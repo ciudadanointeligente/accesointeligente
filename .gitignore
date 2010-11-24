@@ -1,0 +1,10 @@
+.classpath
+.project
+.settings/
+war/WEB-INF/classes/
+war/accesointeligente
+extras/
+*Css.java
+.*.swp
+war/WEB-INF/lib/gwt-servlet.jar
+.gwt/
