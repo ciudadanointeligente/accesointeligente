@@ -1,0 +1,77 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="RegisterView.css"/>
+	<g:FormPanel>
+		<g:HTMLPanel>
+			<g:HTMLPanel>
+				<g:Label>¿Pedirás la información para tí o para una institución?</g:Label>
+				<g:RadioButton ui:field="person" name="person" checked="true">Por mi (particular)</g:RadioButton>
+				<g:RadioButton ui:field="institution" name="person">Por una institución</g:RadioButton>
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="personPanel">
+				<g:Label>Datos personales</g:Label>
+				<br/>
+				<g:Label>Nombre</g:Label>
+				<g:TextBox ui:field="personFirstName"/>
+				<br/>
+				<g:Label>Apellidos</g:Label>
+				<g:TextBox ui:field="personLastName"/>
+				<br/>
+				<g:Label>RUT</g:Label>
+				<g:TextBox ui:field="personRut"/>
+				<br/>
+				<g:Label>Sexo</g:Label>
+				<g:RadioButton ui:field="personGenderFemale" name="personGender">Femenino</g:RadioButton>
+				<g:RadioButton ui:field="personGenderMale" name="personGender">Masculino</g:RadioButton>
+				<br/>
+				<g:Label>Actividad</g:Label>
+				<g:ListBox ui:field="personActivity"/>
+				<br/>
+				<g:Label>Edad</g:Label>
+				<g:ListBox ui:field="personAge"/>
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="institutionPanel" visible="false">
+				<g:Label>Datos de la institución</g:Label><br/>
+				<g:Label>Razón social</g:Label>
+				<g:TextBox ui:field="institutionName"/>
+				<br/>
+				<g:Label>RUT</g:Label>
+				<g:TextBox ui:field="institutionRut"/>
+				<br/>
+				<g:Label>¿Qué tipo de institución es?</g:Label>
+				<g:ListBox ui:field="institutionType"/>
+				<br/>
+				<g:Label>Marca a qué temas se dedican:</g:Label>
+				<g:FlowPanel ui:field="institutionActivities"/>
+			</g:HTMLPanel>
+			<g:HTMLPanel>
+				<g:Label>Dónde vives</g:Label><br/>
+				<g:Label>País</g:Label>
+				<g:RadioButton ui:field="countryChile" name="country" checked="true">Chile</g:RadioButton>
+				<g:RadioButton ui:field="countryOther" name="country">Resto del mundo</g:RadioButton>
+				<br/>
+				<g:Label>Región</g:Label>
+				<g:ListBox ui:field="region"/>
+			</g:HTMLPanel>
+			<g:HTMLPanel>
+				<g:Label>Contacto</g:Label><br/>
+				<g:Label>Ingresa un mail donde podamos contactarte</g:Label>
+				<g:TextBox ui:field="email"/>
+			</g:HTMLPanel>
+			<g:HTMLPanel>
+				<g:Label>Ingresa tus datos para ingresar al sistema</g:Label><br/>
+				<g:Label>Nombre de usuario</g:Label>
+				<g:TextBox ui:field="username"/>
+				<br/>
+				<g:Label>Contraseña</g:Label>
+				<g:PasswordTextBox ui:field="password1"/>
+				<br/>
+				<g:Label>Confirma tu contraseña</g:Label>
+				<g:PasswordTextBox ui:field="password2"/>
+			</g:HTMLPanel>
+			<g:Button ui:field="register">Registrarme</g:Button>
+			<g:Button ui:field="login">Volver</g:Button>
+		</g:HTMLPanel>
+	</g:FormPanel>
+</ui:UiBinder> 

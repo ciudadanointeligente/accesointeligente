@@ -1,0 +1,46 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="RequestView.css"/>
+	<g:HTMLPanel>
+		<g:HTMLPanel ui:field="institutionSearchPanel" visible="false">
+			<g:Label>Escribe el nombre de la institucion</g:Label>
+			<g:SuggestBox ui:field="institutionSearch"/>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="requestPanel" visible="false">
+			<g:Label>Información o documento que buscas</g:Label>
+			<g:TextArea ui:field="requestInfo"/>
+			<br/>
+			<g:Label>Delimita temporalmente la información que necesitas</g:Label>
+			<g:TextArea ui:field="requestContext"/>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="requestDetailPanel" visible="false">
+			<g:Label>Ponle título a tu solicitud</g:Label>
+			<g:TextBox ui:field="requestTitle"/>
+			<br/>
+			<g:Label>¿Podrías un circunscribir la información que solicitas en alguna de estas categorías?</g:Label>
+			<g:FlowPanel ui:field="requestCategoryPanel"/>
+			<br/>
+			<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
+			<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
+			<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" checked="true">No</g:RadioButton>
+			<br/>
+			<g:Label>Formato en que se requiere la información</g:Label>
+			<g:CheckBox ui:field="formatPaper">Papel</g:CheckBox>
+			<g:CheckBox ui:field="formatDigital">Digital</g:CheckBox>
+			<g:CheckBox ui:field="formatAny" checked="true">Cualquiera</g:CheckBox>
+			<br/>
+			<g:Label>Cómo quieres recibir esta información</g:Label>
+			<g:CheckBox ui:field="methodEmail" checked="true">Email</g:CheckBox>
+			<g:CheckBox ui:field="methodMail">Envío por correo</g:CheckBox>
+			<g:CheckBox ui:field="methodOffice">Retiro en oficina</g:CheckBox>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="successPanel">
+			<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="buttonPanel">
+			<g:Button ui:field="previous" visible="false"/>
+			<g:Button ui:field="next" visible="false"/>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 
