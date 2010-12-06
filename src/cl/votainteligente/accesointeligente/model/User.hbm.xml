@@ -8,12 +8,10 @@
 		<id name="id">
 			<generator class="identity" />
 		</id>
-		<property name="rut" />
-		<property name="username" />
+		<property name="email" />
 		<property name="password" />
 		<property name="firstName" />
 		<property name="lastName" />
-		<property name="emailAddress" />
 		<many-to-one name="age" lazy="false" column="ageId"/>
 		<property name="gender">
 			<type name="cl.votainteligente.accesointeligente.server.EnumUserType">

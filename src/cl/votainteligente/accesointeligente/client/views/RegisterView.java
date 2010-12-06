@@ -40,21 +40,18 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	@UiField HTMLPanel personPanel;
 	@UiField TextBox personFirstName;
 	@UiField TextBox personLastName;
-	@UiField TextBox personRut;
 	@UiField RadioButton personGenderFemale;
 	@UiField RadioButton personGenderMale;
 	@UiField ListBox personActivity;
 	@UiField ListBox personAge;
 	@UiField HTMLPanel institutionPanel;
 	@UiField TextBox institutionName;
-	@UiField TextBox institutionRut;
 	@UiField ListBox institutionType;
 	@UiField FlowPanel institutionActivities;
 	@UiField RadioButton countryChile;
 	@UiField RadioButton countryOther;
 	@UiField ListBox region;
 	@UiField TextBox email;
-	@UiField TextBox username;
 	@UiField PasswordTextBox password1;
 	@UiField PasswordTextBox password2;
 	@UiField Button register;
@@ -154,11 +151,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	}
 
 	@Override
-	public String getPersonRut() {
-		return personRut.getText();
-	}
-
-	@Override
 	public Gender getPersonGender() {
 		if (personGenderFemale.getValue()) {
 			return Gender.FEMALE;
@@ -188,11 +180,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	@Override
 	public String getInstitutionName() {
 		return institutionName.getText();
-	}
-
-	@Override
-	public String getInstitutionRut() {
-		return institutionRut.getText();
 	}
 
 	@Override
@@ -249,11 +236,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	}
 
 	@Override
-	public String getUsername() {
-		return username.getText();
-	}
-
-	@Override
 	public String getPassword() {
 		return password1.getText();
 	}
@@ -265,9 +247,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 				return false;
 			} else if (!personLastName.getText().matches(".*\\w+.*")) {
 				return false;
-			} else if (!personRut.getText().matches(".*\\w+.*")) {
-				// TODO: implement true rut validator
-				return false;
 			} else if (!personGenderFemale.getValue() && !personGenderMale.getValue()) {
 				return false;
 			} else if (personActivity.getSelectedIndex() < 1) {
@@ -277,9 +256,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 			}
 		} else if (institution.getValue()) {
 			if (!institutionName.getText().matches(".*\\w+.*")) {
-				return false;
-			} else if (!institutionRut.getText().matches(".*\\w+.*")) {
-				// TODO: implement true rut validator
 				return false;
 			} else if (institutionType.getSelectedIndex() < 1) {
 				return false;
@@ -293,8 +269,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 		} else if (region.getSelectedIndex() < 1 && countryChile.getValue()) {
 			return false;
 		} else if (!email.getText().matches("\\S+")) {
-			return false;
-		} else if (!username.getText().matches("\\w+")) {
 			return false;
 		} else if (!password1.getText().matches("\\w+")) {
 			return false;

@@ -16,7 +16,7 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(LoginPresenterIface presenter);
-		String getUsername();
+		String getEmail();
 		String getPassword();
 		void setName(String name);
 	}
@@ -40,11 +40,11 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 
 	@Override
 	public void login() {
-		String username = display.getUsername();
+		String email = display.getEmail();
 		String password = display.getPassword();
 
-		if (username.length() == 0) {
-			Window.alert("Debe ingresar nombre de usuario");
+		if (email.length() == 0) {
+			Window.alert("Debe ingresar email");
 			return;
 		}
 
@@ -53,13 +53,13 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 			return;
 		}
 
-		RPC.getUserService().login(username, password, new AsyncCallback<User>() {
+		RPC.getUserService().login(email, password, new AsyncCallback<User>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				if (caught instanceof ServiceException) {
 					Window.alert("Fallo la conexion");
 				} else if (caught instanceof LoginException) {
-					Window.alert("Nombre de usuario y/o contraseña incorrecta");
+					Window.alert("Email y/o contraseña incorrecta");
 				}
 			}
 

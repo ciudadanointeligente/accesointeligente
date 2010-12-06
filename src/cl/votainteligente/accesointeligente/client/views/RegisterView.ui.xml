@@ -18,9 +18,6 @@
 				<g:Label>Apellidos</g:Label>
 				<g:TextBox ui:field="personLastName"/>
 				<br/>
-				<g:Label>RUT</g:Label>
-				<g:TextBox ui:field="personRut"/>
-				<br/>
 				<g:Label>Sexo</g:Label>
 				<g:RadioButton ui:field="personGenderFemale" name="personGender">Femenino</g:RadioButton>
 				<g:RadioButton ui:field="personGenderMale" name="personGender">Masculino</g:RadioButton>
@@ -35,9 +32,6 @@
 				<g:Label>Datos de la institución</g:Label><br/>
 				<g:Label>Razón social</g:Label>
 				<g:TextBox ui:field="institutionName"/>
-				<br/>
-				<g:Label>RUT</g:Label>
-				<g:TextBox ui:field="institutionRut"/>
 				<br/>
 				<g:Label>¿Qué tipo de institución es?</g:Label>
 				<g:ListBox ui:field="institutionType"/>
@@ -55,14 +49,9 @@
 				<g:ListBox ui:field="region"/>
 			</g:HTMLPanel>
 			<g:HTMLPanel>
-				<g:Label>Contacto</g:Label><br/>
-				<g:Label>Ingresa un mail donde podamos contactarte</g:Label>
-				<g:TextBox ui:field="email"/>
-			</g:HTMLPanel>
-			<g:HTMLPanel>
 				<g:Label>Ingresa tus datos para ingresar al sistema</g:Label><br/>
-				<g:Label>Nombre de usuario</g:Label>
-				<g:TextBox ui:field="username"/>
+				<g:Label>Email</g:Label>
+				<g:TextBox ui:field="email"/>
 				<br/>
 				<g:Label>Contraseña</g:Label>
 				<g:PasswordTextBox ui:field="password1"/>

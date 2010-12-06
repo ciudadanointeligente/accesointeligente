@@ -28,14 +28,14 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public User login(String username, String password) throws LoginException, ServiceException {
+	public User login(String email, String password) throws LoginException, ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 		List<User> result = new ArrayList<User>();
 
 		try {
 			Criteria criteria = hibernate.createCriteria(User.class);
-			criteria.add(Restrictions.eq("username", username));
+			criteria.add(Restrictions.eq("email", email));
 			criteria.add(Restrictions.eq("password", password));
 			result = (List<User>) criteria.list();
 			hibernate.getTransaction().commit();
@@ -58,7 +58,7 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 
 		try {
 			Criteria criteria = hibernate.createCriteria(User.class);
-			criteria.add(Restrictions.eq("username", user.getUsername()));
+			criteria.add(Restrictions.eq("email", user.getEmail()));
 
 			if (criteria.list().size() == 1) {
 				throw new RegisterException();

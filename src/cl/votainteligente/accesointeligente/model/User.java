@@ -11,12 +11,10 @@ public class User extends LightEntity {
 	private static final long serialVersionUID = 6475258234495271306L;
 
 	private Long id;
-	private String rut;
-	private String username;
+	private String email;
 	private String password;
 	private String firstName;
 	private String lastName;
-	private String emailAddress;
 	private Age age;
 	private Gender gender;
 	private Set<Activity> activities;
@@ -33,20 +31,12 @@ public class User extends LightEntity {
 		this.id = id;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+	public String getEmail() {
+		return email;
 	}
 
-	public String getRut() {
-		return rut;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -71,14 +61,6 @@ public class User extends LightEntity {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
 	}
 
 	public void setAge(Age age) {

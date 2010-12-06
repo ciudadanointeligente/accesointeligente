@@ -39,18 +39,15 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		Boolean isPerson();
 		String getPersonFirstName();
 		String getPersonLastName();
-		String getPersonRut();
 		Gender getPersonGender();
 		Activity getPersonActivity();
 		Age getPersonAge();
 		String getInstitutionName();
-		String getInstitutionRut();
 		InstitutionType getInstitutionType();
 		Set<Activity> getInstitutionActivities();
 		Country getCountry();
 		Region getRegion();
 		String getEmail();
-		String getUsername();
 		String getPassword();
 		Boolean validateForm();
 	}
@@ -181,7 +178,6 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 			if (display.isPerson()) {
 				user.setFirstName(display.getPersonFirstName());
 				user.setLastName(display.getPersonLastName());
-				user.setRut(display.getPersonRut());
 				Set<Activity> activities = new HashSet<Activity>();
 				activities.add(display.getPersonActivity());
 				user.setGender(display.getPersonGender());
@@ -190,14 +186,12 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				user.setNaturalPerson(true);
 			} else {
 				user.setFirstName(display.getInstitutionName());
-				user.setRut(display.getInstitutionRut());
 				user.setActivities(display.getInstitutionActivities());
 				user.setInstitutionType(display.getInstitutionType());
 				user.setNaturalPerson(false);
 			}
 
-			user.setEmailAddress(display.getEmail());
-			user.setUsername(display.getUsername());
+			user.setEmail(display.getEmail());
 			user.setPassword(display.getPassword());
 			user.setCountry(display.getCountry());
 
@@ -209,7 +203,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				@Override
 				public void onFailure(Throwable caught) {
 					if (caught instanceof RegisterException) {
-						display.setErrorMessage("El nombre de usuario ya existe");
+						display.setErrorMessage("Ya existe un usuario registrado con ese email");
 					} else {
 						display.setErrorMessage("No se pudo registrar el nuevo usuario, intente nuevamente");
 					}

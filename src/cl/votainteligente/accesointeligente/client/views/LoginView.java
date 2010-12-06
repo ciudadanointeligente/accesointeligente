@@ -20,7 +20,7 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 
-	@UiField TextBox username;
+	@UiField TextBox email;
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Button register;
@@ -57,8 +57,8 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	}
 
 	@Override
-	public String getUsername() {
-		return username.getText();
+	public String getEmail() {
+		return email.getText();
 	}
 
 	@Override
