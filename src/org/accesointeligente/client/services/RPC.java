@@ -8,6 +8,7 @@ public class RPC {
 	private static InstitutionTypeServiceAsync institutionTypeService = null;
 	private static RegionServiceAsync regionService = null;
 	private static UserServiceAsync userService = null;
+	private static RequestServiceAsync requestService = null;
 
 	protected RPC() {
 	}
@@ -50,5 +51,13 @@ public class RPC {
 		}
 
 		return userService;
+	}
+
+	public static RequestServiceAsync getRequestService() {
+		if (requestService == null) {
+			requestService = GWT.create(RequestService.class);
+		}
+
+		return requestService;
 	}
 }
