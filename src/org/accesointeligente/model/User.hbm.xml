@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.accesointeligente.model">
+	<class name="User" table="User">
+		<id name="id">
+			<generator class="identity" />
+		</id>
+		<property name="email" />
+		<property name="password" />
+		<property name="firstName" />
+		<property name="lastName" />
+		<many-to-one name="age" lazy="false" column="ageId"/>
+		<property name="gender">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.Gender</param>
+			</type>
+		</property>
+		<set name="activities" table="UserActivities">
+			<key column="userId"/>
+			<many-to-many column="activityId" class="Activity"/>
+		</set>
+		<property name="country">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.Country</param>
+			</type>
+		</property>
+		<many-to-one name="region" lazy="false" column="regionId"/>
+		<property name="naturalPerson" />
+		<many-to-one name="institutionType" lazy="false" column="institutionTypeId"/>
+	</class>
+</hibernate-mapping>

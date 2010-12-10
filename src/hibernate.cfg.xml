@@ -34,10 +34,10 @@
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hbm2ddl.auto">update</property>
 		
-		<mapping resource="cl/votainteligente/accesointeligente/model/Activity.hbm.xml"/>
-		<mapping resource="cl/votainteligente/accesointeligente/model/Age.hbm.xml"/>
-		<mapping resource="cl/votainteligente/accesointeligente/model/InstitutionType.hbm.xml"/>
-		<mapping resource="cl/votainteligente/accesointeligente/model/Region.hbm.xml"/>
-		<mapping resource="cl/votainteligente/accesointeligente/model/User.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Activity.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Age.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/InstitutionType.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Region.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/User.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>activityServlet</servlet-name>
-    <servlet-class>cl.votainteligente.accesointeligente.server.services.ActivityServiceImpl</servlet-class>
+    <servlet-class>org.accesointeligente.server.services.ActivityServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -18,7 +18,7 @@
  
   <servlet>
     <servlet-name>ageServlet</servlet-name>
-    <servlet-class>cl.votainteligente.accesointeligente.server.services.AgeServiceImpl</servlet-class>
+    <servlet-class>org.accesointeligente.server.services.AgeServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -28,7 +28,7 @@
  
   <servlet>
     <servlet-name>institutionTypeServlet</servlet-name>
-    <servlet-class>cl.votainteligente.accesointeligente.server.services.InstitutionTypeServiceImpl</servlet-class>
+    <servlet-class>org.accesointeligente.server.services.InstitutionTypeServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -38,7 +38,7 @@
  
   <servlet>
     <servlet-name>regionServlet</servlet-name>
-    <servlet-class>cl.votainteligente.accesointeligente.server.services.RegionServiceImpl</servlet-class>
+    <servlet-class>org.accesointeligente.server.services.RegionServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -48,7 +48,7 @@
  
   <servlet>
     <servlet-name>userServlet</servlet-name>
-    <servlet-class>cl.votainteligente.accesointeligente.server.services.UserServiceImpl</servlet-class>
+    <servlet-class>org.accesointeligente.server.services.UserServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
