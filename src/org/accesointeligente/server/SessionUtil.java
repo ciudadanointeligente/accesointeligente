@@ -1,0 +1,55 @@
+package org.accesointeligente.server;
+
+import org.accesointeligente.client.SessionData;
+import org.accesointeligente.client.services.SessionServiceException;
+import org.accesointeligente.model.User;
+
+import javax.servlet.http.HttpSession;
+
+public class SessionUtil {
+	private static HttpSession session;
+
+	public static SessionData getSessionData () throws SessionServiceException {
+		if (session == null) {
+			throw new SessionServiceException ();
+		}
+
+		String sessionId = (String) session.getAttribute ("sessionId");
+		User user = (User) session.getAttribute ("user");
+
+		if (sessionId == null || user == null) {
+			throw new SessionServiceException ();
+		} else {
+			SessionData sessionData = new SessionData ();
+			sessionData.getData ().put ("sessionId", sessionId);
+			sessionData.getData ().put ("user", user);
+			return sessionData;
+		}
+	}
+
+	public static Object getAttribute (String name) {
+		if (session != null) {
+			return session.getAttribute (name);
+		} else {
+			return null;
+		}
+	}
+
+	public static void setAttribute (String name, Object value) {
+		if (session != null) {
+			session.setAttribute (name, value);
+		}
+	}
+
+	public static void setSession (HttpSession session) {
+		SessionUtil.session = session;
+	}
+
+	public static HttpSession getSession () {
+		return session;
+	}
+
+	public static User getUser () {
+		return (User) session.getAttribute ("user");
+	}
+}

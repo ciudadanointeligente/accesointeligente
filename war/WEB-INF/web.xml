@@ -65,6 +65,16 @@
     <servlet-name>requestServlet</servlet-name>
     <url-pattern>/accesointeligente/request</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>sessionServlet</servlet-name>
+    <servlet-class>org.accesointeligente.server.services.SessionServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>sessionServlet</servlet-name>
+    <url-pattern>/accesointeligente/session</url-pattern>
+  </servlet-mapping>
  
   <servlet>
     <servlet-name>userServlet</servlet-name>

@@ -20,11 +20,10 @@ public interface UserService extends RemoteService {
 	 *
 	 * @param email the user's provided email address
 	 * @param password the user's provided password
-	 * @return the user that logged in
 	 * @throws LoginException if the user provided incorrect credentials
 	 * @throws ServiceException if something went wrong with the service
 	 */
-	User login(String email, String password) throws LoginException, ServiceException;
+	void login(String email, String password) throws LoginException, ServiceException;
 
 	/**
 	 * Registers a new user

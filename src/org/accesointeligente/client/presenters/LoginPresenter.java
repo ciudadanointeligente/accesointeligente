@@ -1,17 +1,19 @@
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.SessionData;
+import org.accesointeligente.client.events.LoginSuccessfulEvent;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.model.User;
 import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
-
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
+
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
 	public interface Display extends WidgetDisplay {
@@ -53,7 +55,7 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 			return;
 		}
 
-		RPC.getUserService().login(email, password, new AsyncCallback<User>() {
+		RPC.getUserService().login(email, password, new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				if (caught instanceof ServiceException) {
@@ -64,8 +66,19 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 			}
 
 			@Override
-			public void onSuccess(User user) {
-				display.setName(user.getFirstName());
+			public void onSuccess(Void result) {
+				RPC.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
+					@Override
+					public void onFailure (Throwable caught) {
+						Window.alert ("Error creando sesión");
+					}
+
+					@Override
+					public void onSuccess (SessionData result) {
+						ClientSessionUtil.createSession (result);
+						eventBus.fireEvent (new LoginSuccessfulEvent ());
+					}
+				});
 			}
 		});
 	}

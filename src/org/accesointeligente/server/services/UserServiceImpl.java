@@ -1,20 +1,19 @@
 package org.accesointeligente.server.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.accesointeligente.client.services.UserService;
+import org.accesointeligente.model.User;
+import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.server.SessionUtil;
+import org.accesointeligente.shared.*;
 
 import net.sf.gilead.core.PersistentBeanManager;
 import net.sf.gilead.gwt.PersistentRemoteService;
 
-import org.accesointeligente.client.services.UserService;
-import org.accesointeligente.model.User;
-import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.shared.LoginException;
-import org.accesointeligente.shared.RegisterException;
-import org.accesointeligente.shared.ServiceException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
+import java.util.*;
 
 
 public class UserServiceImpl extends PersistentRemoteService implements UserService {
@@ -28,7 +27,7 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public User login(String email, String password) throws LoginException, ServiceException {
+	public void login(String email, String password) throws LoginException, ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 		List<User> result = new ArrayList<User>();
@@ -47,7 +46,9 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 		if (result.size() != 1) {
 			throw new LoginException();
 		} else {
-			return (User) persistentBeanManager.clone(result.get(0));
+			SessionUtil.setSession (getThreadLocalRequest ().getSession ());
+			SessionUtil.setAttribute ("sessionId", UUID.randomUUID ().toString ());
+			SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(result.get(0)));
 		}
 	}
 

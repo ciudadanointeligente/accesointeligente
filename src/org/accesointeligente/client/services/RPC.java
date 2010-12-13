@@ -8,6 +8,7 @@ public class RPC {
 	private static InstitutionServiceAsync institutionService = null;
 	private static InstitutionTypeServiceAsync institutionTypeService = null;
 	private static RegionServiceAsync regionService = null;
+	private static SessionServiceAsync sessionService = null;
 	private static UserServiceAsync userService = null;
 	private static RequestServiceAsync requestService = null;
 
@@ -52,6 +53,14 @@ public class RPC {
 		}
 
 		return regionService;
+	}
+
+	public static SessionServiceAsync getSessionService() {
+		if (sessionService == null) {
+			sessionService = GWT.create(SessionService.class);
+		}
+
+		return sessionService;
 	}
 
 	public static UserServiceAsync getUserService() {

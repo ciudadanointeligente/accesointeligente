@@ -1,9 +1,8 @@
 package org.accesointeligente.client;
 
-import org.accesointeligente.client.presenters.LoginPresenter;
-import org.accesointeligente.client.presenters.RegisterPresenter;
-import org.accesointeligente.client.views.LoginView;
-import org.accesointeligente.client.views.RegisterView;
+import org.accesointeligente.client.events.*;
+import org.accesointeligente.client.presenters.*;
+import org.accesointeligente.client.views.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 
@@ -25,19 +24,20 @@ public class AppController implements ValueChangeHandler<String> {
 	private void setup() {
 		History.addValueChangeHandler(this);
 
-//		eventBus.addHandler(LoginSuccessfulEvent.TYPE,	new LoginSuccessfulEventHandler () {
-//			@Override
-//			public void loginSuccessful(LoginSuccessfulEvent event) {
-//				History.newItem("main");
-//			}
-//		});
-//
-//		eventBus.addHandler(LoginRequiredEvent.TYPE, new LoginRequiredEventHandler() {
-//			@Override
-//			public void loginRequired(LoginRequiredEvent event) {
-//				History.newItem("login");
-//			}
-//		});
+		eventBus.addHandler(LoginSuccessfulEvent.TYPE,	new LoginSuccessfulEventHandler () {
+			@Override
+			public void loginSuccessful(LoginSuccessfulEvent event) {
+				// TODO: implement MainPresenter/View
+				History.newItem("request");
+			}
+		});
+
+		eventBus.addHandler(LoginRequiredEvent.TYPE, new LoginRequiredEventHandler() {
+			@Override
+			public void loginRequired(LoginRequiredEvent event) {
+				History.newItem("login");
+			}
+		});
 
 		switchSection(History.getToken());
 	}
@@ -49,21 +49,34 @@ public class AppController implements ValueChangeHandler<String> {
 	}
 
 	public void switchSection(String token) {
-		// TODO: implement ClientSessionUtil
-		if (token.equals("login")) {
-			LoginPresenter presenter = new LoginPresenter(new LoginView(), eventBus);
-			presenter.bind();
-			layout.clear();
-			layout.add(presenter.getDisplay().asWidget());
-		} else if (token.equals("register")) {
-			RegisterPresenter presenter = new RegisterPresenter(new RegisterView(), eventBus);
-			presenter.bind();
-			layout.clear();
-			layout.add(presenter.getDisplay().asWidget());
+		if (ClientSessionUtil.checkSession ()) {
+			if (token.equals("request")) {
+				RequestPresenter presenter = new RequestPresenter(new RequestView(), eventBus);
+				presenter.bind();
+				layout.clear();
+				layout.add(presenter.getDisplay().asWidget());
+			} else if (token.equals ("logout")) {
+				ClientSessionUtil.destroySession ();
+				History.newItem ("login");
+			} else {
+				// TODO: implement MainPresenter/View
+				History.newItem ("request");
+			}
 		} else {
-			History.newItem("login");
+			if (token.equals ("login")) {
+				LoginPresenter presenter = new LoginPresenter (new LoginView (), eventBus);
+				presenter.bind ();
+				layout.clear ();
+				layout.add (presenter.getDisplay ().asWidget ());
+			} else if (token.equals("register")) {
+				RegisterPresenter presenter = new RegisterPresenter(new RegisterView(), eventBus);
+				presenter.bind();
+				layout.clear();
+				layout.add(presenter.getDisplay().asWidget());
+			} else {
+				History.newItem ("login");
+			}
 		}
-
 	}
 
 	public FlowPanel getLayout() {
