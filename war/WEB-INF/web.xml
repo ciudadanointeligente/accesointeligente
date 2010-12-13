@@ -25,6 +25,16 @@
     <servlet-name>ageServlet</servlet-name>
     <url-pattern>/accesointeligente/age</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>institutionServlet</servlet-name>
+    <servlet-class>org.accesointeligente.server.services.InstitutionServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>institutionServlet</servlet-name>
+    <url-pattern>/accesointeligente/institution</url-pattern>
+  </servlet-mapping>
  
   <servlet>
     <servlet-name>institutionTypeServlet</servlet-name>

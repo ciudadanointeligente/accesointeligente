@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 public class RPC {
 	private static ActivityServiceAsync activityService = null;
 	private static AgeServiceAsync ageService = null;
+	private static InstitutionServiceAsync institutionService = null;
 	private static InstitutionTypeServiceAsync institutionTypeService = null;
 	private static RegionServiceAsync regionService = null;
 	private static UserServiceAsync userService = null;
@@ -27,6 +28,14 @@ public class RPC {
 		}
 
 		return ageService;
+	}
+
+	public static InstitutionServiceAsync getInstitutionService() {
+		if (institutionService == null) {
+			institutionService = GWT.create(InstitutionService.class);
+		}
+
+		return institutionService;
 	}
 
 	public static InstitutionTypeServiceAsync getInstitutionTypeService() {
