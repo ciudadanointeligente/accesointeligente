@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.accesointeligente.model">
+	<class name="Request">
+		<id name="id">
+			<generator class="identity"/>
+		</id>
+		<many-to-one name="institution" column="institutionId"/>
+		<property name="information"/>
+		<property name="context"/>
+		<property name="title"/>
+		<set name="categories" table="RequestCategories">
+			<key column="requestId"/>
+			<many-to-many column="categoryId" class="RequestCategory"/>
+		</set>
+		<property name="anotherInstitution"/>
+		<set name="formats" table="RequestFormats">
+			<key column="requestId"/>
+			<element column="requestFormat">
+				<type name="org.accesointeligente.server.EnumUserType">
+					<param name="enumClassName">org.accesointeligente.shared.RequestFormat</param>
+				</type>
+			</element>
+		</set>
+		<set name="methods" table="RequestMethods">
+			<key column="requestId"/>
+			<element column="requestMethod">
+				<type name="org.accesointeligente.server.EnumUserType">
+					<param name="enumClassName">org.accesointeligente.shared.RequestMethod</param>
+				</type>
+			</element>
+		</set>
+	</class>
+</hibernate-mapping>

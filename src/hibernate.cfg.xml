@@ -36,8 +36,11 @@
 		
 		<mapping resource="org/accesointeligente/model/Activity.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Age.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Institution.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/InstitutionType.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Region.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Request.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/RequestCategory.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/User.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>
