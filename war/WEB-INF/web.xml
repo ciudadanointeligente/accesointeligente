@@ -45,6 +45,16 @@
     <servlet-name>regionServlet</servlet-name>
     <url-pattern>/accesointeligente/region</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>requestServlet</servlet-name>
+    <servlet-class>org.accesointeligente.server.services.RequestServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>requestServlet</servlet-name>
+    <url-pattern>/accesointeligente/request</url-pattern>
+  </servlet-mapping>
  
   <servlet>
     <servlet-name>userServlet</servlet-name>
