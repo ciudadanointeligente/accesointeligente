@@ -3,6 +3,7 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
+import org.accesointeligente.client.presenters.LoginPresenter.Display.DisplayMode;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
@@ -11,12 +12,17 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
 	public interface Display extends WidgetDisplay {
+		public enum DisplayMode {
+			LoginForm,
+			LoginPending
+		}
+
+		public void setDisplayMode(DisplayMode mode);
 		void setPresenter(LoginPresenterIface presenter);
 		String getEmail();
 		String getPassword();
@@ -86,5 +92,34 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 	@Override
 	public void register() {
 		History.newItem("register");
+	}
+
+	public void tryCookieLogin() {
+		final String sessionId = Cookies.getCookie("sessionId");
+
+		if (sessionId != null) {
+			display.setDisplayMode(DisplayMode.LoginPending);
+
+			RPC.getSessionService().getSessionData(new AsyncCallback<SessionData>() {
+				@Override
+				public void onFailure(Throwable caught) {
+					ClientSessionUtil.destroySession();
+					display.setDisplayMode(DisplayMode.LoginForm);
+				}
+
+				@Override
+				public void onSuccess(SessionData result) {
+					if (sessionId.equals(result.getData().get("sessionId"))) {
+						ClientSessionUtil.createSession(result);
+						eventBus.fireEvent(new LoginSuccessfulEvent());
+					} else {
+						ClientSessionUtil.destroySession();
+						display.setDisplayMode(DisplayMode.LoginForm);
+					}
+				}
+			});
+		} else {
+			display.setDisplayMode(DisplayMode.LoginForm);
+		}
 	}
 }

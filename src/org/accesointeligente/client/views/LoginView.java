@@ -8,23 +8,20 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class LoginView extends Composite implements LoginPresenter.Display {
 	private static LoginViewUiBinder uiBinder = GWT.create(LoginViewUiBinder.class);
 
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 
+	@UiField HTMLPanel loginForm;
 	@UiField TextBox email;
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Button register;
 	@UiField Label name;
+	@UiField Label loginPending;
 
 	private LoginPresenterIface presenter;
 
@@ -54,6 +51,21 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@Override
 	public void setPresenter(LoginPresenterIface presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void setDisplayMode(DisplayMode mode) {
+		switch (mode) {
+			case LoginForm:
+				loginForm.setVisible(true);
+				loginPending.setVisible(false);
+				email.setFocus(true);
+				break;
+			case LoginPending:
+				loginForm.setVisible(false);
+				loginPending.setVisible(true);
+				break;
+		}
 	}
 
 	@Override

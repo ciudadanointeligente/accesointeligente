@@ -3,22 +3,25 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css"/>
 	<g:HTMLPanel>
-		<table>
-			<tr>
-				<td>Email</td>
-				<td><g:TextBox ui:field="email"/></td>
-			</tr>
-			<tr>
-				<td>Contraseña</td>
-				<td><g:PasswordTextBox ui:field="password"/></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<g:Button ui:field="login" text="Ingresar"/>
-					<g:Button ui:field="register" text="Registrarse"/>
-				</td>
-			</tr>
-		</table>
-		<g:Label ui:field="name"/>
+		<g:HTMLPanel ui:field="loginForm">
+			<table>
+				<tr>
+					<td>Email</td>
+					<td><g:TextBox ui:field="email"/></td>
+				</tr>
+				<tr>
+					<td>Contraseña</td>
+					<td><g:PasswordTextBox ui:field="password"/></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<g:Button ui:field="login" text="Ingresar"/>
+						<g:Button ui:field="register" text="Registrarse"/>
+					</td>
+				</tr>
+			</table>
+			<g:Label ui:field="name"/>
+		</g:HTMLPanel>
+		<g:Label ui:field="loginPending">Ingresando...</g:Label>
 	</g:HTMLPanel>
 </ui:UiBinder> 
