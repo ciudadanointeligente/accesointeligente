@@ -18,7 +18,7 @@
 			<g:Label>Ponle título a tu solicitud</g:Label>
 			<g:TextBox ui:field="requestTitle"/>
 			<br/>
-			<g:Label>¿Podrías un circunscribir la información que solicitas en alguna de estas categorías?</g:Label>
+			<g:Label>¿Podrías circunscribir la información que solicitas en alguna de estas categorías?</g:Label>
 			<g:FlowPanel ui:field="requestCategoryPanel"/>
 			<br/>
 			<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
@@ -39,8 +39,8 @@
 			<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="buttonPanel">
-			<g:Button ui:field="previous" visible="false"/>
-			<g:Button ui:field="next" visible="false"/>
+			<g:Button ui:field="previous" visible="false">Anterior</g:Button>
+			<g:Button ui:field="next" visible="false">Siguiente</g:Button>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 
