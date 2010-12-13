@@ -7,10 +7,10 @@ import org.accesointeligente.shared.ServiceException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import java.util.Set;
+import java.util.List;
 
 @RemoteServiceRelativePath("request")
 public interface RequestService extends RemoteService {
 	void makeRequest(Request request) throws ServiceException;
-	Set<RequestCategory> getCategories() throws ServiceException;
+	List<RequestCategory> getCategories() throws ServiceException;
 }
