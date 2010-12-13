@@ -11,6 +11,7 @@ public class Request extends LightEntity {
 	private static final long serialVersionUID = 3099494353260207511L;
 
 	private Integer id;
+	private User user;
 	private Institution institution;
 	private String information;
 	private String context;
@@ -26,6 +27,14 @@ public class Request extends LightEntity {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Institution getInstitution() {

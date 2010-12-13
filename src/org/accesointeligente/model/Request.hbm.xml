@@ -8,6 +8,7 @@
 		<id name="id">
 			<generator class="identity"/>
 		</id>
+		<many-to-one name="user" column="userId"/>
 		<many-to-one name="institution" column="institutionId"/>
 		<property name="information"/>
 		<property name="context"/>
