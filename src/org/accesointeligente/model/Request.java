@@ -1,7 +1,6 @@
 package org.accesointeligente.model;
 
-import org.accesointeligente.shared.RequestFormat;
-import org.accesointeligente.shared.RequestMethod;
+import org.accesointeligente.shared.*;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
@@ -20,6 +19,7 @@ public class Request extends LightEntity {
 	private Boolean anotherInstitution;
 	private Set<RequestFormat> formats;
 	private Set<RequestMethod> methods;
+	private RequestStatus status;
 
 	public Integer getId() {
 		return id;
@@ -99,5 +99,13 @@ public class Request extends LightEntity {
 
 	public void setMethods(Set<RequestMethod> methods) {
 		this.methods = methods;
+	}
+
+	public RequestStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RequestStatus status) {
+		this.status = status;
 	}
 }

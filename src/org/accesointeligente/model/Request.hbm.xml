@@ -34,5 +34,10 @@
 				</type>
 			</element>
 		</set>
+		<property name="status">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.RequestStatus</param>
+			</type>
+		</property>
 	</class>
 </hibernate-mapping>
