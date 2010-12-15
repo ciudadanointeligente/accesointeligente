@@ -4,14 +4,14 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.shared.RequestStatus;
 
 public abstract class Robot {
-	private String username;
-	private String password;
+	protected String username;
+	protected String password;
 
-	public abstract void login();
+	public abstract void login() throws RobotException;
 
-	public abstract RequestStatus makeRequest(Request request);
+	public abstract RequestStatus makeRequest(Request request) throws RobotException;
 
-	public abstract RequestStatus checkRequestStatus(Request request);
+	public abstract RequestStatus checkRequestStatus(Request request) throws RobotException;
 
 	public String getUsername() {
 		return username;
