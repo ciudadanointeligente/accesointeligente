@@ -1,34 +1,76 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+.body {
+	padding: 0;
+	margin: 0;
+	font-size: 12px;
+	color: #77778A;
 }
 
+.body,.body table td,.body select {
+	font-family: Trebuchet MS, Lucida Grande, Calibri, Arial, sans-serif;
+	font-size: 12px;
+}
+
+img {
+	border: none;
+}
+
+a {
+	outline: none;
+}
+
+.body a,.body a:visited,.body a:hover {
+	color: #45B0BC;
+}
+
+.body a:hover {
+	color: #19BDCF;
+}
+
+h1 {
+	font-size: 1.45em;
+	font-weight: bold;
+	color: #77778A;
+	margin: 0px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	margin: 0px;
+}
+
+/*---- GWT-----*/
+/** Example rules used by the template application (remove for your app) */
 .sendButton {
-  display: block;
-  font-size: 16pt;
+	display: block;
+	font-size: 16pt;
 }
 
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
-  width: 400px;
+	width: 400px;
+}
+
+.gwt-TextBox,.gwt-PasswordTextBox {
+	background-color: #FFFFFF;
+	border: 1px solid darkgrey;
+	-moz-border-radius: 4px; /* FF1+ */
+	-webkit-border-radius: 4px; /* Saf3-4 */
+	border-radius: 4px; /* Opera 10.5, IE 9, Saf5, Chrome */
 }
 
 .dialogVPanel {
-  margin: 5px;
+	margin: 5px;
 }
 
 .serverResponseLabelError {
-  color: red;
+	color: red;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
-  margin: 15px 6px 6px;
+	margin: 15px 6px 6px;
+}
+
+/*-----EXCEPTIONS----*/
+.contenedorRegistro .gwt-Label {
+	padding: 16px 0 5px;
 }
