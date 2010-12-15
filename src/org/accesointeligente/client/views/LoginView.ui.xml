@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css"/>
 	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="loginForm">
+		<g:HTMLPanel ui:field="loginForm" visible="false">
 			<table>
 				<tr>
 					<td>Email</td>
@@ -22,6 +22,6 @@
 			</table>
 			<g:Label ui:field="name"/>
 		</g:HTMLPanel>
-		<g:Label ui:field="loginPending">Ingresando...</g:Label>
+		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
 	</g:HTMLPanel>
 </ui:UiBinder> 

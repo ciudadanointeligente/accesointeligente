@@ -36,6 +36,7 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
+		tryCookieLogin();
 	}
 
 	@Override
