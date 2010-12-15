@@ -1,25 +1,50 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style src="LoginView.css"/>
-	<g:HTMLPanel>
+	<ui:style src="LoginView.css" />
+
+	<g:HTMLPanel addStyleNames="{style.greyBlock}">
 		<g:HTMLPanel ui:field="loginForm" visible="false">
+			<h1 class="{style.greyBlock}">LOGIN</h1>
 			<table>
 				<tr>
 					<td>Email</td>
-					<td><g:TextBox ui:field="email"/></td>
+					<td colspan="2">
+						<g:TextBox addStyleNames="{style.fullField}" ui:field="email" />
+					</td>
 				</tr>
 				<tr>
 					<td>Contraseña</td>
-					<td><g:PasswordTextBox ui:field="password"/></td>
+					<td>
+						<g:PasswordTextBox ui:field="password" />
+					</td>
+					<td>
+						<g:Button ui:field="login" text="Ingresar" />
+					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
-						<g:Button ui:field="login" text="Ingresar"/>
-						<g:Button ui:field="register" text="Registrarse"/>
+					<td colspan="3">
+						¿No eres miembro?
+						<g:Label addStyleNames="{style.link}" ui:field="register" text="Regístrate gratis" />
 					</td>
 				</tr>
 			</table>
+			<div>
+				<br />
+				<h1>¿Por qué pedimos registro?</h1>
+				<p>
+					Aunque nosotros actuaremos como tu apoderado en tu solicitud, si
+					esta es rechazada y quieres apelar sólo podrás hacerlo si tu
+					nombre figura en el formulario.
+					<br />
+					Intentamos reducir al máximo los datos requeridos. Sólo tendrás
+					que rellenarlos una vez y de ser posible evitaremos utilizar tu rut
+				</p>
+				<p>Acceso Inteligente no usará tus datos personales con otros fines</p>
+				<p>
+					<a class="{style.link}" href="#">Ver política de privacidad</a>
+				</p>
+			</div>
 		</g:HTMLPanel>
 		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
 	</g:HTMLPanel>

@@ -19,7 +19,7 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@UiField TextBox email;
 	@UiField PasswordTextBox password;
 	@UiField Button login;
-	@UiField Button register;
+	@UiField Label register;
 	@UiField Label loginPending;
 
 	private LoginPresenterIface presenter;
