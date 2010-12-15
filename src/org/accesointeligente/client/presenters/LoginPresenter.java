@@ -26,7 +26,6 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 		void setPresenter(LoginPresenterIface presenter);
 		String getEmail();
 		String getPassword();
-		void setName(String name);
 	}
 
 	public LoginPresenter(Display display, EventBus eventBus) {

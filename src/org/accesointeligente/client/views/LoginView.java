@@ -20,7 +20,6 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Button register;
-	@UiField Label name;
 	@UiField Label loginPending;
 
 	private LoginPresenterIface presenter;
@@ -76,10 +75,5 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@Override
 	public String getPassword() {
 		return password.getText();
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name.setText("Hola " + name);
 	}
 }

@@ -20,8 +20,7 @@
 					</td>
 				</tr>
 			</table>
-			<g:Label ui:field="name"/>
 		</g:HTMLPanel>
 		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
 	</g:HTMLPanel>
-</ui:UiBinder> 
+</ui:UiBinder>
