@@ -18,22 +18,16 @@
 			<many-to-many column="categoryId" class="RequestCategory"/>
 		</set>
 		<property name="anotherInstitution"/>
-		<set name="formats" table="RequestFormats">
-			<key column="requestId"/>
-			<element column="requestFormat">
-				<type name="org.accesointeligente.server.EnumUserType">
-					<param name="enumClassName">org.accesointeligente.shared.RequestFormat</param>
-				</type>
-			</element>
-		</set>
-		<set name="methods" table="RequestMethods">
-			<key column="requestId"/>
-			<element column="requestMethod">
-				<type name="org.accesointeligente.server.EnumUserType">
-					<param name="enumClassName">org.accesointeligente.shared.RequestMethod</param>
-				</type>
-			</element>
-		</set>
+		<property name="format">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.RequestFormat</param>
+			</type>
+		</property>
+		<property name="method">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.RequestMethod</param>
+			</type>
+		</property>
 		<property name="status">
 			<type name="org.accesointeligente.server.EnumUserType">
 				<param name="enumClassName">org.accesointeligente.shared.RequestStatus</param>

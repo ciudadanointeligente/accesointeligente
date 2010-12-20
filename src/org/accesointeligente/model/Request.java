@@ -17,8 +17,8 @@ public class Request extends LightEntity {
 	private String title;
 	private Set<RequestCategory> categories;
 	private Boolean anotherInstitution;
-	private Set<RequestFormat> formats;
-	private Set<RequestMethod> methods;
+	private RequestFormat format;
+	private RequestMethod method;
 	private RequestStatus status;
 
 	public Integer getId() {
@@ -85,20 +85,20 @@ public class Request extends LightEntity {
 		this.anotherInstitution = anotherInstitution;
 	}
 
-	public Set<RequestFormat> getFormats() {
-		return formats;
+	public RequestFormat getFormat() {
+		return format;
 	}
 
-	public void setFormats(Set<RequestFormat> formats) {
-		this.formats = formats;
+	public void setFormat(RequestFormat format) {
+		this.format = format;
 	}
 
-	public Set<RequestMethod> getMethods() {
-		return methods;
+	public RequestMethod getMethod() {
+		return method;
 	}
 
-	public void setMethods(Set<RequestMethod> methods) {
-		this.methods = methods;
+	public void setMethod(RequestMethod method) {
+		this.method = method;
 	}
 
 	public RequestStatus getStatus() {

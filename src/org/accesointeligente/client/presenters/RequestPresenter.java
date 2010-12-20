@@ -16,7 +16,6 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -194,35 +193,21 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 				// User
 				request.setUser(ClientSessionUtil.getUser());
 
-				Set<RequestFormat> formats = new HashSet<RequestFormat>();
 				if (formatPaper) {
-					formats.add(RequestFormat.PAPER);
+					request.setFormat(RequestFormat.PAPER);
+				} else if (formatDigital) {
+					request.setFormat(RequestFormat.DIGITAL);
+				} else if (formatAny) {
+					request.setFormat(RequestFormat.DIGITAL);
 				}
 
-				if (formatDigital) {
-					formats.add(RequestFormat.DIGITAL);
-				}
-
-				if (formatAny) {
-					formats.add(RequestFormat.ANY);
-				}
-
-				request.setFormats(formats);
-
-				Set<RequestMethod> methods = new HashSet<RequestMethod>();
 				if (methodEmail) {
-					methods.add(RequestMethod.EMAIL);
+					request.setMethod(RequestMethod.EMAIL);
+				} else if (methodMail) {
+					request.setMethod(RequestMethod.MAIL);
+				} else if (methodOffice) {
+					request.setMethod(RequestMethod.OFFICE);
 				}
-
-				if (methodMail) {
-					methods.add(RequestMethod.MAIL);
-				}
-
-				if (methodOffice) {
-					methods.add(RequestMethod.OFFICE);
-				}
-
-				request.setMethods(methods);
 
 				RPC.getRequestService().makeRequest(request, new AsyncCallback<Void>() {
 					@Override
