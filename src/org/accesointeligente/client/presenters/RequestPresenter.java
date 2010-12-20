@@ -6,8 +6,6 @@ import org.accesointeligente.client.views.RequestView.State;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.shared.RequestFormat;
-import org.accesointeligente.shared.RequestMethod;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
@@ -40,12 +38,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		Set<RequestCategory> getRequestCategories();
 		Boolean getAnotherInstitutionYes();
 		Boolean getAnotherInstitutionNo();
-		Boolean getFormatPaper();
-		Boolean getFormatDigital();
-		Boolean getFormatAny();
-		Boolean getMethodEmail();
-		Boolean getMethodMail();
-		Boolean getMethodOffice();
 		// Step 4
 	}
 
@@ -148,12 +140,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 				Set<RequestCategory> categories = display.getRequestCategories();
 				Boolean anotherInstitutionYes = display.getAnotherInstitutionYes();
 				Boolean anotherInstitutionNo = display.getAnotherInstitutionNo();
-				Boolean formatPaper = display.getFormatPaper();
-				Boolean formatDigital = display.getFormatDigital();
-				Boolean formatAny = display.getFormatAny();
-				Boolean methodEmail = display.getMethodEmail();
-				Boolean methodMail = display.getMethodMail();
-				Boolean methodOffice = display.getMethodOffice();
 
 				if (requestTitle == null || requestTitle.trim().length() == 0) {
 					display.displayMessage("Por favor complete el campo de Titulo de la solicitud");
@@ -170,16 +156,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 					return;
 				}
 
-				if(formatPaper == false && formatDigital == false && formatAny == false) {
-					display.displayMessage("Por favor seleccione uno o más formatos para recibir la información");
-					return;
-				}
-
-				if(methodEmail == false && methodMail == false && methodOffice == false) {
-					display.displayMessage("Por favor seleccione una o más formas para recibir la información");
-					return;
-				}
-
 				Request request = new Request();
 				//Step 1
 				request.setInstitution(display.getInstitution());
@@ -192,22 +168,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 				request.setAnotherInstitution(display.getAnotherInstitutionYes());
 				// User
 				request.setUser(ClientSessionUtil.getUser());
-
-				if (formatPaper) {
-					request.setFormat(RequestFormat.PAPER);
-				} else if (formatDigital) {
-					request.setFormat(RequestFormat.DIGITAL);
-				} else if (formatAny) {
-					request.setFormat(RequestFormat.DIGITAL);
-				}
-
-				if (methodEmail) {
-					request.setMethod(RequestMethod.EMAIL);
-				} else if (methodMail) {
-					request.setMethod(RequestMethod.MAIL);
-				} else if (methodOffice) {
-					request.setMethod(RequestMethod.OFFICE);
-				}
 
 				RPC.getRequestService().makeRequest(request, new AsyncCallback<Void>() {
 					@Override

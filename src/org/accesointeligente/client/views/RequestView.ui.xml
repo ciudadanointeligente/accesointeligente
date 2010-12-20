@@ -24,16 +24,6 @@
 			<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
 			<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
 			<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" checked="true">No</g:RadioButton>
-			<br/>
-			<g:Label>Formato en que se requiere la información</g:Label>
-			<g:CheckBox ui:field="formatPaper">Papel</g:CheckBox>
-			<g:CheckBox ui:field="formatDigital">Digital</g:CheckBox>
-			<g:CheckBox ui:field="formatAny" checked="true">Cualquiera</g:CheckBox>
-			<br/>
-			<g:Label>Cómo quieres recibir esta información</g:Label>
-			<g:CheckBox ui:field="methodEmail" checked="true">Email</g:CheckBox>
-			<g:CheckBox ui:field="methodMail">Envío por correo</g:CheckBox>
-			<g:CheckBox ui:field="methodOffice">Retiro en oficina</g:CheckBox>
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="successPanel">
 			<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>

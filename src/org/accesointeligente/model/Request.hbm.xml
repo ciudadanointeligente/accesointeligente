@@ -18,16 +18,6 @@
 			<many-to-many column="categoryId" class="RequestCategory"/>
 		</set>
 		<property name="anotherInstitution"/>
-		<property name="format">
-			<type name="org.accesointeligente.server.EnumUserType">
-				<param name="enumClassName">org.accesointeligente.shared.RequestFormat</param>
-			</type>
-		</property>
-		<property name="method">
-			<type name="org.accesointeligente.server.EnumUserType">
-				<param name="enumClassName">org.accesointeligente.shared.RequestMethod</param>
-			</type>
-		</property>
 		<property name="status">
 			<type name="org.accesointeligente.server.EnumUserType">
 				<param name="enumClassName">org.accesointeligente.shared.RequestStatus</param>

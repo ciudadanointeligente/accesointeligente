@@ -76,12 +76,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@UiField FlowPanel requestCategoryPanel;
 	@UiField RadioButton anotherInstitutionYes;
 	@UiField RadioButton anotherInstitutionNo;
-	@UiField CheckBox formatPaper;
-	@UiField CheckBox formatDigital;
-	@UiField CheckBox formatAny;
-	@UiField CheckBox methodEmail;
-	@UiField CheckBox methodMail;
-	@UiField CheckBox methodOffice;
 
 	// Step 4
 	@UiField HTMLPanel successPanel;
@@ -168,36 +162,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@Override
 	public Boolean getAnotherInstitutionNo() {
 		return anotherInstitutionNo.getValue();
-	}
-
-	@Override
-	public Boolean getFormatPaper() {
-		return formatPaper.getValue();
-	}
-
-	@Override
-	public Boolean getFormatDigital() {
-		return formatDigital.getValue();
-	}
-
-	@Override
-	public Boolean getFormatAny() {
-		return formatAny.getValue();
-	}
-
-	@Override
-	public Boolean getMethodEmail() {
-		return methodEmail.getValue();
-	}
-
-	@Override
-	public Boolean getMethodMail() {
-		return methodMail.getValue();
-	}
-
-	@Override
-	public Boolean getMethodOffice() {
-		return methodOffice.getValue();
 	}
 
 	@Override
