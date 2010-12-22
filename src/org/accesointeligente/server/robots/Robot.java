@@ -9,7 +9,7 @@ public abstract class Robot {
 
 	public abstract void login() throws RobotException;
 
-	public abstract RequestStatus makeRequest(Request request) throws RobotException;
+	public abstract Request makeRequest(Request request) throws RobotException;
 
 	public abstract RequestStatus checkRequestStatus(Request request) throws RobotException;
 

@@ -21,6 +21,7 @@ public class Request extends LightEntity {
 	private RequestStatus status;
 	private Date date;
 	private Response response;
+	private String remoteIdentifier;
 
 	public Integer getId() {
 		return id;
@@ -108,5 +109,13 @@ public class Request extends LightEntity {
 
 	public void setResponse(Response response) {
 		this.response = response;
+	}
+
+	public String getRemoteIdentifier() {
+		return remoteIdentifier;
+	}
+
+	public void setRemoteIdentifier(String remoteIdentifier) {
+		this.remoteIdentifier = remoteIdentifier;
 	}
 }

@@ -1,0 +1,195 @@
+package org.accesointeligente.server.robots;
+
+import org.accesointeligente.model.Request;
+import org.accesointeligente.shared.RequestStatus;
+
+import org.apache.http.*;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.util.EntityUtils;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
+
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class SGS extends Robot {
+	private HttpClient client;
+	private HtmlCleaner cleaner;
+	private Boolean loggedIn = false;
+	private String characterEncoding;
+	private String baseUrl;
+	private String idEntidad;
+
+	public SGS() {
+		client = new DefaultHttpClient();
+		HttpProtocolParams.setUserAgent(client.getParams(), "Mozilla/5.0 (X11; U; Linux x86_64; es-CL; rv:1.9.2.12) Gecko/20101027 Ubuntu/10.10 (maverick) Firefox/3.6.12");
+		cleaner = new HtmlCleaner();
+	}
+
+	@Override
+	public void login() throws RobotException {
+		List<NameValuePair> formParams;
+		HttpPost post;
+		HttpGet get;
+		HttpResponse response;
+		TagNode document;
+		Header location;
+
+		try {
+			formParams = new ArrayList<NameValuePair>();
+			formParams.add(new BasicNameValuePair("login", username));
+			formParams.add(new BasicNameValuePair("password", password));
+			formParams.add(new BasicNameValuePair("Ingresar", "Ingresar"));
+
+			post = new HttpPost(baseUrl + "?accion=login");
+			post.addHeader("Referer", baseUrl + "?accion=Home");
+			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
+			response = client.execute(post);
+			location = response.getFirstHeader("Location");
+
+			if (location == null || !"index.php".equals(location.getValue())) {
+				throw new Exception();
+			}
+
+			EntityUtils.consume(response.getEntity());
+
+			get = new HttpGet(baseUrl + "");
+			get.addHeader("Referer", baseUrl + "?accion=Home");
+			response = client.execute(get);
+			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+
+			if (document.getElementListByAttValue("href", "index.php?accion=Salir", true, true).isEmpty()) {
+				throw new Exception();
+			}
+
+			loggedIn = true;
+		} catch (Throwable ex) {
+			throw new RobotException();
+		}
+	}
+
+	@Override
+	public Request makeRequest(Request request) throws RobotException {
+		if (!loggedIn) {
+			login();
+		}
+
+		List<NameValuePair> formParams;
+		HttpPost post;
+		HttpResponse response;
+		TagNode document, hidden;
+		Integer folio;
+		Header location;
+		Pattern pattern;
+		Matcher matcher;
+		String remoteIdentifier;
+
+		try {
+			formParams = new ArrayList<NameValuePair>();
+			formParams.add(new BasicNameValuePair("id_entidad", idEntidad));
+			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getTitle() + "\n\n" + request.getInformation() + "\n\n" + request.getContext()));
+			formParams.add(new BasicNameValuePair("notificacion", "0"));
+			formParams.add(new BasicNameValuePair("id_forma_recepcion", "1")); // Email
+			formParams.add(new BasicNameValuePair("oficina", ""));
+			formParams.add(new BasicNameValuePair("id_formato_entrega", "2")); // Digital
+			formParams.add(new BasicNameValuePair("Registrarse", "Continuar"));
+
+			post = new HttpPost(baseUrl + "?accion=solicitud-de-informacion&act=4");
+			post.addHeader("Referer", baseUrl + "?accion=Solicitud-de-Informacion");
+			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
+			response = client.execute(post);
+			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+
+			hidden = document.findElementByAttValue("name", "folio_hidden", true, true);
+
+			if (hidden == null || !"input".equals(hidden.getName())) {
+				throw new Exception();
+			}
+
+			folio = Integer.parseInt(hidden.getAttributeByName("value"));
+
+			if (folio == null) {
+				throw new Exception();
+			}
+
+			formParams = new ArrayList<NameValuePair>();
+			formParams.add(new BasicNameValuePair("folio_hidden", folio.toString()));
+			formParams.add(new BasicNameValuePair("Aceptar", "Enviar Solicitud"));
+
+			post = new HttpPost(baseUrl + "?accion=solicitud-de-informacion&act=6");
+			post.addHeader("Referer", baseUrl + "?accion=solicitud-de-informacion&act=4");
+			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
+			response = client.execute(post);
+			location = response.getFirstHeader("Location");
+
+			if (location == null) {
+				throw new Exception();
+			}
+
+			pattern = Pattern.compile("^index.php\\?accion=solicitud-de-informacion&act=5&folio=(.+)$");
+			matcher = pattern.matcher(location.getValue());
+
+			if (!matcher.matches()) {
+				throw new Exception();
+			}
+
+			remoteIdentifier = matcher.group(1);
+
+			if (remoteIdentifier == null || remoteIdentifier.length() == 0) {
+				throw new Exception();
+			}
+
+			EntityUtils.consume(response.getEntity());
+
+			request.setRemoteIdentifier(remoteIdentifier);
+			request.setStatus(RequestStatus.PENDING);
+
+			return request;
+		} catch (Throwable ex) {
+			throw new RobotException();
+		}
+	}
+
+	@Override
+	public RequestStatus checkRequestStatus(Request request) throws RobotException {
+		if (!loggedIn) {
+			login();
+		}
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getCharacterEncoding() {
+		return characterEncoding;
+	}
+
+	public void setCharacterEncoding(String characterEncoding) {
+		this.characterEncoding = characterEncoding;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public String getIdEntidad() {
+		return idEntidad;
+	}
+
+	public void setIdEntidad(String idEntidad) {
+		this.idEntidad = idEntidad;
+	}
+}
