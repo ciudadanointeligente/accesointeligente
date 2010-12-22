@@ -23,5 +23,7 @@
 				<param name="enumClassName">org.accesointeligente.shared.RequestStatus</param>
 			</type>
 		</property>
+		<property name="date"/>
+		<one-to-one name="response"/>
 	</class>
 </hibernate-mapping>

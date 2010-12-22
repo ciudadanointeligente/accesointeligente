@@ -6,11 +6,13 @@ import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	interface RequestStatusViewUiBinder extends UiBinder<Widget, RequestStatusView> {}
 
 	// UIFields
+	@UiField Label requestDate;
 	@UiField Label requestStatus;
 	@UiField Label institutionName;
 	@UiField Label requestInfo;
@@ -42,6 +45,11 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@Override
 	public void setPresenter(RequestStatusPresenterIface presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void setDate(Date date) {
+		requestDate.setText(DateTimeFormat.getFormat("d/M/y H:m").format(date));
 	}
 
 	@Override

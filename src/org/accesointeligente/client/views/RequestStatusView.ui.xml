@@ -3,16 +3,18 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestStatusView.css" />
 	<g:HTMLPanel>
+		<g:Label>Fecha de la solicitud</g:Label>
+		<g:Label ui:field="requestDate"></g:Label>
 		<g:Label>Estado de la solicitud</g:Label>
-		<g:Label ui:field="requestStatus">Pendiente</g:Label>
+		<g:Label ui:field="requestStatus"></g:Label>
 		<g:Label>Institución</g:Label>
-		<g:Label ui:field="institutionName">Nombre Institución</g:Label>
+		<g:Label ui:field="institutionName"></g:Label>
 		<g:Label>Información solicitada</g:Label>
-		<g:Label ui:field="requestInfo">Información</g:Label>
+		<g:Label ui:field="requestInfo"></g:Label>
 		<g:Label>Delimitación temporal de la información</g:Label>
-		<g:Label ui:field="requestContext">Año de la consulta</g:Label>
+		<g:Label ui:field="requestContext"></g:Label>
 		<g:Label>Título de la solicitud</g:Label>
-		<g:Label ui:field="requestTitle">Título</g:Label>
+		<g:Label ui:field="requestTitle"></g:Label>
 		<g:Label>Categorías a las que pertenece la solicitud</g:Label>
 		<g:FlowPanel ui:field="requestCategoryPanel"/>
 		<g:Label>Información solicitada a otro organismo</g:Label>

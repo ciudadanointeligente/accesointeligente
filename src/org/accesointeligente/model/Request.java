@@ -4,6 +4,7 @@ import org.accesointeligente.shared.*;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import java.util.Date;
 import java.util.Set;
 
 public class Request extends LightEntity {
@@ -18,6 +19,8 @@ public class Request extends LightEntity {
 	private Set<RequestCategory> categories;
 	private Boolean anotherInstitution;
 	private RequestStatus status;
+	private Date date;
+	private Response response;
 
 	public Integer getId() {
 		return id;
@@ -89,5 +92,21 @@ public class Request extends LightEntity {
 
 	public void setStatus(RequestStatus status) {
 		this.status = status;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Response getResponse() {
+		return response;
+	}
+
+	public void setResponse(Response response) {
+		this.response = response;
 	}
 }
