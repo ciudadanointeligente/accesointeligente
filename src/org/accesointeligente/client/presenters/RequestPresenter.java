@@ -11,6 +11,7 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.HashMap;
@@ -40,6 +41,8 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		Boolean getAnotherInstitutionNo();
 		// Step 4
 	}
+
+	private Request request;
 
 	public RequestPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
@@ -156,7 +159,8 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 					return;
 				}
 
-				Request request = new Request();
+				request = new Request();
+
 				//Step 1
 				request.setInstitution(display.getInstitution());
 				// Step 2
@@ -169,7 +173,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 				// User
 				request.setUser(ClientSessionUtil.getUser());
 
-				RPC.getRequestService().makeRequest(request, new AsyncCallback<Void>() {
+				RPC.getRequestService().makeRequest(request, new AsyncCallback<Request>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						caught.printStackTrace(System.err);
@@ -177,7 +181,8 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 					}
 
 					@Override
-					public void onSuccess(Void result) {
+					public void onSuccess(Request result) {
+						request = result;
 						display.setState(state.getNext());
 					}
 				});
@@ -196,6 +201,15 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 			display.setState(display.getState().getPrevious());
 		} catch (IndexOutOfBoundsException ioobe) {
 			display.displayMessage("No existe paso previo");
+		}
+	}
+
+	@Override
+	public void showRequest() {
+		if (request != null) {
+			History.newItem("status?requestId=" + request.getId());
+		} else {
+			display.displayMessage("No se ha podido cargar la solicitud");
 		}
 	}
 }

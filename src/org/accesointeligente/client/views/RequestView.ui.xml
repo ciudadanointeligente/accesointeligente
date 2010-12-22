@@ -27,6 +27,7 @@
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="successPanel">
 			<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
+			<g:Button ui:field="showRequest">Ver resumen</g:Button>
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="buttonPanel">
 			<g:Button ui:field="previous" visible="false">Anterior</g:Button>

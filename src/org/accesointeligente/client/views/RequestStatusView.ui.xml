@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="RequestStatusView.css" />
+	<g:HTMLPanel>
+		<g:Label>Estado de la solicitud</g:Label>
+		<g:Label ui:field="requestStatus">Pendiente</g:Label>
+		<g:Label>Institución</g:Label>
+		<g:Label ui:field="institutionName">Nombre Institución</g:Label>
+		<g:Label>Información solicitada</g:Label>
+		<g:Label ui:field="requestInfo">Información</g:Label>
+		<g:Label>Delimitación temporal de la información</g:Label>
+		<g:Label ui:field="requestContext">Año de la consulta</g:Label>
+		<g:Label>Título de la solicitud</g:Label>
+		<g:Label ui:field="requestTitle">Título</g:Label>
+		<g:Label>Categorías a las que pertenece la solicitud</g:Label>
+		<g:FlowPanel ui:field="requestCategoryPanel"/>
+		<g:Label>Información solicitada a otro organismo</g:Label>
+		<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution" enabled="false">Si</g:RadioButton>
+		<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" enabled="false">No</g:RadioButton>
+	</g:HTMLPanel>
+</ui:UiBinder>

@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -79,7 +80,7 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 
 	// Step 4
 	@UiField HTMLPanel successPanel;
-	// TODO This panel needs a label and a button to show the summary
+	@UiField Button showRequest;
 
 	// Navigation
 	@UiField HTMLPanel buttonPanel;
@@ -221,6 +222,13 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	protected void onPreviousClick(ClickEvent event) {
 		if (presenter != null) {
 			presenter.previousStep();
+		}
+	}
+
+	@UiHandler("showRequest")
+	protected void onShowRequestClick(ClickEvent event) {
+		if (presenter != null) {
+			presenter.showRequest();
 		}
 	}
 }
