@@ -14,10 +14,7 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> implements RequestPresenterIface {
 	public interface Display extends WidgetDisplay {
@@ -172,6 +169,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 				request.setAnotherInstitution(display.getAnotherInstitutionYes());
 				// User
 				request.setUser(ClientSessionUtil.getUser());
+				request.setDate(new Date());
 
 				RPC.getRequestService().makeRequest(request, new AsyncCallback<Request>() {
 					@Override
