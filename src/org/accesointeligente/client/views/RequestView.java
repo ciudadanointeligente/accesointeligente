@@ -7,26 +7,11 @@ import org.accesointeligente.model.RequestCategory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.History;
+import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RequestView extends Composite implements RequestPresenter.Display {
 	private static RequestViewUiBinder uiBinder = GWT.create(RequestViewUiBinder.class);
@@ -34,58 +19,27 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	interface RequestViewUiBinder extends UiBinder<Widget, RequestView> {}
 
 	public enum State {
-		INSTITUTION_SEARCH, // Step 1
-		REQUEST_INFO, // Step 2
-		REQUEST_DETAIL, // Step 3
-		SUCCESS; // Step 4
-
-		public State getPrevious() throws IndexOutOfBoundsException {
-			int ordinal = this.ordinal();
-			State[] values = State.values();
-
-			if (ordinal > 0) {
-				return values[ordinal - 1];
-			} else {
-				throw new IndexOutOfBoundsException();
-			}
-		}
-
-		public State getNext() throws IndexOutOfBoundsException {
-			int ordinal = this.ordinal();
-			State[] values = State.values();
-
-			if (ordinal < values.length) {
-				return values[ordinal + 1];
-			} else {
-				throw new IndexOutOfBoundsException();
-			}
-		}
+		REQUEST,
+		SUCCESS
 	}
 
-	// Step 1
 	@UiField HTMLPanel institutionSearchPanel;
 	@UiField SuggestBox institutionSearch;
 
-	// Step 2
 	@UiField HTMLPanel requestPanel;
 	@UiField TextArea requestInfo;
 	@UiField TextArea requestContext;
 
-	// Step 3
 	@UiField HTMLPanel requestDetailPanel;
 	@UiField TextBox requestTitle;
 	@UiField FlowPanel requestCategoryPanel;
 	@UiField RadioButton anotherInstitutionYes;
 	@UiField RadioButton anotherInstitutionNo;
 
-	// Step 4
 	@UiField HTMLPanel successPanel;
 	@UiField Button showRequest;
 
-	// Navigation
-	@UiField HTMLPanel buttonPanel;
-	@UiField Button previous;
-	@UiField Button next;
+	@UiField Button submitRequest;
 
 	private State state;
 	private Map<String, Institution> institutions;
@@ -119,16 +73,14 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	public void setState(State state) {
 		this.state = state;
 		// Panels
-		institutionSearchPanel.setVisible(State.INSTITUTION_SEARCH.equals(state));
-		requestPanel.setVisible(State.REQUEST_INFO.equals(state));
-		requestDetailPanel.setVisible(State.REQUEST_DETAIL.equals(state));
+		institutionSearchPanel.setVisible(State.REQUEST.equals(state));
+		requestPanel.setVisible(State.REQUEST.equals(state));
+		requestDetailPanel.setVisible(State.REQUEST.equals(state));
 		successPanel.setVisible(State.SUCCESS.equals(state));
 		// Buttons
-		previous.setVisible(!State.INSTITUTION_SEARCH.equals(state));
-		next.setVisible(!State.SUCCESS.equals(state));
+		submitRequest.setVisible(State.REQUEST.equals(state));
 	}
 
-	// Step 1
 	@Override
 	public Institution getInstitution() {
 		try {
@@ -138,7 +90,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 		}
 	}
 
-	// Step 2
 	@Override
 	public String getRequestInfo() {
 		return requestInfo.getValue();
@@ -149,7 +100,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 		return requestContext.getValue();
 	}
 
-	// Step 3
 	@Override
 	public String getRequestTitle() {
 		return requestTitle.getValue();
@@ -210,18 +160,10 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 		}
 	}
 
-	// Buttons
-	@UiHandler("next")
+	@UiHandler("submitRequest")
 	protected void onNextClick(ClickEvent event) {
 		if (presenter != null) {
-			presenter.nextStep();
-		}
-	}
-
-	@UiHandler("previous")
-	protected void onPreviousClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.previousStep();
+			presenter.submitRequest();
 		}
 	}
 

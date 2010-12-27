@@ -3,18 +3,18 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestView.css"/>
 	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="institutionSearchPanel" visible="false">
+		<g:HTMLPanel ui:field="institutionSearchPanel">
 			<g:Label>Escribe el nombre de la institucion</g:Label>
 			<g:SuggestBox ui:field="institutionSearch"/>
 		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="requestPanel" visible="false">
+		<g:HTMLPanel ui:field="requestPanel">
 			<g:Label>Información o documento que buscas</g:Label>
 			<g:TextArea ui:field="requestInfo"/>
 			<br/>
 			<g:Label>Delimita temporalmente la información que necesitas</g:Label>
 			<g:TextArea ui:field="requestContext"/>
 		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="requestDetailPanel" visible="false">
+		<g:HTMLPanel ui:field="requestDetailPanel">
 			<g:Label>Ponle título a tu solicitud</g:Label>
 			<g:TextBox ui:field="requestTitle"/>
 			<br/>
@@ -25,13 +25,10 @@
 			<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
 			<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" checked="true">No</g:RadioButton>
 		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="successPanel">
+		<g:Button ui:field="submitRequest" visible="false">Enviar solicitud</g:Button>
+		<g:HTMLPanel ui:field="successPanel" visible="false">
 			<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
 			<g:Button ui:field="showRequest">Ver resumen</g:Button>
-		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="buttonPanel">
-			<g:Button ui:field="previous" visible="false">Anterior</g:Button>
-			<g:Button ui:field="next" visible="false">Siguiente</g:Button>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 
