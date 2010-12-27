@@ -4,7 +4,8 @@ public enum RequestStatus {
 	NEW("Nueva"),
 	PENDING("Pendiente"),
 	EXPIRED("Vencida"),
-	CLOSED("Cerrada");
+	CLOSED("Cerrada"),
+	DERIVED("Derivada");
 
 	private String name;
 

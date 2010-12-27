@@ -97,7 +97,7 @@ public class SGS extends Robot {
 			formParams = new ArrayList<NameValuePair>();
 			formParams.add(new BasicNameValuePair("id_entidad", idEntidad));
 			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getTitle() + "\n\n" + request.getInformation() + "\n\n" + request.getContext()));
-			formParams.add(new BasicNameValuePair("notificacion", "0"));
+			formParams.add(new BasicNameValuePair("notificacion", "1"));
 			formParams.add(new BasicNameValuePair("id_forma_recepcion", "1")); // Email
 			formParams.add(new BasicNameValuePair("oficina", ""));
 			formParams.add(new BasicNameValuePair("id_formato_entrega", "2")); // Digital
@@ -165,8 +165,41 @@ public class SGS extends Robot {
 			login();
 		}
 
-		// TODO Auto-generated method stub
-		return null;
+		HttpGet get;
+		HttpResponse response;
+		TagNode document, statusCell;
+		String statusLabel;
+
+		try {
+			if (request.getRemoteIdentifier() == null || request.getRemoteIdentifier().length() == 0) {
+				throw new Exception();
+			}
+
+			get = new HttpGet(baseUrl + "?accion=mis-solicitudes&act=1&folio=" + request.getRemoteIdentifier());
+			get.addHeader("Referer", baseUrl + "?accion=Mis-Solicitudes");
+			response = client.execute(get);
+			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+			statusCell = document.findElementByAttValue("width", "36%", true, true);
+
+			if (statusCell == null) {
+				throw new Exception();
+			}
+
+			statusLabel = statusCell.getText().toString().trim();
+
+			// TODO: check if request expired
+			if (statusLabel.equals("En Proceso")) {
+				return RequestStatus.PENDING;
+			} else if (statusLabel.equals("Respondida")) {
+				return RequestStatus.CLOSED;
+			} else if (statusLabel.equals("Derivada")) {
+				return RequestStatus.DERIVED;
+			} else {
+				return null;
+			}
+		} catch (Throwable ex) {
+			throw new RobotException();
+		}
 	}
 
 	public String getCharacterEncoding() {
