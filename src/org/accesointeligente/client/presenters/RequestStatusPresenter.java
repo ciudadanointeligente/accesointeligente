@@ -11,11 +11,13 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.util.Date;
 import java.util.Set;
 
 public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresenter.Display> implements RequestStatusPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestStatusPresenterIface presenter);
+		void setDate(Date date);
 		void setStatus(RequestStatus status);
 		void setInstitutionName(String name);
 		void setRequestInfo(String info);
