@@ -65,11 +65,11 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 					display.setRequestTitle(result.getTitle());
 					display.setRequestCategories(result.getCategories());
 					display.setAnotherInstitution(result.getAnotherInstitution());
+					display.setDate(result.getDate());
 				} else {
 					display.displayMessage("No se puede cargar la solicitud");
 				}
 			}
-
 		});
 	}
 }
