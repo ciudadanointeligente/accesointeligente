@@ -1,0 +1,13 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="MainView.css"/>
+	<g:HTMLPanel>
+		<g:HTMLPanel ui:field="mainPanel" visible="false">
+			<g:Hyperlink ui:field="loginLink" targetHistoryToken="login" visible="false">Ingresar</g:Hyperlink>
+			<g:Hyperlink ui:field="logoutLink" targetHistoryToken="logout" visible="false">Salir</g:Hyperlink>
+			<g:Hyperlink ui:field="requestLink" targetHistoryToken="request" visible="false">Realizar una solicitud</g:Hyperlink>
+		</g:HTMLPanel>
+		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
+	</g:HTMLPanel>
+</ui:UiBinder>

@@ -11,6 +11,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,21 +19,22 @@ import java.util.Map;
 public class AppController implements ValueChangeHandler<String> {
 	private FlowPanel layout;
 	private EventBus eventBus;
+	private PopupPanel popup;
 
 	public AppController(EventBus eventBus) {
 		this.eventBus = eventBus;
 		layout = new FlowPanel();
+		popup = new PopupPanel();
 		setup();
 	}
 
 	private void setup() {
 		History.addValueChangeHandler(this);
 
-		eventBus.addHandler(LoginSuccessfulEvent.TYPE,	new LoginSuccessfulEventHandler () {
+		eventBus.addHandler(LoginSuccessfulEvent.TYPE, new LoginSuccessfulEventHandler() {
 			@Override
 			public void loginSuccessful(LoginSuccessfulEvent event) {
-				// TODO: implement MainPresenter/View
-				History.newItem("request");
+				History.newItem("main");
 			}
 		});
 
@@ -53,15 +55,22 @@ public class AppController implements ValueChangeHandler<String> {
 	}
 
 	public void switchSection(String token) {
-		if (ClientSessionUtil.checkSession ()) {
-			if (token.equals("request")) {
+		popup.hide();
+
+		if (ClientSessionUtil.checkSession()) {
+			if (token.equals("main")) {
+				MainPresenter presenter = new MainPresenter(new MainView(), eventBus);
+				presenter.bind();
+				layout.clear();
+				layout.add(presenter.getDisplay().asWidget());
+			} else if (token.equals("request")) {
 				RequestPresenter presenter = new RequestPresenter(new RequestView(), eventBus);
 				presenter.bind();
 				layout.clear();
 				layout.add(presenter.getDisplay().asWidget());
-			} else if (token.equals ("logout")) {
-				ClientSessionUtil.destroySession ();
-				History.newItem ("login");
+			} else if (token.equals("logout")) {
+				ClientSessionUtil.destroySession();
+				History.newItem("main");
 			} else if (token.startsWith("status")) {
 				Map<String, String> parameters = getHistoryTokenParameters(token);
 				try {
@@ -76,21 +85,29 @@ public class AppController implements ValueChangeHandler<String> {
 				}
 			} else {
 				// TODO: implement MainPresenter/View
-				History.newItem ("request");
+				History.newItem("main");
 			}
 		} else {
-			if (token.equals ("login")) {
-				LoginPresenter presenter = new LoginPresenter (new LoginView (), eventBus);
-				presenter.bind ();
-				layout.clear ();
-				layout.add (presenter.getDisplay ().asWidget ());
+			if (token.equals("main")) {
+				MainPresenter presenter = new MainPresenter(new MainView(), eventBus);
+				presenter.bind();
+				layout.clear();
+				layout.add(presenter.getDisplay().asWidget());
+			} else if (token.equals("login")) {
+				LoginPresenter presenter = new LoginPresenter(new LoginView(), eventBus);
+				presenter.bind();
+				popup.setModal(true);
+				popup.setGlassEnabled(true);
+				popup.clear();
+				popup.add(presenter.getDisplay().asWidget());
+				popup.center();
 			} else if (token.equals("register")) {
 				RegisterPresenter presenter = new RegisterPresenter(new RegisterView(), eventBus);
 				presenter.bind();
 				layout.clear();
 				layout.add(presenter.getDisplay().asWidget());
 			} else {
-				History.newItem ("login");
+				History.newItem("main");
 			}
 		}
 	}
@@ -108,20 +125,20 @@ public class AppController implements ValueChangeHandler<String> {
 	 * @return hashmap of the parameters
 	 */
 	private static Map<String, String> getHistoryTokenParameters(String historyToken) {
-		//skip if there is no question mark
+		// skip if there is no question mark
 		if (!historyToken.contains("?")) {
-		        return null;
+			return null;
 		}
 		// ? position
 		int questionMarkIndex = historyToken.indexOf("?") + 1;
 
-		//get the sub string of parameters var=1&var2=2&var3=3...
+		// get the sub string of parameters var=1&var2=2&var3=3...
 		String[] arStr = historyToken.substring(questionMarkIndex, historyToken.length()).split("&");
 		Map<String, String> params = new HashMap<String, String>();
 
 		for (int i = 0; i < arStr.length; i++) {
-		        String[] substr = arStr[i].split("=");
-		        params.put(substr[0], substr[1]);
+			String[] substr = arStr[i].split("=");
+			params.put(substr[0], substr[1]);
 		}
 
 		return params;

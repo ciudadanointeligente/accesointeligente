@@ -3,8 +3,8 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css" />
 
-	<g:HTMLPanel addStyleNames="{style.greyBlock}">
-		<g:HTMLPanel ui:field="loginForm" visible="false">
+	<g:HTMLPanel addStyleNames="{style.greyBlock}" width="320PX" height="400PX">
+		<g:HTMLPanel ui:field="loginForm">
 			<h1 class="{style.greyBlock}">LOGIN</h1>
 			<table>
 				<tr>
@@ -46,6 +46,5 @@
 				</p>
 			</div>
 		</g:HTMLPanel>
-		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
-	</g:HTMLPanel>
+		</g:HTMLPanel>
 </ui:UiBinder>

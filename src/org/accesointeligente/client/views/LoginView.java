@@ -15,12 +15,11 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 
-	@UiField HTMLPanel loginForm;
 	@UiField TextBox email;
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Label register;
-	@UiField Label loginPending;
+
 
 	private LoginPresenterIface presenter;
 
@@ -50,21 +49,6 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@Override
 	public void setPresenter(LoginPresenterIface presenter) {
 		this.presenter = presenter;
-	}
-
-	@Override
-	public void setDisplayMode(DisplayMode mode) {
-		switch (mode) {
-			case LoginForm:
-				loginForm.setVisible(true);
-				loginPending.setVisible(false);
-				email.setFocus(true);
-				break;
-			case LoginPending:
-				loginForm.setVisible(false);
-				loginPending.setVisible(true);
-				break;
-		}
 	}
 
 	@Override
