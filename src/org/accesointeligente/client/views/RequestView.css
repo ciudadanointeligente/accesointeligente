@@ -1,0 +1,232 @@
+.headSolicitud {
+	background-color: #DEE1E6;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	padding: 10px 10px 10px 30px;
+	color: #696969;
+	border-bottom: 4px solid #ffffff;
+	overflow: hidden;
+}
+
+.headSolicitud h1 {
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+	font-size: 12pt;
+	line-height: 120%;
+	float: left;
+}
+
+.waterBlock {
+	background-color: #D4ECED;
+	display: block;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	padding: 10px 10px 10px 30px;
+	color: #45B0BC;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+}
+
+.whiteBlock {
+	background-color: #FFFFFF;
+	display: block;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	padding: 6px 10px 6px 30px;
+	color: #45B0BC;
+	font-weight: normal;
+	letter-spacing: 0.4pt;
+}
+
+.circleNumber {
+	background-color: #45B0BC;
+	color: #FFFFFF;
+	display: block;
+	float: left;
+	font-size: 9px;
+	height: 16px;
+	margin: 0 -22px;
+	position: relative;
+	text-align: center;
+	width: 16px;
+	-moz-border-radius: 8px; /* FF1+ */
+	-webkit-border-radius: 8px; /* Saf3-4 */
+	border-radius: 8px; /* Opera 10.5, IE 9, Saf5, Chrome */
+}
+
+img.listIcon {
+	color: #FFFFFF;
+	display: block;
+	float: left;
+	font-size: 9px;
+	margin: 0 -22px;
+	position: relative;
+	text-align: center;
+}
+
+.greyBlock {
+	background-color: #f3f3f3;
+	display: block;
+	padding: 10px 25px 15px;
+	overflow: hidden;
+}
+
+.greyBlock div {
+	margin: 3px 6px 3px 0px;
+}
+
+.borderBottomW {
+	border-bottom: 2px solid #ffffff;
+}
+
+.borderBottomG {
+	border-bottom: 3px solid #f3f3f3;
+}
+
+.borderBottomG5 {
+	border-bottom: 5px solid #f3f3f3;
+}
+
+.bgGrey {
+	background-color: #f3f3f3;
+}
+
+.waterBlockDark {
+	background-color: #45B0BC;
+	display: block;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	padding: 7px 10px 10px 30px;
+	color: #FFFFFF;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+	overflow: hidden;
+}
+
+.waterBlockDark span {
+	color: #D4ECED;
+	letter-spacing: 0.7pt;
+	text-transform: none;
+}
+
+.waterBlockDark h1 {
+	color: #FFFFFF;
+	padding: 10px 0 7px;
+}
+
+.wbdHead {
+	width: 345px;
+	padding: 0 12px 0 0;
+}
+
+.exclamations {
+	display: block;
+	overflow: hidden;
+	padding: 5px;
+	float: left;
+	margin: 0 10px 10px -20px;
+}
+
+
+.sideBgImg img {
+	margin: 5px 20px 10px 0;
+	width: 80%;
+}
+
+.mW300 {
+	max-width: 340px;
+}
+
+.mW300 TextArea,.mW300 TextBox {
+	width: 340px;
+}
+
+.mW300 TextArea,.mW600 TextArea {
+	min-height: 100px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.mW600 {
+	max-width: 600px;
+}
+
+.mW600 TextArea {
+	width: 600px;
+}
+
+.mW600 .bgW {
+	padding: 10px;
+	margin: 10px 0 0 0;
+}
+
+.W600 {
+	display: block;
+	width: 250px;
+}
+
+.bgW {
+	background-color: #FFFFFF;
+}
+
+.bgW span.sideNote {
+	color: #45B0BC;
+	font-size: 11.5px;
+	letter-spacing: 0.2px;
+	line-height: 145%;
+	font-style: italic;
+}
+
+.greyBlock div.sideNote {
+	color: #45B0BC;
+	font-size: 11.5px;
+	letter-spacing: 0.2px;
+	line-height: 145%;
+	margin: 15px 10px 0;
+	font-style: italic;
+	float: left;
+	max-width: 250px;
+}
+
+.giantButton {
+	background: url("images/giantButton.png") no-repeat scroll 0 0
+		transparent;
+	border: 0 none;
+	height: 53px;
+	margin: 3px 15px;
+	width: 230px;
+}
+
+.greyGrad {
+	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom
+		#DDE1E6;
+	color: black;
+	display: block;
+	overflow: hidden;
+	padding: 10px 20px 0;
+}
+
+.greyGradText {
+	float: left;
+	font-size: 14pt;
+	margin: 0 20px 0 0;
+	padding: 10px;
+	text-align: right;
+	width: 200px;
+}
+
+img.mano {
+	bottom: -20px;
+	float: left;
+	position: relative;
+}
+
+.succesPanel {
+	margin: -25px 0 0 0;
+}

@@ -1,34 +1,198 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style src="RequestView.css"/>
-	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="institutionSearchPanel">
-			<g:Label>Escribe el nombre de la institucion</g:Label>
-			<g:SuggestBox ui:field="institutionSearch"/>
+	<ui:style src="RequestView.css" />
+	<g:HTMLPanel addStyleNames="{style.bgGrey}">
+		<div class="{style.headSolicitud}">
+			<h1>Solicitud de acceso a la información</h1>
+		</div>
+		<g:HTMLPanel ui:field="institutionSearchPanel" visible="false">
+			<div class="{style.waterBlockDark} {style.borderBottomG5}">
+				<div class="fLeft {style.wbdHead}">
+					<img class="{style.exclamations}" src="images/exclamations_w.png" />
+					<h1>Ahorremos tiempo y recursos</h1>
+					<span> ¿Estás seguro de que la información que buscas no ha sido
+						pedida antes?</span>
+				</div>
+				<div class="fLeft">
+					<a href="#">
+						<img src="images/irAlBuscador.png" />
+					</a>
+				</div>
+			</div>
+			<div>
+				<h2 class="{style.waterBlock} {style.borderBottomG}">
+					<span class="{style.circleNumber}">1</span>
+					¿A qué órgano del estado quieres solicitar la información?
+				</h2>
+				<div class="{style.whiteBlock} {style.borderBottomG}">
+					<img src="images/asterisco.png" class="{style.listIcon}" />
+					<i>Evita que te tramiten más de la cuenta! Averigua cuál es el
+						órgano que tiene la información que necesitas para que tu
+						solicitud no sea dirigida a otro organismo!</i>
+				</div>
+			</div>
+			<div class="{style.greyBlock}">
+				<g:Label addStyleNames="fLeft">Escribe el nombre de la institucion</g:Label>
+				<g:SuggestBox addStyleNames="fLeft" ui:field="institutionSearch" />
+			</div>
 		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="requestPanel">
-			<g:Label>Información o documento que buscas</g:Label>
-			<g:TextArea ui:field="requestInfo"/>
-			<br/>
-			<g:Label>Delimita temporalmente la información que necesitas</g:Label>
-			<g:TextArea ui:field="requestContext"/>
+
+
+
+
+		<g:HTMLPanel ui:field="requestPanel" visible="false">
+			<div>
+				<h2 class="{style.waterBlock} {style.borderBottomG}">
+					<span class="{style.circleNumber}">2</span>
+					¿Qué información o documento específico buscas de ese órgano?
+				</h2>
+				<div class="{style.whiteBlock} {style.borderBottomG}">
+					<img src="images/asterisco.png" class="{style.listIcon}" />
+					<i>No te alargues! Mientras más claro y preciso seas será más fácil
+						identificar lo que buscas...</i>
+				</div>
+			</div>
+			<div class="{style.greyBlock}">
+				<div class="fLeft {style.sideBgImg}">
+					<img src="images/bg_question.png" />
+				</div>
+				<div class="fLeft {style.mW300}">
+					<g:Label>Información o documento que buscas</g:Label>
+					<g:TextArea ui:field="requestInfo" />
+				</div>
+				<div class="{style.sideNote}">
+					<p>* Recuerda, este espacio no busca realizar sugerencias,
+						reclamos,
+						ni tampoco que argumentes sobre las razones por la que
+						éstas
+						haciendo la solicitud. Se respetuoso si no no será posible
+						enviar
+						tu solicitud</p>
+				</div>
+			</div>
+
+			<div>
+				<h2 class="{style.waterBlock} {style.borderBottomG}">
+					<span class="{style.circleNumber}">3</span>
+					Delimita temporalmente
+				</h2>
+				<div class="{style.whiteBlock} {style.borderBottomG}">
+					<img src="images/asterisco.png" class="{style.listIcon}" />
+					<i>
+						Es importante para que encuentren tu solicitud que la especifiques
+						lo más posible.
+						<br />
+						Nosotros
+						te ayudaremos.
+					</i>
+				</div>
+			</div>
+			<div class="{style.greyBlock}">
+				<div class="fLeft {style.sideBgImg}">
+					<img src="images/bg_clock.png" />
+				</div>
+				<div class="fLeft {style.mW300}">
+					<g:Label>Delimita temporalmente la información que necesitas</g:Label>
+					<g:TextArea ui:field="requestContext" />
+				</div>
+				<div class="{style.sideNote}">
+					<p>* Precisa temporalmente la información que necesitas ya que
+						tu
+						solicitud puede ser rechazada si es demasiado genérica. Por
+						ejemplo: “Oficios emitidos por tal organismo” o
+						“Todos los
+						contratos celebrados con tal empresa”</p>
+				</div>
+			</div>
+
 		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="requestDetailPanel">
-			<g:Label>Ponle título a tu solicitud</g:Label>
-			<g:TextBox ui:field="requestTitle"/>
-			<br/>
-			<g:Label>¿Podrías circunscribir la información que solicitas en alguna de estas categorías?</g:Label>
-			<g:FlowPanel ui:field="requestCategoryPanel"/>
-			<br/>
-			<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
-			<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
-			<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" checked="true">No</g:RadioButton>
+
+		<g:HTMLPanel ui:field="requestDetailPanel" visible="false">
+			<div>
+				<h2 class="{style.waterBlock} {style.borderBottomG}">
+					<span class="{style.circleNumber}">4</span>
+					Ayudanos a mejorar
+				</h2>
+			</div>
+			<div class="{style.greyBlock}">
+				<div class="fLeft {style.sideBgImg}">
+					<img src="images/bg_tag.png" />
+				</div>
+				<div class="fLeft {style.mW600}">
+					<div class="fLeft clearRight">
+						<g:Label addStyleNames="fLeft">Ponle título a tu solicitud</g:Label>
+						<g:TextBox addStyleNames="fLeft {style.W600}" ui:field="requestTitle" />
+					</div>
+					<div class="{style.bgW} fLeft">
+						<g:Label>¿Podrías circunscribir la información que solicitas en
+							alguna de estas categorías?</g:Label>
+						<span class="sideNote">* Responde sólo si estás seguro, si no déjalo
+							en blanco.</span>
+						<br />
+						<g:FlowPanel ui:field="requestCategoryPanel" />
+						<br />
+					</div>
+				</div>
+			</div>
+			<div>
+				<h2 class="{style.waterBlock} {style.borderBottomG}">
+					<span class="{style.circleNumber}">5</span>
+					<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
+				</h2>
+				<div class="{style.greyBlock}">
+					<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
+					<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution"
+						checked="true">No</g:RadioButton>
+				</div>
+			</div>
 		</g:HTMLPanel>
-		<g:Button ui:field="submitRequest" visible="false">Enviar solicitud</g:Button>
-		<g:HTMLPanel ui:field="successPanel" visible="false">
-			<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
-			<g:Button ui:field="showRequest">Ver resumen</g:Button>
+		<div class="{style.greyBlock}">
+			<g:Button ui:field="submitRequest" visible="false">Enviar solicitud</g:Button>
+		</div>
+		<g:HTMLPanel ui:field="successPanel" visible="false"
+			addStyleNames="{style.succesPanel}">
+			<div class="{style.waterBlockDark} {style.borderBottomG}">
+				<table>
+					<tr>
+						<td>
+							<img src="images/bg_check_green.png" />
+						</td>
+						<td>
+							<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="{style.waterBlockDark} {style.borderBottomG}">
+				<div class="fLeft">
+					<span>
+						*El órgano tiene 20 días hábiles para responder.
+						<br />
+						Te notificaremos por mail.
+						<br />
+						<br />
+						*Puedes revisar el estado de tu solicitud en
+						<a href="#"> tu perfil</a>
+					</span>
+				</div>
+				<g:Button addStyleNames="{style.giantButton} fLeft"
+					ui:field="showRequest">Ver resumen</g:Button>
+			</div>
+			<a href="#">
+				<div class="{style.greyGrad}">
+					<div class="{style.greyGradText}">
+						Te invitamos a revisar otras solicitudes
+						<h1>
+							Aquí
+					</h1>
+					</div>
+					<img class="{style.mano}" src="images/mano.png" />
+					<img class="{style.mano}" src="images/mano.png" />
+					<img class="{style.mano}" src="images/mano.png" />
+					<img class="{style.mano}" src="images/mano.png" />
+				</div>
+			</a>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -36,12 +36,33 @@ h1 {
 h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
 }
+.contentPad{
+ padding: 0px 10px;
+}
+.contentPad .noMargin{
+	margin: 0px -10px;
+}
+.fLeft{
+	float: left;
+}
+.fRight{
+	float: right;
+	}
+.clear{
+	clear: both;
+	}
+.clearRight{
+	clear: right;
+}
 
 /*---- GWT-----*/
 /** Example rules used by the template application (remove for your app) */
 .sendButton {
 	display: block;
 	font-size: 16pt;
+}
+.gwt-CheckBox {
+	padding: 3px 5px 3px 0px;
 }
 
 /** Most GWT widgets already have a style name defined */
@@ -73,4 +94,7 @@ h1,h2,h3,h4,h5,h6 {
 /*-----EXCEPTIONS----*/
 .contenedorRegistro .gwt-Label {
 	padding: 16px 0 5px;
+}
+.body .waterBlockDark span a, .body .waterBlockDark span a:hover, .body .waterBlockDark span a:visited{
+	color: #ffffff;
 }
