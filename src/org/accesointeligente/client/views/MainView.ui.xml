@@ -3,11 +3,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="MainView.css"/>
 	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="mainPanel" visible="false">
-			<g:Hyperlink ui:field="loginLink" targetHistoryToken="login" visible="false">Ingresar</g:Hyperlink>
-			<g:Hyperlink ui:field="logoutLink" targetHistoryToken="logout" visible="false">Salir</g:Hyperlink>
-			<g:Hyperlink ui:field="requestLink" targetHistoryToken="request" visible="false">Realizar una solicitud</g:Hyperlink>
+		<g:HTMLPanel ui:field="headerPanel" visible="false">
+			<g:HTMLPanel>
+				<g:Hyperlink ui:field="loginLink" targetHistoryToken="login" visible="false">Ingresar</g:Hyperlink>
+				<g:Hyperlink ui:field="logoutLink" targetHistoryToken="logout" visible="false">Salir</g:Hyperlink>
+				<g:Hyperlink targetHistoryToken="main">Home</g:Hyperlink>
+				<g:Hyperlink targetHistoryToken="about">Acerca del proyecto</g:Hyperlink>
+				<g:Hyperlink targetHistoryToken="contact">Contacto</g:Hyperlink>
+			</g:HTMLPanel>
 		</g:HTMLPanel>
+		<g:FlowPanel ui:field="mainPanel" visible="false"/>
 		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
 	</g:HTMLPanel>
 </ui:UiBinder>

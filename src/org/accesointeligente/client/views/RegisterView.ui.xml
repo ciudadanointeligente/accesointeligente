@@ -124,7 +124,6 @@
 			</g:HTMLPanel>
 			<div class="{style.formSection}">
 				<g:Button addStyleNames="{style.margRight}" ui:field="register">Registrarme</g:Button>
-				<g:Button addStyleNames="{style.margRight}" ui:field="login">Volver</g:Button>
 			</div>
 		</g:HTMLPanel>
 	</g:FormPanel>

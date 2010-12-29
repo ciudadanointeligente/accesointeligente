@@ -10,38 +10,45 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AppController implements ValueChangeHandler<String> {
-	private FlowPanel layout;
+	private MainPresenter mainPresenter;
 	private EventBus eventBus;
 	private PopupPanel popup;
 
 	public AppController(EventBus eventBus) {
 		this.eventBus = eventBus;
-		layout = new FlowPanel();
+		mainPresenter = new MainPresenter(new MainView(), eventBus);
+		this.eventBus.addHandler(LoginRequiredEvent.TYPE, mainPresenter);
+		this.eventBus.addHandler(LoginSuccessfulEvent.TYPE, mainPresenter);
 		popup = new PopupPanel();
-		setup();
 	}
 
-	private void setup() {
+	protected void setup() {
+		RootPanel.get().add(mainPresenter.getDisplay().asWidget());
+
+		mainPresenter.bind();
 		History.addValueChangeHandler(this);
 
 		eventBus.addHandler(LoginSuccessfulEvent.TYPE, new LoginSuccessfulEventHandler() {
 			@Override
 			public void loginSuccessful(LoginSuccessfulEvent event) {
-				History.newItem("main");
+				if (!"home".equals(History.getToken())) {
+					History.newItem("home");
+				}
 			}
 		});
 
 		eventBus.addHandler(LoginRequiredEvent.TYPE, new LoginRequiredEventHandler() {
 			@Override
 			public void loginRequired(LoginRequiredEvent event) {
-				History.newItem("login");
+				if (!"home".equals(History.getToken())) {
+					History.newItem("home");
+				}
 			}
 		});
 
@@ -58,19 +65,19 @@ public class AppController implements ValueChangeHandler<String> {
 		popup.hide();
 
 		if (ClientSessionUtil.checkSession()) {
-			if (token.equals("main")) {
-				MainPresenter presenter = new MainPresenter(new MainView(), eventBus);
+			if (token.equals("home")) {
+				HomePresenter presenter = new HomePresenter(new HomeView(), eventBus);
 				presenter.bind();
-				layout.clear();
-				layout.add(presenter.getDisplay().asWidget());
+				getLayout().clear();
+				getLayout().add(presenter.getDisplay().asWidget());
 			} else if (token.equals("request")) {
 				RequestPresenter presenter = new RequestPresenter(new RequestView(), eventBus);
 				presenter.bind();
-				layout.clear();
-				layout.add(presenter.getDisplay().asWidget());
+				getLayout().clear();
+				getLayout().add(presenter.getDisplay().asWidget());
 			} else if (token.equals("logout")) {
 				ClientSessionUtil.destroySession();
-				History.newItem("main");
+				eventBus.fireEvent(new LoginRequiredEvent());
 			} else if (token.startsWith("status")) {
 				Map<String, String> parameters = getHistoryTokenParameters(token);
 				try {
@@ -78,21 +85,20 @@ public class AppController implements ValueChangeHandler<String> {
 					RequestStatusPresenter presenter = new RequestStatusPresenter(new RequestStatusView(), eventBus);
 					presenter.bind();
 					presenter.showRequest(requestId);
-					layout.clear();
-					layout.add(presenter.getDisplay().asWidget());
+					getLayout().clear();
+					getLayout().add(presenter.getDisplay().asWidget());
 				} catch (Exception e) {
 					Window.alert("Id incorrecta: No se puede cargar la solicitud");
 				}
 			} else {
-				// TODO: implement MainPresenter/View
-				History.newItem("main");
+				History.newItem("home");
 			}
 		} else {
-			if (token.equals("main")) {
-				MainPresenter presenter = new MainPresenter(new MainView(), eventBus);
+			if (token.equals("home")) {
+				HomePresenter presenter = new HomePresenter(new HomeView(), eventBus);
 				presenter.bind();
-				layout.clear();
-				layout.add(presenter.getDisplay().asWidget());
+				getLayout().clear();
+				getLayout().add(presenter.getDisplay().asWidget());
 			} else if (token.equals("login")) {
 				LoginPresenter presenter = new LoginPresenter(new LoginView(), eventBus);
 				presenter.bind();
@@ -104,16 +110,16 @@ public class AppController implements ValueChangeHandler<String> {
 			} else if (token.equals("register")) {
 				RegisterPresenter presenter = new RegisterPresenter(new RegisterView(), eventBus);
 				presenter.bind();
-				layout.clear();
-				layout.add(presenter.getDisplay().asWidget());
+				getLayout().clear();
+				getLayout().add(presenter.getDisplay().asWidget());
 			} else {
-				History.newItem("main");
+				History.newItem("home");
 			}
 		}
 	}
 
 	public FlowPanel getLayout() {
-		return layout;
+		return mainPresenter.getDisplay().getLayout();
 	}
 
 	/**

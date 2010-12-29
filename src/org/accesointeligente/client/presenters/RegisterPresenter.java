@@ -213,14 +213,9 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				@Override
 				public void onSuccess(User result) {
 					Window.alert("Registro exitoso!");
-					login();
+					History.newItem("home");
 				}
 			});
 		}
-	}
-
-	@Override
-	public void login() {
-		History.newItem("login");
 	}
 }

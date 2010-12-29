@@ -2,8 +2,9 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
-import org.accesointeligente.client.presenters.MainPresenter.Display.DisplayMode;
+import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.views.MainView.DisplayMode;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
@@ -11,17 +12,13 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 
-public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implements MainPresenterIface {
+public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implements MainPresenterIface, LoginRequiredEventHandler, LoginSuccessfulEventHandler {
 	public interface Display extends WidgetDisplay {
-		public enum DisplayMode {
-			LoggedIn,
-			LoggedOut,
-			LoginPending
-		}
-
-		public void setDisplayMode(DisplayMode mode);
 		void setPresenter(MainPresenterIface presenter);
+		void setDisplayMode(DisplayMode mode);
+		FlowPanel getLayout();
 	}
 
 	public MainPresenter(Display display, EventBus eventBus) {
@@ -42,6 +39,16 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 	protected void onRevealDisplay() {
 	}
 
+	@Override
+	public void loginRequired(LoginRequiredEvent event) {
+		display.setDisplayMode(DisplayMode.LoggedOut);
+	}
+
+	@Override
+	public void loginSuccessful(LoginSuccessfulEvent event) {
+		display.setDisplayMode(DisplayMode.LoggedIn);
+	}
+
 	public void tryCookieLogin() {
 		final String sessionId = Cookies.getCookie("sessionId");
 
@@ -52,22 +59,21 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 				@Override
 				public void onFailure(Throwable caught) {
 					ClientSessionUtil.destroySession();
-					display.setDisplayMode(DisplayMode.LoggedOut);
 				}
 
 				@Override
 				public void onSuccess(SessionData result) {
 					if (sessionId.equals(result.getData().get("sessionId"))) {
 						ClientSessionUtil.createSession(result);
-						display.setDisplayMode(DisplayMode.LoggedIn);
+						eventBus.fireEvent(new LoginSuccessfulEvent());
 					} else {
 						ClientSessionUtil.destroySession();
-						display.setDisplayMode(DisplayMode.LoggedOut);
+						eventBus.fireEvent(new LoginRequiredEvent());
 					}
 				}
 			});
 		} else {
-			display.setDisplayMode(DisplayMode.LoggedOut);
+			eventBus.fireEvent(new LoginRequiredEvent());
 		}
 	}
 }

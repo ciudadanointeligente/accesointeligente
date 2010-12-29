@@ -56,7 +56,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	@UiField PasswordTextBox password1;
 	@UiField PasswordTextBox password2;
 	@UiField Button register;
-	@UiField Button login;
 
 	private RegisterPresenterIface presenter;
 
@@ -306,13 +305,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	public void onRegisterClick(ClickEvent event) {
 		if (presenter != null) {
 			presenter.register();
-		}
-	}
-
-	@UiHandler("login")
-	public void onLoginClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.login();
 		}
 	}
 }

@@ -7,5 +7,4 @@ public interface RegisterPresenterIface {
 	void getPersonAges();
 	void getRegions();
 	void register();
-	void login();
 }

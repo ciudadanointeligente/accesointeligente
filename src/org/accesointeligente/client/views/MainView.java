@@ -10,14 +10,18 @@ import com.google.gwt.user.client.ui.*;
 
 public class MainView extends Composite implements MainPresenter.Display {
 	private static MainViewUiBinder uiBinder = GWT.create(MainViewUiBinder.class);
+	interface MainViewUiBinder extends UiBinder<Widget, MainView> {}
 
-	interface MainViewUiBinder extends UiBinder<Widget, MainView> {
+	public enum DisplayMode {
+		LoggedIn,
+		LoggedOut,
+		LoginPending
 	}
 
-	@UiField HTMLPanel mainPanel;
+	@UiField HTMLPanel headerPanel;
+	@UiField FlowPanel mainPanel;
 	@UiField Hyperlink loginLink;
 	@UiField Hyperlink logoutLink;
-	@UiField Hyperlink requestLink;
 	@UiField Label loginPending;
 
 	private MainPresenterIface presenter;
@@ -38,10 +42,15 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@Override
 	public void setDisplayMode(DisplayMode mode) {
+		headerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		loginLink.setVisible(DisplayMode.LoggedOut.equals(mode));
 		logoutLink.setVisible(DisplayMode.LoggedIn.equals(mode));
-		requestLink.setVisible(DisplayMode.LoggedIn.equals(mode));
 		loginPending.setVisible(DisplayMode.LoginPending.equals(mode));
+	}
+
+	@Override
+	public FlowPanel getLayout() {
+		return mainPanel;
 	}
 }
