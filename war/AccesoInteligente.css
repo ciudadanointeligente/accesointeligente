@@ -54,6 +54,15 @@ h1,h2,h3,h4,h5,h6 {
 .clearRight{
 	clear: right;
 }
+/*---modules---*/
+.greyGrad {
+	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom #DDE1E6;
+	color: black;
+	display: block;
+	overflow: hidden;
+	padding: 15px 20px 0px;
+}
+
 
 /*---- GWT-----*/
 /** Example rules used by the template application (remove for your app) */
@@ -65,6 +74,9 @@ h1,h2,h3,h4,h5,h6 {
 	padding: 3px 5px 3px 0px;
 }
 
+.body .gwt-PopupPanel {
+    border: none;
+}
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
 	width: 400px;
@@ -95,6 +107,8 @@ h1,h2,h3,h4,h5,h6 {
 .contenedorRegistro .gwt-Label {
 	padding: 16px 0 5px;
 }
-.body .waterBlockDark span a, .body .waterBlockDark span a:hover, .body .waterBlockDark span a:visited{
+.body .waterBlockDark a, .body .waterBlockDark a:hover, .body .waterBlockDark a:visited, .body .waterBlockDark a:link{
 	color: #ffffff;
 }
+
+

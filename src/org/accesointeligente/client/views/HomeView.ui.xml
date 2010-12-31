@@ -1,22 +1,63 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style src="HomeView.css"/>
+	<ui:style src="HomeView.css" />
+
 	<g:HTMLPanel>
-		<g:FocusPanel ui:field="requestFormLink" visible="false">
-			<g:HTMLPanel>
-				Haz tu solicitud aquí
-			</g:HTMLPanel>
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="requestListLink">
-			<g:HTMLPanel>
-				Revisa otras solicitudes aquí
-			</g:HTMLPanel>
-		</g:FocusPanel>
-		<g:FlowPanel ui:field="lastResponses">
-			<g:HTMLPanel>
-				Ultimas Respuestas
-			</g:HTMLPanel>
-		</g:FlowPanel>
+		<div class="{style.padWhite}">
+			<div class="greyGrad {style.modulesHome}">
+				<div class="{style.modulesHomeContent}">
+					<h1>¡Bienvenido!</h1>
+					<p>Para avanzar en elcamino de la transparencia, facilitar el
+						acceso
+						a la información pública creamos Acceso Inteligente, una
+						plataforma
+						que te permite hacer solicitides de acceso a información
+						pública
+						dirigidas cualquier organismo del Estado* en un sólo lugar.
+				</p>
+				</div>
+			</div>
+			<div class="greyGrad {style.modulesHome}">
+
+				<g:FocusPanel ui:field="requestFormLink"
+					addStyleNames="{style.modulesHomeContent} {style.bgMano}">
+					<g:HTMLPanel>
+						<h1>
+							Haz tu solicitud
+							<br />
+							<span>Aquí</span>
+						</h1>
+					</g:HTMLPanel>
+				</g:FocusPanel>
+			</div>
+			<div class="greyGrad {style.modulesHome}">
+				<g:FocusPanel ui:field="requestListLink"
+					addStyleNames="{style.modulesHomeContent} {style.bgManos}">
+					<g:HTMLPanel>
+						<h1>
+							Revisa otras
+							<br />
+							solicitudes
+							<br />
+							<span>Aquí</span>
+						</h1>
+					</g:HTMLPanel>
+				</g:FocusPanel>
+			</div>
+		</div>
+		<div class="{style.padGrey}">
+			<div class="{style.modulesHomeBottom}">
+				<h1>Saber +</h1>
+			</div>
+			<div class="{style.modulesHomeBottom}">
+				<h1>VIDEO</h1>
+			</div>
+			<g:FlowPanel ui:field="lastResponses" addStyleNames="{style.modulesHomeBottom}">
+				<g:HTMLPanel>
+					<h1>Ultimas Respuestas</h1>
+				</g:HTMLPanel>
+			</g:FlowPanel>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

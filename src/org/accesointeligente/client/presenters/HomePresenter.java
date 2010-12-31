@@ -9,7 +9,6 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 public class HomePresenter extends WidgetPresenter<HomePresenter.Display> implements HomePresenterIface {//, LoginRequiredEventHandler, LoginSuccessfulEventHandler {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(HomePresenterIface presenter);
-		void setAuthenticated(Boolean authenticated);
 	}
 
 	public HomePresenter(Display display, EventBus eventBus) {
@@ -19,7 +18,6 @@ public class HomePresenter extends WidgetPresenter<HomePresenter.Display> implem
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		display.setAuthenticated(ClientSessionUtil.checkSession());
 	}
 
 	@Override

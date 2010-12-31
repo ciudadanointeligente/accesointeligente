@@ -33,11 +33,6 @@ public class HomeView extends Composite implements HomePresenter.Display {
 		this.presenter = presenter;
 	}
 
-	@Override
-	public void setAuthenticated(Boolean authenticated) {
-		requestFormLink.setVisible(authenticated);
-	}
-
 	@UiHandler("requestFormLink")
 	public void onRequestFormLinkClick(ClickEvent event) {
 		History.newItem("request");

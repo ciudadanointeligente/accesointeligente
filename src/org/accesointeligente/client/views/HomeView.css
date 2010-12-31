@@ -1,0 +1,82 @@
+.modulesHome {
+	float: left;
+	height: 237px;
+	margin-right: 12px;
+	width: 268px;
+}
+
+.padWhite .modulesHome:last-child, .modulesHomeBottom:last-child {
+	margin-right: 0px;
+}
+
+.modulesHomeContent {
+	padding-top: 15px;
+	color: #616161;
+	line-height: 160%;
+}
+
+.modulesHomeContent h1 {
+	text-align: center;
+	color: black;
+	letter-spacing: 1pt;
+	line-height: 140%;
+}
+
+.modulesHomeContent h1 span {
+	font-size: 2em;
+	font-variant: small-caps;
+	letter-spacing: 2pt;
+	text-transform: lowercase;
+}
+
+.padWhite {
+	clear: both;
+	background-color: white;
+	padding: 12px 0px;
+	overflow: hidden;
+	width: 950px;
+}
+
+.padGrey {
+	clear: both;
+	background-color: #e3e3e3;
+	display: block;
+	overflow: hidden;
+}
+
+.modulesHomeBottom {
+	width: 288px;
+	height: 150px;
+	margin-right: 12px;
+	padding: 10px;
+	float: left;
+	color: #333333;
+}
+.modulesHomeBottom h1{
+	 color: #333333;
+    font-weight: normal;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+}
+
+.modulesHomeBottom:first-child {
+	padding: 10px 20px;
+	width: 268px;
+}
+
+.bgMano {
+	background: url("images/home/big_hand.png") no-repeat scroll 0 bottom
+		transparent;
+	height: 227px;
+	position: relative;
+	width: 100%;
+	cursor: pointer;
+}
+
+.bgManos {
+	background: url("images/mano.png") repeat-x scroll -9px bottom transparent;
+    height: 227px;
+    position: relative;
+    width: 271px;
+    cursor: pointer;
+}
