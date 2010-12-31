@@ -5,11 +5,20 @@
 	<g:HTMLPanel>
 		<g:HTMLPanel ui:field="headerPanel" visible="false">
 			<g:HTMLPanel>
-				<g:Hyperlink ui:field="loginLink" targetHistoryToken="login" visible="false">Ingresar</g:Hyperlink>
-				<g:Hyperlink ui:field="logoutLink" targetHistoryToken="logout" visible="false">Salir</g:Hyperlink>
-				<g:Hyperlink targetHistoryToken="main">Home</g:Hyperlink>
-				<g:Hyperlink targetHistoryToken="about">Acerca del proyecto</g:Hyperlink>
-				<g:Hyperlink targetHistoryToken="contact">Contacto</g:Hyperlink>
+				<g:MenuBar>
+					<g:MenuItem>Mi cuenta
+						<g:MenuBar vertical="true">
+							<g:MenuItem ui:field="login" visible="false">Ingresar</g:MenuItem>
+							<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
+						</g:MenuBar>
+					</g:MenuItem>
+					<g:MenuItemSeparator/>
+					<g:MenuItem ui:field="home">Home</g:MenuItem>
+					<g:MenuItemSeparator/>
+					<g:MenuItem ui:field="about">Acerca del proyecto</g:MenuItem>
+					<g:MenuItemSeparator/>
+					<g:MenuItem ui:field="contact">Contacto</g:MenuItem>
+				</g:MenuBar>
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 		<g:FlowPanel ui:field="mainPanel" visible="false"/>

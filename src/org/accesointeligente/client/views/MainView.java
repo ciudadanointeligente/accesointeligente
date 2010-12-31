@@ -6,6 +6,8 @@ import org.accesointeligente.client.presenters.MainPresenterIface;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 
 public class MainView extends Composite implements MainPresenter.Display {
@@ -20,14 +22,52 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@UiField HTMLPanel headerPanel;
 	@UiField FlowPanel mainPanel;
-	@UiField Hyperlink loginLink;
-	@UiField Hyperlink logoutLink;
+	@UiField MenuItem login;
+	@UiField MenuItem logout;
+	@UiField MenuItem home;
+	@UiField MenuItem about;
+	@UiField MenuItem contact;
 	@UiField Label loginPending;
 
 	private MainPresenterIface presenter;
 
 	public MainView() {
 		initWidget(uiBinder.createAndBindUi(this));
+
+		login.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem("login");
+			}
+		});
+
+		logout.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem("logout");
+			}
+		});
+
+		home.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem("home");
+			}
+		});
+
+		about.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem("about");
+			}
+		});
+
+		contact.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem("contact");
+			}
+		});
 	}
 
 	@Override
@@ -44,8 +84,8 @@ public class MainView extends Composite implements MainPresenter.Display {
 	public void setDisplayMode(DisplayMode mode) {
 		headerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
-		loginLink.setVisible(DisplayMode.LoggedOut.equals(mode));
-		logoutLink.setVisible(DisplayMode.LoggedIn.equals(mode));
+		login.setVisible(DisplayMode.LoggedOut.equals(mode));
+		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
 		loginPending.setVisible(DisplayMode.LoginPending.equals(mode));
 	}
 
