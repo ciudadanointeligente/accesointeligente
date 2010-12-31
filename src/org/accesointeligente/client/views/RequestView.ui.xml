@@ -159,7 +159,7 @@
 							<img src="images/bg_check_green.png" />
 						</td>
 						<td>
-							<g:Label>Tu solicitud ha sido despachada correctamente</g:Label>
+							<h2>Tu solicitud ha sido despachada correctamente</h2>
 						</td>
 					</tr>
 				</table>
@@ -180,13 +180,14 @@
 					ui:field="showRequest">Ver resumen</g:Button>
 			</div>
 			<a href="#">
-				<div class="{style.greyGrad}">
+				<div class="greyGrad">
 					<div class="{style.greyGradText}">
 						Te invitamos a revisar otras solicitudes
 						<h1>
 							Aquí
 					</h1>
 					</div>
+					<img class="{style.mano}" src="images/mano.png" />
 					<img class="{style.mano}" src="images/mano.png" />
 					<img class="{style.mano}" src="images/mano.png" />
 					<img class="{style.mano}" src="images/mano.png" />

@@ -96,7 +96,7 @@ img.listIcon {
 }
 
 .waterBlockDark {
-	background-color: #45B0BC;
+	background-color: #73C8CA;
 	display: block;
 	line-height: 120%;
 	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
@@ -132,7 +132,6 @@ img.listIcon {
 	float: left;
 	margin: 0 10px 10px -20px;
 }
-
 
 .sideBgImg img {
 	margin: 5px 20px 10px 0;
@@ -201,15 +200,6 @@ img.listIcon {
 	height: 53px;
 	margin: 3px 15px;
 	width: 230px;
-}
-
-.greyGrad {
-	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom
-		#DDE1E6;
-	color: black;
-	display: block;
-	overflow: hidden;
-	padding: 10px 20px 0;
 }
 
 .greyGradText {
