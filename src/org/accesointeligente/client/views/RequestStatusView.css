@@ -1,0 +1,107 @@
+.greyBlock {
+	background-color: #f3f3f3;
+	display: block;
+	padding: 10px 25px 15px;
+	overflow: hidden;
+}
+
+.greyBlock div {
+	margin: 3px 6px 3px 0px;
+}
+
+.statusDetail td {
+	padding: 7px 350px 30px 20px;
+}
+
+.statusDetail td.waterBlock {
+	background-color: #D4ECED;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	padding: 10px 10px 10px 30px;
+	color: #45B0BC;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+}
+
+.statusDetail {
+	width: 100%;
+}
+
+.categories div {
+	background-color: #B3B6BF;
+	color: white;
+	float: left;
+	margin: 3px 10px 3px 0;
+	padding: 3px 10px;
+	-moz-border-radius: 4px; /* FF1+ */
+	-webkit-border-radius: 4px; /* Saf3-4 */
+	border-radius: 4px; /* Opera 10.5, IE 9, Saf5, Chrome */
+}
+
+.statusTable {
+	margin: 10px;
+	width: 930px;
+}
+
+.statusTable th {
+	border-top: 1px dashed #adadad;
+	border-bottom: 1px dashed #adadad;
+	border-right: 1px dashed #adadad;
+	color: indigo;
+	text-transform: uppercase;
+	font-family: calibri, trebuchet MS, arial, sans serif;
+	padding: 2px 10px;
+	vertical-align: middle;
+}
+
+.statusTable th,.statusTable td {
+	padding: 5px 10px;
+}
+
+.statusTable tr {
+	border-top: 1px dashed #adadad;
+	border-bottom: 1px dashed #adadad;
+}
+
+.statusTable td {
+	text-align: center;
+	vertical-align: top;
+}
+
+.statusTable td:first-child,.statusTable th:first-child {
+	padding: 5px 10px 5px 20px;
+}
+
+.statusTable td:last-child,.statusTable th:last-child {
+	padding: 5px 3px 5px 10px;
+	border-right: 0;
+}
+
+.statusTable td.title {
+	text-align: left;
+	max-width: 350px;
+}
+
+.statusTable .institution {
+	max-width: 140px;
+	white-space: normal;
+}
+
+.waterBlockDark {
+	background-color: #73C8CA;
+	display: block;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	padding: 7px 10px 10px 30px;
+	color: #FFFFFF;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+	overflow: hidden;
+}
+td.imgStatus img{
+	padding: 4px;
+}

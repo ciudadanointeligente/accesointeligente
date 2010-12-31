@@ -2,23 +2,57 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestStatusView.css" />
+
 	<g:HTMLPanel>
-		<g:Label>Fecha de la solicitud</g:Label>
-		<g:Label ui:field="requestDate"></g:Label>
-		<g:Label>Estado de la solicitud</g:Label>
-		<g:Label ui:field="requestStatus"></g:Label>
-		<g:Label>Institución</g:Label>
-		<g:Label ui:field="institutionName"></g:Label>
-		<g:Label>Información solicitada</g:Label>
-		<g:Label ui:field="requestInfo"></g:Label>
-		<g:Label>Delimitación temporal de la información</g:Label>
-		<g:Label ui:field="requestContext"></g:Label>
-		<g:Label>Título de la solicitud</g:Label>
-		<g:Label ui:field="requestTitle"></g:Label>
-		<g:Label>Categorías a las que pertenece la solicitud</g:Label>
-		<g:FlowPanel ui:field="requestCategoryPanel"/>
-		<g:Label>Información solicitada a otro organismo</g:Label>
-		<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution" enabled="false">Si</g:RadioButton>
-		<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" enabled="false">No</g:RadioButton>
+	<div class="{style.waterBlockDark} clear"><h2>Resumen de la solicitud</h2></div>
+		<table class="{style.statusTable}">
+			<tr>
+				<th>Estado</th>
+				<th>Título de la solicitud</th>
+				<th>Institución</th>
+				<th>Solicita a <br/> otro organismo</th>
+				<th>Fecha</th>
+			</tr>
+			<tr>
+				<td class="{style.imgStatus}">
+					<g:Label ui:field="requestStatus"></g:Label>
+				</td>
+				<td class="{style.title}">
+					<g:Label ui:field="requestTitle"></g:Label>
+				</td>
+				<td class="{style.institution}">
+					<g:Label ui:field="institutionName"></g:Label>
+				</td>
+				<td>
+					<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution"
+						enabled="false">Si</g:RadioButton>
+					<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution"
+						enabled="false">No</g:RadioButton>
+				</td>
+				<td>
+					<g:Label ui:field="requestDate"></g:Label>
+				</td>
+			</tr>
+			</table>
+			<table class="{style.statusDetail}">
+			<tr>
+				<td class="{style.waterBlock}">Información solicitada</td>
+			</tr>
+			<tr>
+				<td class=""><g:Label ui:field="requestInfo"></g:Label></td>
+			</tr>
+			<tr>
+				<td class="{style.waterBlock}">Delimitación temporal de la información</td>
+			</tr>
+			<tr>
+				<td class=""><g:Label ui:field="requestContext"></g:Label></td>
+			</tr>
+			<tr>
+				<td class="{style.waterBlock}"><g:Label>Categorías a las que pertenece la solicitud</g:Label></td>
+			</tr>
+			<tr>
+				<td><g:FlowPanel ui:field="requestCategoryPanel" addStyleNames="{style.categories}" /> </td>
+			</tr>
+		</table>
 	</g:HTMLPanel>
 </ui:UiBinder>
