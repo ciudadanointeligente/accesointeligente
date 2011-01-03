@@ -37,4 +37,9 @@ public class HomeView extends Composite implements HomePresenter.Display {
 	public void onRequestFormLinkClick(ClickEvent event) {
 		History.newItem("request");
 	}
+
+   @UiHandler("requestListLink")
+   public void onRequestListLinkClick(ClickEvent event) {
+           History.newItem("list?type=general");
+   }
 }

@@ -4,7 +4,10 @@
 	<ui:style src="RequestStatusView.css" />
 
 	<g:HTMLPanel>
-	<div class="{style.waterBlockDark} clear"><h2>Resumen de la solicitud</h2></div>
+		<g:Anchor ui:field="requestListLink">
+			Ir al listado de solicitudes
+		</g:Anchor>
+		<div class="{style.waterBlockDark} clear"><h2>Resumen de la solicitud</h2></div>
 		<table class="{style.statusTable}">
 			<tr>
 				<th>Estado</th>

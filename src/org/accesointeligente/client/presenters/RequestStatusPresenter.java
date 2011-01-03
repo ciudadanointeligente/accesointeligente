@@ -1,5 +1,7 @@
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.AppController;
+import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -12,6 +14,7 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresenter.Display> implements RequestStatusPresenterIface {
@@ -71,5 +74,25 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 				}
 			}
 		});
+	}
+
+	@Override
+	public String getListLink() {
+		String tokenLink = null;
+		List<String> tokenList = AppController.getTokens();
+
+		try  {
+			if (tokenList.get(tokenList.size() - 2).equals("request")) {
+				if (ClientSessionUtil.checkSession()) {
+					tokenLink = "list?type=mylist";
+				} else {
+					tokenLink = "list?type=general";
+				}
+			}
+		} catch (Exception e) {
+			display.displayMessage("Ha ocurrido un error al cargar la lista de solicitudes");
+		}
+
+		return tokenLink;
 	}
 }
