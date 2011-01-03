@@ -1,8 +1,12 @@
 package org.accesointeligente.server.services;
 
 import org.accesointeligente.client.services.RequestService;
-import org.accesointeligente.model.*;
+import org.accesointeligente.model.Request;
+import org.accesointeligente.model.RequestCategory;
+import org.accesointeligente.model.User;
 import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.server.SessionUtil;
+import org.accesointeligente.shared.RequestStatus;
 import org.accesointeligente.shared.ServiceException;
 
 import net.sf.gilead.core.PersistentBeanManager;
@@ -71,6 +75,71 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.add(Restrictions.eq("id", requestId));
 			Request request = (Request) criteria.uniqueResult();
 			return (Request) persistentBeanManager.clone(request);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public List<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			User user = SessionUtil.getUser();
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setFirstResult(offset);
+			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.eq("user", user));
+			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("institution"));
+			criteria.setFetchMode("institution", FetchMode.JOIN);
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			User user = SessionUtil.getUser();
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setFirstResult(offset);
+			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.eq("user", user));
+			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("institution"));
+			criteria.setFetchMode("institution", FetchMode.JOIN);
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setFirstResult(offset);
+			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
+			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("institution"));
+			criteria.setFetchMode("institution", FetchMode.JOIN);
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			return requests;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();

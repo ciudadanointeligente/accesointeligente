@@ -10,15 +10,17 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class AppController implements ValueChangeHandler<String> {
 	private MainPresenter mainPresenter;
 	private EventBus eventBus;
 	private PopupPanel popup;
+	private static List<String> tokens = new ArrayList<String>();
 
 	public AppController(EventBus eventBus) {
 		this.eventBus = eventBus;
@@ -64,6 +66,8 @@ public class AppController implements ValueChangeHandler<String> {
 	public void switchSection(String token) {
 		popup.hide();
 
+		tokens.add(token);
+
 		if (ClientSessionUtil.checkSession()) {
 			if (token.equals("home")) {
 				HomePresenter presenter = new HomePresenter(new HomeView(), eventBus);
@@ -90,6 +94,18 @@ public class AppController implements ValueChangeHandler<String> {
 				} catch (Exception e) {
 					Window.alert("Id incorrecta: No se puede cargar la solicitud");
 				}
+			} else if (token.startsWith("list")) {
+				Map<String, String> parameters = getHistoryTokenParameters(token);
+				try {
+					String listType = parameters.get("type");
+					RequestListPresenter presenter = new RequestListPresenter(new RequestListView(), eventBus);
+					presenter.bind();
+					presenter.loadRequests(0, 100, listType);
+					getLayout().clear();
+					getLayout().add(presenter.getDisplay().asWidget());
+				} catch (Exception e) {
+					Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
+				}
 			} else {
 				History.newItem("home");
 			}
@@ -112,6 +128,30 @@ public class AppController implements ValueChangeHandler<String> {
 				presenter.bind();
 				getLayout().clear();
 				getLayout().add(presenter.getDisplay().asWidget());
+			} else if (token.startsWith("status")) {
+				Map<String, String> parameters = getHistoryTokenParameters(token);
+				try {
+					Integer requestId = Integer.parseInt(parameters.get("requestId"));
+					RequestStatusPresenter presenter = new RequestStatusPresenter(new RequestStatusView(), eventBus);
+					presenter.bind();
+					presenter.showRequest(requestId);
+					getLayout().clear();
+					getLayout().add(presenter.getDisplay().asWidget());
+				} catch (Exception e) {
+					Window.alert("Id incorrecta: No se puede cargar la solicitud");
+				}
+			} else if (token.startsWith("list")) {
+				Map<String, String> parameters = getHistoryTokenParameters(token);
+				try {
+					String listType = parameters.get("type");
+					RequestListPresenter presenter = new RequestListPresenter(new RequestListView(), eventBus);
+					presenter.bind();
+					presenter.loadRequests(0, 100, listType);
+					getLayout().clear();
+					getLayout().add(presenter.getDisplay().asWidget());
+				} catch (Exception e) {
+					Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
+				}
 			} else {
 				History.newItem("home");
 			}
@@ -148,5 +188,9 @@ public class AppController implements ValueChangeHandler<String> {
 		}
 
 		return params;
+	}
+
+	public static List<String> getTokens() {
+		return tokens;
 	}
 }
