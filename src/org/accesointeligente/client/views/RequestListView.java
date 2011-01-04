@@ -1,16 +1,16 @@
 package org.accesointeligente.client.views;
 
+import org.accesointeligente.client.*;
 import org.accesointeligente.client.presenters.RequestListPresenter;
 import org.accesointeligente.client.presenters.RequestListPresenterIface;
 import org.accesointeligente.model.Request;
 
-import com.google.gwt.cell.client.*;
+import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
-import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
@@ -59,22 +59,28 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@Override
 	public void initTableColumns() {
 		// Status
-		Column<Request, String> statusColumn = new Column<Request, String>(new ImageCell()) {
+		Column<Request, CustomImageCellParams> statusColumn = new Column<Request, CustomImageCellParams>(new CustomImageCell()) {
 			@Override
-			public String getValue(Request request) {
-				return request.getStatus().getUrl();
+			public CustomImageCellParams getValue(Request request) {
+				CustomImageCellParams params = new CustomImageCellParams();
+				params.setUrl(request.getStatus().getUrl());
+				params.setTitle(request.getStatus().getName());
+				return params;
 			}
 		};
 		requestTable.addColumn(statusColumn, "Estado");
 
 		// Title
-		Column<Request, String> titleColumn = new Column<Request, String>(new TextCell()) {
+		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
 			@Override
-			public String getValue(Request request) {
-				return request.getTitle();
+			public AnchorCellParams getValue(Request request) {
+				AnchorCellParams params = new AnchorCellParams();
+				params.setValue(request.getTitle());
+				params.setToken("#response?requestId=" + request.getId());
+				return params;
 			}
 		};
-		requestTable.addColumn(titleColumn, "Nombre de la solicitud");
+		requestTable.addColumn(titleColumn, "Titulo");
 
 		// Institution
 		Column<Request, String> institutionColumn = new Column<Request, String>(new TextCell()) {
@@ -83,19 +89,37 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				return request.getInstitution().getName();
 			}
 		};
-		requestTable.addColumn(institutionColumn, "Institución");
+		requestTable.addColumn(institutionColumn, "Organismo");
 
-		// Date
-		Column<Request, String> dateColumn = new Column<Request, String>(new TextCell()) {
+		// Request Date
+		Column<Request, String> requestDateColumn = new Column<Request, String>(new TextCell()) {
 			@Override
 			public String getValue(Request request) {
 				return DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getDate());
 			}
 		};
-		requestTable.addColumn(dateColumn, "Fecha");
+		requestTable.addColumn(requestDateColumn, "Consulta");
+
+		// Response Date
+		Column<Request, String> responseDateColumn = new Column<Request, String>(new TextCell()) {
+			@Override
+			public String getValue(Request request) {
+				try {
+					String responseDate = "Esperando respuesta";
+					if (request.getResponse() != null) {
+						responseDate = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getResponse().getDate());
+					}
+					return responseDate;
+				} catch (Exception e) {
+					Window.alert(e.getMessage());
+					return "";
+				}
+			}
+		};
+		requestTable.addColumn(responseDateColumn, "Respuesta");
 
 		// Action
-		Column<Request, Request> buttonColumn = new Column<Request, Request>(new ActionCell<Request> ("Ver solicitud", new Delegate<Request> () {
+		Column<Request, Request> buttonColumn = new Column<Request, Request>(new ActionCell<Request> ("+", new Delegate<Request> () {
 			public void execute (Request request) {
 				presenter.showRequest(request.getId());
 			}
