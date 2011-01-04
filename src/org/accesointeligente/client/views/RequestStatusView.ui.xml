@@ -4,16 +4,29 @@
 	<ui:style src="RequestStatusView.css" />
 
 	<g:HTMLPanel>
+		<div class="headSolicitud clear">
+			<h1>Resumen de la solicitud</h1>
+		</div>
 		<g:Anchor ui:field="requestListLink">
 			Ir al listado de solicitudes
 		</g:Anchor>
-		<div class="{style.waterBlockDark} clear"><h2>Resumen de la solicitud</h2></div>
+		<div class="{style.waterBlockDark} clear">
+			<div class="{style.iconReqResp}">
+				<g:Label ui:field="requestStatusHead"></g:Label>
+			</div>
+			<div class="{style.titleReqResp}"></div>
+			<g:Label ui:field="requestTitleHead"></g:Label>
+		</div>
 		<table class="{style.statusTable}">
 			<tr>
 				<th>Estado</th>
 				<th>Título de la solicitud</th>
 				<th>Institución</th>
-				<th>Solicita a <br/> otro organismo</th>
+				<th>
+					Solicita a
+					<br />
+					otro organismo
+				</th>
 				<th>Fecha</th>
 			</tr>
 			<tr>
@@ -36,25 +49,34 @@
 					<g:Label ui:field="requestDate"></g:Label>
 				</td>
 			</tr>
-			</table>
-			<table class="{style.statusDetail}">
+		</table>
+		<table class="{style.statusDetail}">
 			<tr>
 				<td class="{style.waterBlock}">Información solicitada</td>
 			</tr>
 			<tr>
-				<td class=""><g:Label ui:field="requestInfo"></g:Label></td>
+				<td class="">
+					<g:Label ui:field="requestInfo"></g:Label>
+				</td>
 			</tr>
 			<tr>
 				<td class="{style.waterBlock}">Delimitación temporal de la información</td>
 			</tr>
 			<tr>
-				<td class=""><g:Label ui:field="requestContext"></g:Label></td>
+				<td class="">
+					<g:Label ui:field="requestContext"></g:Label>
+				</td>
 			</tr>
 			<tr>
-				<td class="{style.waterBlock}"><g:Label>Categorías a las que pertenece la solicitud</g:Label></td>
+				<td class="{style.waterBlock}">
+					<g:Label>Categorías a las que pertenece la solicitud</g:Label>
+				</td>
 			</tr>
 			<tr>
-				<td><g:FlowPanel ui:field="requestCategoryPanel" addStyleNames="{style.categories}" /> </td>
+				<td>
+					<g:FlowPanel ui:field="requestCategoryPanel"
+						addStyleNames="{style.categories}" />
+				</td>
 			</tr>
 		</table>
 	</g:HTMLPanel>

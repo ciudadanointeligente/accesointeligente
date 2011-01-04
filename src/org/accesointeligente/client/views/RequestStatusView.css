@@ -102,6 +102,21 @@
 	letter-spacing: 1pt;
 	overflow: hidden;
 }
-td.imgStatus img{
+
+td.imgStatus img {
 	padding: 4px;
+}
+
+.iconReqResp {
+	float: left;
+	padding: 10px;
+}
+
+.titleReqResp {
+	float: left;
+	padding: 13px;
+}
+
+.titleReqResp .gwt-label {
+	font-size: 200%;
 }

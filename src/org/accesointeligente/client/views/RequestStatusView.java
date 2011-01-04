@@ -6,12 +6,9 @@ import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
@@ -24,7 +21,6 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	interface RequestStatusViewUiBinder extends UiBinder<Widget, RequestStatusView> {}
 
 	// UIFields
-	@UiField Anchor requestListLink;
 	@UiField Label requestDate;
 	@UiField Label requestStatus;
 	@UiField Label institutionName;
@@ -110,16 +106,5 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@Override
 	public void displayMessage(String message) {
 		Window.alert(message);
-	}
-
-	@UiHandler("requestListLink")
-	public void onRequestListLinkClick(ClickEvent event) {
-		String link = presenter.getListLink();
-
-		if (link == null) {
-			History.back();
-		} else {
-			History.newItem(link);
-		}
 	}
 }
