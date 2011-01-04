@@ -112,6 +112,6 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void showRequest(Integer requestId) {
-		History.newItem("status?requestId=" + requestId.toString());
+		History.newItem("response?requestId=" + requestId.toString());
 	}
 }

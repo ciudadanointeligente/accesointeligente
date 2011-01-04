@@ -1,8 +1,8 @@
 package org.accesointeligente.client;
 
 public class CustomImageCellParams {
-	private String url = "";
-	private String title = "";
+	private String url;
+	private String title;
 
 	public String getUrl() {
 		return url;

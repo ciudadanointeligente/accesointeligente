@@ -3,5 +3,44 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestResponseView.css" />
 	<g:HTMLPanel>
+		<g:HTMLPanel ui:field="navigationPanel">
+			<g:Anchor ui:field="requestListLink">
+				Ir al listado de solicitudes
+			</g:Anchor>
+		</g:HTMLPanel>
+		<g:HTMLPanel>
+			<g:Image ui:field="requestStatus"></g:Image>
+			<g:Label ui:field="requestTitle"></g:Label>
+		</g:HTMLPanel>
+		<g:HTMLPanel>
+			<g:Label>Solicitado</g:Label>
+			<g:Label ui:field="requestDate"></g:Label>
+			<g:Label>Respuesta</g:Label>
+			<g:Label ui:field="responseDate"></g:Label>
+			<g:Label>Organismo</g:Label>
+			<g:Label ui:field="institutionName"></g:Label>
+			<g:Label>Comentarios</g:Label>
+			<g:Label>3</g:Label>
+		</g:HTMLPanel>
+		<g:HTMLPanel>
+			<g:Label>SOLICITUD:</g:Label>
+			<g:Label ui:field="requestInfo"></g:Label>
+			<g:Label>Contexto: </g:Label>
+			<g:Label ui:field="requestContext"></g:Label>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="responsePanel">
+			<g:Label>RESPUESTA:</g:Label>
+			<g:Label ui:field="responseInfo"></g:Label>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="responseAttachmentsPanel">
+			<g:Label>DESCARGAR DOCUMENTOS DE LA RESPUESTA:</g:Label>
+			<g:Label>Nombre del documento</g:Label>
+			<g:Label>Formato</g:Label>
+			<g:Anchor>
+				imagen con link a la descarga
+			</g:Anchor>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="commentsPanel">
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>

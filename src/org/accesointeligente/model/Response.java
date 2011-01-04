@@ -9,6 +9,7 @@ public class Response extends LightEntity {
 
 	private Integer id;
 	private Request request;
+	private String information;
 	private Date date;
 
 	public Integer getId() {
@@ -23,6 +24,14 @@ public class Response extends LightEntity {
 	public void setRequest(Request request) {
 		this.request = request;
 	}
+
+	public String getInformation() {
+		return information;
+	}
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
 	public Date getDate() {
 		return date;
 	}

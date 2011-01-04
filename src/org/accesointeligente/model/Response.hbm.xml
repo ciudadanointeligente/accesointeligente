@@ -9,6 +9,7 @@
 			<generator class="identity"/>
 		</id>
 		<many-to-one name="request" column="resquestId"/>
+		<property name="information"/>
 		<property name="date"/>
 	</class>
 </hibernate-mapping>

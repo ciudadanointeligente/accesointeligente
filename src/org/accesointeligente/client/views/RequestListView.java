@@ -76,7 +76,8 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			public AnchorCellParams getValue(Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				params.setToken("#response?requestId=" + request.getId());
+				params.setTitle("");
+				params.setUrl("#response?requestId=" + request.getId());
 				return params;
 			}
 		};

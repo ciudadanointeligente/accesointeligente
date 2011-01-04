@@ -6,9 +6,12 @@ import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
@@ -49,7 +52,7 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 
 	@Override
 	public void setDate(Date date) {
-		requestDate.setText(DateTimeFormat.getFormat("d/M/y H:m").format(date));
+		requestDate.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(date));
 	}
 
 	@Override
@@ -106,5 +109,10 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@Override
 	public void displayMessage(String message) {
 		Window.alert(message);
+	}
+
+	@UiHandler("requestListLink")
+	public void onRequestListLinkClick(ClickEvent event) {
+		History.newItem("list?type=mylist");
 	}
 }
