@@ -36,47 +36,90 @@ h1 {
 h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
 }
-.contentPad{
- padding: 0px 10px;
+
+.contentPad {
+	padding: 0px 10px;
 }
-.contentPad .noMargin{
+
+.contentPad .noMargin {
 	margin: 0px -10px;
 }
-.fLeft{
+
+.fLeft {
 	float: left;
 }
-.fRight{
+
+.fRight {
 	float: right;
-	}
-.clear{
+}
+
+.clear {
 	clear: both;
-	}
-.clearRight{
+}
+
+.clearRight {
 	clear: right;
 }
+
+@font-face {
+	font-family: 'BebasNeueRegular';
+	src: url('fonts/bebasneue-acceso.eot');
+	src: local('☺'), url('fonts/bebasneue-acceso.woff') format('woff'),
+		url('fonts/bebasneue-acceso.ttf') format('truetype'),
+		url('fonts/bebasneue-acceso.svg#webfont6sjBIBvz') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.body .bebas,.body .bebas td {
+	font-family: 'BebasNeueRegular', Trebuchet MS, Helvetica, Arial,
+		Sans Serif;
+}
+
 /*---modules---*/
 .greyGrad {
-	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom #DDE1E6;
+	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom
+		#DDE1E6;
 	color: black;
 	display: block;
 	overflow: hidden;
 	padding: 15px 20px 0px;
 }
 
+.headSolicitud {
+	background-color: #DEE1E6;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	padding: 10px 10px 10px 30px;
+	color: #696969;
+	border-bottom: 4px solid #ffffff;
+	overflow: hidden;
+}
+
+.headSolicitud h1 {
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+	font-size: 12pt;
+	line-height: 120%;
+	float: left;
+}
 
 /*---- GWT-----*/
-/** Example rules used by the template application (remove for your app) */
+	/** Example rules used by the template application (remove for your app) */
 .sendButton {
 	display: block;
 	font-size: 16pt;
 }
+
 .gwt-CheckBox {
 	padding: 3px 5px 3px 0px;
 }
 
 .body .gwt-PopupPanel {
-    border: none;
+	border: none;
 }
+
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
 	width: 400px;
@@ -107,8 +150,88 @@ h1,h2,h3,h4,h5,h6 {
 .contenedorRegistro .gwt-Label {
 	padding: 16px 0 5px;
 }
-.body .waterBlockDark a, .body .waterBlockDark a:hover, .body .waterBlockDark a:visited, .body .waterBlockDark a:link{
+
+.body .waterBlockDark a,.body .waterBlockDark a:hover,.body .waterBlockDark a:visited,.body .waterBlockDark a:link
+	{
 	color: #ffffff;
 }
 
+.body .mainMenu .gwt-MenuBar-horizontal .gwt-MenuItem {
+	font-weight: normal;
+}
 
+.body .mainMenu {
+	background-color: white;
+	clear: none;
+	display: block;
+	float: right;
+	overflow: hidden;
+	padding: 9px;
+	position: relative;
+	right: 0;
+	top: 50px;
+}
+
+.body .mainMenu .gwt-MenuItem {
+	font-size: 14pt;
+	letter-spacing: 1pt;
+}
+
+.body .mainMenu .mainSubMenuItem {
+	font-size: 12pt;
+	letter-spacing: 0pt;
+}
+
+.body .mainMenu .gwt-MenuBar,.body .mainMenu .gwt-MenuBar .gwt-MenuItem,.body .mainMenu .gwt-MenuBar .gwt-MenuItem-selected,.body .mainMenu .gwt-MenuBar-horizontal
+	{
+	cursor: pointer;
+	background: white;
+	border: 0;
+}
+
+.body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem-selected {
+	cursor: pointer;
+	background: #f3f3f3;
+}
+
+.body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem {
+	cursor: pointer;
+	letter-spacing: 1pt;
+}
+
+.body .gwt-MenuBar-vertical .gwt-MenuItem {
+	padding: 4px 10px;
+}
+/*-----------gwtMenuBarPopup overwrite-------*/
+.body .gwt-MenuBarPopup {
+	margin: 3px 0 0 3px;
+}
+
+.body .gwt-MenuBarPopup .menuPopupTopLeft {
+	background: none;
+}
+
+.body .gwt-MenuBarPopup .menuPopupTopLeftInner {
+	background: url("images/menuBar/hborder_top.png") no-repeat scroll -1px 0
+		transparent;
+	height: 15px;
+	width: 5px;
+}
+
+.body .gwt-MenuBarPopup .menuPopupTopCenter {
+    background: url("images/menuBar/hborder_top.png") repeat-x scroll -2px 0 transparent;
+    height: 15px;
+}
+
+.body .gwt-MenuBarPopup .menuPopupTopRight {
+	background: none repeat scroll 0 0 transparent;
+}
+
+.body .gwt-MenuBarPopup .menuPopupTopRightInner {
+    background: url("images/menuBar/hborder_top.png") no-repeat scroll -496px top transparent;
+    height: 15px;
+    width: 5px;
+}
+
+
+/*-----*/
