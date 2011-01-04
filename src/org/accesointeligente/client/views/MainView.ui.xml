@@ -1,27 +1,57 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style src="MainView.css"/>
+	<ui:style src="MainView.css" />
+
 	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="headerPanel" visible="false">
-			<g:HTMLPanel>
-				<g:MenuBar>
-					<g:MenuItem>Mi cuenta
-						<g:MenuBar vertical="true">
-							<g:MenuItem ui:field="login" visible="false">Ingresar</g:MenuItem>
-							<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
+		<div class="{style.container}">
+			<g:HTMLPanel ui:field="headerPanel" visible="false">
+				<g:HTMLPanel addStyleNames="{style.bgDotted} {style.headerPanel}">
+					<g:Image ui:field="logo" addStyleNames="{style.logo}"
+						url="images/layout/logo_head.png" />
+					<div class="{style.headSlogan}">¿Qué quieres saber de los organismos públicos? </div>
+					<div class="mainMenu bebas">
+						<g:MenuBar>
+							<g:MenuItem>
+								Mi cuenta
+								<g:MenuBar vertical="true">
+									<g:MenuItem ui:field="login" visible="false">Ingresar</g:MenuItem>
+									<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
+								</g:MenuBar>
+							</g:MenuItem>
+							<g:MenuItemSeparator />
+							<g:MenuItem ui:field="home">Home</g:MenuItem>
+							<g:MenuItemSeparator />
+							<g:MenuItem ui:field="about">Acerca del proyecto</g:MenuItem>
+							<g:MenuItemSeparator />
+							<g:MenuItem ui:field="contact">Contacto</g:MenuItem>
 						</g:MenuBar>
-					</g:MenuItem>
-					<g:MenuItemSeparator/>
-					<g:MenuItem ui:field="home">Home</g:MenuItem>
-					<g:MenuItemSeparator/>
-					<g:MenuItem ui:field="about">Acerca del proyecto</g:MenuItem>
-					<g:MenuItemSeparator/>
-					<g:MenuItem ui:field="contact">Contacto</g:MenuItem>
-				</g:MenuBar>
+					</div>
+				</g:HTMLPanel>
 			</g:HTMLPanel>
-		</g:HTMLPanel>
-		<g:FlowPanel ui:field="mainPanel" visible="false"/>
-		<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
+			<g:FlowPanel ui:field="mainPanel" visible="false" />
+			<g:HTMLPanel ui:field="footerPanel" visible="false"
+				addStyleNames="{style.footerPanel} {style.bgDotted}">
+				<div class="{style.footerPanelContent} {style.footerGoldenDouble}">
+					<div class="{style.footerModule}">
+						<h1>Links</h1>
+						<ul class="{style.link}">
+							<li>
+								<a href="#">www.hayquedefinirloslinks.cl</a>
+							</li>
+							<li>
+								<a href="#">www.hayquedefinirloslinks.cl</a>
+							</li>
+							<li>
+								<a href="#">www.hayquedefinirloslinks.cl</a>
+							</li>
+						</ul>
+					</div>
+					<div class="{style.footerModule}"> jnsjkdnsjd</div>
+
+				</div>
+			</g:HTMLPanel>
+			<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

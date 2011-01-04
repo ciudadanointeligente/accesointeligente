@@ -1,0 +1,107 @@
+.container {
+	width: 950px;
+	margin: auto;
+	clear: both;
+	background-color: white;
+}
+
+.bgDotted {
+	background: url(images/layout/bg_dotted1.jpg) repeat scroll 0 0 white;
+}
+
+.logo {
+	margin: 6px 20px;
+	float: left;
+}
+
+.menuBar {
+	font-size: 14pt;
+}
+
+.subMenu {
+	font-size: 10pt;
+}
+
+.headSlogan {
+	background: none repeat scroll 0 0 white;
+	bottom: -24px;
+	color: #4BC2C8;
+	float: left;
+	font-size: 10pt;
+	height: 52px;
+	margin-left: -23px;
+	padding: 30px 10px 10px 15px;
+	position: relative;
+	width: 160px;
+}
+
+.headerPanel {
+	height: 134px;
+}
+
+.footerPanel {
+	overflow: hidden;
+	display: block;
+	margin-top: 12px;
+}
+
+.footerPanelContent {
+	background-color: white;
+	display: block;
+	overflow: hidden;
+	margin: 20px;
+}
+
+.footerModule {
+	color: #333333;
+	float: left;
+	min-height: 60px;
+	padding: 15px;
+	border-right: 1px dotted #4BC2C8;
+}
+
+.footerModule h1 {
+	color: #333333;
+	font-weight: normal;
+	letter-spacing: 1.5pt;
+	text-transform: uppercase;
+}
+
+.footerModule:last-child {
+	border-right: none;
+}
+
+.footerEqualThird {
+}
+
+.footerEqualThird .footerModule {
+	width: 278px;
+}
+
+.footerEqualThird .footerModule:first-child,.footerEqualThird .footerModule:last-child,.footerGoldenDouble .footerModule:last-child
+	{
+	width: 270px;
+}
+
+.footerGoldenDouble .footerModule:first-child {
+	width: 578px;
+}
+
+ul.link {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.link li {
+	background-image: url("images/layout/li_marker.png");
+	background-position: 0 5px;
+	background-repeat: no-repeat;
+	margin: 5px 0;
+	padding-left: 14px;
+}
+
+.link li a {
+	text-transform: uppercase;
+	text-decoration: none;
+}

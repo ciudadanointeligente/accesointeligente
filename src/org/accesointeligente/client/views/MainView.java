@@ -4,8 +4,10 @@ import org.accesointeligente.client.presenters.MainPresenter;
 import org.accesointeligente.client.presenters.MainPresenterIface;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
@@ -21,12 +23,14 @@ public class MainView extends Composite implements MainPresenter.Display {
 	}
 
 	@UiField HTMLPanel headerPanel;
+	@UiField Image logo;
 	@UiField FlowPanel mainPanel;
 	@UiField MenuItem login;
 	@UiField MenuItem logout;
 	@UiField MenuItem home;
 	@UiField MenuItem about;
 	@UiField MenuItem contact;
+	@UiField HTMLPanel footerPanel;
 	@UiField Label loginPending;
 
 	private MainPresenterIface presenter;
@@ -86,11 +90,17 @@ public class MainView extends Composite implements MainPresenter.Display {
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		login.setVisible(DisplayMode.LoggedOut.equals(mode));
 		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
+		footerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		loginPending.setVisible(DisplayMode.LoginPending.equals(mode));
 	}
 
 	@Override
 	public FlowPanel getLayout() {
 		return mainPanel;
+	}
+
+	@UiHandler("logo")
+	public void onLogoClick(ClickEvent event) {
+		History.newItem("home");
 	}
 }
