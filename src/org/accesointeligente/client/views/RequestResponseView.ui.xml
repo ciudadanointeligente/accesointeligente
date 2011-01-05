@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style src="RequestResponseView.css" />
 	<g:HTMLPanel>
 		<g:HTMLPanel ui:field="navigationPanel">
@@ -34,11 +35,7 @@
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="responseAttachmentsPanel">
 			<g:Label>DESCARGAR DOCUMENTOS DE LA RESPUESTA:</g:Label>
-			<g:Label>Nombre del documento</g:Label>
-			<g:Label>Formato</g:Label>
-			<g:Anchor>
-				imagen con link a la descarga
-			</g:Anchor>
+			<c:CellTable ui:field="attachmentsTable"/>
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="commentsPanel">
 		</g:HTMLPanel>

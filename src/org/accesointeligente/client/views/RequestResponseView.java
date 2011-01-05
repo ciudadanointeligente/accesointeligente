@@ -1,19 +1,25 @@
 package org.accesointeligente.client.views;
 
+import org.accesointeligente.client.AnchorCell;
+import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
-import org.accesointeligente.model.Response;
+import org.accesointeligente.model.Attachment;
 import org.accesointeligente.shared.RequestStatus;
 
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Date;
 
@@ -34,6 +40,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField HTMLPanel responsePanel;
 	@UiField Label responseInfo;
 	@UiField HTMLPanel responseAttachmentsPanel;
+	@UiField CellTable<Attachment> attachmentsTable;
 	@UiField HTMLPanel commentsPanel;
 
 
@@ -90,9 +97,47 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	}
 
 	@Override
-	public void setResponseAttachments(Response response) {
-		// TODO Auto-generated method stub
+	public void setResponseAttachments(ListDataProvider<Attachment> data) {
+		data.addDataDisplay(attachmentsTable);
+	}
 
+	@Override
+	public void initTable() {
+		initTableColumns();
+	}
+
+	@Override
+	public void initTableColumns() {
+		// Name
+		Column<Attachment, String> nameColumn = new Column<Attachment, String>(new TextCell()) {
+			@Override
+			public String getValue(Attachment attachment) {
+				return attachment.getName();
+			}
+		};
+		attachmentsTable.addColumn(nameColumn, "Nombre");
+
+		// Type
+		Column<Attachment, String> typeColumn = new Column<Attachment, String>(new TextCell()) {
+			@Override
+			public String getValue(Attachment attachment) {
+				return attachment.getType().getName() + " " + attachment.getType().getExtension();
+			}
+		};
+		attachmentsTable.addColumn(typeColumn, "Tipo");
+
+		// Download
+		Column<Attachment, AnchorCellParams> statusColumn = new Column<Attachment, AnchorCellParams>(new AnchorCell()) {
+			@Override
+			public AnchorCellParams getValue(Attachment attachment) {
+				AnchorCellParams params = new AnchorCellParams();
+				params.setTitle("Descargar "+ attachment.getName());
+				params.setUrl(attachment.getUrl());
+				params.setValue(attachment.getName() + attachment.getType().getExtension());
+				return params;
+			}
+		};
+		attachmentsTable.addColumn(statusColumn, "Descarga");
 	}
 
 	@Override

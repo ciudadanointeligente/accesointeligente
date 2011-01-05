@@ -11,5 +11,9 @@
 		<many-to-one name="request" column="resquestId"/>
 		<property name="information"/>
 		<property name="date"/>
+		<set name="attachments" inverse="true">
+			<key column="responseId"/>
+			<one-to-many class="Attachment"/>
+		</set>
 	</class>
 </hibernate-mapping>

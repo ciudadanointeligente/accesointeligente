@@ -1,8 +1,8 @@
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.model.Attachment;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.RequestStatus;
@@ -11,7 +11,9 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Date;
 import java.util.List;
@@ -29,8 +31,10 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void setRequestContext(String context);
 		// Response
 		void setResponseInfo(String info);
-		void setResponseAttachments(Response response);
+		void setResponseAttachments(ListDataProvider<Attachment> data);
 		void displayMessage(String string);
+		void initTable();
+		void initTableColumns();
 	}
 
 	public RequestResponsePresenter(Display display, EventBus eventBus) {
@@ -40,6 +44,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
+		display.initTable();
 	}
 
 	@Override
@@ -48,6 +53,24 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	protected void onRevealDisplay() {
+	}
+
+	@Override
+	public void loadAttachments(Response response) {
+		RPC.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.displayMessage("No es posible recuperar los archivos adjuntos");
+				History.back();
+			}
+
+			@Override
+			public void onSuccess(List<Attachment> attachments) {
+				ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
+				display.setResponseAttachments(data);
+			}
+		});
 	}
 
 	@Override
@@ -71,6 +94,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					if (result.getResponse() != null) {
 						display.setResponseDate(result.getResponse().getDate());
 						display.setResponseInfo(result.getResponse().getInformation());
+						loadAttachments(result.getResponse());
 					} else {
 						display.setResponseInfo("Esperando Respuesta");
 					}

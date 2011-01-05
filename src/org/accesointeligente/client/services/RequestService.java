@@ -1,8 +1,6 @@
 package org.accesointeligente.client.services;
 
-import org.accesointeligente.model.Request;
-import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.model.User;
+import org.accesointeligente.model.*;
 import org.accesointeligente.shared.ServiceException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -18,4 +16,5 @@ public interface RequestService extends RemoteService {
 	List<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
+	List<Attachment> getResponseAttachmentList(Response response) throws ServiceException;
 }

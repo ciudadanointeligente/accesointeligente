@@ -1,9 +1,7 @@
 package org.accesointeligente.server.services;
 
 import org.accesointeligente.client.services.RequestService;
-import org.accesointeligente.model.Request;
-import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.model.User;
+import org.accesointeligente.model.*;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.SessionUtil;
 import org.accesointeligente.shared.RequestStatus;
@@ -141,6 +139,23 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			return requests;
 		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public List<Attachment> getResponseAttachmentList(Response response) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Attachment.class);
+			criteria.add(Restrictions.eq("response", response));
+			criteria.addOrder(Order.asc("name"));
+			List<Attachment> attachments = (List<Attachment>) persistentBeanManager.clone(criteria.list());
+			return attachments;
+		} catch (Exception ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
 		}

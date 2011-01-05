@@ -1,8 +1,6 @@
 package org.accesointeligente.client.services;
 
-import org.accesointeligente.model.Request;
-import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.model.User;
+import org.accesointeligente.model.*;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -15,4 +13,5 @@ public interface RequestServiceAsync {
 	void getUserRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getUserFavoriteRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
+	void getResponseAttachmentList(Response response, AsyncCallback<List<Attachment>> callback);
 }
