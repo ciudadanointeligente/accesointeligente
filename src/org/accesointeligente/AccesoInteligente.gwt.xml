@@ -14,6 +14,9 @@
   <inherits name='com.google.gwt.inject.Inject'/>
   <inherits name='net.customware.gwt.presenter.Presenter' />
   <inherits name="net.sf.gilead.Gilead4Gwt"/>
+  <inherits name="com.google.gwt.i18n.I18N"/>
+
+  <extend-property name="locale" values="es" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.accesointeligente.client.AccesoInteligente'/>
