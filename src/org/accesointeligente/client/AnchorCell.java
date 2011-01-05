@@ -11,7 +11,7 @@ public class AnchorCell extends AbstractCell<AnchorCellParams> {
 
 	interface Template extends SafeHtmlTemplates {
 		@Template("<a href=\"{0}\" title=\"{1}\">{2}</a>")
-		SafeHtml anchor(String token, String title, String value);
+		SafeHtml anchor(String url, String title, String value);
 	}
 
 	private static Template template;
@@ -29,7 +29,7 @@ public class AnchorCell extends AbstractCell<AnchorCellParams> {
 	public void render(Context context, AnchorCellParams value, SafeHtmlBuilder sb) {
 		if (value != null) {
 			// The template will sanitize the URI.
-			sb.append(template.anchor(value.getToken(), value.getTitle(), value.getValue()));
+			sb.append(template.anchor(value.getUrl(), value.getTitle(), value.getValue()));
 		}
 	}
 }
