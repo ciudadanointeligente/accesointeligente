@@ -17,6 +17,7 @@
   <inherits name="com.google.gwt.i18n.I18N"/>
 
   <extend-property name="locale" values="es" />
+  <set-property name="locale" value="es"/>
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.accesointeligente.client.AccesoInteligente'/>
