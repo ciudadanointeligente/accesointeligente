@@ -33,6 +33,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	public RequestListView() {
 		initWidget(uiBinder.createAndBindUi(this));
+		ResourceBundle.INSTANCE.RequestListView().ensureInjected();
 	}
 
 	@Override
@@ -65,6 +66,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				CustomImageCellParams params = new CustomImageCellParams();
 				params.setUrl(request.getStatus().getUrl());
 				params.setTitle(request.getStatus().getName());
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableStatus());
 				return params;
 			}
 		};
@@ -78,6 +80,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				params.setValue(request.getTitle());
 				params.setTitle("");
 				params.setUrl("#response?requestId=" + request.getId());
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}
 		};

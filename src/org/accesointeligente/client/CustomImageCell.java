@@ -10,8 +10,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 public class CustomImageCell extends AbstractCell<CustomImageCellParams> {
 
 	interface Template extends SafeHtmlTemplates {
-		@Template("<img src=\"{0}\" title=\"{1}\"/>")
-		SafeHtml img(String url, String title);
+		@Template("<img src=\"{0}\" title=\"{1}\" class=\"{2}\"/>")
+		SafeHtml img(String url, String title, String styleNames);
 	}
 
 	private static Template template;
@@ -29,7 +29,7 @@ public class CustomImageCell extends AbstractCell<CustomImageCellParams> {
 	public void render(Context context, CustomImageCellParams value, SafeHtmlBuilder sb) {
 		if (value != null) {
 			// The template will sanitize the URI.
-			sb.append(template.img(value.getUrl(), value.getTitle()));
+			sb.append(template.img(value.getUrl(), value.getTitle(), value.getStyleNames()));
 		}
 	}
 }
