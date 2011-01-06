@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:c="urn:import:com.google.gwt.user.datepicker.client">
+	<ui:style src="RequestSearchView.css" />
+	<g:HTMLPanel>
+		<g:Label>FILTRAR</g:Label>
+		<g:HTMLPanel>
+			<g:TextBox>PALABRA CLAVE...</g:TextBox>
+			<g:HTMLPanel>
+				<g:TextBox>ORGANISMO</g:TextBox>
+				<g:ListBox></g:ListBox>
+			</g:HTMLPanel>
+			<g:HTMLPanel>
+				<g:TextBox>Fecha</g:TextBox>
+				<g:Label>Desde</g:Label>
+				<c:DateBox></c:DateBox>
+				<g:Label>Hasta</g:Label>
+				<c:DateBox></c:DateBox>
+			</g:HTMLPanel>
+			<g:HTMLPanel>
+				<g:Label>ESTADO</g:Label>
+				<g:RadioButton name="requestStatus">Pendiente</g:RadioButton>
+				<g:RadioButton name="requestStatus">Respondido</g:RadioButton>
+				<g:RadioButton name="requestStatus">Vencido</g:RadioButton>
+				<g:RadioButton name="requestStatus">Derivado</g:RadioButton>
+			</g:HTMLPanel>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>
