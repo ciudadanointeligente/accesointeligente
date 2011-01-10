@@ -105,6 +105,28 @@ h1,h2,h3,h4,h5,h6 {
 	float: left;
 }
 
+.leftContainer {
+	float: left;
+	width: 650px;
+}
+
+.rightContainer {
+	background: url("images/layout/bg_dotted1.jpg") repeat scroll 0 0
+		transparent;
+	float: left;
+	margin: 10px 0 10px 10px;
+	overflow: hidden;
+	padding: 15px;
+	width: 260px;
+}
+
+.rightContent {
+	background-color: white;
+	overflow: hidden;
+	padding: 10px;
+	width: 240px;
+}
+
 /*---- GWT-----*/
 	/** Example rules used by the template application (remove for your app) */
 .sendButton {
@@ -146,6 +168,10 @@ h1,h2,h3,h4,h5,h6 {
 	margin: 15px 6px 6px;
 }
 
+.noOverflow {
+	overflow: hidden;
+}
+
 /*-----EXCEPTIONS----*/
 .contenedorRegistro .gwt-Label {
 	padding: 16px 0 5px;
@@ -156,6 +182,7 @@ h1,h2,h3,h4,h5,h6 {
 	color: #ffffff;
 }
 
+/*-----------gwtMenuBar mainMenu EXCEPTION-------*/
 .body .mainMenu .gwt-MenuBar-horizontal .gwt-MenuItem {
 	font-weight: normal;
 }
@@ -189,19 +216,10 @@ h1,h2,h3,h4,h5,h6 {
 	border: 0;
 }
 
-.body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem-selected {
-	cursor: pointer;
-	background: #f3f3f3;
-}
-
-.body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem {
-	cursor: pointer;
-	letter-spacing: 1pt;
-}
-
 .body .gwt-MenuBar-vertical .gwt-MenuItem {
 	padding: 4px 10px;
 }
+
 /*-----------gwtMenuBarPopup overwrite-------*/
 .body .gwt-MenuBarPopup {
 	margin: 3px 0 0 3px;
@@ -212,15 +230,16 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .body .gwt-MenuBarPopup .menuPopupTopLeftInner {
-	background: url("images/menuBar/hborder_top.png") no-repeat scroll -1px 0
-		transparent;
+	background: url("images/menuBar/hborder_top.png") no-repeat scroll -1px
+		0 transparent;
 	height: 15px;
 	width: 5px;
 }
 
 .body .gwt-MenuBarPopup .menuPopupTopCenter {
-    background: url("images/menuBar/hborder_top.png") repeat-x scroll -2px 0 transparent;
-    height: 15px;
+	background: url("images/menuBar/hborder_top.png") repeat-x scroll -2px 0
+		transparent;
+	height: 15px;
 }
 
 .body .gwt-MenuBarPopup .menuPopupTopRight {
@@ -228,10 +247,19 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .body .gwt-MenuBarPopup .menuPopupTopRightInner {
-    background: url("images/menuBar/hborder_top.png") no-repeat scroll -496px top transparent;
-    height: 15px;
-    width: 5px;
+	background: url("images/menuBar/hborder_top.png") no-repeat scroll
+		-496px top transparent;
+	height: 15px;
+	width: 5px;
 }
 
+.body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem-selected {
+	cursor: pointer;
+	background: #f3f3f3;
+}
 
+.body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem {
+	cursor: pointer;
+	letter-spacing: 1pt;
+}
 /*-----*/
