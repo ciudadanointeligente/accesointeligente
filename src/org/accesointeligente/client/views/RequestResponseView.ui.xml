@@ -1,43 +1,74 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style src="RequestResponseView.css" />
 	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="navigationPanel">
-			<g:Anchor ui:field="requestListLink">
-				Ir al listado de solicitudes
+		<g:HTMLPanel addStyleNames="leftContainer">
+			<g:HTMLPanel ui:field="navigationPanel">
+				<g:Anchor ui:field="requestListLink">
+					Ir al listado de solicitudes
 			</g:Anchor>
+			</g:HTMLPanel>
+			<div class="headSolicitud noMargin">
+				<h1>Listado de solicitudes</h1>
+			</div>
+			<g:HTMLPanel addStyleNames="{style.wBlockDark}">
+				<table>
+				<td><g:Image ui:field="requestStatus"></g:Image>
+				</td>
+				<td><g:Label ui:field="requestTitle"></g:Label>
+				</td>
+				</table>
+			</g:HTMLPanel>
+			<g:HTMLPanel addStyleNames="{style.tagline}">
+				<div class="{style.unit}">
+					<span>Solicitado</span>
+					<g:Label ui:field="requestDate"></g:Label>
+				</div>
+				<div class="{style.unit}">
+					<span>Respuesta</span>
+					<g:Label ui:field="responseDate"></g:Label>
+				</div>
+				<div class="{style.unit}">
+					<span>Comentarios</span>
+					<g:Label>3</g:Label>
+				</div>
+				<div class="{style.unit}">
+					<span>Organismo</span>
+					<g:Label ui:field="institutionName"></g:Label>
+				</div>
+			</g:HTMLPanel>
+			<g:HTMLPanel addStyleNames="{style.contentResponse}">
+				<g:HTMLPanel>
+					<h3>Solicitud:</h3>
+					<g:Label ui:field="requestInfo"></g:Label>
+					<br/>
+					<h4>Contexto: </h4>
+					<g:Label ui:field="requestContext"></g:Label>
+				</g:HTMLPanel>
+				<g:HTMLPanel ui:field="responsePanel" addStyleNames="{style.responsePanel}">
+					<h3>Respuesta:</h3>
+					<g:Label ui:field="responseInfo"></g:Label>
+					<br/>
+					<g:HTMLPanel ui:field="responseAttachmentsPanel">
+					<h3>Descargar documentos de la respuesta:</h3>
+					<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}"/>
+				</g:HTMLPanel>
+				</g:HTMLPanel>
+				<g:HTMLPanel ui:field="commentsPanel">
+				</g:HTMLPanel>
+			</g:HTMLPanel>
 		</g:HTMLPanel>
-		<g:HTMLPanel>
-			<g:Image ui:field="requestStatus"></g:Image>
-			<g:Label ui:field="requestTitle"></g:Label>
-		</g:HTMLPanel>
-		<g:HTMLPanel>
-			<g:Label>Solicitado</g:Label>
-			<g:Label ui:field="requestDate"></g:Label>
-			<g:Label>Respuesta</g:Label>
-			<g:Label ui:field="responseDate"></g:Label>
-			<g:Label>Organismo</g:Label>
-			<g:Label ui:field="institutionName"></g:Label>
-			<g:Label>Comentarios</g:Label>
-			<g:Label>3</g:Label>
-		</g:HTMLPanel>
-		<g:HTMLPanel>
-			<g:Label>SOLICITUD:</g:Label>
-			<g:Label ui:field="requestInfo"></g:Label>
-			<g:Label>Contexto: </g:Label>
-			<g:Label ui:field="requestContext"></g:Label>
-		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="responsePanel">
-			<g:Label>RESPUESTA:</g:Label>
-			<g:Label ui:field="responseInfo"></g:Label>
-		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="responseAttachmentsPanel">
-			<g:Label>DESCARGAR DOCUMENTOS DE LA RESPUESTA:</g:Label>
-			<c:CellTable ui:field="attachmentsTable"/>
-		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="commentsPanel">
+		<g:HTMLPanel addStyleNames="rightContainer">
+			<div class="rightContent">
+				<h2>Otras preguntas</h2>
+				<ul>
+					<li>pregunta1</li>
+					<li>pregunta1</li>
+					<li>pregunta1</li>
+					<li>pregunta1</li>
+				</ul>
+			</div>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>
