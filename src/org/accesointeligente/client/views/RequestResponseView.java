@@ -131,7 +131,6 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 			@Override
 			public AnchorCellParams getValue(Attachment attachment) {
 				AnchorCellParams params = new AnchorCellParams();
-				params.setTitle("Descargar "+ attachment.getName());
 				params.setUrl(attachment.getUrl());
 				params.setStyleNames("");
 				params.setValue(attachment.getName() + attachment.getType().getExtension());

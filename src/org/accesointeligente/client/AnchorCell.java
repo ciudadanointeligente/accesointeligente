@@ -10,14 +10,14 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 public class AnchorCell extends AbstractCell<AnchorCellParams> {
 
 	interface Template extends SafeHtmlTemplates {
-		@Template("<a href=\"{0}\" title=\"{1}\" class=\"{2}\">{3}</a>")
-		SafeHtml anchor(String url, String title, String styleNames, String value);
+		@Template("<a href=\"{0}\" class=\"{1}\">{2}</a>")
+		SafeHtml anchor(String url, String styleNames, String value);
 	}
 
 	private static Template template;
 
 	/**
-	 * Construct a new ImageCell.
+	 * Construct a new AnchorCell.
 	 */
 	public AnchorCell() {
 		if (template == null) {
@@ -29,7 +29,7 @@ public class AnchorCell extends AbstractCell<AnchorCellParams> {
 	public void render(Context context, AnchorCellParams value, SafeHtmlBuilder sb) {
 		if (value != null) {
 			// The template will sanitize the URI.
-			sb.append(template.anchor(value.getUrl(), value.getTitle(), value.getStyleNames(), value.getValue()));
+			sb.append(template.anchor(value.getUrl(), value.getStyleNames(), value.getValue()));
 		}
 	}
 }

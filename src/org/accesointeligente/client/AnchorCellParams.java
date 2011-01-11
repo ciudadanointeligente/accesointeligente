@@ -2,7 +2,6 @@ package org.accesointeligente.client;
 
 public class AnchorCellParams {
 	private String url;
-	private String title;
 	private String value;
 	private String styleNames;
 
@@ -12,14 +11,6 @@ public class AnchorCellParams {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public String getValue() {
