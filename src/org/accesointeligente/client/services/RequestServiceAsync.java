@@ -14,4 +14,7 @@ public interface RequestServiceAsync {
 	void getUserFavoriteRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getResponseAttachmentList(Response response, AsyncCallback<List<Attachment>> callback);
+	void getFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);
+	void createFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);
+	void deleteFavoriteRequest(UserFavoriteRequest favorite, AsyncCallback<Void> callback);
 }

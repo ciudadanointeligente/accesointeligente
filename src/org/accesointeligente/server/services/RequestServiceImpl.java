@@ -160,4 +160,62 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			throw new ServiceException();
 		}
 	}
+
+	@Override
+	public UserFavoriteRequest getFavoriteRequest(Request request, User user) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+			criteria.setFetchMode("user", FetchMode.JOIN);
+			criteria.setFetchMode("request", FetchMode.JOIN);
+			criteria.add(Restrictions.eq("user", user));
+			criteria.add(Restrictions.eq("request", request));
+			UserFavoriteRequest favorite = (UserFavoriteRequest) criteria.uniqueResult();
+			hibernate.getTransaction().commit();
+			if (favorite != null) {
+				return (UserFavoriteRequest) persistentBeanManager.clone(favorite);
+			} else {
+				return null;
+			}
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public UserFavoriteRequest createFavoriteRequest(Request request, User user) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			UserFavoriteRequest favorite = new UserFavoriteRequest();
+			favorite.setRequest(request);
+			favorite.setUser(user);
+			hibernate.save(favorite);
+			hibernate.getTransaction().commit();
+			return favorite;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public void deleteFavoriteRequest(UserFavoriteRequest favorite) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			favorite = (UserFavoriteRequest) persistentBeanManager.merge(favorite);
+			hibernate.delete(favorite);
+			hibernate.getTransaction().commit();
+			return;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
 }

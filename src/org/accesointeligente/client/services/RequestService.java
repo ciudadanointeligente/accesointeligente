@@ -17,4 +17,7 @@ public interface RequestService extends RemoteService {
 	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Attachment> getResponseAttachmentList(Response response) throws ServiceException;
+	UserFavoriteRequest getFavoriteRequest(Request request, User user) throws ServiceException;
+	UserFavoriteRequest createFavoriteRequest(Request request, User user) throws ServiceException;
+	void deleteFavoriteRequest(UserFavoriteRequest favorite) throws ServiceException;
 }
