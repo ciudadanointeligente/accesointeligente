@@ -59,6 +59,7 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 				@Override
 				public void onFailure(Throwable caught) {
 					ClientSessionUtil.destroySession();
+					eventBus.fireEvent(new LoginRequiredEvent());
 				}
 
 				@Override
