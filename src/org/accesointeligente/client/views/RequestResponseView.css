@@ -30,7 +30,10 @@
 
 .tagline .unit {
 	float: left;
-	padding: 3px 10px 0 0;
+	padding: 3px 10px 0 5px;
+	background: url("images/reqList/separator.png") no-repeat scroll right
+		top transparent;
+	overflow: hidden;
 }
 
 .tagline div {
