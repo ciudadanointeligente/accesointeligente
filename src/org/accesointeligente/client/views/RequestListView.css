@@ -45,6 +45,23 @@
 .reqTableResponseDate {
 }
 
+.reqTableViewMore {
+}
+
+.reqTableFavorite {
+}
+
+.reqTableNoFavorite {
+}
+.reqTableInstitution {
+}
+
+.reqTableRequestDate {
+}
+
+.reqTableResponseDate {
+}
+
 .reqTableMore {
 	background: url(images/reqList/viewMore.png) no-repeat scroll 0 0
 		transparent;

@@ -3,6 +3,8 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.Request;
+import org.accesointeligente.model.User;
+import org.accesointeligente.model.UserFavoriteRequest;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
@@ -20,7 +22,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void displayMessage(String message);
 		void initTable();
 		void initTableColumns();
-		void setTableSize(Integer size);
+		void initTableFavColumn();
 		void setRequests(ListDataProvider<Request> data);
 	}
 
@@ -32,6 +34,9 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 	protected void onBind() {
 		display.setPresenter(this);
 		display.initTable();
+		if (ClientSessionUtil.checkSession()) {
+			display.initTableFavColumn();
+		}
 	}
 
 	@Override
@@ -52,7 +57,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 					@Override
 					public void onFailure(Throwable caught) {
-						display.displayMessage("No es posible recuperar la solicitud");
+						display.displayMessage("No es posible recuperar el listado solicitado");
 						History.newItem("home");
 					}
 
@@ -108,6 +113,53 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.displayMessage("No existe el tipo de lista solicitado");
 			History.newItem("home");
 		}
+	}
+
+	@Override
+	public void requestToggleFavorite(final Request request) {
+		final User user = ClientSessionUtil.getUser();
+		RPC.getRequestService().getFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.displayMessage("No es posible recuperar los favoritos");
+			}
+
+			@Override
+			public void onSuccess(UserFavoriteRequest result) {
+				if (result == null) {
+					RPC.getRequestService().createFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							display.displayMessage("No es posible almacenar el favorito");
+						}
+
+						@Override
+						public void onSuccess(UserFavoriteRequest result) {
+							loadRequests(0, 100, "mylist");
+						}
+					});
+				} else {
+					UserFavoriteRequest favorite = new UserFavoriteRequest();
+					favorite.setRequest(request);
+					favorite.setUser(user);
+
+					RPC.getRequestService().deleteFavoriteRequest(favorite, new AsyncCallback<Void>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							display.displayMessage("No es posible eliminar el favorito");
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							loadRequests(0, 100, "mylist");
+						}
+					});
+				}
+			}
+		});
 	}
 
 	@Override

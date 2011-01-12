@@ -1,13 +1,11 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.*;
+import org.accesointeligente.client.CustomActionCell.Delegate;
 import org.accesointeligente.client.presenters.RequestListPresenter;
 import org.accesointeligente.client.presenters.RequestListPresenterIface;
 import org.accesointeligente.model.Request;
 
-import com.google.gwt.cell.client.ActionCell;
-import com.google.gwt.cell.client.ActionCell.Delegate;
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -23,7 +21,9 @@ import com.google.gwt.view.client.ListDataProvider;
 
 public class RequestListView extends Composite implements RequestListPresenter.Display {
 	private static RequestListViewUiBinder uiBinder = GWT.create(RequestListViewUiBinder.class);
-	interface RequestListViewUiBinder extends UiBinder<Widget, RequestListView> {}
+
+	interface RequestListViewUiBinder extends UiBinder<Widget, RequestListView> {
+	}
 
 	@UiField Anchor requestLink;
 	@UiField CellTable<Request> requestTable;
@@ -78,7 +78,6 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			public AnchorCellParams getValue(Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				params.setTitle("");
 				params.setUrl("#response?requestId=" + request.getId());
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
@@ -87,44 +86,57 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 		requestTable.addColumn(titleColumn, "Titulo");
 
 		// Institution
-		Column<Request, String> institutionColumn = new Column<Request, String>(new TextCell()) {
+		Column<Request, CustomTextCellParams> institutionColumn = new Column<Request, CustomTextCellParams>(new CustomTextCell()) {
 			@Override
-			public String getValue(Request request) {
-				return request.getInstitution().getName();
+			public CustomTextCellParams getValue(Request request) {
+				CustomTextCellParams params = new CustomTextCellParams();
+				params.setText(request.getInstitution().getName());
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableInstitution());
+				return params;
 			}
 		};
 		requestTable.addColumn(institutionColumn, "Organismo");
 
 		// Request Date
-		Column<Request, String> requestDateColumn = new Column<Request, String>(new TextCell()) {
+		Column<Request, CustomTextCellParams> requestDateColumn = new Column<Request, CustomTextCellParams>(new CustomTextCell()) {
 			@Override
-			public String getValue(Request request) {
-				return DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getDate());
+			public CustomTextCellParams getValue(Request request) {
+				CustomTextCellParams params = new CustomTextCellParams();
+				params.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getDate()));
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableRequestDate());
+				return params;
 			}
 		};
 		requestTable.addColumn(requestDateColumn, "Consulta");
 
 		// Response Date
-		Column<Request, String> responseDateColumn = new Column<Request, String>(new TextCell()) {
+		Column<Request, CustomTextCellParams> responseDateColumn = new Column<Request, CustomTextCellParams>(new CustomTextCell()) {
 			@Override
-			public String getValue(Request request) {
+			public CustomTextCellParams getValue(Request request) {
+				CustomTextCellParams params = new CustomTextCellParams();
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableResponseDate());
 				try {
 					String responseDate = "Esperando respuesta";
+
 					if (request.getResponse() != null) {
 						responseDate = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getResponse().getDate());
 					}
-					return responseDate;
+					params.setText(responseDate);
+					return params;
 				} catch (Exception e) {
 					Window.alert(e.getMessage());
-					return "";
+					params.setText("");
+					return params;
 				}
 			}
 		};
 		requestTable.addColumn(responseDateColumn, "Respuesta");
 
-		// Action
-		Column<Request, Request> buttonColumn = new Column<Request, Request>(new ActionCell<Request> ("+", new Delegate<Request> () {
-			public void execute (Request request) {
+		// View Request
+		Column<Request, Request> viewButtonColumn = new Column<Request, Request>(
+				new CustomActionCell<Request>("+", ResourceBundle.INSTANCE.RequestListView().reqTableViewMore() ,new Delegate<Request>() {
+
+			public void execute(Request request) {
 				presenter.showRequest(request.getId());
 			}
 		})) {
@@ -133,13 +145,25 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				return request;
 			}
 		};
-		requestTable.addColumn(buttonColumn, "Acciones");
-
+		requestTable.addColumn(viewButtonColumn, "Ver +");
 	}
 
 	@Override
-	public void setTableSize(Integer size) {
-		requestTable.setRowCount(size, true);
+	public void initTableFavColumn() {
+		// Favorite Request
+		Column<Request, Request> favButtonColumn = new Column<Request, Request>(
+				new CustomActionCell<Request>("", ResourceBundle.INSTANCE.RequestListView().reqTableNoFavorite(), new Delegate<Request>() {
+
+			public void execute(Request request) {
+				presenter.requestToggleFavorite(request);
+			}
+		})) {
+			@Override
+			public Request getValue(Request request) {
+				return request;
+			}
+		};
+		requestTable.addColumn(favButtonColumn, "Seguir");
 	}
 
 	@Override
@@ -150,7 +174,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@UiFactory
 	SimplePager getPager() {
 		requestPager = new SimplePager(TextLocation.CENTER);
-	    return requestPager;
+		return requestPager;
 	}
 
 	@UiHandler("requestLink")
