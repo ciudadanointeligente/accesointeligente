@@ -1,10 +1,11 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.*;
-import org.accesointeligente.client.CustomActionCell.Delegate;
+import org.accesointeligente.client.CustomActionImageCell.Delegate;
 import org.accesointeligente.client.presenters.RequestListPresenter;
 import org.accesointeligente.client.presenters.RequestListPresenterIface;
 import org.accesointeligente.model.Request;
+import org.accesointeligente.model.UserFavoriteRequest;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -133,16 +134,20 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 		requestTable.addColumn(responseDateColumn, "Respuesta");
 
 		// View Request
-		Column<Request, Request> viewButtonColumn = new Column<Request, Request>(
-				new CustomActionCell<Request>("+", ResourceBundle.INSTANCE.RequestListView().reqTableViewMore() ,new Delegate<Request>() {
+		Column<Request, CustomActionImageCellParams> viewButtonColumn = new Column<Request, CustomActionImageCellParams>(
+				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
-			public void execute(Request request) {
-				presenter.showRequest(request.getId());
+			public void execute(CustomActionImageCellParams params) {
+				presenter.showRequest(((Request) params.getValue()).getId());
 			}
 		})) {
 			@Override
-			public Request getValue(Request request) {
-				return request;
+			public CustomActionImageCellParams getValue(Request request) {
+				CustomActionImageCellParams params = new CustomActionImageCellParams();
+				params.setUrl("images/reqList/viewMore.png");
+				params.setTitle("Ver +");
+				params.setValue(request);
+				return params;
 			}
 		};
 		requestTable.addColumn(viewButtonColumn, "Ver +");
@@ -151,16 +156,29 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@Override
 	public void initTableFavColumn() {
 		// Favorite Request
-		Column<Request, Request> favButtonColumn = new Column<Request, Request>(
-				new CustomActionCell<Request>("", ResourceBundle.INSTANCE.RequestListView().reqTableNoFavorite(), new Delegate<Request>() {
+		Column<Request, CustomActionImageCellParams> favButtonColumn = new Column<Request, CustomActionImageCellParams>(
+				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
-			public void execute(Request request) {
-				presenter.requestToggleFavorite(request);
+			public void execute(CustomActionImageCellParams params) {
+				presenter.requestToggleFavorite((Request) params.getValue());
 			}
 		})) {
 			@Override
-			public Request getValue(Request request) {
-				return request;
+			public CustomActionImageCellParams getValue(Request request) {
+				CustomActionImageCellParams params = new CustomActionImageCellParams();
+				params.setUrl("images/reqList/no-favorite.png");
+				params.setTitle("Seguir");
+
+				for (UserFavoriteRequest favorite : request.getFavorites()) {
+					if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
+						params.setUrl("images/reqList/favorite.png");
+						params.setTitle("Dejar de seguir");
+						break;
+					}
+				}
+
+				params.setValue(request);
+				return params;
 			}
 		};
 		requestTable.addColumn(favButtonColumn, "Seguir");

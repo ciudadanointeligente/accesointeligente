@@ -6,7 +6,7 @@
 <hibernate-mapping package="org.accesointeligente.model">
 	<class name="UserFavoriteRequest">
 		<composite-id>
-			<key-many-to-one class="User" column="userId" name="user" />
+			<key-many-to-one class="User" column="userId" name="user" lazy="false" />
 			<key-many-to-one class="Request" column="requestId" name="request" />
 		</composite-id>
 	</class>

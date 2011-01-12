@@ -70,6 +70,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFetchMode("user", FetchMode.JOIN);
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("categories", FetchMode.JOIN);
+			criteria.setFetchMode("favorites", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("id", requestId));
 			Request request = (Request) criteria.uniqueResult();
 			return (Request) persistentBeanManager.clone(request);
@@ -93,6 +94,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
+			criteria.setFetchMode("favorites", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			return requests;
 		} catch (Throwable ex) {
@@ -136,6 +138,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
+			criteria.setFetchMode("favorites", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			return requests;
 		} catch (Throwable ex) {

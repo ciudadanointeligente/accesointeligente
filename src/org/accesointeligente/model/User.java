@@ -119,4 +119,21 @@ public class User extends LightEntity {
 	public InstitutionType getInstitutionType() {
 		return institutionType;
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+
+		if (!(other instanceof User)) {
+			return false;
+		}
+
+		if (getId() == null) {
+			return false;
+		}
+
+		return getId().equals(((User) other).getId());
+	}
 }

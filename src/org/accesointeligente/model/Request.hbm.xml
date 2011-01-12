@@ -26,5 +26,9 @@
 		<property name="date"/>
 		<one-to-one name="response"/>
 		<property name="remoteIdentifier"/>
+		<set name="favorites" inverse="true">
+			<key column="requestId"/>
+			<one-to-many class="UserFavoriteRequest"/>
+		</set>
 	</class>
 </hibernate-mapping>

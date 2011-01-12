@@ -45,14 +45,6 @@
 .reqTableResponseDate {
 }
 
-.reqTableViewMore {
-}
-
-.reqTableFavorite {
-}
-
-.reqTableNoFavorite {
-}
 .reqTableInstitution {
 }
 
@@ -60,25 +52,4 @@
 }
 
 .reqTableResponseDate {
-}
-
-.reqTableMore {
-	background: url(images/reqList/viewMore.png) no-repeat scroll 0 0
-		transparent;
-	height: 18px;
-	width: 18px;
-}
-
-.reqTableFavorite {
-	background: url(images/reqList/favorite.png) no-repeat scroll 0 0
-		transparent;
-	height: 18px;
-	width: 18px;
-}
-
-.reqTableNoFavorite {
-	background: url(images/reqList/no-favorite.png) no-repeat scroll 0 0
-		transparent;
-	height: 18px;
-	width: 18px;
 }
