@@ -5,6 +5,7 @@ import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
 import org.accesointeligente.model.Attachment;
+import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.google.gwt.cell.client.TextCell;
@@ -149,7 +150,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	public void onRequestListLinkClick(ClickEvent event) {
 		String link = presenter.getListLink();
 		if (link == null) {
-			link = "home";
+			link = AppPlace.HOME.getToken();
 		}
 
 		History.newItem(link);

@@ -4,6 +4,7 @@ import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
 import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
 
@@ -83,6 +84,6 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 
 	@Override
 	public void register() {
-		History.newItem("register");
+		History.newItem(AppPlace.REGISTER.getToken());
 	}
 }

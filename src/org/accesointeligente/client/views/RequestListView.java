@@ -6,7 +6,7 @@ import org.accesointeligente.client.presenters.RequestListPresenter;
 import org.accesointeligente.client.presenters.RequestListPresenterIface;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.UserFavoriteRequest;
-import org.accesointeligente.shared.AppPlaces;
+import org.accesointeligente.shared.AppPlace;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -210,7 +210,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@UiHandler("requestLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		History.newItem(AppPlaces.REQUEST.getName());
+		History.newItem(AppPlace.REQUEST.getToken());
 	}
 
 	@UiHandler("searchPanelHandle")

@@ -62,7 +62,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 	@Override
 	public void loadRequests(Integer offset, Integer limit, String type) {
 
-		if (type.equals(RequestListType.MYREQUESTS.getName())) {
+		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
 
 			if (ClientSessionUtil.checkSession()) {
@@ -71,7 +71,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					@Override
 					public void onFailure(Throwable caught) {
 						display.displayMessage("No es posible recuperar el listado solicitado");
-						History.newItem(AppPlaces.HOME.getName());
+						History.newItem(AppPlace.HOME.getToken());
 					}
 
 					@Override
@@ -82,10 +82,10 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 				});
 			} else {
 				display.displayMessage("Necesita acceder para poder ver esta lista");
-				History.newItem(AppPlaces.HOME.getName());
+				History.newItem(AppPlace.HOME.getToken());
 			}
 
-		} else if (type.equals(RequestListType.FAVORITES.getName())) {
+		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			display.setListTitle("Mis favoritas");
 
 			if (ClientSessionUtil.checkSession()) {
@@ -94,7 +94,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					@Override
 					public void onFailure(Throwable caught) {
 						display.displayMessage("No es posible recuperar el listado solicitado");
-						History.newItem(AppPlaces.HOME.getName());
+						History.newItem(AppPlace.HOME.getToken());
 					}
 
 					@Override
@@ -105,10 +105,10 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 				});
 			} else {
 				display.displayMessage("Necesita acceder para poder ver esta lista");
-				History.newItem(AppPlaces.HOME.getName());
+				History.newItem(AppPlace.HOME.getToken());
 			}
 
-		} else if (type.equals(RequestListType.GENERAL.getName())) {
+		} else if (type.equals(RequestListType.GENERAL.getType())) {
 			display.setListTitle("Listado de solicitudes");
 
 			RPC.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -116,7 +116,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 				@Override
 				public void onFailure(Throwable caught) {
 					display.displayMessage("No es posible recuperar el listado solicitado");
-					History.newItem(AppPlaces.HOME.getName());
+					History.newItem(AppPlace.HOME.getToken());
 				}
 
 				@Override
@@ -127,7 +127,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			});
 		} else {
 			display.displayMessage("No existe el tipo de lista solicitado: " + type);
-			History.newItem(AppPlaces.HOME.getName());
+			History.newItem(AppPlace.HOME.getToken());
 		}
 	}
 
@@ -153,7 +153,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 						@Override
 						public void onSuccess(UserFavoriteRequest result) {
-							loadRequests(0, 100, RequestListType.MYREQUESTS.getName());
+							loadRequests(0, 100, RequestListType.MYREQUESTS.getType());
 						}
 					});
 				} else {
@@ -170,7 +170,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 						@Override
 						public void onSuccess(Void result) {
-							loadRequests(0, 100, RequestListType.MYREQUESTS.getName());
+							loadRequests(0, 100, RequestListType.MYREQUESTS.getType());
 						}
 					});
 				}
@@ -180,7 +180,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void showRequest(Integer requestId) {
-		History.newItem(AppPlaces.RESPONSE.getName() + "?requestId=" + requestId.toString());
+		History.newItem(AppPlace.RESPONSE.getToken() + "?requestId=" + requestId.toString());
 	}
 
 	@Override

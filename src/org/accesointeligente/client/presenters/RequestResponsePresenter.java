@@ -5,6 +5,8 @@ import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.Attachment;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
+import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.RequestListType;
 import org.accesointeligente.shared.RequestStatus;
 
 import net.customware.gwt.presenter.client.EventBus;
@@ -110,9 +112,9 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		String link = null;
 
 		if (ClientSessionUtil.checkSession()) {
-			link = "list?type=mylist";
+			link = AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType();
 		} else {
-			link = "list?type=general";
+			link = AppPlace.LIST.getToken() + "?type=" + RequestListType.GENERAL.getType();
 		}
 
 		return link;

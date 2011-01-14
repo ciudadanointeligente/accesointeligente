@@ -3,6 +3,7 @@ package org.accesointeligente.client;
 import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.views.*;
+import org.accesointeligente.shared.AppPlace;
 
 import net.customware.gwt.presenter.client.EventBus;
 
@@ -20,6 +21,7 @@ public class AppController implements ValueChangeHandler<String> {
 	private MainPresenter mainPresenter;
 	private EventBus eventBus;
 	private PopupPanel popup;
+	private static List<String> tokenHistory;
 
 	public AppController(EventBus eventBus) {
 		this.eventBus = eventBus;
@@ -27,6 +29,7 @@ public class AppController implements ValueChangeHandler<String> {
 		this.eventBus.addHandler(LoginRequiredEvent.TYPE, mainPresenter);
 		this.eventBus.addHandler(LoginSuccessfulEvent.TYPE, mainPresenter);
 		popup = new PopupPanel();
+		tokenHistory = new ArrayList<String>();
 	}
 
 	protected void setup() {
@@ -38,17 +41,15 @@ public class AppController implements ValueChangeHandler<String> {
 		eventBus.addHandler(LoginSuccessfulEvent.TYPE, new LoginSuccessfulEventHandler() {
 			@Override
 			public void loginSuccessful(LoginSuccessfulEvent event) {
-				if (!"home".equals(History.getToken())) {
-					History.newItem("home");
-				}
+				History.newItem(getPreviousHistoryToken());
 			}
 		});
 
 		eventBus.addHandler(LoginRequiredEvent.TYPE, new LoginRequiredEventHandler() {
 			@Override
 			public void loginRequired(LoginRequiredEvent event) {
-				if (!"home".equals(History.getToken())) {
-					History.newItem("home");
+				if (!AppPlace.HOME.equals(getPlace(History.getToken()))) {
+					History.newItem(AppPlace.HOME.getToken());
 				}
 			}
 		});
@@ -64,105 +65,116 @@ public class AppController implements ValueChangeHandler<String> {
 
 	public void switchSection(String token) {
 		popup.hide();
+		tokenHistory.add(token);
+		Map<String, String> parameters = getHistoryTokenParameters(token);
+		AppPlace place = getPlace(token);
 
 		if (ClientSessionUtil.checkSession()) {
-			if (token.equals("home")) {
-				HomePresenter presenter = new HomePresenter(new HomeView(), eventBus);
-				presenter.bind();
-				getLayout().clear();
-				getLayout().add(presenter.getDisplay().asWidget());
-			} else if (token.equals("request")) {
-				RequestPresenter presenter = new RequestPresenter(new RequestView(), eventBus);
-				presenter.bind();
-				getLayout().clear();
-				getLayout().add(presenter.getDisplay().asWidget());
-			} else if (token.equals("logout")) {
-				ClientSessionUtil.destroySession();
-				eventBus.fireEvent(new LoginRequiredEvent());
-			} else if (token.startsWith("status")) {
-				Map<String, String> parameters = getHistoryTokenParameters(token);
-				try {
-					Integer requestId = Integer.parseInt(parameters.get("requestId"));
-					RequestStatusPresenter presenter = new RequestStatusPresenter(new RequestStatusView(), eventBus);
-					presenter.bind();
-					presenter.showRequest(requestId);
+			switch (place) {
+				case HOME:
+					HomePresenter homePresenter = new HomePresenter(new HomeView(), eventBus);
+					homePresenter.bind();
 					getLayout().clear();
-					getLayout().add(presenter.getDisplay().asWidget());
-				} catch (Exception e) {
-					Window.alert("Id incorrecta: No se puede cargar la solicitud");
-				}
-			} else if (token.startsWith("response")) {
-				Map<String, String> parameters = getHistoryTokenParameters(token);
-				try {
-					Integer requestId = Integer.parseInt(parameters.get("requestId"));
-					RequestResponsePresenter presenter = new RequestResponsePresenter(new RequestResponseView(), eventBus);
-					presenter.bind();
-					presenter.showRequest(requestId);
+					getLayout().add(homePresenter.getDisplay().asWidget());
+					break;
+				case REQUEST:
+					RequestPresenter requestPresenter = new RequestPresenter(new RequestView(), eventBus);
+					requestPresenter.bind();
 					getLayout().clear();
-					getLayout().add(presenter.getDisplay().asWidget());
-				} catch (Exception e) {
-					Window.alert("Id incorrecta: No se puede cargar la solicitud");
-				}
-			} else if (token.startsWith("list")) {
-				Map<String, String> parameters = getHistoryTokenParameters(token);
-				try {
-					String listType = parameters.get("type");
-					RequestListPresenter presenter = new RequestListPresenter(new RequestListView(), eventBus);
-					presenter.bind();
-					presenter.loadRequests(0, 100, listType);
-					getLayout().clear();
-					getLayout().add(presenter.getDisplay().asWidget());
-				} catch (Exception e) {
-					Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
-				}
-			} else {
-				History.newItem("home");
+					getLayout().add(requestPresenter.getDisplay().asWidget());
+					break;
+				case LOGOUT:
+					ClientSessionUtil.destroySession();
+					eventBus.fireEvent(new LoginRequiredEvent());
+					break;
+				case REQUESTSTATUS:
+					try {
+						Integer requestId = Integer.parseInt(parameters.get("requestId"));
+						RequestStatusPresenter requestStatusPresenter = new RequestStatusPresenter(new RequestStatusView(), eventBus);
+						requestStatusPresenter.bind();
+						requestStatusPresenter.showRequest(requestId);
+						getLayout().clear();
+						getLayout().add(requestStatusPresenter.getDisplay().asWidget());
+					} catch (Exception e) {
+						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+					}
+					break;
+				case RESPONSE:
+					try {
+						Integer requestId = Integer.parseInt(parameters.get("requestId"));
+						RequestResponsePresenter requestResponsePresenter = new RequestResponsePresenter(new RequestResponseView(), eventBus);
+						requestResponsePresenter.bind();
+						requestResponsePresenter.showRequest(requestId);
+						getLayout().clear();
+						getLayout().add(requestResponsePresenter.getDisplay().asWidget());
+					} catch (Exception e) {
+						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+					}
+					break;
+				case LIST:
+					try {
+						String listType = parameters.get("type");
+						RequestListPresenter requestListPresenter = new RequestListPresenter(new RequestListView(), eventBus);
+						requestListPresenter.bind();
+						requestListPresenter.loadRequests(0, 100, listType);
+						getLayout().clear();
+						getLayout().add(requestListPresenter.getDisplay().asWidget());
+					} catch (Exception e) {
+						Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
+					}
+					break;
+				default:
+					History.newItem(AppPlace.HOME.toString());
 			}
 		} else {
-			if (token.equals("home")) {
-				HomePresenter presenter = new HomePresenter(new HomeView(), eventBus);
-				presenter.bind();
-				getLayout().clear();
-				getLayout().add(presenter.getDisplay().asWidget());
-			} else if (token.equals("login")) {
-				LoginPresenter presenter = new LoginPresenter(new LoginView(), eventBus);
-				presenter.bind();
-				popup.setModal(true);
-				popup.setGlassEnabled(true);
-				popup.clear();
-				popup.add(presenter.getDisplay().asWidget());
-				popup.center();
-			} else if (token.equals("register")) {
-				RegisterPresenter presenter = new RegisterPresenter(new RegisterView(), eventBus);
-				presenter.bind();
-				getLayout().clear();
-				getLayout().add(presenter.getDisplay().asWidget());
-			} else if (token.startsWith("response")) {
-				Map<String, String> parameters = getHistoryTokenParameters(token);
-				try {
-					Integer requestId = Integer.parseInt(parameters.get("requestId"));
-					RequestResponsePresenter presenter = new RequestResponsePresenter(new RequestResponseView(), eventBus);
-					presenter.bind();
-					presenter.showRequest(requestId);
+			switch (place) {
+				case HOME:
+					HomePresenter homePresenter = new HomePresenter(new HomeView(), eventBus);
+					homePresenter.bind();
 					getLayout().clear();
-					getLayout().add(presenter.getDisplay().asWidget());
-				} catch (Exception e) {
-					Window.alert("Id incorrecta: No se puede cargar la solicitud");
-				}
-			} else if (token.startsWith("list")) {
-				Map<String, String> parameters = getHistoryTokenParameters(token);
-				try {
-					String listType = parameters.get("type");
-					RequestListPresenter presenter = new RequestListPresenter(new RequestListView(), eventBus);
-					presenter.bind();
-					presenter.loadRequests(0, 100, listType);
+					getLayout().add(homePresenter.getDisplay().asWidget());
+					break;
+				case LOGIN:
+					LoginPresenter loginPresenter = new LoginPresenter(new LoginView(), eventBus);
+					loginPresenter.bind();
+					popup.setModal(true);
+					popup.setGlassEnabled(true);
+					popup.clear();
+					popup.add(loginPresenter.getDisplay().asWidget());
+					popup.center();
+					break;
+				case REGISTER:
+					RegisterPresenter registerPresenter = new RegisterPresenter(new RegisterView(), eventBus);
+					registerPresenter.bind();
 					getLayout().clear();
-					getLayout().add(presenter.getDisplay().asWidget());
-				} catch (Exception e) {
-					Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
-				}
-			} else {
-				History.newItem("home");
+					getLayout().add(registerPresenter.getDisplay().asWidget());
+					break;
+				case RESPONSE:
+					try {
+						Integer requestId = Integer.parseInt(parameters.get("requestId"));
+						RequestResponsePresenter requestResponsePresenter = new RequestResponsePresenter(new RequestResponseView(), eventBus);
+						requestResponsePresenter.bind();
+						requestResponsePresenter.showRequest(requestId);
+						getLayout().clear();
+						getLayout().add(requestResponsePresenter.getDisplay().asWidget());
+					} catch (Exception e) {
+						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+					}
+					break;
+				case LIST:
+					try {
+						String listType = parameters.get("type");
+						RequestListPresenter requtesListPresenter = new RequestListPresenter(new RequestListView(), eventBus);
+						requtesListPresenter.bind();
+						requtesListPresenter.loadRequests(0, 100, listType);
+						getLayout().clear();
+						getLayout().add(requtesListPresenter.getDisplay().asWidget());
+					} catch (Exception e) {
+						Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
+					}
+					break;
+				default:
+					History.newItem(AppPlace.HOME.toString());
 			}
 		}
 	}
@@ -197,5 +209,32 @@ public class AppController implements ValueChangeHandler<String> {
 		}
 
 		return params;
+	}
+
+	public static List<String> getHistoryTokenList() {
+		return tokenHistory;
+	}
+
+	public String getCurrentHistoryToken() {
+		return getHistoryTokenList().get(getHistoryTokenList().size() - 1);
+	}
+
+	public String getPreviousHistoryToken() {
+		if(getHistoryTokenList().size() > 2) {
+			return getHistoryTokenList().get(getHistoryTokenList().size() - 2);
+		}
+		return AppPlace.HOME.getToken();
+	}
+
+	public AppPlace getPlace(String token) {
+		AppPlace place = AppPlace.HOME;
+
+		try {
+			place = AppPlace.valueOf(token.replaceFirst("^(.*)\\?.*$", "$1").toUpperCase());
+		} catch (Exception ex) {
+			ex.printStackTrace(System.err);
+		}
+
+		return place;
 	}
 }

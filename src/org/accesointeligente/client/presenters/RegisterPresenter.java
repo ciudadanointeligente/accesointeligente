@@ -19,9 +19,7 @@ import org.accesointeligente.model.Age;
 import org.accesointeligente.model.InstitutionType;
 import org.accesointeligente.model.Region;
 import org.accesointeligente.model.User;
-import org.accesointeligente.shared.Country;
-import org.accesointeligente.shared.Gender;
-import org.accesointeligente.shared.RegisterException;
+import org.accesointeligente.shared.*;
 
 public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
 	public interface Display extends WidgetDisplay {
@@ -213,7 +211,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				@Override
 				public void onSuccess(User result) {
 					Window.alert("Registro exitoso!");
-					History.newItem("home");
+					History.newItem(AppPlace.HOME.getToken());
 				}
 			});
 		}

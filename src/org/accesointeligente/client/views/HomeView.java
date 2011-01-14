@@ -2,10 +2,14 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.HomePresenter;
 import org.accesointeligente.client.presenters.HomePresenterIface;
+import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.RequestListType;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.uibinder.client.*;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 
@@ -35,11 +39,11 @@ public class HomeView extends Composite implements HomePresenter.Display {
 
 	@UiHandler("requestFormLink")
 	public void onRequestFormLinkClick(ClickEvent event) {
-		History.newItem("request");
+		History.newItem(AppPlace.REQUEST.getToken());
 	}
 
    @UiHandler("requestListLink")
    public void onRequestListLinkClick(ClickEvent event) {
-           History.newItem("list?type=general");
+           History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.GENERAL.getType());
    }
 }

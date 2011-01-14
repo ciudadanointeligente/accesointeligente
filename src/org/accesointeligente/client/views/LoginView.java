@@ -5,6 +5,8 @@ import org.accesointeligente.client.presenters.LoginPresenterIface;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -30,6 +32,13 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@Override
 	public Widget asWidget() {
 		return this;
+	}
+
+	@UiHandler("password")
+	void onPasswordKeyDown(KeyDownEvent event) {
+		if (presenter != null && (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)) {
+			presenter.login();
+		}
 	}
 
 	@UiHandler("login")

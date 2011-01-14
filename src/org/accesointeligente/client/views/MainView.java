@@ -2,6 +2,8 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.MainPresenter;
 import org.accesointeligente.client.presenters.MainPresenterIface;
+import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.RequestListType;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +27,8 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField HTMLPanel headerPanel;
 	@UiField Image logo;
 	@UiField FlowPanel mainPanel;
+	@UiField MenuItem myrequests;
+	@UiField MenuItem favorites;
 	@UiField MenuItem login;
 	@UiField MenuItem logout;
 	@UiField MenuItem home;
@@ -38,38 +42,52 @@ public class MainView extends Composite implements MainPresenter.Display {
 	public MainView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
+		myrequests.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+			}
+		});
+
+		favorites.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.FAVORITES.getType());
+			}
+		});
+
 		login.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem("login");
+				History.newItem(AppPlace.LOGIN.getToken());
 			}
 		});
 
 		logout.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem("logout");
+				History.newItem(AppPlace.LOGOUT.getToken());
 			}
 		});
 
 		home.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem("home");
+				History.newItem(AppPlace.HOME.getToken());
 			}
 		});
 
 		about.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem("about");
+				History.newItem(AppPlace.ABOUT.getToken());
 			}
 		});
 
 		contact.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem("contact");
+				History.newItem(AppPlace.CONTACT.getToken());
 			}
 		});
 	}
@@ -88,6 +106,8 @@ public class MainView extends Composite implements MainPresenter.Display {
 	public void setDisplayMode(DisplayMode mode) {
 		headerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
+		myrequests.setVisible(DisplayMode.LoggedIn.equals(mode));
+		favorites.setVisible(DisplayMode.LoggedIn.equals(mode));
 		login.setVisible(DisplayMode.LoggedOut.equals(mode));
 		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
 		footerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
@@ -101,6 +121,6 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@UiHandler("logo")
 	public void onLogoClick(ClickEvent event) {
-		History.newItem("home");
+		History.newItem(AppPlace.HOME.getToken());
 	}
 }
