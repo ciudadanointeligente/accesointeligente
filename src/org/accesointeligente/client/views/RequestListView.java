@@ -6,6 +6,7 @@ import org.accesointeligente.client.presenters.RequestListPresenter;
 import org.accesointeligente.client.presenters.RequestListPresenterIface;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.UserFavoriteRequest;
+import org.accesointeligente.shared.AppPlaces;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,9 +16,7 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class RequestListView extends Composite implements RequestListPresenter.Display {
@@ -27,6 +26,9 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@UiField Anchor requestLink;
+	@UiField Label listTitle;
+	@UiField Anchor searchPanelHandle;
+	@UiField FlowPanel searchPanel;
 	@UiField CellTable<Request> requestTable;
 	@UiField SimplePager requestPager;
 
@@ -50,6 +52,17 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@Override
 	public void displayMessage(String message) {
 		Window.alert(message);
+	}
+
+	@Override
+	public void setListTitle(String title)  {
+		listTitle.setText(title);
+	}
+
+	@Override
+	public void setSearchWidget(Widget widget) {
+		searchPanel.clear();
+		searchPanel.add(widget);
 	}
 
 	@Override
@@ -103,7 +116,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			@Override
 			public CustomTextCellParams getValue(Request request) {
 				CustomTextCellParams params = new CustomTextCellParams();
-				params.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getDate()));
+				params.setText(DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getDate()));
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableRequestDate());
 				return params;
 			}
@@ -120,7 +133,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 					String responseDate = "Esperando respuesta";
 
 					if (request.getResponse() != null) {
-						responseDate = DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(request.getResponse().getDate());
+						responseDate = DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getResponse().getDate());
 					}
 					params.setText(responseDate);
 					return params;
@@ -197,6 +210,15 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@UiHandler("requestLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		History.newItem("request");
+		History.newItem(AppPlaces.REQUEST.getName());
+	}
+
+	@UiHandler("searchPanelHandle")
+	public void onSearchPanelHandleClick(ClickEvent event) {
+		if (searchPanel.isVisible()) {
+			searchPanel.setVisible(false);
+		} else {
+			searchPanel.setVisible(true);
+		}
 	}
 }

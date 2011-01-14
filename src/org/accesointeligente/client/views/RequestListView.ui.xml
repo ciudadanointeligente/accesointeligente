@@ -3,14 +3,15 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style src="RequestListView.css" />
 	<g:HTMLPanel addStyleNames="noOverflow">
-		<g:Anchor ui:field="requestLink">
-			Crea una nueva solicitud
-		</g:Anchor>
 		<div class="contentPad {style.reqTableContainer}">
-		<div class="headSolicitud noMargin"><h1>Listado de solicitudes <!-- este nombre es dinámico, indica el contenido del listado--></h1></div>
-		<div class=""></div>
-			<c:CellTable ui:field="requestTable" pageSize="10" addStyleNames="{style.requestTable}"/>
-			<c:SimplePager ui:field="requestPager" rangeLimited="false" addStyleNames="{style.requestPager}"/>
+			<div class="headSolicitud noMargin">
+				<g:Label ui:field="listTitle"/>
+				<g:Anchor ui:field="searchPanelHandle">Buscar</g:Anchor>
+				<div class="makeARequest"><g:Anchor ui:field="requestLink">Crea una nueva solicitud</g:Anchor></div>
+			</div>
+			<div><g:FlowPanel ui:field="searchPanel" visible="false"/></div>
+			<c:CellTable ui:field="requestTable" pageSize="10" addStyleNames="{style.requestTable}" />
+			<c:SimplePager ui:field="requestPager" rangeLimited="false" addStyleNames="{style.requestPager}" />
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -4,27 +4,29 @@
 	xmlns:c="urn:import:com.google.gwt.user.datepicker.client">
 	<ui:style src="RequestSearchView.css" />
 	<g:HTMLPanel>
-		<g:Label>FILTRAR</g:Label>
+		<g:Label>Busqueda</g:Label>
 		<g:HTMLPanel>
-			<g:TextBox>PALABRA CLAVE...</g:TextBox>
+			<g:TextBox ui:field="keyWord"/>
 			<g:HTMLPanel>
-				<g:TextBox>ORGANISMO</g:TextBox>
-				<g:ListBox></g:ListBox>
+				<g:Label>Organismo</g:Label>
+				<g:SuggestBox ui:field="institution" />
 			</g:HTMLPanel>
 			<g:HTMLPanel>
-				<g:TextBox>Fecha</g:TextBox>
+				<g:Label>Fecha</g:Label>
 				<g:Label>Desde</g:Label>
-				<c:DateBox></c:DateBox>
+				<c:DateBox ui:field="minDate"></c:DateBox>
 				<g:Label>Hasta</g:Label>
-				<c:DateBox></c:DateBox>
+				<c:DateBox ui:field="maxDate"></c:DateBox>
 			</g:HTMLPanel>
 			<g:HTMLPanel>
 				<g:Label>ESTADO</g:Label>
-				<g:RadioButton name="requestStatus">Pendiente</g:RadioButton>
-				<g:RadioButton name="requestStatus">Respondido</g:RadioButton>
-				<g:RadioButton name="requestStatus">Vencido</g:RadioButton>
-				<g:RadioButton name="requestStatus">Derivado</g:RadioButton>
+				<g:CheckBox ui:field="statusPending">Pendiente</g:CheckBox>
+				<g:CheckBox ui:field="statusClosed">Respondido</g:CheckBox>
+				<g:CheckBox ui:field="statusExpired">Vencido</g:CheckBox>
+				<g:CheckBox ui:field="statusDerived">Derivado</g:CheckBox>
 			</g:HTMLPanel>
+			<g:Button ui:field="search">Buscar</g:Button>
+			<g:Button ui:field="clear">Limpiar</g:Button>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>
