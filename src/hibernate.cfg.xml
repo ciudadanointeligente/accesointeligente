@@ -42,6 +42,7 @@
 		<mapping resource="org/accesointeligente/model/Region.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Request.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/RequestCategory.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/RequestComment.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Response.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/User.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/UserFavoriteRequest.hbm.xml"/>

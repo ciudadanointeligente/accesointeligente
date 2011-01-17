@@ -17,4 +17,7 @@ public interface RequestServiceAsync {
 	void getFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);
 	void createFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);
 	void deleteFavoriteRequest(UserFavoriteRequest favorite, AsyncCallback<Void> callback);
+	void getRequestComments(Request request, AsyncCallback<List<RequestComment>> callback);
+	void createRequestComment(RequestComment comment, AsyncCallback<RequestComment> callback);
+	void deleteRequestComment(RequestComment comment, AsyncCallback<Void> callback);
 }

@@ -23,6 +23,7 @@ public class Request extends LightEntity {
 	private Response response;
 	private String remoteIdentifier;
 	private Set<UserFavoriteRequest> favorites;
+	private Set<RequestComment> comments;
 
 	public Integer getId() {
 		return id;
@@ -126,5 +127,13 @@ public class Request extends LightEntity {
 
 	public void setFavorites(Set<UserFavoriteRequest> favorites) {
 		this.favorites = favorites;
+	}
+
+	public Set<RequestComment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<RequestComment> comments) {
+		this.comments = comments;
 	}
 }

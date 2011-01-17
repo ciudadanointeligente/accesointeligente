@@ -34,7 +34,7 @@
 				</div>
 				<div class="{style.unit}">
 					<span>Comentarios</span>
-					<g:Label>3</g:Label>
+					<g:Label ui:field="commentCount"/>
 				</div>
 				<div class="{style.unit}">
 					<span>Organismo</span>
@@ -54,12 +54,14 @@
 					<g:Label ui:field="responseInfo"></g:Label>
 					<br />
 					<g:HTMLPanel ui:field="responseAttachmentsPanel">
-						<c:CellTable ui:field="attachmentsTable"
-							addStyleNames="{style.downloadTable}" />
+						<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
 					</g:HTMLPanel>
 				</g:HTMLPanel>
-				<g:HTMLPanel ui:field="commentsPanel">
+				<g:HTMLPanel ui:field="newCommentPanel">
+					<g:TextArea ui:field="newCommentText"/>
+					<g:Button ui:field="newCommentSubmit">Comentar</g:Button>
 				</g:HTMLPanel>
+				<g:FlowPanel ui:field="commentsPanel" />
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 		<g:HTMLPanel addStyleNames="rightContainer">

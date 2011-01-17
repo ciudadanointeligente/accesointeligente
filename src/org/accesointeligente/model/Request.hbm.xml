@@ -30,5 +30,9 @@
 			<key column="requestId"/>
 			<one-to-many class="UserFavoriteRequest"/>
 		</set>
+		<set name="comments" inverse="true">
+			<key column="requestId"/>
+			<one-to-many class="RequestComment"/>
+		</set>
 	</class>
 </hibernate-mapping>

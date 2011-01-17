@@ -4,7 +4,9 @@ import org.accesointeligente.client.AnchorCell;
 import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
+import org.accesointeligente.client.widgets.CommentWidget;
 import org.accesointeligente.model.Attachment;
+import org.accesointeligente.model.RequestComment;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
@@ -23,6 +25,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Date;
+import java.util.List;
 
 public class RequestResponseView extends Composite implements RequestResponsePresenter.Display {
 	private static RequestResponseViewUiBinder uiBinder = GWT.create(RequestResponseViewUiBinder.class);
@@ -35,6 +38,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField Label requestTitle;
 	@UiField Label requestDate;
 	@UiField Label responseDate;
+	@UiField Label commentCount;
 	@UiField Label institutionName;
 	@UiField Label requestInfo;
 	@UiField Label requestContext;
@@ -42,7 +46,10 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField Label responseInfo;
 	@UiField HTMLPanel responseAttachmentsPanel;
 	@UiField CellTable<Attachment> attachmentsTable;
-	@UiField HTMLPanel commentsPanel;
+	@UiField FlowPanel commentsPanel;
+	@UiField HTMLPanel newCommentPanel;
+	@UiField TextArea newCommentText;
+	@UiField Button newCommentSubmit;
 
 
 	private RequestResponsePresenterIface presenter;
@@ -133,12 +140,27 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 			public AnchorCellParams getValue(Attachment attachment) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setUrl(attachment.getUrl());
+				// TODO add comment image url
 				params.setStyleNames("");
 				params.setValue(attachment.getName() + attachment.getType().getExtension());
 				return params;
 			}
 		};
 		attachmentsTable.addColumn(statusColumn, "Descarga");
+	}
+
+	@Override
+	public void setComments(List<RequestComment> comments) {
+		commentsPanel.clear();
+		for (RequestComment comment : comments) {
+			CommentWidget cw = new CommentWidget();
+			cw.setImage("");
+			cw.setAuthor(comment.getUser().getFirstName());
+			cw.setDate(comment.getDate());
+			cw.setContent(comment.getText());
+			commentsPanel.add(cw);
+		}
+		commentCount.setText(new Integer(comments.size()).toString());
 	}
 
 	@Override
@@ -154,5 +176,10 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 		}
 
 		History.newItem(link);
+	}
+
+	@UiHandler("newCommentSubmit")
+	public void onNewCommentClick(ClickEvent event) {
+		presenter.saveComment(newCommentText.getText());
 	}
 }

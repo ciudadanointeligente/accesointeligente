@@ -20,4 +20,7 @@ public interface RequestService extends RemoteService {
 	UserFavoriteRequest getFavoriteRequest(Request request, User user) throws ServiceException;
 	UserFavoriteRequest createFavoriteRequest(Request request, User user) throws ServiceException;
 	void deleteFavoriteRequest(UserFavoriteRequest favorite) throws ServiceException;
+	List<RequestComment> getRequestComments(Request request) throws ServiceException;
+	RequestComment createRequestComment(RequestComment comment) throws ServiceException;
+	void deleteRequestComment(RequestComment comment) throws ServiceException;
 }

@@ -2,9 +2,7 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.model.Attachment;
-import org.accesointeligente.model.Request;
-import org.accesointeligente.model.Response;
+import org.accesointeligente.model.*;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestListType;
 import org.accesointeligente.shared.RequestStatus;
@@ -34,10 +32,13 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		// Response
 		void setResponseInfo(String info);
 		void setResponseAttachments(ListDataProvider<Attachment> data);
-		void displayMessage(String string);
 		void initTable();
 		void initTableColumns();
+		void setComments(List<RequestComment> comments);
+		void displayMessage(String string);
 	}
+
+	private Request request;
 
 	public RequestResponsePresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
@@ -55,24 +56,6 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	protected void onRevealDisplay() {
-	}
-
-	@Override
-	public void loadAttachments(Response response) {
-		RPC.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar los archivos adjuntos");
-				History.back();
-			}
-
-			@Override
-			public void onSuccess(List<Attachment> attachments) {
-				ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
-				display.setResponseAttachments(data);
-			}
-		});
 	}
 
 	@Override
@@ -100,9 +83,69 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					} else {
 						display.setResponseInfo("Esperando Respuesta");
 					}
+					request = result;
+					loadComments(result);
 				} else {
 					display.displayMessage("No se puede cargar la solicitud");
 				}
+			}
+		});
+	}
+
+	@Override
+	public void loadComments(Request request) {
+		RPC.getRequestService().getRequestComments(request, new AsyncCallback<List<RequestComment>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.displayMessage("No es posible recuperar los archivos adjuntos");
+				History.back();
+			}
+
+			@Override
+			public void onSuccess(List<RequestComment> comments) {
+				display.setComments(comments);
+			}
+		});
+	}
+
+	@Override
+	public void saveComment(String commentContent) {
+		RequestComment comment = new RequestComment();
+		comment.setDate(new Date());
+		comment.setText(commentContent);
+		comment.setUser(ClientSessionUtil.getUser());
+		comment.setRequest(request);
+
+		RPC.getRequestService().createRequestComment(comment, new AsyncCallback<RequestComment>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.displayMessage("No es posible publicar su comentario");
+			}
+
+			@Override
+			public void onSuccess(RequestComment comment) {
+				loadComments(comment.getRequest());
+			}
+		});
+
+	}
+
+	@Override
+	public void loadAttachments(Response response) {
+		RPC.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.displayMessage("No es posible recuperar los archivos adjuntos");
+				History.back();
+			}
+
+			@Override
+			public void onSuccess(List<Attachment> attachments) {
+				ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
+				display.setResponseAttachments(data);
 			}
 		});
 	}
