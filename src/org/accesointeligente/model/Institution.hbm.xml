@@ -9,5 +9,10 @@
 			<generator class="identity"/>
 		</id>
 		<property name="name"/>
+		<property name="institutionClass">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.InstitutionClass</param>
+			</type>
+		</property>
 	</class>
 </hibernate-mapping>
