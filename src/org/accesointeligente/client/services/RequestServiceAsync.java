@@ -10,6 +10,7 @@ public interface RequestServiceAsync {
 	void saveRequest(Request request, AsyncCallback<Request> callback);
 	void getCategories(AsyncCallback<List<RequestCategory>> callback);
 	void getRequest(Integer requestId, AsyncCallback<Request> callback);
+	void getRequest(String remoteIdentifier, AsyncCallback<Request> callback);
 	void getUserRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getUserFavoriteRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
@@ -20,4 +21,6 @@ public interface RequestServiceAsync {
 	void getRequestComments(Request request, AsyncCallback<List<RequestComment>> callback);
 	void createRequestComment(RequestComment comment, AsyncCallback<RequestComment> callback);
 	void deleteRequestComment(RequestComment comment, AsyncCallback<Void> callback);
+	void saveResponse(Response response, AsyncCallback<Response> callback);
+	void saveAttachment(Attachment attachment, AsyncCallback<Attachment> callback);
 }

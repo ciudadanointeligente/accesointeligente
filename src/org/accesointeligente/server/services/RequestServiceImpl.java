@@ -81,6 +81,22 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		}
 	}
 
+	@Override
+	public Request getRequest (String remoteIdentifier) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.add(Restrictions.eq("remoteIdentifier", remoteIdentifier));
+			Request request = (Request) criteria.uniqueResult();
+			return (Request) persistentBeanManager.clone(request);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException {
@@ -278,6 +294,38 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			hibernate.delete(comment);
 			hibernate.getTransaction().commit();
 			return;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Response saveResponse(Response response) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			response = (Response) persistentBeanManager.merge(response);
+			hibernate.save(response);
+			hibernate.getTransaction().commit();
+			return response;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Attachment saveAttachment(Attachment attachment) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			attachment = (Attachment) persistentBeanManager.merge(attachment);
+			hibernate.save(attachment);
+			hibernate.getTransaction().commit();
+			return attachment;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();

@@ -13,6 +13,7 @@ public interface RequestService extends RemoteService {
 	Request saveRequest(Request request) throws ServiceException;
 	List<RequestCategory> getCategories() throws ServiceException;
 	Request getRequest(Integer requestId) throws ServiceException;
+	Request getRequest(String remoteIdentifier) throws ServiceException;
 	List<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
@@ -23,4 +24,6 @@ public interface RequestService extends RemoteService {
 	List<RequestComment> getRequestComments(Request request) throws ServiceException;
 	RequestComment createRequestComment(RequestComment comment) throws ServiceException;
 	void deleteRequestComment(RequestComment comment) throws ServiceException;
+	Response saveResponse(Response response) throws ServiceException;
+	Attachment saveAttachment(Attachment attachment) throws ServiceException;
 }
