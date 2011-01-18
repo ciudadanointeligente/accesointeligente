@@ -16,5 +16,6 @@ public class BackgroundServiceManager implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		timer = new Timer();
+		timer.schedule(new ResponseCheckerTask(), 60000, 3600000);
 	}
 }
