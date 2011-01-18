@@ -90,6 +90,10 @@
     <listener-class>org.accesointeligente.server.ApplicationProperties</listener-class>
   </listener>
 
+  <listener>
+    <listener-class>org.accesointeligente.server.BackgroundServiceManager</listener-class>
+  </listener>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>AccesoInteligente.html</welcome-file>
