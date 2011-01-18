@@ -1,5 +1,6 @@
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.client.views.RequestSearchView;
@@ -18,6 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.List;
+import java.util.Map;
 
 public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.Display> implements RequestListPresenterIface, RequestSearchEventHandler {
 	public interface Display extends WidgetDisplay {
@@ -132,6 +134,78 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 	}
 
 	@Override
+	public void loadRequests(Integer offset, Integer limit, String type, RequestSearchParams params) {
+
+		if (type.equals(RequestListType.MYREQUESTS.getType())) {
+			display.setListTitle("Mis solicitudes");
+
+			if (ClientSessionUtil.checkSession()) {
+				RPC.getRequestService().getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						display.displayMessage("No es posible recuperar el listado solicitado");
+						History.newItem(AppPlace.HOME.getToken());
+					}
+
+					@Override
+					public void onSuccess(List<Request> results) {
+						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
+						display.setRequests(data);
+					}
+				});
+			} else {
+				display.displayMessage("Necesita acceder para poder ver esta lista");
+				History.newItem(AppPlace.HOME.getToken());
+			}
+
+		} else if (type.equals(RequestListType.FAVORITES.getType())) {
+			display.setListTitle("Mis favoritas");
+
+			if (ClientSessionUtil.checkSession()) {
+				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						display.displayMessage("No es posible recuperar el listado solicitado");
+						History.newItem(AppPlace.HOME.getToken());
+					}
+
+					@Override
+					public void onSuccess(List<Request> results) {
+						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
+						display.setRequests(data);
+					}
+				});
+			} else {
+				display.displayMessage("Necesita acceder para poder ver esta lista");
+				History.newItem(AppPlace.HOME.getToken());
+			}
+
+		} else if (type.equals(RequestListType.GENERAL.getType())) {
+			display.setListTitle("Listado de solicitudes");
+
+			RPC.getRequestService().getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					display.displayMessage("No es posible recuperar el listado solicitado");
+					History.newItem(AppPlace.HOME.getToken());
+				}
+
+				@Override
+				public void onSuccess(List<Request> results) {
+					ListDataProvider<Request> data = new ListDataProvider<Request>(results);
+					display.setRequests(data);
+				}
+			});
+		} else {
+			display.displayMessage("No existe el tipo de lista solicitado: " + type);
+			History.newItem(AppPlace.HOME.getToken());
+		}
+	}
+
+	@Override
 	public void requestToggleFavorite(final Request request) {
 		final User user = ClientSessionUtil.getUser();
 		RPC.getRequestService().getFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
@@ -153,7 +227,8 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 						@Override
 						public void onSuccess(UserFavoriteRequest result) {
-							loadRequests(0, 100, RequestListType.MYREQUESTS.getType());
+							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
+							loadRequests(0, 100, parameters.get("type"));
 						}
 					});
 				} else {
@@ -170,7 +245,8 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 						@Override
 						public void onSuccess(Void result) {
-							loadRequests(0, 100, RequestListType.MYREQUESTS.getType());
+							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
+							loadRequests(0, 100, parameters.get("type"));
 						}
 					});
 				}
@@ -185,6 +261,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void onSearch(RequestSearchEvent event) {
-		display.displayMessage("Se ha recibido el evento de busqueda");
+		Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
+		loadRequests(0, 100, parameters.get("type"), event.getParams());
 	}
 }

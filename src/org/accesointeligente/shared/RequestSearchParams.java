@@ -2,9 +2,10 @@ package org.accesointeligente.shared;
 
 import org.accesointeligente.model.Institution;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class RequestSearchParams {
+public class RequestSearchParams implements Serializable {
 
 	private String keyWord;
 	private Institution institution;

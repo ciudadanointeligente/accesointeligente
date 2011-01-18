@@ -3,16 +3,16 @@ package org.accesointeligente.server.services;
 import org.accesointeligente.client.services.RequestService;
 import org.accesointeligente.model.*;
 import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.server.SearchParamParseUtil;
 import org.accesointeligente.server.SessionUtil;
+import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
 import org.accesointeligente.shared.ServiceException;
 
 import net.sf.gilead.core.PersistentBeanManager;
 import net.sf.gilead.gwt.PersistentRemoteService;
 
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -74,6 +74,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("id", requestId));
 			Request request = (Request) criteria.uniqueResult();
+			hibernate.getTransaction().commit();
 			return (Request) persistentBeanManager.clone(request);
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
@@ -90,6 +91,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.add(Restrictions.eq("remoteIdentifier", remoteIdentifier));
 			Request request = (Request) criteria.uniqueResult();
+			hibernate.getTransaction().commit();
 			return (Request) persistentBeanManager.clone(request);
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
@@ -115,6 +117,37 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Request> getUserRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			params = (RequestSearchParams) persistentBeanManager.merge(params);
+			User user = SessionUtil.getUser();
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.setFirstResult(offset);
+			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.eq("user", user));
+			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("institution"));
+			criteria.setFetchMode("institution", FetchMode.JOIN);
+			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			if(params != null) {
+				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
+			}
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
 			return requests;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
@@ -130,16 +163,46 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			User user = SessionUtil.getUser();
-			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFirstResult(offset);
-			criteria.setMaxResults(limit);
-			criteria.add(Restrictions.eq("user", user));
-			criteria.addOrder(Order.asc("date"));
-			criteria.addOrder(Order.asc("institution"));
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
-			return requests;
+			String query = "select f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites where f.user = :user";
+			Query hQuery = hibernate.createQuery(query);
+			hQuery.setParameter("user", user);
+			List<Request> requests = hQuery.list();
+			hibernate.getTransaction().commit();
+			return (List<Request>) persistentBeanManager.clone(requests);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Request> getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			User user = SessionUtil.getUser();
+			String query = "select f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites where f.user = :user";
+			Query hQuery;
+			if(params != null) {
+				query += SearchParamParseUtil.queryAddSearchParams(params);
+				System.err.println(query);
+				hQuery = hibernate.createQuery(query);
+				hQuery.setParameter("user", user);
+				if (query.contains("minDate")) {
+					hQuery.setParameter("minDate", params.getMinDate());
+				}
+				if (query.contains("maxDate")) {
+					hQuery.setParameter("maxDate", params.getMaxDate());
+				}
+			} else {
+				hQuery = hibernate.createQuery(query);
+				hQuery.setParameter("user", user);
+			}
+			List<Request> requests = hQuery.list();
+			hibernate.getTransaction().commit();
+			return (List<Request>) persistentBeanManager.clone(requests);
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
@@ -163,6 +226,35 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.setFirstResult(offset);
+			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
+			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("institution"));
+			criteria.setFetchMode("institution", FetchMode.JOIN);
+			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			if(params != null) {
+				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
+			}
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
 			return requests;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
@@ -181,6 +273,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.add(Restrictions.eq("response", response));
 			criteria.addOrder(Order.asc("name"));
 			List<Attachment> attachments = (List<Attachment>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
 			return attachments;
 		} catch (Exception ex) {
 			hibernate.getTransaction().rollback();
@@ -261,6 +354,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.add(Restrictions.eq("request", request));
 			criteria.addOrder(Order.desc("date"));
 			List<RequestComment> comments = (List<RequestComment>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
 			return comments;
 		} catch (Exception ex) {
 			hibernate.getTransaction().rollback();

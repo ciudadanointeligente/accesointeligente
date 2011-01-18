@@ -191,7 +191,7 @@ public class AppController implements ValueChangeHandler<String> {
 	 * @param historyToken anchor tag
 	 * @return hashmap of the parameters
 	 */
-	private static Map<String, String> getHistoryTokenParameters(String historyToken) {
+	public static Map<String, String> getHistoryTokenParameters(String historyToken) {
 		// skip if there is no question mark
 		if (!historyToken.contains("?")) {
 			return null;
@@ -215,11 +215,11 @@ public class AppController implements ValueChangeHandler<String> {
 		return tokenHistory;
 	}
 
-	public String getCurrentHistoryToken() {
+	public static String getCurrentHistoryToken() {
 		return getHistoryTokenList().get(getHistoryTokenList().size() - 1);
 	}
 
-	public String getPreviousHistoryToken() {
+	public static String getPreviousHistoryToken() {
 		if(getHistoryTokenList().size() > 2) {
 			return getHistoryTokenList().get(getHistoryTokenList().size() - 2);
 		}
