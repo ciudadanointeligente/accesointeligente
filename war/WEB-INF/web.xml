@@ -4,23 +4,23 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  
+
   <!-- Servlets -->
   <servlet>
     <servlet-name>activityServlet</servlet-name>
     <servlet-class>org.accesointeligente.server.services.ActivityServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>activityServlet</servlet-name>
     <url-pattern>/accesointeligente/activity</url-pattern>
   </servlet-mapping>
- 
+
   <servlet>
     <servlet-name>ageServlet</servlet-name>
     <servlet-class>org.accesointeligente.server.services.AgeServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>ageServlet</servlet-name>
     <url-pattern>/accesointeligente/age</url-pattern>
@@ -35,22 +35,22 @@
     <servlet-name>institutionServlet</servlet-name>
     <url-pattern>/accesointeligente/institution</url-pattern>
   </servlet-mapping>
- 
+
   <servlet>
     <servlet-name>institutionTypeServlet</servlet-name>
     <servlet-class>org.accesointeligente.server.services.InstitutionTypeServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>institutionTypeServlet</servlet-name>
     <url-pattern>/accesointeligente/institutionType</url-pattern>
   </servlet-mapping>
- 
+
   <servlet>
     <servlet-name>regionServlet</servlet-name>
     <servlet-class>org.accesointeligente.server.services.RegionServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>regionServlet</servlet-name>
     <url-pattern>/accesointeligente/region</url-pattern>
@@ -75,17 +75,21 @@
     <servlet-name>sessionServlet</servlet-name>
     <url-pattern>/accesointeligente/session</url-pattern>
   </servlet-mapping>
- 
+
   <servlet>
     <servlet-name>userServlet</servlet-name>
     <servlet-class>org.accesointeligente.server.services.UserServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>userServlet</servlet-name>
     <url-pattern>/accesointeligente/user</url-pattern>
   </servlet-mapping>
-  
+
+  <listener>
+    <listener-class>org.accesointeligente.server.ApplicationProperties</listener-class>
+  </listener>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>AccesoInteligente.html</welcome-file>
