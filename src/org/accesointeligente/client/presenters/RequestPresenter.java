@@ -150,7 +150,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		request.setStatus(RequestStatus.NEW);
 		request.setDate(new Date());
 
-		RPC.getRequestService().makeRequest(request, new AsyncCallback<Request>() {
+		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace(System.err);

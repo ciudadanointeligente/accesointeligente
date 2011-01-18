@@ -28,7 +28,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 	}
 
 	@Override
-	public Request makeRequest(Request request) throws ServiceException {
+	public Request saveRequest(Request request) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
