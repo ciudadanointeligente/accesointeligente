@@ -1,5 +1,6 @@
 package org.accesointeligente.server.robots;
 
+import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.shared.RequestStatus;
 
@@ -27,5 +28,12 @@ public abstract class Robot {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public static Robot getRobot(Institution institution) {
+		switch (institution.getInstitutionClass()) {
+			default:
+				return null;
+		}
 	}
 }
