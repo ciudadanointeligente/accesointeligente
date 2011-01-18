@@ -232,7 +232,6 @@ public class AppController implements ValueChangeHandler<String> {
 		try {
 			place = AppPlace.valueOf(token.replaceFirst("^(.*)\\?.*$", "$1").toUpperCase());
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
 		}
 
 		return place;
