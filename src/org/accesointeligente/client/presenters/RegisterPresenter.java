@@ -13,6 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.SessionData;
+import org.accesointeligente.client.events.LoginSuccessfulEvent;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.Activity;
 import org.accesointeligente.model.Age;
@@ -211,6 +214,32 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				@Override
 				public void onSuccess(User result) {
 					Window.alert("Registro exitoso!");
+					RPC.getUserService().login(result.getEmail(), result.getPassword(), new AsyncCallback<Void>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							if (caught instanceof ServiceException) {
+								Window.alert("Fallo la conexion");
+							} else if (caught instanceof LoginException) {
+								Window.alert("Email y/o contraseña incorrecta");
+							}
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							RPC.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
+								@Override
+								public void onFailure (Throwable caught) {
+									Window.alert ("Error creando sesión");
+								}
+
+								@Override
+								public void onSuccess (SessionData result) {
+									ClientSessionUtil.createSession (result);
+									eventBus.fireEvent (new LoginSuccessfulEvent ());
+								}
+							});
+						}
+					});
 					History.newItem(AppPlace.HOME.getToken());
 				}
 			});
