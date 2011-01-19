@@ -1,5 +1,6 @@
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
@@ -12,7 +13,8 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
@@ -85,5 +87,10 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 	@Override
 	public void register() {
 		History.newItem(AppPlace.REGISTER.getToken());
+	}
+
+	@Override
+	public void close() {
+		History.newItem(AppController.getPreviousHistoryToken());
 	}
 }

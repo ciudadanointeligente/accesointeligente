@@ -17,11 +17,12 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 
+	@UiField FocusPanel loginPanel;
 	@UiField TextBox email;
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Label register;
-
+	@UiField Label close;
 
 	private LoginPresenterIface presenter;
 
@@ -53,6 +54,18 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 		if (presenter != null) {
 			presenter.register();
 		}
+	}
+
+	@UiHandler("loginPanel")
+	void onLoginPanelKeyDown(KeyDownEvent key) {
+		if(key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+			presenter.close();
+		}
+	}
+
+	@UiHandler("close")
+	void onCloseClick(ClickEvent click) {
+		presenter.close();
 	}
 
 	@Override

@@ -3,9 +3,10 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css" />
 
-	<g:HTMLPanel addStyleNames="{style.greyBlock}" width="320PX" height="400PX">
+	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX" height="400PX" ui:field="loginPanel">
 		<g:HTMLPanel ui:field="loginForm">
 			<h1 class="{style.greyBlock}">LOGIN</h1>
+			<g:Label ui:field="close">cerrar</g:Label>
 			<table>
 				<tr>
 					<td>Email</td>
@@ -46,5 +47,5 @@
 				</p>
 			</div>
 		</g:HTMLPanel>
-		</g:HTMLPanel>
+	</g:FocusPanel>
 </ui:UiBinder>
