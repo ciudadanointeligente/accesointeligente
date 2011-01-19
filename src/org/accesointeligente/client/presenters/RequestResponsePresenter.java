@@ -47,7 +47,6 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		display.initTable();
 	}
 
 	@Override
@@ -79,6 +78,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					if (result.getResponse() != null) {
 						display.setResponseDate(result.getResponse().getDate());
 						display.setResponseInfo(result.getResponse().getInformation());
+						display.initTable();
 						loadAttachments(result.getResponse());
 					} else {
 						display.setResponseInfo("Esperando Respuesta");

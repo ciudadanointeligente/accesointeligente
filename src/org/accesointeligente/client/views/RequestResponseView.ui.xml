@@ -57,7 +57,7 @@
 						<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
 					</g:HTMLPanel>
 				</g:HTMLPanel>
-				<g:HTMLPanel ui:field="newCommentPanel">
+				<g:HTMLPanel ui:field="newCommentPanel" visible="false">
 					<g:TextArea ui:field="newCommentText"/>
 					<g:Button ui:field="newCommentSubmit">Comentar</g:Button>
 				</g:HTMLPanel>
