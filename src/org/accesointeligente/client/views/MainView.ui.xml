@@ -10,6 +10,7 @@
 					<g:Image ui:field="logo" addStyleNames="{style.logo}"
 						url="images/layout/logo_head.png" />
 					<div class="{style.headSlogan}">¿Qué quieres saber de los organismos públicos? </div>
+					<g:Label ui:field="welcomeMessage" visible="false"/>
 					<div class="mainMenu bebas">
 						<g:MenuBar>
 							<g:MenuItem>

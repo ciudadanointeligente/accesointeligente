@@ -26,6 +26,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@UiField HTMLPanel headerPanel;
 	@UiField Image logo;
+	@UiField Label welcomeMessage;
 	@UiField FlowPanel mainPanel;
 	@UiField MenuItem myrequests;
 	@UiField MenuItem favorites;
@@ -105,6 +106,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@Override
 	public void setDisplayMode(DisplayMode mode) {
 		headerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
+		welcomeMessage.setVisible(DisplayMode.LoggedIn.equals(mode));
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		myrequests.setVisible(DisplayMode.LoggedIn.equals(mode));
 		favorites.setVisible(DisplayMode.LoggedIn.equals(mode));
@@ -117,6 +119,11 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@Override
 	public FlowPanel getLayout() {
 		return mainPanel;
+	}
+
+	@Override
+	public void setWelcomeMessage(String message) {
+		welcomeMessage.setText(message);
 	}
 
 	@UiHandler("logo")

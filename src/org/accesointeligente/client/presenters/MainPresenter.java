@@ -19,6 +19,7 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 		void setPresenter(MainPresenterIface presenter);
 		void setDisplayMode(DisplayMode mode);
 		FlowPanel getLayout();
+		void setWelcomeMessage(String message);
 	}
 
 	public MainPresenter(Display display, EventBus eventBus) {
@@ -42,11 +43,13 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 	@Override
 	public void loginRequired(LoginRequiredEvent event) {
 		display.setDisplayMode(DisplayMode.LoggedOut);
+		display.setWelcomeMessage("");
 	}
 
 	@Override
 	public void loginSuccessful(LoginSuccessfulEvent event) {
 		display.setDisplayMode(DisplayMode.LoggedIn);
+		display.setWelcomeMessage("Bienvenido: " + ClientSessionUtil.getUser().getFirstName());
 	}
 
 	public void tryCookieLogin() {
