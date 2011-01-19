@@ -1,7 +1,5 @@
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.ClientSessionUtil;
-
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
