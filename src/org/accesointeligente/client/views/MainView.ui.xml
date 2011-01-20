@@ -13,12 +13,11 @@
 					<g:Label ui:field="welcomeMessage" visible="false"/>
 					<div class="mainMenu bebas">
 						<g:MenuBar>
-							<g:MenuItem>
+							<g:MenuItem ui:field="myMenu">
 								Mi cuenta
 								<g:MenuBar vertical="true">
 									<g:MenuItem ui:field="myrequests" visible="false">Mis solicitudes</g:MenuItem>
 									<g:MenuItem ui:field="favorites" visible="false">Mis favoritos</g:MenuItem>
-									<g:MenuItem ui:field="login" visible="false">Ingresar</g:MenuItem>
 									<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
 								</g:MenuBar>
 							</g:MenuItem>

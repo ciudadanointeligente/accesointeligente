@@ -28,9 +28,9 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField Image logo;
 	@UiField Label welcomeMessage;
 	@UiField FlowPanel mainPanel;
+	@UiField MenuItem myMenu;
 	@UiField MenuItem myrequests;
 	@UiField MenuItem favorites;
-	@UiField MenuItem login;
 	@UiField MenuItem logout;
 	@UiField MenuItem home;
 	@UiField MenuItem about;
@@ -54,13 +54,6 @@ public class MainView extends Composite implements MainPresenter.Display {
 			@Override
 			public void execute() {
 				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.FAVORITES.getType());
-			}
-		});
-
-		login.setCommand(new Command() {
-			@Override
-			public void execute() {
-				History.newItem(AppPlace.LOGIN.getToken());
 			}
 		});
 
@@ -110,10 +103,22 @@ public class MainView extends Composite implements MainPresenter.Display {
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		myrequests.setVisible(DisplayMode.LoggedIn.equals(mode));
 		favorites.setVisible(DisplayMode.LoggedIn.equals(mode));
-		login.setVisible(DisplayMode.LoggedOut.equals(mode));
 		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
 		footerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		loginPending.setVisible(DisplayMode.LoginPending.equals(mode));
+
+		if (DisplayMode.LoggedIn.equals(mode)) {
+			myMenu.setText("Mi cuenta");
+			myMenu.setCommand(null);
+		} else {
+			myMenu.setText("Ingresar");
+			myMenu.setCommand(new Command() {
+				@Override
+				public void execute() {
+						History.newItem(AppPlace.LOGIN.getToken());
+				}
+			});
+		}
 	}
 
 	@Override
