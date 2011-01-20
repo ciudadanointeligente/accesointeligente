@@ -5,6 +5,10 @@
 
 	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX" height="400PX" ui:field="loginPanel">
 		<g:HTMLPanel ui:field="loginForm">
+			<g:HTMLPanel ui:field="noticePanel" visible="false">
+				<g:Label ui:field="noticeClose">Cerrar</g:Label>
+				<g:Label ui:field="noticeLabel"/>
+			</g:HTMLPanel>
 			<h1 class="{style.greyBlock}">LOGIN</h1>
 			<g:Label ui:field="close">cerrar</g:Label>
 			<table>

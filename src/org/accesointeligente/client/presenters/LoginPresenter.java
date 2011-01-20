@@ -14,12 +14,12 @@ import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(LoginPresenterIface presenter);
+		void showNotice(String message);
 		String getEmail();
 		String getPassword();
 	}
@@ -47,12 +47,12 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 		String password = display.getPassword();
 
 		if (email.length() == 0) {
-			Window.alert("Debe ingresar email");
+			display.showNotice("Debe ingresar email");
 			return;
 		}
 
 		if (password.length() == 0) {
-			Window.alert("Debe ingresar contraseña");
+			display.showNotice("Debe ingresar contraseña");
 			return;
 		}
 
@@ -60,9 +60,9 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 			@Override
 			public void onFailure(Throwable caught) {
 				if (caught instanceof ServiceException) {
-					Window.alert("Fallo la conexion");
+					display.showNotice("Fallo la conexion");
 				} else if (caught instanceof LoginException) {
-					Window.alert("Email y/o contraseña incorrecta");
+					display.showNotice("Email y/o contraseña incorrecta");
 				}
 			}
 
@@ -71,7 +71,7 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 				RPC.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
 					@Override
 					public void onFailure (Throwable caught) {
-						Window.alert ("Error creando sesión");
+						display.showNotice ("Error creando sesión");
 					}
 
 					@Override

@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 
 public class LoginView extends Composite implements LoginPresenter.Display {
@@ -18,12 +19,16 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 
 	@UiField FocusPanel loginPanel;
+	@UiField HTMLPanel noticePanel;
+	@UiField Label noticeClose;
+	@UiField Label noticeLabel;
 	@UiField TextBox email;
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Label register;
 	@UiField Label close;
 
+	Timer notificationTimer;
 	private LoginPresenterIface presenter;
 
 	public LoginView() {
@@ -66,6 +71,26 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@UiHandler("close")
 	void onCloseClick(ClickEvent click) {
 		presenter.close();
+	}
+
+	@UiHandler("noticeClose")
+	void onNoticeCloseClick(ClickEvent event) {
+		noticePanel.setVisible(false);
+		notificationTimer.cancel();
+	}
+
+	@Override
+	public void showNotice(String message) {
+		noticeLabel.setText(message);
+		noticePanel.setVisible(true);
+		notificationTimer = new Timer() {
+
+			@Override
+			public void run() {
+				noticePanel.setVisible(false);
+			}
+		};
+		notificationTimer.schedule(15000);
 	}
 
 	@Override
