@@ -3,6 +3,7 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.presenters.MainPresenter;
 import org.accesointeligente.client.presenters.MainPresenterIface;
 import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.NotificationEventParams;
 import org.accesointeligente.shared.RequestListType;
 
 import com.google.gwt.core.client.GWT;
@@ -12,6 +13,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 
 public class MainView extends Composite implements MainPresenter.Display {
@@ -27,6 +29,9 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField HTMLPanel headerPanel;
 	@UiField Image logo;
 	@UiField Label welcomeMessage;
+	@UiField HTMLPanel notificationPanel;
+	@UiField Label notificationLabel;
+	@UiField Label notificationClose;
 	@UiField FlowPanel mainPanel;
 	@UiField MenuItem myMenu;
 	@UiField MenuItem myrequests;
@@ -38,6 +43,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField HTMLPanel footerPanel;
 	@UiField Label loginPending;
 
+	Timer notificationTimer;
 	private MainPresenterIface presenter;
 
 	public MainView() {
@@ -129,6 +135,27 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@Override
 	public void setWelcomeMessage(String message) {
 		welcomeMessage.setText(message);
+	}
+
+	@Override
+	public void setNotificationMessage(NotificationEventParams params) {
+		notificationPanel.setVisible(true);
+		notificationLabel.setText(params.getMessage());
+		notificationLabel.setStyleName(params.getType().getType());
+		notificationTimer = new Timer() {
+
+			@Override
+			public void run() {
+				notificationPanel.setVisible(false);
+			}
+		};
+		notificationTimer.schedule(15000);
+	}
+
+	@UiHandler("notificationClose")
+	public void onNotificationCloseClick(ClickEvent event) {
+		notificationPanel.setVisible(false);
+		notificationTimer.cancel();
 	}
 
 	@UiHandler("logo")

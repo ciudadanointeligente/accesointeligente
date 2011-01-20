@@ -5,6 +5,7 @@ import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.client.views.MainView.DisplayMode;
+import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
@@ -14,12 +15,13 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implements MainPresenterIface, LoginRequiredEventHandler, LoginSuccessfulEventHandler {
+public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implements MainPresenterIface, LoginRequiredEventHandler, LoginSuccessfulEventHandler, NotificationEventHandler {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(MainPresenterIface presenter);
 		void setDisplayMode(DisplayMode mode);
 		FlowPanel getLayout();
 		void setWelcomeMessage(String message);
+		void setNotificationMessage(NotificationEventParams params);
 	}
 
 	public MainPresenter(Display display, EventBus eventBus) {
@@ -29,6 +31,7 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
+		eventBus.addHandler(NotificationEvent.TYPE, this);
 		tryCookieLogin();
 	}
 
@@ -78,6 +81,13 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 			});
 		} else {
 			eventBus.fireEvent(new LoginRequiredEvent());
+		}
+	}
+
+	@Override
+	public void onNotification(NotificationEvent notificationEvent) {
+		if (notificationEvent.getParams() != null) {
+			display.setNotificationMessage(notificationEvent.getParams());
 		}
 	}
 }

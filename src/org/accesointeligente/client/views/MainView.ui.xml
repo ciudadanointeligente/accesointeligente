@@ -31,6 +31,10 @@
 					</div>
 				</g:HTMLPanel>
 			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="notificationPanel" visible="false">
+				<g:Label ui:field="notificationClose">cerrar</g:Label>
+				<g:Label ui:field="notificationLabel"/>
+			</g:HTMLPanel>
 			<g:FlowPanel ui:field="mainPanel" visible="false" />
 			<g:HTMLPanel ui:field="footerPanel" visible="false"
 				addStyleNames="{style.footerPanel} {style.bgDotted}">
