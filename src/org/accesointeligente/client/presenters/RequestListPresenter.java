@@ -72,7 +72,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 					@Override
 					public void onFailure(Throwable caught) {
-						display.displayMessage("No es posible recuperar el listado solicitado");
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
 						History.newItem(AppPlace.HOME.getToken());
 					}
 
@@ -83,7 +83,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					}
 				});
 			} else {
-				display.displayMessage("Necesita acceder para poder ver esta lista");
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
 				History.newItem(AppPlace.HOME.getToken());
 			}
 
@@ -95,7 +95,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 					@Override
 					public void onFailure(Throwable caught) {
-						display.displayMessage("No es posible recuperar el listado solicitado");
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
 						History.newItem(AppPlace.HOME.getToken());
 					}
 
@@ -106,7 +106,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					}
 				});
 			} else {
-				display.displayMessage("Necesita acceder para poder ver esta lista");
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
 				History.newItem(AppPlace.HOME.getToken());
 			}
 
@@ -117,7 +117,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 				@Override
 				public void onFailure(Throwable caught) {
-					display.displayMessage("No es posible recuperar el listado solicitado");
+					showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
 					History.newItem(AppPlace.HOME.getToken());
 				}
 
@@ -128,7 +128,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 				}
 			});
 		} else {
-			display.displayMessage("No existe el tipo de lista solicitado: " + type);
+			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
 			History.newItem(AppPlace.HOME.getToken());
 		}
 	}
@@ -144,7 +144,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 					@Override
 					public void onFailure(Throwable caught) {
-						display.displayMessage("No es posible recuperar el listado solicitado");
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
 						History.newItem(AppPlace.HOME.getToken());
 					}
 
@@ -155,7 +155,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					}
 				});
 			} else {
-				display.displayMessage("Necesita acceder para poder ver esta lista");
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
 				History.newItem(AppPlace.HOME.getToken());
 			}
 
@@ -167,7 +167,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 					@Override
 					public void onFailure(Throwable caught) {
-						display.displayMessage("No es posible recuperar el listado solicitado");
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
 						History.newItem(AppPlace.HOME.getToken());
 					}
 
@@ -178,7 +178,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					}
 				});
 			} else {
-				display.displayMessage("Necesita acceder para poder ver esta lista");
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
 				History.newItem(AppPlace.HOME.getToken());
 			}
 
@@ -189,7 +189,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 				@Override
 				public void onFailure(Throwable caught) {
-					display.displayMessage("No es posible recuperar el listado solicitado");
+					showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
 					History.newItem(AppPlace.HOME.getToken());
 				}
 
@@ -200,7 +200,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 				}
 			});
 		} else {
-			display.displayMessage("No existe el tipo de lista solicitado: " + type);
+			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
 			History.newItem(AppPlace.HOME.getToken());
 		}
 	}
@@ -212,7 +212,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar los favoritos");
+				showNotification("No es posible recuperar los favoritos", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -222,13 +222,14 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 						@Override
 						public void onFailure(Throwable caught) {
-							display.displayMessage("No es posible almacenar el favorito");
+							showNotification("No es posible almacenar el favorito", NotificationEventType.ERROR);
 						}
 
 						@Override
 						public void onSuccess(UserFavoriteRequest result) {
 							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
 							loadRequests(0, 100, parameters.get("type"));
+							showNotification("Se ha agregado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
 				} else {
@@ -240,18 +241,27 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 						@Override
 						public void onFailure(Throwable caught) {
-							display.displayMessage("No es posible eliminar el favorito");
+							showNotification("No es posible eliminar el favorito", NotificationEventType.ERROR);
 						}
 
 						@Override
 						public void onSuccess(Void result) {
 							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
 							loadRequests(0, 100, parameters.get("type"));
+							showNotification("Se ha eliminado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
 				}
 			}
 		});
+	}
+
+	@Override
+	public void showNotification(String message, NotificationEventType type) {
+		NotificationEventParams params = new NotificationEventParams();
+		params.setMessage(message);
+		params.setType(type);
+		eventBus.fireEvent(new NotificationEvent(params));
 	}
 
 	@Override
