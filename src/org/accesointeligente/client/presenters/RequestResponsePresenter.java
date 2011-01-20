@@ -1,5 +1,6 @@
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.*;
@@ -157,12 +158,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 	@Override
 	public String getListLink() {
 		String link = null;
-
-		if (ClientSessionUtil.checkSession()) {
-			link = AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType();
-		} else {
-			link = AppPlace.LIST.getToken() + "?type=" + RequestListType.GENERAL.getType();
-		}
+			link = AppController.getPreviousHistoryToken();
 
 		return link;
 	}
