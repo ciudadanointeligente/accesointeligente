@@ -164,6 +164,11 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	}
 
 	@Override
+	public void showNewCommentPanel() {
+		newCommentPanel.setVisible(true);
+	}
+
+	@Override
 	public void displayMessage(String message) {
 		Window.alert(message);
 	}

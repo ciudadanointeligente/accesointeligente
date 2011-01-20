@@ -36,6 +36,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void initTableColumns();
 		void setComments(List<RequestComment> comments);
 		void displayMessage(String string);
+		void showNewCommentPanel();
 	}
 
 	private Request request;
@@ -85,6 +86,9 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					}
 					request = result;
 					loadComments(result);
+					if (ClientSessionUtil.checkSession()) {
+						display.showNewCommentPanel();
+					}
 				} else {
 					display.displayMessage("No se puede cargar la solicitud");
 				}
