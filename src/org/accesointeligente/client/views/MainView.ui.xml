@@ -2,7 +2,6 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="MainView.css" />
-
 	<g:HTMLPanel>
 		<div class="{style.container}">
 			<g:HTMLPanel ui:field="headerPanel" visible="false">
@@ -10,7 +9,7 @@
 					<g:Image ui:field="logo" addStyleNames="{style.logo}"
 						url="images/layout/logo_head.png" />
 					<div class="{style.headSlogan}">¿Qué quieres saber de los organismos públicos? </div>
-					<g:Label ui:field="welcomeMessage" visible="false"/>
+					<div class="{style.welcome}"><g:Label ui:field="welcomeMessage" visible="false" /></div>
 					<div class="mainMenu bebas">
 						<g:MenuBar>
 							<g:MenuItem ui:field="myMenu">
@@ -54,7 +53,6 @@
 						</ul>
 					</div>
 					<div class="{style.footerModule}"> jnsjkdnsjd</div>
-
 				</div>
 			</g:HTMLPanel>
 			<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
