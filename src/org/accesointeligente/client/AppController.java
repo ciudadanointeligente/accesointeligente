@@ -134,6 +134,7 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(homePresenter.getDisplay().asWidget());
 					break;
+				case REQUEST:
 				case LOGIN:
 					LoginPresenter loginPresenter = new LoginPresenter(new LoginView(), eventBus);
 					loginPresenter.bind();
