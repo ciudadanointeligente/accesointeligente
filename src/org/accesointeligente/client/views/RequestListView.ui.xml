@@ -3,11 +3,11 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style src="RequestListView.css" />
 	<g:HTMLPanel addStyleNames="noOverflow">
-		<div class="contentPad {style.reqTableContainer}">
+		<div class="{style.reqTableContainer} contentPad">
 			<div class="headSolicitud noMargin">
-				<g:Label ui:field="listTitle"/>
-				<g:Anchor ui:field="searchPanelHandle">Buscar</g:Anchor>
-				<div class="makeARequest"><g:Anchor ui:field="requestLink">Crea una nueva solicitud</g:Anchor></div>
+				<g:Label addStyleNames="titleH1" ui:field="listTitle"/>
+				<g:Anchor addStyleNames="reqMenuItem newRequestButton" ui:field="requestLink">Haz una solicitud</g:Anchor>
+				<g:Anchor addStyleNames="reqMenuItem searchButton" ui:field="searchPanelHandle">Buscar</g:Anchor>
 			</div>
 			<div><g:FlowPanel ui:field="searchPanel" visible="false"/></div>
 			<c:CellTable ui:field="requestTable" pageSize="10" addStyleNames="{style.requestTable}" />

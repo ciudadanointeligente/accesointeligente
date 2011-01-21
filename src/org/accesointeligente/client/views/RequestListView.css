@@ -1,3 +1,6 @@
+.reqTableContainer {
+}
+
 .reqTableContainer .requestTable {
 	width: 100%;
 	margin-top: 10px;
@@ -16,6 +19,7 @@
 	padding: 10px 15px;
 	text-align: center;
 	text-shadow: none;
+	min-width: 30px;
 }
 
 .requestTable th:first-child {
@@ -24,6 +28,7 @@
 
 .requestTable td {
 	padding: 3px 10px;
+	border: none;
 }
 
 .requestPager {
@@ -37,19 +42,30 @@
 }
 
 .reqTableInstitution {
+	text-align: center;
 }
 
 .reqTableRequestDate {
+	text-align: center;
 }
 
 .reqTableResponseDate {
+	text-align: center;
 }
 
-.reqTableInstitution {
+.reqTableMore {
+	padding: 0px;
+	border: 1px solid;
 }
 
-.reqTableRequestDate {
+.reqTableFavorite {
+	padding: 0px;
+	border: 1px solid;
 }
 
-.reqTableResponseDate {
+.reqTableNoFavorite {
+}
+
+.reqMenuItem {
+	float: right;
 }
