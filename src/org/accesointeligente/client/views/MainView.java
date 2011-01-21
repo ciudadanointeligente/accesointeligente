@@ -139,9 +139,9 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@Override
 	public void setNotificationMessage(NotificationEventParams params) {
-		notificationPanel.setVisible(true);
 		notificationLabel.setText(params.getMessage());
-		notificationLabel.setStyleName(params.getType().getType());
+		notificationPanel.setStyleName(params.getType().getType());
+		notificationPanel.setVisible(true);
 		notificationTimer = new Timer() {
 
 			@Override
