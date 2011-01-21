@@ -6,6 +6,7 @@ import org.accesointeligente.client.views.RequestView.State;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
+import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
 import net.customware.gwt.presenter.client.EventBus;
@@ -168,7 +169,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 	@Override
 	public void showRequest() {
 		if (request != null) {
-			History.newItem("status?requestId=" + request.getId());
+			History.newItem(AppPlace.REQUESTSTATUS.getToken() + "?requestId=" + request.getId());
 		} else {
 			display.displayMessage("No se ha podido cargar la solicitud");
 		}
