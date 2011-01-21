@@ -1,32 +1,75 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:c="urn:import:com.google.gwt.user.datepicker.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.datepicker.client">
 	<ui:style src="RequestSearchView.css" />
-	<g:HTMLPanel>
-		<g:Label>Busqueda</g:Label>
+	<g:HTMLPanel addStyleNames="noOverflow noMargin {style.searchModule}">
 		<g:HTMLPanel>
-			<g:TextBox ui:field="keyWord"/>
-			<g:HTMLPanel>
+			<g:HTMLPanel addStyleNames="{style.searchUnit}">
+				<img src="images/search/search-lupa.png" />
+				<g:Label>Busca por palabra</g:Label>
+				<g:TextBox ui:field="keyWord" />
+			</g:HTMLPanel>
+			<g:HTMLPanel addStyleNames="{style.searchUnit}">
+				<img src="images/search/search-institution.png" />
 				<g:Label>Organismo</g:Label>
 				<g:SuggestBox ui:field="institution" />
 			</g:HTMLPanel>
-			<g:HTMLPanel>
+			<g:HTMLPanel addStyleNames="{style.searchUnit} {style.dateUnit}">
+				<img src="images/search/search-date17.png" />
 				<g:Label>Fecha</g:Label>
-				<g:Label>Desde</g:Label>
-				<c:DateBox ui:field="minDate"></c:DateBox>
-				<g:Label>Hasta</g:Label>
-				<c:DateBox ui:field="maxDate"></c:DateBox>
+				<table>
+					<tr>
+						<td>
+							<span class="{style.Label}">Desde</span>
+						</td>
+						<td>
+							<c:DateBox addStyleNames="{style.dateUDateBox}"
+								ui:field="minDate"></c:DateBox>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="{style.Label}">Hasta</span>
+						</td>
+						<td>
+							<c:DateBox addStyleNames="{style.dateUDateBox}"
+								ui:field="maxDate"></c:DateBox>
+						</td>
+					</tr>
+				</table>
 			</g:HTMLPanel>
-			<g:HTMLPanel>
-				<g:Label>ESTADO</g:Label>
-				<g:CheckBox ui:field="statusPending">Pendiente</g:CheckBox>
-				<g:CheckBox ui:field="statusClosed">Respondido</g:CheckBox>
-				<g:CheckBox ui:field="statusExpired">Vencido</g:CheckBox>
-				<g:CheckBox ui:field="statusDerived">Derivado</g:CheckBox>
+			<g:HTMLPanel addStyleNames="{style.searchUnit}">
+				<img src="images/search/search-status.png" />
+				<g:Label>Estado</g:Label>
+				<table class="{style.tbCheck}">
+					<tr>
+						<td class="{style.Label}">
+							<g:CheckBox ui:field="statusPending">Pendiente</g:CheckBox>
+						</td>
+						<td>
+							<g:CheckBox ui:field="statusClosed">Respondido</g:CheckBox>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<g:CheckBox ui:field="statusExpired">Vencido</g:CheckBox>
+						</td>
+						<td>
+							<g:CheckBox ui:field="statusDerived">Derivado</g:CheckBox>
+						</td>
+					</tr>
+				</table>
 			</g:HTMLPanel>
-			<g:Button ui:field="search">Buscar</g:Button>
-			<g:Button ui:field="clear">Limpiar</g:Button>
+			<div class="{style.searchUnit}">
+				<g:Button ui:field="search" addStyleNames="{style.searchModuleButton}">
+					<img src="images/search/lookfor.png" />
+					Buscar
+				</g:Button>
+				<g:Button ui:field="clear" addStyleNames="{style.searchModuleButton}">
+					<img src="images/search/cross.png" />
+					Limpiar
+				</g:Button>
+			</div>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>

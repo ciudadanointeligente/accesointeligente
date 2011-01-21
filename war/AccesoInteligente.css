@@ -90,19 +90,41 @@ h1,h2,h3,h4,h5,h6 {
 	background-color: #DEE1E6;
 	display: block;
 	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
-	padding: 10px 10px 10px 30px;
+	padding: 10px 0px 10px 30px;
 	color: #696969;
 	border-bottom: 4px solid #ffffff;
 	overflow: hidden;
 }
 
-.headSolicitud h1 {
+.headSolicitud h1,.titleH1 {
 	font-weight: normal;
 	text-transform: uppercase;
 	letter-spacing: 1pt;
 	font-size: 12pt;
 	line-height: 120%;
 	float: left;
+}
+
+.headSolicitud .reqMenuItem,.headSolicitud a.reqMenuItem {
+	float: right;
+	border-left: 2px solid white;
+	cursor: pointer;
+	display: block;
+	height: 20px;
+	overflow: hidden;
+	padding: 14px 20px 5px 50px;
+	margin: -10px 0px;
+	color: white;
+	text-decoration: none;
+}
+
+.headSolicitud .searchButton {
+	background: url("images/lupa.png") no-repeat 10px 8px #c2c2cf;
+}
+
+.headSolicitud .newRequestButton {
+	background: url("images/makeArequestPlus.png") no-repeat 10px 8px
+		#a4a4af;
 }
 
 .leftContainer {
@@ -128,7 +150,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 /*---- GWT-----*/
-	/** Example rules used by the template application (remove for your app) */
+/** Example rules used by the template application (remove for your app) */
 .sendButton {
 	display: block;
 	font-size: 16pt;
@@ -142,17 +164,77 @@ h1,h2,h3,h4,h5,h6 {
 	border: none;
 }
 
-/** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
 	width: 400px;
 }
 
-.gwt-TextBox,.gwt-PasswordTextBox {
+/* SuggestItem*/
+.gwt-SuggestBoxPopup .item {
+	color: #424242;
+	cursor: default;
+	padding: 2px 6px;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTop div,.gwt-SuggestBoxPopup .suggestPopupMiddleLeft div,.gwt-SuggestBoxPopup .suggestPopupMiddleRight div,.gwt-SuggestBoxPopup .suggestPopupBottom div
+	{
+	display: none;
+}
+
+.body .gwt-SuggestBoxPopup .suggestPopupMiddleCenterInner table {
+	border: 2px solid #dcdcdc;
+}
+
+.body .gwt-SuggestBoxPopup .item-selected {
+	background: none repeat scroll 0 0 #f3f3f3;
+}
+
+/*----*/ /*DATEPICKER*/
+.body td.datePickerMonth,.body .datePickerPreviousButton,.body .datePickerNextButton
+	{
+	color: #77778A;
+}
+
+.body .gwt-DatePicker {
+	border: 1px solid #77778A;
+}
+
+.body .datePickerWeekdayLabel,.body .datePickerWeekendLabel {
+	background: none repeat scroll 0 0 #C2C2CF;
+}
+.body .datePickerDayIsHighlighted{
+	background: none repeat scroll 0 0 #D1ECED;
+}
+
+.body .datePickerMonthSelector {
+	background: none repeat scroll 0 0 #C2C2CF;
+}
+
+/*--*/
+.gwt-TextBox,.gwt-PasswordTextBox,.gwt-SuggestBox,.gwt-DateBox {
 	background-color: #FFFFFF;
 	border: 1px solid darkgrey;
 	-moz-border-radius: 4px; /* FF1+ */
 	-webkit-border-radius: 4px; /* Saf3-4 */
 	border-radius: 4px; /* Opera 10.5, IE 9, Saf5, Chrome */
+	-moz-box-shadow: 1px 1px 1px #dcdcdc inset; /* FF3.5+ */
+	-webkit-box-shadow: inset 1px 1px 1px #dcdcdc; /* Saf3.0+, Chrome */
+	box-shadow: inset 1px 1px 1px #dcdcdc; /* Opera 10.5, IE9 */
+}
+
+.gwt-TextBox:focus,.gwt-PasswordTextBox:focus,.gwt-SuggestBox:focus,.gwt-DateBox:focus
+	{
+	border: 1px solid #7AA1D6;
+	-moz-box-shadow: 0 0 5px #7AA1D6; /* FF3.5+ */
+	-webkit-box-shadow: 0 0 5px #7AA1D6; /* Saf3.0+, Chrome */
+	box-shadow: 0 0 5px #7AA1D6; /* Opera 10.5, IE9 */
+}
+
+.searchModule .gwt-TextBox:focus,.searchModule .gwt-PasswordTextBox:focus,.searchModule .gwt-SuggestBox:focus,.searchModule .gwt-DateBox:focus
+	{
+	border: 1px solid #86868f;
+	-moz-box-shadow: 0 0 5px #86868f; /* FF3.5+ */
+	-webkit-box-shadow: 0 0 5px #86868f; /* Saf3.0+, Chrome */
+	box-shadow: 0 0 5px #86868f; /* Opera 10.5, IE9 */
 }
 
 .dialogVPanel {
@@ -225,6 +307,10 @@ h1,h2,h3,h4,h5,h6 {
 	margin: 3px 0 0 3px;
 }
 
+.body .gwt-MenuBarPopup table td {
+	border-collapse: collapse;
+}
+
 .body .gwt-MenuBarPopup .menuPopupTopLeft {
 	background: none;
 }
@@ -242,6 +328,11 @@ h1,h2,h3,h4,h5,h6 {
 	height: 15px;
 }
 
+.body .gwt-MenuBarPopup .menuPopupBottomCenter {
+	background: url("images/menuBar/hborder_bottom.png") repeat-x scroll 0
+		-6px transparent;
+}
+
 .body .gwt-MenuBarPopup .menuPopupTopRight {
 	background: none repeat scroll 0 0 transparent;
 }
@@ -251,6 +342,9 @@ h1,h2,h3,h4,h5,h6 {
 		-496px top transparent;
 	height: 15px;
 	width: 5px;
+}
+
+.body .menuPopupBottomCenterInner {
 }
 
 .body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem-selected {

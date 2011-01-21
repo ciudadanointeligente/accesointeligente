@@ -1,0 +1,61 @@
+.searchModule {
+	background-color: #c2c2cf;
+	padding: 10px;
+}
+
+.searchUnit {
+	border-right: 2px dotted white;
+	float: left;
+	height: 65px;
+	padding: 0 10px;
+}
+
+.searchUnit:last-child {
+	border: 0;
+}
+
+.searchUnit img {
+	float: left;
+	margin: -2px 0 3px;
+}
+
+.body .dateUnit td {
+	font-size: 8pt;
+}
+
+.dateUDateBox {
+	width: 80px;
+}
+
+span.Label {
+	font-size: 10px;
+}
+
+.tbCheck {
+	clear: both;
+	margin-top: -5px;
+}
+
+.tbCheck td span,.tbCheck td label {
+	font-size: 0.961em;
+}
+
+.searchModuleButton {
+	background: none repeat scroll 0 0 #D1D1DF;
+	border-color: #E0E0EF #D1D1DF #D1D1DF #E0E0EF;
+	border-style: solid;
+	border-width: 1px;
+	clear: right;
+	color: white;
+	display: block;
+	margin: 0 0 5px;
+	padding: 1px 10px 1px 3px;
+	-moz-border-radius: 8px; /* FF1+ */
+	-webkit-border-radius: 8px; /* Saf3-4 */
+	border-radius: 8px; /* Opera 10.5, IE 9, Saf5, Chrome */
+}
+
+.searchModuleButton img {
+	margin: 0;
+	padding: 0 7px 0 0;
+}
