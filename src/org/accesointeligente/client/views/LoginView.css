@@ -31,3 +31,22 @@ h1.greyBlock {
 	display: inline;
 	clear: none;
 }
+
+.closeButton{
+	background: url("images/search/cross.png") no-repeat scroll 2px 3px #A4A4AF;
+	border: 2px solid white;
+	-moz-border-radius: 15px; /* FF1+ */
+	-webkit-border-radius: 15px; /* Saf3-4 */
+	border-radius: 15px; /* Opera 10.5, IE 9, Saf5, Chrome */
+	height:26px;
+	width: 26px;
+	overflow: hidden; 
+	float: right;
+	cursor: pointer;
+}
+.closeButton:hover{
+	background-color: #95959F;
+}
+.closeButton:active{
+	background-color: #77778A;
+}

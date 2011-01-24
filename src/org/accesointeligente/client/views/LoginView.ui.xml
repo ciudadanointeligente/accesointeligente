@@ -2,15 +2,16 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css" />
-
-	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX" height="400PX" ui:field="loginPanel">
+			
+	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX"
+		height="400PX" ui:field="loginPanel">
 		<g:HTMLPanel ui:field="loginForm">
+		<g:Label ui:field="close" addStyleNames="{style.closeButton}"/>
 			<g:HTMLPanel ui:field="noticePanel" visible="false">
 				<g:Label ui:field="noticeClose">Cerrar</g:Label>
-				<g:Label ui:field="noticeLabel"/>
+				<g:Label ui:field="noticeLabel" />
 			</g:HTMLPanel>
 			<h1 class="{style.greyBlock}">LOGIN</h1>
-			<g:Label ui:field="close">cerrar</g:Label>
 			<table>
 				<tr>
 					<td>Email</td>
@@ -30,7 +31,8 @@
 				<tr>
 					<td colspan="3">
 						¿No eres miembro?
-						<g:Label addStyleNames="{style.link}" ui:field="register" text="Regístrate gratis" />
+						<g:Label addStyleNames="{style.link}" ui:field="register"
+							text="Regístrate gratis" />
 					</td>
 				</tr>
 			</table>
