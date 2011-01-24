@@ -50,12 +50,17 @@ span.Label {
 	display: block;
 	margin: 0 0 5px;
 	padding: 1px 10px 1px 3px;
-	-moz-border-radius: 8px; /* FF1+ */
-	-webkit-border-radius: 8px; /* Saf3-4 */
-	border-radius: 8px; /* Opera 10.5, IE 9, Saf5, Chrome */
+	-moz-border-radius: 6px; /* FF1+ */
+	-webkit-border-radius: 5px; /* Saf3-4 */
+	border-radius: 5px; /* Opera 10.5, IE 9, Saf5, Chrome */
 }
 
 .searchModuleButton img {
 	margin: 0;
 	padding: 0 7px 0 0;
 }
+
+.dateUnit table td{
+	padding:0px;
+}
+
