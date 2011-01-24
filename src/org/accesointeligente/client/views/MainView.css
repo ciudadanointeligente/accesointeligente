@@ -12,6 +12,7 @@
 .logo {
 	margin: 6px 20px;
 	float: left;
+	cursor: pointer;
 }
 
 .welcome {

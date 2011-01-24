@@ -9,14 +9,17 @@
 					<g:Image ui:field="logo" addStyleNames="{style.logo}"
 						url="images/layout/logo_head.png" />
 					<div class="{style.headSlogan}">¿Qué quieres saber de los organismos públicos? </div>
-					<div class="{style.welcome}"><g:Label ui:field="welcomeMessage" visible="false" /></div>
+					<g:Label ui:field="welcomeMessage" visible="false"
+						addStyleNames="{style.welcome}" />
 					<div class="mainMenu bebas">
 						<g:MenuBar>
 							<g:MenuItem ui:field="myMenu">
 								Mi cuenta
 								<g:MenuBar vertical="true">
-									<g:MenuItem ui:field="myrequests" visible="false">Mis solicitudes</g:MenuItem>
-									<g:MenuItem ui:field="favorites" visible="false">Mis favoritos</g:MenuItem>
+									<g:MenuItem ui:field="myrequests" visible="false">Mis
+										solicitudes</g:MenuItem>
+									<g:MenuItem ui:field="favorites" visible="false">Mis
+										favoritos</g:MenuItem>
 									<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
 								</g:MenuBar>
 							</g:MenuItem>
@@ -32,7 +35,7 @@
 			</g:HTMLPanel>
 			<g:HTMLPanel ui:field="notificationPanel" visible="false">
 				<g:Label ui:field="notificationClose">cerrar</g:Label>
-				<g:Label ui:field="notificationLabel"/>
+				<g:Label ui:field="notificationLabel" />
 			</g:HTMLPanel>
 			<g:FlowPanel ui:field="mainPanel" visible="false" />
 			<g:HTMLPanel ui:field="footerPanel" visible="false"
