@@ -271,14 +271,11 @@ h1,h2,h3,h4,h5,h6 {
 
 .body .mainMenu {
 	background-color: white;
-	clear: none;
+	clear: right;
 	display: block;
 	float: right;
 	overflow: hidden;
 	padding: 9px;
-	position: relative;
-	right: 0;
-	top: 50px;
 }
 
 .body .mainMenu .gwt-MenuItem {

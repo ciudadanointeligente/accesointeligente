@@ -15,17 +15,27 @@
 	cursor: pointer;
 }
 
-.welcome {
-	background: none repeat scroll 0 0 #4BC2C8;
-	color: white;
-	display: block;
+.rightHeader,.rightHeaderTop {
 	float: right;
-	overflow: hidden;
-	padding: 3px 12px 5px;
+	display: block;
+}
+
+.rightHeaderTop {
+	display: block;
+	float: none;
+	height: 50px;
+	margin-right: 20px;
 	position: relative;
-	right: 20px;
-	text-align: right;
-	z-index: 2000;
+	z-index: 20;
+}
+
+.welcome {
+	 background: none repeat scroll 0 0 #4BC2C8;
+    color: white;
+    float: left;
+    padding: 3px 12px 5px;
+    position: absolute;
+    right: 0;
 }
 
 .menuBar {
