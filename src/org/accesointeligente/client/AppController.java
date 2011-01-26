@@ -123,6 +123,12 @@ public class AppController implements ValueChangeHandler<String> {
 						Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
 					}
 					break;
+				case STATISTICS:
+					StatisticsPresenter statistics = new StatisticsPresenter(new StatisticsView(), eventBus);
+					statistics.bind();
+					getLayout().clear();
+					getLayout().add(statistics.getDisplay().asWidget());
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
@@ -173,6 +179,12 @@ public class AppController implements ValueChangeHandler<String> {
 					} catch (Exception e) {
 						Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
 					}
+					break;
+				case STATISTICS:
+					StatisticsPresenter statistics = new StatisticsPresenter(new StatisticsView(), eventBus);
+					statistics.bind();
+					getLayout().clear();
+					getLayout().add(statistics.getDisplay().asWidget());
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());

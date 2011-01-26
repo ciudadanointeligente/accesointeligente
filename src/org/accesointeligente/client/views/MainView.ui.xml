@@ -18,17 +18,21 @@
 								<g:MenuItem ui:field="myMenu">
 									Mi cuenta
 									<g:MenuBar vertical="true">
-										<g:MenuItem ui:field="myrequests" visible="false">Mis
-											solicitudes</g:MenuItem>
-										<g:MenuItem ui:field="favorites" visible="false">Mis
-											favoritos</g:MenuItem>
+										<g:MenuItem ui:field="myrequests" visible="false">Mis solicitudes</g:MenuItem>
+										<g:MenuItem ui:field="favorites" visible="false">Mis favoritos</g:MenuItem>
 										<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
 									</g:MenuBar>
 								</g:MenuItem>
 								<g:MenuItemSeparator />
-								<g:MenuItem ui:field="home">Home</g:MenuItem>
+								<g:MenuItem ui:field="statistics">Estadísticas</g:MenuItem>
 								<g:MenuItemSeparator />
-								<g:MenuItem ui:field="about">Acerca del proyecto</g:MenuItem>
+								<g:MenuItem ui:field="about">
+									Acerca del proyecto
+									<g:MenuBar vertical="true">
+										<g:MenuItem ui:field="aboutProject">Sobre el proyecto</g:MenuItem>
+										<g:MenuItem ui:field="asociates">Nos Apoyan</g:MenuItem>
+									</g:MenuBar>
+								</g:MenuItem>
 								<g:MenuItemSeparator />
 								<g:MenuItem ui:field="contact">Contacto</g:MenuItem>
 							</g:MenuBar>

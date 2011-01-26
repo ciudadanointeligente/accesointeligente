@@ -9,7 +9,9 @@ public enum AppPlace {
 	RESPONSE,
 	REQUESTSTATUS,
 	LIST,
-	ABOUT,
+	ABOUTPROJECT,
+	ASOCIATES,
+	STATISTICS,
 	CONTACT;
 
 	public String getToken() {

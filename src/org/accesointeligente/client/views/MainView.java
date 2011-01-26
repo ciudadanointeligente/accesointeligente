@@ -11,9 +11,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class MainView extends Composite implements MainPresenter.Display {
@@ -37,8 +35,9 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField MenuItem myrequests;
 	@UiField MenuItem favorites;
 	@UiField MenuItem logout;
-	@UiField MenuItem home;
-	@UiField MenuItem about;
+	@UiField MenuItem statistics;
+	@UiField MenuItem aboutProject;
+	@UiField MenuItem asociates;
 	@UiField MenuItem contact;
 	@UiField HTMLPanel footerPanel;
 	@UiField Label loginPending;
@@ -70,17 +69,24 @@ public class MainView extends Composite implements MainPresenter.Display {
 			}
 		});
 
-		home.setCommand(new Command() {
+		statistics.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.HOME.getToken());
+				History.newItem(AppPlace.STATISTICS.getToken());
 			}
 		});
 
-		about.setCommand(new Command() {
+		aboutProject.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.ABOUT.getToken());
+				History.newItem(AppPlace.ABOUTPROJECT.getToken());
+			}
+		});
+
+		asociates.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem(AppPlace.ASOCIATES.getToken());
 			}
 		});
 
