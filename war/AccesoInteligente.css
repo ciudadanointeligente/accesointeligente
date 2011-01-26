@@ -76,6 +76,76 @@ h1,h2,h3,h4,h5,h6 {
 		Sans Serif;
 }
 
+/*----Notifications---*/
+.success,.error,.notice {
+	border-bottom: 3px solid white;
+	border-top: 3px solid white;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	font-style: italic;
+	font-weight: normal;
+	letter-spacing: 1pt;
+	line-height: 120%;
+	overflow: hidden;
+	padding: 13px 10px 7px 40px;
+}
+
+.success .fLeft,.error .fLeft,.notice .fLeft {
+	max-width: 850px;
+}
+
+.closeNotice {
+	background: url(images/layout/c_notice.png) no-repeat scroll 0 0
+		transparent;
+	pointer: cursor;
+	float: right;
+	position: relative;
+	right: -8px;
+	top: -8px;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+
+.success {
+	color: #42973D;
+	background: url(images/layout/success.png) no-repeat scroll 5px 50%
+		#CEEAAC;
+}
+
+.error {
+	color: #EF3C39;
+	background: url(images/layout/error.png) no-repeat scroll 5px 50%
+		#FCDBDB;
+}
+
+.notice {
+	color: #f38612;
+	background: url(images/layout/notify.png) no-repeat scroll 5px 50%
+		#fff277;
+}
+
+.error .closeNotice {
+	background-image: url(images/layout/c_error.png);
+}
+
+.success .closeNotice {
+	background-image: url(images/layout/c_success.png);
+}
+
+.loginForm .error {
+	border: none;
+	margin: 0px -10px 0px -30px;
+	background-position: 25px 50%;
+	padding-left: 60px;
+}
+
+.loginForm .error .closeNotice {
+	display: none;
+}
+
+
 /*---modules---*/
 .greyGrad {
 	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom
@@ -201,7 +271,8 @@ h1,h2,h3,h4,h5,h6 {
 .body .datePickerWeekdayLabel,.body .datePickerWeekendLabel {
 	background: none repeat scroll 0 0 #C2C2CF;
 }
-.body .datePickerDayIsHighlighted{
+
+.body .datePickerDayIsHighlighted {
 	background: none repeat scroll 0 0 #D1ECED;
 }
 
