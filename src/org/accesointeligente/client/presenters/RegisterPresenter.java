@@ -175,7 +175,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 	@Override
 	public void register() {
 		if (display.validateForm()) {
-			User user = new User();
+			final User user = new User();
 
 			if (display.isPerson()) {
 				user.setFirstName(display.getPersonFirstName());
@@ -214,7 +214,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				@Override
 				public void onSuccess(User result) {
 					Window.alert("Registro exitoso!");
-					RPC.getUserService().login(result.getEmail(), result.getPassword(), new AsyncCallback<Void>() {
+					RPC.getUserService().login(result.getEmail(), user.getPassword(), new AsyncCallback<Void>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							if (caught instanceof ServiceException) {

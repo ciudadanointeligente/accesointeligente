@@ -2,6 +2,7 @@ package org.accesointeligente.server.services;
 
 import org.accesointeligente.client.services.UserService;
 import org.accesointeligente.model.User;
+import org.accesointeligente.server.BCrypt;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.SessionUtil;
 import org.accesointeligente.shared.*;
@@ -35,7 +36,6 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 		try {
 			Criteria criteria = hibernate.createCriteria(User.class);
 			criteria.add(Restrictions.eq("email", email));
-			criteria.add(Restrictions.eq("password", password));
 			result = (List<User>) criteria.list();
 			hibernate.getTransaction().commit();
 		} catch (Throwable ex) {
@@ -46,9 +46,15 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 		if (result.size() != 1) {
 			throw new LoginException();
 		} else {
-			SessionUtil.setSession (getThreadLocalRequest ().getSession ());
-			SessionUtil.setAttribute ("sessionId", UUID.randomUUID ().toString ());
-			SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(result.get(0)));
+			User user = result.get(0);
+
+			if (!BCrypt.checkpw(password, user.getPassword())) {
+				throw new LoginException();
+			} else {
+				SessionUtil.setSession (getThreadLocalRequest ().getSession ());
+				SessionUtil.setAttribute ("sessionId", UUID.randomUUID ().toString ());
+				SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(user));
+			}
 		}
 	}
 
@@ -64,6 +70,8 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			if (criteria.list().size() == 1) {
 				throw new RegisterException();
 			}
+
+			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
 			hibernate.save(user);
 			hibernate.getTransaction().commit();
