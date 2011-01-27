@@ -27,7 +27,10 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 		void setRequestCategories(Set<RequestCategory> categories);
 		void setAnotherInstitution(Boolean anotherInstitution);
 		void displayMessage(String string);
+		void editOptions(Boolean allowEdit);
 	}
+
+	private Request request;
 
 	public RequestStatusPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
@@ -58,6 +61,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 			@Override
 			public void onSuccess(Request result) {
 				if (result != null) {
+					setRequest(result);
 					display.setStatus(result.getStatus());
 					display.setInstitutionName(result.getInstitution().getName());
 					display.setRequestInfo(result.getInformation());
@@ -66,10 +70,30 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 					display.setRequestCategories(result.getCategories());
 					display.setAnotherInstitution(result.getAnotherInstitution());
 					display.setDate(result.getDate());
+					display.editOptions(requestIsEditable());
 				} else {
 					display.displayMessage("No se puede cargar la solicitud");
 				}
 			}
 		});
+	}
+
+	@Override
+	public Request getRequest() {
+		return request;
+	}
+
+	@Override
+	public void setRequest(Request request) {
+		this.request = request;
+	}
+
+	@Override
+	public Boolean requestIsEditable() {
+		if (request.getStatus() == RequestStatus.NEW) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

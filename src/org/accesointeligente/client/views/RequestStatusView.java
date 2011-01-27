@@ -3,6 +3,8 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.presenters.RequestStatusPresenter;
 import org.accesointeligente.client.presenters.RequestStatusPresenterIface;
 import org.accesointeligente.model.RequestCategory;
+import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.RequestListType;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.google.gwt.core.client.GWT;
@@ -33,6 +35,9 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@UiField FlowPanel requestCategoryPanel;
 	@UiField RadioButton anotherInstitutionYes;
 	@UiField RadioButton anotherInstitutionNo;
+	@UiField Anchor requestListLink;
+	@UiField Anchor editRequest;
+	@UiField Anchor deleteRequest;
 
 	private RequestStatusPresenterIface presenter;
 
@@ -111,8 +116,21 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 		Window.alert(message);
 	}
 
+	@UiHandler("editRequest")
+	public void onEditRequestClick(ClickEvent event) {
+		History.newItem(AppPlace.EDITREQUEST.getToken() + "?requestId=" + presenter.getRequest().getId());
+	}
+
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		History.newItem("list?type=mylist");
+		History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+	}
+
+	@Override
+	public void editOptions(Boolean allowEdit) {
+		if (allowEdit == false) {
+			editRequest.setVisible(false);
+			deleteRequest.setVisible(false);
+		}
 	}
 }

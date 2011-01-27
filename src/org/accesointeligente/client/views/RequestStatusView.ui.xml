@@ -10,6 +10,12 @@
 		<g:Anchor ui:field="requestListLink">
 			Ir al listado de solicitudes
 		</g:Anchor>
+		<g:Anchor ui:field="editRequest">
+			Editar
+		</g:Anchor>
+		<g:Anchor ui:field="deleteRequest">
+			Eliminar
+		</g:Anchor>
 		<div class="{style.waterBlockDark} clear">
 			<div class="{style.iconReqResp}">
 				<g:Label ui:field="requestStatusHead"></g:Label>

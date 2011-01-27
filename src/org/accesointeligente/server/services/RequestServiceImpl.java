@@ -33,7 +33,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		hibernate.beginTransaction();
 
 		try {
-			hibernate.save(request);
+			hibernate.saveOrUpdate(request);
 			hibernate.getTransaction().commit();
 			return request;
 		} catch (Throwable ex) {
