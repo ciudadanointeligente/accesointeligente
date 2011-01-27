@@ -1,7 +1,6 @@
 package org.accesointeligente.server;
 
-import com.ibm.icu.util.Calendar;
-
+import java.util.Calendar;
 import java.util.Timer;
 
 import javax.servlet.ServletContextEvent;
