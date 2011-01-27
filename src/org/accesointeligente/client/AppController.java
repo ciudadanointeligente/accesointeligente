@@ -129,6 +129,18 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(statistics.getDisplay().asWidget());
 					break;
+				case ABOUTPROJECT:
+					AboutProjectPresenter aboutProjectPresenter = new AboutProjectPresenter(new AboutProjectView(), eventBus);
+					aboutProjectPresenter.bind();
+					getLayout().clear();
+					getLayout().add(aboutProjectPresenter.getDisplay().asWidget());
+					break;
+				case ASOCIATES:
+					AsociatesPresenter asociatesPresenter = new AsociatesPresenter(new AsociatesView(), eventBus);
+					asociatesPresenter.bind();
+					getLayout().clear();
+					getLayout().add(asociatesPresenter.getDisplay().asWidget());
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
@@ -185,6 +197,18 @@ public class AppController implements ValueChangeHandler<String> {
 					statistics.bind();
 					getLayout().clear();
 					getLayout().add(statistics.getDisplay().asWidget());
+					break;
+				case ABOUTPROJECT:
+					AboutProjectPresenter aboutProjectPresenter = new AboutProjectPresenter(new AboutProjectView(), eventBus);
+					aboutProjectPresenter.bind();
+					getLayout().clear();
+					getLayout().add(aboutProjectPresenter.getDisplay().asWidget());
+					break;
+				case ASOCIATES:
+					AsociatesPresenter asociatesPresenter = new AsociatesPresenter(new AsociatesView(), eventBus);
+					asociatesPresenter.bind();
+					getLayout().clear();
+					getLayout().add(asociatesPresenter.getDisplay().asWidget());
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
