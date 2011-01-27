@@ -6,6 +6,7 @@ public enum AppPlace {
 	LOGIN,
 	LOGOUT,
 	REQUEST,
+	EDITREQUEST,
 	RESPONSE,
 	REQUESTSTATUS,
 	LIST,

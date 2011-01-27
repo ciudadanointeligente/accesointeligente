@@ -99,6 +99,18 @@ public class AppController implements ValueChangeHandler<String> {
 						Window.alert("Id incorrecta: No se puede cargar la solicitud");
 					}
 					break;
+				case EDITREQUEST:
+					try {
+						Integer requestId = Integer.parseInt(parameters.get("requestId"));
+						RequestEditPresenter editPresenter = new RequestEditPresenter(new RequestEditView(), eventBus);
+						editPresenter.bind();
+						editPresenter.showRequest(requestId);
+						getLayout().clear();
+						getLayout().add(editPresenter.getDisplay().asWidget());
+					} catch (Exception e) {
+						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+					}
+					break;
 				case RESPONSE:
 					try {
 						Integer requestId = Integer.parseInt(parameters.get("requestId"));
