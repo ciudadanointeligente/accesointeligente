@@ -10,8 +10,12 @@
 		</id>
 		<many-to-one name="user" column="userId"/>
 		<many-to-one name="institution" column="institutionId"/>
-		<property name="information"/>
-		<property name="context"/>
+		<property name="information">
+			<column name="information" sql-type="text"/>
+		</property>
+		<property name="context">
+			<column name="context" sql-type="text"/>
+		</property>
 		<property name="title"/>
 		<set name="categories" table="RequestCategories">
 			<key column="requestId"/>
