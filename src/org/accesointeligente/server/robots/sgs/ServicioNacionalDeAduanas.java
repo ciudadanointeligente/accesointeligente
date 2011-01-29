@@ -7,7 +7,7 @@ public class ServicioNacionalDeAduanas extends SGS {
 	public ServicioNacionalDeAduanas() {
 		super();
 		setIdEntidad("122");
-		setBaseUrl("http://www.aduana.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.aduana.cl/sgs/index.php");
 	}
 }
 

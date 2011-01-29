@@ -7,7 +7,7 @@ public class GobiernoRegionalDeAysen extends SGS {
 	public GobiernoRegionalDeAysen() {
 		super();
 		setIdEntidad("089");
-		setBaseUrl("http://sgs.goreaysen.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://sgs.goreaysen.cl/sgs/index.php");
 	}
 }
 

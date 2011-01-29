@@ -7,7 +7,7 @@ public class DireccionGeneralDeMovilizacionNacional extends SGS {
 	public DireccionGeneralDeMovilizacionNacional() {
 		super();
 		setIdEntidad("108");
-		setBaseUrl("http://www.dgmn.cl/oirs/index.php?accion=Home");
+		setBaseUrl("http://www.dgmn.cl/oirs/index.php");
 	}
 }
 

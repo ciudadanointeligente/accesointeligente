@@ -7,7 +7,7 @@ public class JuntaNacionalDeJardinesInfantiles extends SGS {
 	public JuntaNacionalDeJardinesInfantiles() {
 		super();
 		setIdEntidad("157");
-		setBaseUrl("http://www.junji.cl/junjijoomla/index.php?option=Home");
+		setBaseUrl("http://www.junji.cl/junjijoomla/index.php");
 	}
 }
 

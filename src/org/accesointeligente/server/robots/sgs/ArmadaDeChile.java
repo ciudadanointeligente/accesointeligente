@@ -7,7 +7,7 @@ public class ArmadaDeChile extends SGS {
 	public ArmadaDeChile() {
 		super();
 		setIdEntidad("102");
-		setBaseUrl("http://transparencia.armada.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.armada.cl/index.php");
 	}
 }
 

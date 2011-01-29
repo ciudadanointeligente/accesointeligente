@@ -7,7 +7,7 @@ public class GobiernoRegionalDelMaule extends SGS {
 	public GobiernoRegionalDelMaule() {
 		super();
 		setIdEntidad("084");
-		setBaseUrl("http://www.gobiernoregionaldelmaule.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.gobiernoregionaldelmaule.cl/sgs/index.php");
 	}
 }
 

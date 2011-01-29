@@ -7,7 +7,7 @@ public class CorporacionNacionalForestal extends SGS {
 	public CorporacionNacionalForestal() {
 		super();
 		setIdEntidad("251");
-		setBaseUrl("http://sgs.odepa.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.odepa.cl/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class ComisionNacionalDeInvestigacionEnCienciaYTecnologia extends SGS {
 	public ComisionNacionalDeInvestigacionEnCienciaYTecnologia() {
 		super();
 		setIdEntidad("155");
-		setBaseUrl("http://sgs.conicyt.cl/");
+		setBaseUrl("http://sgs.conicyt.cl/index.php");
 	}
 }
 

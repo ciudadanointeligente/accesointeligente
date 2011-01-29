@@ -7,7 +7,7 @@ public class AgenciaDeCooperacionInternacional extends SGS {
 	public AgenciaDeCooperacionInternacional() {
 		super();
 		setIdEntidad("094");
-		setBaseUrl("http://201.238.224.3:1055/sgs/index.php?accion=Home");
+		setBaseUrl("http://201.238.224.3:1055/sgs/index.php");
 	}
 }
 

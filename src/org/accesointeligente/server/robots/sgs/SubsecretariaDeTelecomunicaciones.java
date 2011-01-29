@@ -7,7 +7,7 @@ public class SubsecretariaDeTelecomunicaciones extends SGS {
 	public SubsecretariaDeTelecomunicaciones() {
 		super();
 		setIdEntidad("191");
-		setBaseUrl("http://sgs.subtel.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.subtel.cl/index.php");
 	}
 }
 

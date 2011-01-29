@@ -7,7 +7,7 @@ public class ServicioDeSaludCoquimbo extends SGS {
 	public ServicioDeSaludCoquimbo() {
 		super();
 		setIdEntidad("212");
-		setBaseUrl("http://www.sscoquimbo.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.sscoquimbo.cl/sgs/index.php");
 	}
 }
 

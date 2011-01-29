@@ -7,7 +7,7 @@ public class SuperintendenciaDeCasinosDeJuego extends SGS {
 	public SuperintendenciaDeCasinosDeJuego() {
 		super();
 		setIdEntidad("127");
-		setBaseUrl("http://www.scj.cl/ws_uac/");
+		setBaseUrl("http://www.scj.cl/ws_uac/index.php");
 	}
 }
 

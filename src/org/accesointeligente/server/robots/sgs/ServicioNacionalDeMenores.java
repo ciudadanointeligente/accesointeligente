@@ -7,7 +7,7 @@ public class ServicioNacionalDeMenores extends SGS {
 	public ServicioNacionalDeMenores() {
 		super();
 		setIdEntidad("161");
-		setBaseUrl("http://www.sename.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.sename.cl/sgs/index.php");
 	}
 }
 

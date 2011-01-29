@@ -7,7 +7,7 @@ public class ComisionAdministradoraDelSistemaDeCreditosParaEstudiosSuperiores ex
 	public ComisionAdministradoraDelSistemaDeCreditosParaEstudiosSuperiores() {
 		super();
 		setIdEntidad("151");
-		setBaseUrl("http://sgs.ingresa.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.ingresa.cl/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class JuntaDeAeronauticaCivil extends SGS {
 	public JuntaDeAeronauticaCivil() {
 		super();
 		setIdEntidad("192");
-		setBaseUrl("http://vmdi05.mtt.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://vmdi05.mtt.cl/sgs/index.php");
 	}
 }
 

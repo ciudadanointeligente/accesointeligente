@@ -7,7 +7,7 @@ public class OficinaNacionalDeEmergencia extends SGS {
 	public OficinaNacionalDeEmergencia() {
 		super();
 		setIdEntidad("005");
-		setBaseUrl("http://64.76.174.185/~oficina/siac/index.php?accion=Home");
+		setBaseUrl("http://64.76.174.185/~oficina/siac/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class SubsecretariaDePlanificacionYCooperacion extends SGS {
 	public SubsecretariaDePlanificacionYCooperacion() {
 		super();
 		setIdEntidad("143");
-		setBaseUrl("http://sgs.mideplan.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.mideplan.cl/index.php");
 	}
 }
 

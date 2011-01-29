@@ -7,7 +7,7 @@ public class DireccionGeneralDeCreditoPrendario extends SGS {
 	public DireccionGeneralDeCreditoPrendario() {
 		super();
 		setIdEntidad("172");
-		setBaseUrl("http://sgs.dicrep.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.dicrep.cl/index.php");
 	}
 }
 

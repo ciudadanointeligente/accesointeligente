@@ -7,7 +7,7 @@ public class GobiernoRegionalDeLosRios extends SGS {
 	public GobiernoRegionalDeLosRios() {
 		super();
 		setIdEntidad("087");
-		setBaseUrl("http://www.goredelosrios.cl/sigeso/index.php?accion=Home");
+		setBaseUrl("http://www.goredelosrios.cl/sigeso/index.php");
 	}
 }
 

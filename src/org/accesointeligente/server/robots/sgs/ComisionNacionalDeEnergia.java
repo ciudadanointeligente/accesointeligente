@@ -7,7 +7,7 @@ public class ComisionNacionalDeEnergia extends SGS {
 	public ComisionNacionalDeEnergia() {
 		super();
 		setIdEntidad("260");
-		setBaseUrl("http://sgs.cne.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.cne.cl/index.php");
 	}
 }
 

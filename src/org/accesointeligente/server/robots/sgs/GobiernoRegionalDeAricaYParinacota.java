@@ -7,7 +7,7 @@ public class GobiernoRegionalDeAricaYParinacota extends SGS {
 	public GobiernoRegionalDeAricaYParinacota() {
 		super();
 		setIdEntidad("076");
-		setBaseUrl("http://www.gorearicayparinacota.cl/solicitudes/index.php?accion=Home");
+		setBaseUrl("http://www.gorearicayparinacota.cl/solicitudes/index.php");
 	}
 }
 

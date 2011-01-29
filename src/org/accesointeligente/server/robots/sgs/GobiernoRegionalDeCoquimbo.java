@@ -7,7 +7,7 @@ public class GobiernoRegionalDeCoquimbo extends SGS {
 	public GobiernoRegionalDeCoquimbo() {
 		super();
 		setIdEntidad("080");
-		setBaseUrl("http://www.gorecoquimbo.cl/");
+		setBaseUrl("http://www.gorecoquimbo.cl/gestionsolicitudes/index.php");
 	}
 }
 

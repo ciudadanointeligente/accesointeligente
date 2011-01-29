@@ -7,7 +7,7 @@ public class ServicioHidrograficoYOceanograficoDeLaArmada extends SGS {
 	public ServicioHidrograficoYOceanograficoDeLaArmada() {
 		super();
 		setIdEntidad("114");
-		setBaseUrl("http://transparencia.armada.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.armada.cl/index.php");
 	}
 }
 

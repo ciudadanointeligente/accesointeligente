@@ -7,7 +7,7 @@ public class SuperintendenciaDeQuiebras extends SGS {
 	public SuperintendenciaDeQuiebras() {
 		super();
 		setIdEntidad("164");
-		setBaseUrl("http://ley20285.squiebras.cl/sgs1021/index.php?accion=Home");
+		setBaseUrl("http://ley20285.squiebras.cl/sgs1021/index.php");
 	}
 }
 

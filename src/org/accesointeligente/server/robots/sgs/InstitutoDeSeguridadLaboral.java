@@ -7,7 +7,7 @@ public class InstitutoDeSeguridadLaboral extends SGS {
 	public InstitutoDeSeguridadLaboral() {
 		super();
 		setIdEntidad("174");
-		setBaseUrl("http://sgs.isl.gob.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.isl.gob.cl/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class ServicioNacionalDePesca extends SGS {
 	public ServicioNacionalDePesca() {
 		super();
 		setIdEntidad("142");
-		setBaseUrl("http://200.54.73.148/sgs/index.php?accion=Home");
+		setBaseUrl("http://200.54.73.148/sgs/index.php");
 	}
 }
 

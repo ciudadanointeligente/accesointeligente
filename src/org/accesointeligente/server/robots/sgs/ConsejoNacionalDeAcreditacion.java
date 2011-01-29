@@ -7,7 +7,7 @@ public class ConsejoNacionalDeAcreditacion extends SGS {
 	public ConsejoNacionalDeAcreditacion() {
 		super();
 		setIdEntidad("281");
-		setBaseUrl("http://www.cnachile.cl/sgs1021L/index.php?accion=Home");
+		setBaseUrl("http://www.cnachile.cl/sgs1021L/index.php");
 	}
 }
 

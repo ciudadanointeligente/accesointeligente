@@ -7,7 +7,7 @@ public class ServicioNacionalDeLaMujer extends SGS {
 	public ServicioNacionalDeLaMujer() {
 		super();
 		setIdEntidad("259");
-		setBaseUrl("http://www.sernam.cl/sgs102/index.php?accion=Home");
+		setBaseUrl("http://www.sernam.cl/sgs102/index.php");
 	}
 }
 

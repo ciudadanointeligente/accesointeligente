@@ -7,7 +7,7 @@ public class SubsecretariaDeGuerra extends SGS {
 	public SubsecretariaDeGuerra() {
 		super();
 		setIdEntidad("096");
-		setBaseUrl("http://sgs.ssg.gov.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.ssg.gov.cl/index.php");
 	}
 }
 

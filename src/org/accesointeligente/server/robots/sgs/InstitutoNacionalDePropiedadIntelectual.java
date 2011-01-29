@@ -7,7 +7,7 @@ public class InstitutoNacionalDePropiedadIntelectual extends SGS {
 	public InstitutoNacionalDePropiedadIntelectual() {
 		super();
 		setIdEntidad("280");
-		setBaseUrl("http://www.inapi.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.inapi.cl/sgs/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class GobiernoRegionalDelBiobio extends SGS {
 	public GobiernoRegionalDelBiobio() {
 		super();
 		setIdEntidad("085");
-		setBaseUrl("http://sgs.gorebiobio.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.gorebiobio.cl/index.php");
 	}
 }
 

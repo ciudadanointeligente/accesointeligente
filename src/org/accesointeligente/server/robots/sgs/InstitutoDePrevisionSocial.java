@@ -7,7 +7,7 @@ public class InstitutoDePrevisionSocial extends SGS {
 	public InstitutoDePrevisionSocial() {
 		super();
 		setIdEntidad("173");
-		setBaseUrl("http://transparencia.ips.gob.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.ips.gob.cl/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class SubsecretariaDelTrabajo extends SGS {
 	public SubsecretariaDelTrabajo() {
 		super();
 		setIdEntidad("169");
-		setBaseUrl("http://www.mintrab.gob.cl/solicitudes/index.php?accion=Home");
+		setBaseUrl("http://www.mintrab.gob.cl/solicitudes/index.php");
 	}
 }
 

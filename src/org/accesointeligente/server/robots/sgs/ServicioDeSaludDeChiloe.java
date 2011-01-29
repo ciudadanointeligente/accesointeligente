@@ -7,7 +7,7 @@ public class ServicioDeSaludDeChiloe extends SGS {
 	public ServicioDeSaludDeChiloe() {
 		super();
 		setIdEntidad("227");
-		setBaseUrl("http://163.247.51.38/desarrollo/trans/index.php?accion=Home");
+		setBaseUrl("http://163.247.51.38/desarrollo/trans/index.php");
 	}
 }
 

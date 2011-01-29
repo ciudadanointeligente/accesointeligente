@@ -7,7 +7,7 @@ public class DireccionDePresupuestos extends SGS {
 	public DireccionDePresupuestos() {
 		super();
 		setIdEntidad("117");
-		setBaseUrl("http://scutum.dipres.cl:8080/sgs/index.php?accion=Home");
+		setBaseUrl("http://scutum.dipres.cl:8080/sgs/index.php");
 	}
 }
 

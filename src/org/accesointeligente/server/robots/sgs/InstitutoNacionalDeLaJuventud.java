@@ -7,7 +7,7 @@ public class InstitutoNacionalDeLaJuventud extends SGS {
 	public InstitutoNacionalDeLaJuventud() {
 		super();
 		setIdEntidad("147");
-		setBaseUrl("http://www.injuv.gob.cl/transparencia/solicitudes/");
+		setBaseUrl("http://www.injuv.gob.cl/transparencia/solicitudes/index.php");
 	}
 }
 

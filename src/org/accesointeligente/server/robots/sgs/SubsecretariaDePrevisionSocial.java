@@ -7,7 +7,7 @@ public class SubsecretariaDePrevisionSocial extends SGS {
 	public SubsecretariaDePrevisionSocial() {
 		super();
 		setIdEntidad("170");
-		setBaseUrl("http://sgssps.previsionsocial.gob.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://sgssps.previsionsocial.gob.cl/sgs/index.php");
 	}
 }
 

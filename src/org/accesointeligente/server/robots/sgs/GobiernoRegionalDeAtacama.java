@@ -7,7 +7,7 @@ public class GobiernoRegionalDeAtacama extends SGS {
 	public GobiernoRegionalDeAtacama() {
 		super();
 		setIdEntidad("079");
-		setBaseUrl("http://www.goreatacama.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.goreatacama.cl/sgs/index.php");
 	}
 }
 

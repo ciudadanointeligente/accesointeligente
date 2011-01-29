@@ -7,7 +7,7 @@ public class GobiernoRegionalDeLosLagos extends SGS {
 	public GobiernoRegionalDeLosLagos() {
 		super();
 		setIdEntidad("088");
-		setBaseUrl("http://www.regiondeloslagos.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.regiondeloslagos.cl/sgs/index.php");
 	}
 }
 

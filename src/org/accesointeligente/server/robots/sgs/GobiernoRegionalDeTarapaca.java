@@ -7,7 +7,7 @@ public class GobiernoRegionalDeTarapaca extends SGS {
 	public GobiernoRegionalDeTarapaca() {
 		super();
 		setIdEntidad("077");
-		setBaseUrl("http://www.goretarapaca.gov.cl/solicitudes/index.php?accion=Home");
+		setBaseUrl("http://www.goretarapaca.gov.cl/solicitudes/index.php");
 	}
 }
 

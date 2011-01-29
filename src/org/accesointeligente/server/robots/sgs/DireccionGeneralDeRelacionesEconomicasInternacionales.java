@@ -7,7 +7,7 @@ public class DireccionGeneralDeRelacionesEconomicasInternacionales extends SGS {
 	public DireccionGeneralDeRelacionesEconomicasInternacionales() {
 		super();
 		setIdEntidad("092");
-		setBaseUrl("http://transparenciapasiva.direcon.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://transparenciapasiva.direcon.cl/sgs/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class DireccionGeneralDelTerritorioMaritimoYMarinaMercante extends SGS {
 	public DireccionGeneralDelTerritorioMaritimoYMarinaMercante() {
 		super();
 		setIdEntidad("109");
-		setBaseUrl("http://transparencia.armada.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.armada.cl/index.php");
 	}
 }
 

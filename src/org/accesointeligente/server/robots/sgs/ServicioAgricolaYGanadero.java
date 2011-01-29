@@ -7,7 +7,7 @@ public class ServicioAgricolaYGanadero extends SGS {
 	public ServicioAgricolaYGanadero() {
 		super();
 		setIdEntidad("254");
-		setBaseUrl("http://transparencia.sag.gob.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.sag.gob.cl/index.php");
 	}
 }
 

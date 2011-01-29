@@ -7,7 +7,7 @@ public class ComiteDeInversionesExtranjeras extends SGS {
 	public ComiteDeInversionesExtranjeras() {
 		super();
 		setIdEntidad("135");
-		setBaseUrl("http://servapliext.cinver.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://servapliext.cinver.cl/sgs/index.php");
 	}
 }
 

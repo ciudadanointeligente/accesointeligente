@@ -7,7 +7,7 @@ public class SubsecretariaDeBienesNacionales extends SGS {
 	public SubsecretariaDeBienesNacionales() {
 		super();
 		setIdEntidad("248");
-		setBaseUrl("http://scutum.dipres.cl:8080/sgs/index.php?accion=Home");
+		setBaseUrl("http://scutum.dipres.cl:8080/sgs/index.php");
 	}
 }
 

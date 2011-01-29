@@ -7,7 +7,7 @@ public class ServicioAerofotogrametricoFach extends SGS {
 	public ServicioAerofotogrametricoFach() {
 		super();
 		setIdEntidad("113");
-		setBaseUrl("http://www.fach.cl/gob_transp/formulario_solicitud/index.php?accion=Home");
+		setBaseUrl("http://www.fach.cl/gob_transp/formulario_solicitud/index.php");
 	}
 }
 

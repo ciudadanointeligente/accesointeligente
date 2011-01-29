@@ -7,7 +7,7 @@ public class SubsecretariaDeJusticia extends SGS {
 	public SubsecretariaDeJusticia() {
 		super();
 		setIdEntidad("158");
-		setBaseUrl("http://web.minjusticia.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://web.minjusticia.cl/sgs/index.php");
 	}
 }
 

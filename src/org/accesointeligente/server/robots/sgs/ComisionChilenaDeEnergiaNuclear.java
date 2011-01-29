@@ -7,7 +7,7 @@ public class ComisionChilenaDeEnergiaNuclear extends SGS {
 	public ComisionChilenaDeEnergiaNuclear() {
 		super();
 		setIdEntidad("257");
-		setBaseUrl("http://oirs.cchen.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://oirs.cchen.cl/sgs/index.php");
 	}
 }
 

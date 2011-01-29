@@ -7,7 +7,7 @@ public class CorporacionDeAsistenciaJudicialRegionesTarapacaYAntofagasta extends
 	public CorporacionDeAsistenciaJudicialRegionesTarapacaYAntofagasta() {
 		super();
 		setIdEntidad("167");
-		setBaseUrl("http://www.cajta.cl/SGS/index.php?accion=Home");
+		setBaseUrl("http://www.cajta.cl/SGS/index.php");
 	}
 }
 

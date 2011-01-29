@@ -7,7 +7,7 @@ public class CorporacionDeAsistenciaJudicialRegionMetropolitana extends SGS {
 	public CorporacionDeAsistenciaJudicialRegionMetropolitana() {
 		super();
 		setIdEntidad("165");
-		setBaseUrl("http://www.cajmetro.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.cajmetro.cl/sgs/index.php");
 	}
 }
 

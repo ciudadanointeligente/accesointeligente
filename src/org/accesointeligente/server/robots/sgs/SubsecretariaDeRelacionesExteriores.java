@@ -7,7 +7,7 @@ public class SubsecretariaDeRelacionesExteriores extends SGS {
 	public SubsecretariaDeRelacionesExteriores() {
 		super();
 		setIdEntidad("091");
-		setBaseUrl("http://163.247.50.113/index.php?accion=Home");
+		setBaseUrl("http://163.247.50.113/index.php");
 	}
 }
 

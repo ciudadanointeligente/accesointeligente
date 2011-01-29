@@ -7,7 +7,7 @@ public class GendarmeriaDeChile extends SGS {
 	public GendarmeriaDeChile() {
 		super();
 		setIdEntidad("163");
-		setBaseUrl("http://sgs.gendarmeria.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.gendarmeria.cl/index.php");
 	}
 }
 

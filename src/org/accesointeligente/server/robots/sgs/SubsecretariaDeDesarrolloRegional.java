@@ -7,7 +7,7 @@ public class SubsecretariaDeDesarrolloRegional extends SGS {
 	public SubsecretariaDeDesarrolloRegional() {
 		super();
 		setIdEntidad("003");
-		setBaseUrl("http://sgs.subdere.gov.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.subdere.gov.cl/index.php");
 	}
 }
 

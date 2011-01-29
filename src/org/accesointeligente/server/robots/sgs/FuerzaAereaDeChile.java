@@ -7,7 +7,7 @@ public class FuerzaAereaDeChile extends SGS {
 	public FuerzaAereaDeChile() {
 		super();
 		setIdEntidad("103");
-		setBaseUrl("http://www.fach.cl/gob_transp/formulario_solicitud/index.php?accion=Home");
+		setBaseUrl("http://www.fach.cl/gob_transp/formulario_solicitud/index.php");
 	}
 }
 

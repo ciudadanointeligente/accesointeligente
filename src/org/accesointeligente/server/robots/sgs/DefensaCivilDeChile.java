@@ -7,7 +7,7 @@ public class DefensaCivilDeChile extends SGS {
 	public DefensaCivilDeChile() {
 		super();
 		setIdEntidad("107");
-		setBaseUrl("http://www.defensacivil.cl/solicitudes/index.php?accion=Home");
+		setBaseUrl("http://www.defensacivil.cl/solicitudes/index.php");
 	}
 }
 

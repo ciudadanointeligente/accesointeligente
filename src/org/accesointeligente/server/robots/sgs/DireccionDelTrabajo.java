@@ -7,7 +7,7 @@ public class DireccionDelTrabajo extends SGS {
 	public DireccionDelTrabajo() {
 		super();
 		setIdEntidad("171");
-		setBaseUrl("http://sgs.dt.gob.cl/");
+		setBaseUrl("http://sgs.dt.gob.cl/index.php");
 	}
 }
 

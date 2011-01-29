@@ -7,7 +7,7 @@ public class SubsecretariaDeMineria extends SGS {
 	public SubsecretariaDeMineria() {
 		super();
 		setIdEntidad("255");
-		setBaseUrl("http://sgs.minmineria.cl/");
+		setBaseUrl("http://sgs.minmineria.cl/index.php");
 	}
 }
 

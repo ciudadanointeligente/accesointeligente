@@ -7,7 +7,7 @@ public class EjercitoDeChile extends SGS {
 	public EjercitoDeChile() {
 		super();
 		setIdEntidad("101");
-		setBaseUrl("http://solicitudtransparencia.ejercito.cl/index.php?accion=Home");
+		setBaseUrl("http://solicitudtransparencia.ejercito.cl/index.php");
 	}
 }
 

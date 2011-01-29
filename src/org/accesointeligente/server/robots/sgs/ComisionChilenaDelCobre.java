@@ -7,7 +7,7 @@ public class ComisionChilenaDelCobre extends SGS {
 	public ComisionChilenaDelCobre() {
 		super();
 		setIdEntidad("256");
-		setBaseUrl("http://ares.cochilco.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://ares.cochilco.cl/sgs/index.php");
 	}
 }
 

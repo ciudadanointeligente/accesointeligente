@@ -7,7 +7,7 @@ public class ServicioNacionalDelAdultoMayor extends SGS {
 	public ServicioNacionalDelAdultoMayor() {
 		super();
 		setIdEntidad("129");
-		setBaseUrl("http://sgs.senama.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.senama.cl/index.php");
 	}
 }
 

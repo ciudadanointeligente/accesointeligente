@@ -7,7 +7,7 @@ public class SubsecretariaDeInvestigaciones extends SGS {
 	public SubsecretariaDeInvestigaciones() {
 		super();
 		setIdEntidad("100");
-		setBaseUrl("http://www.ssi.gov.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.ssi.gov.cl/sgs/index.php");
 	}
 }
 

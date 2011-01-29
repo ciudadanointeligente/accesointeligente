@@ -7,7 +7,7 @@ public class ServicioNacionalDeTurismo extends SGS {
 	public ServicioNacionalDeTurismo() {
 		super();
 		setIdEntidad("140");
-		setBaseUrl("http://www.sernatur.cl/images/X/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.sernatur.cl/images/X/sgs/index.php");
 	}
 }
 

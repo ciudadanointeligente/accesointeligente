@@ -7,7 +7,7 @@ public class DireccionNacionalDeFronterasYLimitesDelEstado extends SGS {
 	public DireccionNacionalDeFronterasYLimitesDelEstado() {
 		super();
 		setIdEntidad("093");
-		setBaseUrl("http://www.difrol.cl/sgs2/index.php?accion=Home");
+		setBaseUrl("http://www.difrol.cl/sgs2/index.php");
 	}
 }
 

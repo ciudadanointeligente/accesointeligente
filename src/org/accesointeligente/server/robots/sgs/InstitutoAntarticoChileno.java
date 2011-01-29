@@ -7,7 +7,7 @@ public class InstitutoAntarticoChileno extends SGS {
 	public InstitutoAntarticoChileno() {
 		super();
 		setIdEntidad("095");
-		setBaseUrl("http://transparencia.inach.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.inach.cl/index.php");
 	}
 }
 

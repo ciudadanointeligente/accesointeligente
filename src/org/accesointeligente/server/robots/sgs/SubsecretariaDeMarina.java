@@ -7,7 +7,7 @@ public class SubsecretariaDeMarina extends SGS {
 	public SubsecretariaDeMarina() {
 		super();
 		setIdEntidad("097");
-		setBaseUrl("http://sgs.subsecmar.cl/index.php?accion=Home");
+		setBaseUrl("http://sgs.subsecmar.cl/index.php");
 	}
 }
 

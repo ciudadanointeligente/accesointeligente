@@ -7,7 +7,7 @@ public class FiscaliaNacionalEconomica extends SGS {
 	public FiscaliaNacionalEconomica() {
 		super();
 		setIdEntidad("137");
-		setBaseUrl("http://transparencia.fne.gob.cl/index.php?accion=Home");
+		setBaseUrl("http://transparencia.fne.gob.cl/index.php");
 	}
 }
 

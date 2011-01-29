@@ -7,7 +7,7 @@ public class CorporacionNacionalDeDesarrolloIndigena extends SGS {
 	public CorporacionNacionalDeDesarrolloIndigena() {
 		super();
 		setIdEntidad("144");
-		setBaseUrl("http://200.54.70.250/sgs/");
+		setBaseUrl("http://200.54.70.250/sgs/index.php");
 	}
 }
 

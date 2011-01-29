@@ -7,7 +7,7 @@ public class CajaDePrevisionDeLaDefensaNacional extends SGS {
 	public CajaDePrevisionDeLaDefensaNacional() {
 		super();
 		setIdEntidad("110");
-		setBaseUrl("http://200.11.68.116/index.php?accion=Home");
+		setBaseUrl("http://200.11.68.116/index.php");
 	}
 }
 

@@ -7,7 +7,7 @@ public class ConsejoDeDefensaDelEstado extends SGS {
 	public ConsejoDeDefensaDelEstado() {
 		super();
 		setIdEntidad("263");
-		setBaseUrl("http://www.cde.cl/sgs/index.php?accion=Home");
+		setBaseUrl("http://www.cde.cl/sgs/index.php");
 	}
 }
 

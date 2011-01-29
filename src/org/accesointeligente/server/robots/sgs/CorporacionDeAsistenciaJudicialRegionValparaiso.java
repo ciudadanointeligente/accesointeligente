@@ -7,7 +7,7 @@ public class CorporacionDeAsistenciaJudicialRegionValparaiso extends SGS {
 	public CorporacionDeAsistenciaJudicialRegionValparaiso() {
 		super();
 		setIdEntidad("166");
-		setBaseUrl("http://www.cajval.cl/sgs/");
+		setBaseUrl("http://www.cajval.cl/sgs/index.php");
 	}
 }
 
