@@ -234,7 +234,6 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
-			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);

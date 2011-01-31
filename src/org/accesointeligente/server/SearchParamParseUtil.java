@@ -54,6 +54,7 @@ public class SearchParamParseUtil {
 			// Pending Marked
 			if (params.getStatusPending()) {
 				statusDisjunction.add(Restrictions.eq("status", RequestStatus.PENDING));
+				statusDisjunction.add(Restrictions.eq("status", RequestStatus.NEW));
 			}
 			criteria.add(statusDisjunction);
 		}
@@ -109,7 +110,8 @@ public class SearchParamParseUtil {
 
 			// Pending Marked
 			if (params.getStatusPending()) {
-				filters += "'" + RequestStatus.PENDING.toString() + "'";
+				filters += "'" + RequestStatus.PENDING.toString() + "',";
+				filters += "'" + RequestStatus.NEW.toString() + "'";
 			}
 
 			if (filters.charAt(filters.length() - 1) == ',') {
