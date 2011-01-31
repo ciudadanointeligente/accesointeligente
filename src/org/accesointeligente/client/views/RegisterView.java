@@ -74,11 +74,6 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	}
 
 	@Override
-	public void setErrorMessage(String message) {
-		Window.alert(message);
-	}
-
-	@Override
 	public void cleanPersonActivities() {
 		personActivity.clear();
 		personActivity.addItem("Selecciona tu actividad");
