@@ -27,7 +27,6 @@ import org.accesointeligente.shared.*;
 public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RegisterPresenterIface presenter);
-		void setErrorMessage(String message);
 		void cleanPersonActivities();
 		void cleanInstitutionActivities();
 		void cleanInstitutionTypes();
@@ -83,7 +82,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		RPC.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.setErrorMessage("Error obteniendo actividades");
+				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -102,7 +101,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		RPC.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.setErrorMessage("Error obteniendo actividades");
+				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -121,7 +120,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		RPC.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.setErrorMessage("Error obteniendo tipos de institución");
+				showNotification("Error obteniendo tipos de institución", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -141,7 +140,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		RPC.getAgeService().getAges(new AsyncCallback<List<Age>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.setErrorMessage("Error obteniendo edades");
+				showNotification("Error obteniendo edades", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -160,7 +159,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		RPC.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.setErrorMessage("Error obteniendo regiones");
+				showNotification("Error obteniendo regiones", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -205,22 +204,23 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				@Override
 				public void onFailure(Throwable caught) {
 					if (caught instanceof RegisterException) {
-						display.setErrorMessage("Ya existe un usuario registrado con ese email");
+						showNotification("Ya existe un usuario registrado con ese email", NotificationEventType.ERROR);
 					} else {
-						display.setErrorMessage("No se pudo registrar el nuevo usuario, intente nuevamente");
+						showNotification("No se pudo registrar el nuevo usuario, intente nuevamente", NotificationEventType.ERROR);
 					}
 				}
 
 				@Override
 				public void onSuccess(User result) {
-					Window.alert("Registro exitoso!");
+					showNotification("Registro exitoso!", NotificationEventType.SUCCESS);
+
 					RPC.getUserService().login(result.getEmail(), user.getPassword(), new AsyncCallback<Void>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							if (caught instanceof ServiceException) {
-								Window.alert("Fallo la conexion");
+								showNotification("Fallo la conexion", NotificationEventType.ERROR);
 							} else if (caught instanceof LoginException) {
-								Window.alert("Email y/o contraseña incorrecta");
+								showNotification("Email y/o contraseña incorrecta", NotificationEventType.ERROR);
 							}
 						}
 
@@ -229,7 +229,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 							RPC.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
 								@Override
 								public void onFailure (Throwable caught) {
-									Window.alert ("Error creando sesión");
+									showNotification("Error creando sesión", NotificationEventType.ERROR);
 								}
 
 								@Override
@@ -244,5 +244,13 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				}
 			});
 		}
+	}
+
+	@Override
+	public void showNotification(String message, NotificationEventType type) {
+		NotificationEventParams params = new NotificationEventParams();
+		params.setMessage(message);
+		params.setType(type);
+		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }
