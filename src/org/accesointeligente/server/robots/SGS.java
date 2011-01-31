@@ -25,7 +25,7 @@ public class SGS extends Robot {
 	private HttpClient client;
 	private HtmlCleaner cleaner;
 	private Boolean loggedIn = false;
-	private String characterEncoding;
+	private String characterEncoding = "ISO-8859-1";
 	private String baseUrl;
 	private String idEntidad;
 

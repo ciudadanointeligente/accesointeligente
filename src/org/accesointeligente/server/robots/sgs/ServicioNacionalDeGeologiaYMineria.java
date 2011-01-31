@@ -8,6 +8,7 @@ public class ServicioNacionalDeGeologiaYMineria extends SGS {
 		super();
 		setIdEntidad("258");
 		setBaseUrl("http://www.sernageomin.cl/sgs2/index.php");
+		setCharacterEncoding("ISO-8859-1");
 	}
 }
 

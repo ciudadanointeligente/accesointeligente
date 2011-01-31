@@ -8,6 +8,7 @@ public class ConsejoDeDefensaDelEstado extends SGS {
 		super();
 		setIdEntidad("263");
 		setBaseUrl("http://www.cde.cl/sgs/index.php");
+		setCharacterEncoding("UTF-8");
 	}
 }
 
