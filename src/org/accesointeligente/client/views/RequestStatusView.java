@@ -26,6 +26,8 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	interface RequestStatusViewUiBinder extends UiBinder<Widget, RequestStatusView> {}
 
 	// UIFields
+	@UiField Image requestStatusHead;
+	@UiField Label requestTitleHead;
 	@UiField Label requestDate;
 	@UiField Label requestStatus;
 	@UiField Label institutionName;
@@ -63,6 +65,7 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@Override
 	public void setStatus(RequestStatus status) {
 		requestStatus.setText(status.getName());
+		requestStatusHead.setUrl(status.getUrl());
 	}
 
 	@Override
@@ -83,6 +86,7 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@Override
 	public void setRequestTitle(String title) {
 		requestTitle.setText(title);
+		requestTitleHead.setText(title);
 	}
 
 	@Override

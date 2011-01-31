@@ -18,10 +18,10 @@
 		</g:Anchor>
 		<div class="{style.waterBlockDark} clear">
 			<div class="{style.iconReqResp}">
-				<g:Label ui:field="requestStatusHead"></g:Label>
+				<g:Image ui:field="requestStatusHead" />
 			</div>
 			<div class="{style.titleReqResp}"></div>
-			<g:Label ui:field="requestTitleHead"></g:Label>
+			<g:Label ui:field="requestTitleHead" />
 		</div>
 		<table class="{style.statusTable}">
 			<tr>
