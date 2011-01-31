@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class FuerzaAereaDeChile extends SGS {
 
 	public FuerzaAereaDeChile() {
-		super();
-		setIdEntidad("103");
-		setBaseUrl("http://www.fach.cl/gob_transp/formulario_solicitud/index.php");
+		super("103", "http://www.fach.cl/gob_transp/formulario_solicitud/index.php");
 	}
 }
 

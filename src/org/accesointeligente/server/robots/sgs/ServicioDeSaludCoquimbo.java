@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class ServicioDeSaludCoquimbo extends SGS {
 
 	public ServicioDeSaludCoquimbo() {
-		super();
-		setIdEntidad("212");
-		setBaseUrl("http://www.sscoquimbo.cl/sgs/index.php");
+		super("212", "http://www.sscoquimbo.cl/sgs/index.php");
 	}
 }
 

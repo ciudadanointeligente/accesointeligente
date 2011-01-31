@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class ComisionNacionalDeEnergia extends SGS {
 
 	public ComisionNacionalDeEnergia() {
-		super();
-		setIdEntidad("260");
-		setBaseUrl("http://sgs.cne.cl/index.php");
+		super("260", "http://sgs.cne.cl/index.php");
 	}
 }
 

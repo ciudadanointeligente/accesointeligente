@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class DireccionGeneralDeAeronauticaCivil extends SGS {
 
 	public DireccionGeneralDeAeronauticaCivil() {
-		super();
-		setIdEntidad("115");
-		setBaseUrl("http://abeto.dgac.cl/ley/index.php");
+		super("115", "http://abeto.dgac.cl/ley/index.php");
 	}
 }
 

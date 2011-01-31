@@ -5,10 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class ServicioNacionalDeGeologiaYMineria extends SGS {
 
 	public ServicioNacionalDeGeologiaYMineria() {
-		super();
-		setIdEntidad("258");
-		setBaseUrl("http://www.sernageomin.cl/sgs2/index.php");
-		setCharacterEncoding("ISO-8859-1");
+		super("258", "http://www.sernageomin.cl/sgs2/index.php");
 	}
 }
 

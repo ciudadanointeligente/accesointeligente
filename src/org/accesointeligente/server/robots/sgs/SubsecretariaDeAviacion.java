@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDeAviacion extends SGS {
 
 	public SubsecretariaDeAviacion() {
-		super();
-		setIdEntidad("098");
-		setBaseUrl("http://www.ssav.cl/sistema_de_gestion/index.php");
+		super("98", "http://www.ssav.cl/sistema_de_gestion/index.php");
 	}
 }
 

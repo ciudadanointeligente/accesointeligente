@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class GobiernoRegionalDeLosRios extends SGS {
 
 	public GobiernoRegionalDeLosRios() {
-		super();
-		setIdEntidad("087");
-		setBaseUrl("http://www.goredelosrios.cl/sigeso/index.php");
+		super("87", "http://www.goredelosrios.cl/sigeso/index.php");
 	}
 }
 

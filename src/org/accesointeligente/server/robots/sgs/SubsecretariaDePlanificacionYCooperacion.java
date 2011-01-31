@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDePlanificacionYCooperacion extends SGS {
 
 	public SubsecretariaDePlanificacionYCooperacion() {
-		super();
-		setIdEntidad("143");
-		setBaseUrl("http://sgs.mideplan.cl/index.php");
+		super("143", "http://sgs.mideplan.cl/index.php");
 	}
 }
 

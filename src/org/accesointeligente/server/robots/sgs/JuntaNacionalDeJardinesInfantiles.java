@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class JuntaNacionalDeJardinesInfantiles extends SGS {
 
 	public JuntaNacionalDeJardinesInfantiles() {
-		super();
-		setIdEntidad("157");
-		setBaseUrl("http://www.junji.cl/junjijoomla/index.php");
+		super("157", "http://www.junji.cl/junjijoomla/index.php");
 	}
 }
 

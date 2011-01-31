@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SuperintendenciaDeElectricidadYCombustibles extends SGS {
 
 	public SuperintendenciaDeElectricidadYCombustibles() {
-		super();
-		setIdEntidad("138");
-		setBaseUrl("http://ww3.sec.cl/Sgs/index.php");
+		super("138", "http://ww3.sec.cl/Sgs/index.php");
 	}
 }
 

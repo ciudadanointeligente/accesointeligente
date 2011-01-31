@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDeDesarrolloRegional extends SGS {
 
 	public SubsecretariaDeDesarrolloRegional() {
-		super();
-		setIdEntidad("003");
-		setBaseUrl("http://sgs.subdere.gov.cl/index.php");
+		super("3", "http://sgs.subdere.gov.cl/index.php");
 	}
 }
 

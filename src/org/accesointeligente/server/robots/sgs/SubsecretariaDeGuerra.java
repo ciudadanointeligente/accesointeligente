@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDeGuerra extends SGS {
 
 	public SubsecretariaDeGuerra() {
-		super();
-		setIdEntidad("096");
-		setBaseUrl("http://sgs.ssg.gov.cl/index.php");
+		super("96", "http://sgs.ssg.gov.cl/index.php");
 	}
 }
 

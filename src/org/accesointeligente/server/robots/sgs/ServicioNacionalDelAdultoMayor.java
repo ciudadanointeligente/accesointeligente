@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class ServicioNacionalDelAdultoMayor extends SGS {
 
 	public ServicioNacionalDelAdultoMayor() {
-		super();
-		setIdEntidad("129");
-		setBaseUrl("http://sgs.senama.cl/index.php");
+		super("129", "http://sgs.senama.cl/index.php");
 	}
 }
 

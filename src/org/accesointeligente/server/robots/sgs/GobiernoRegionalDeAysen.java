@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class GobiernoRegionalDeAysen extends SGS {
 
 	public GobiernoRegionalDeAysen() {
-		super();
-		setIdEntidad("089");
-		setBaseUrl("http://sgs.goreaysen.cl/sgs/index.php");
+		super("89", "http://sgs.goreaysen.cl/sgs/index.php");
 	}
 }
 

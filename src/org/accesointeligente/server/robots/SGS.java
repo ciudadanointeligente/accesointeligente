@@ -38,6 +38,17 @@ public class SGS extends Robot {
 		setPassword("holanda895:AI");
 	}
 
+	public SGS(String idEntidad, String baseUrl) {
+		this();
+		setIdEntidad(idEntidad);
+		setBaseUrl(baseUrl);
+		String characterEncoding = detectCharacterEncoding();
+
+		if (characterEncoding != null) {
+			setCharacterEncoding(characterEncoding);
+		}
+	}
+
 	@Override
 	public void login() throws RobotException {
 		List<NameValuePair> formParams;
@@ -202,6 +213,36 @@ public class SGS extends Robot {
 			}
 		} catch (Throwable ex) {
 			throw new RobotException();
+		}
+	}
+
+	public String detectCharacterEncoding() {
+		HttpGet get;
+		HttpResponse response;
+		Header contentType;
+		Pattern pattern;
+		Matcher matcher;
+
+		try {
+			get = new HttpGet(baseUrl + "?accion=Home");
+			response = client.execute(get);
+			contentType = response.getFirstHeader("Content-Type");
+			EntityUtils.consume(response.getEntity());
+
+			if (contentType == null || contentType.getValue() == null) {
+				return null;
+			}
+
+			pattern = Pattern.compile(".*charset=(.+)");
+			matcher = pattern.matcher(contentType.getValue());
+
+			if (!matcher.matches()) {
+				return null;
+			}
+
+			return matcher.group(1);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 

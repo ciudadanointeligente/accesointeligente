@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class ComisionChilenaDelCobre extends SGS {
 
 	public ComisionChilenaDelCobre() {
-		super();
-		setIdEntidad("256");
-		setBaseUrl("http://ares.cochilco.cl/sgs/index.php");
+		super("256", "http://ares.cochilco.cl/sgs/index.php");
 	}
 }
 

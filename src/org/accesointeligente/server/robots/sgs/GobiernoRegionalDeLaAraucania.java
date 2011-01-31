@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class GobiernoRegionalDeLaAraucania extends SGS {
 
 	public GobiernoRegionalDeLaAraucania() {
-		super();
-		setIdEntidad("086");
-		setBaseUrl("http://www.laaraucania.cl/sgs/index.php");
+		super("86", "http://www.laaraucania.cl/sgs/index.php");
 	}
 }
 

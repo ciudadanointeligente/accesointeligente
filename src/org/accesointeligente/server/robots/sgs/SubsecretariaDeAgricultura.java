@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDeAgricultura extends SGS {
 
 	public SubsecretariaDeAgricultura() {
-		super();
-		setIdEntidad("249");
-		setBaseUrl("http://solicitudes.minagri.cl/index.php");
+		super("249", "http://solicitudes.minagri.cl/index.php");
 	}
 }
 

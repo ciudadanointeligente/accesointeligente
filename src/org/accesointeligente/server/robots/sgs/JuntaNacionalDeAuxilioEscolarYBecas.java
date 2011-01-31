@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class JuntaNacionalDeAuxilioEscolarYBecas extends SGS {
 
 	public JuntaNacionalDeAuxilioEscolarYBecas() {
-		super();
-		setIdEntidad("156");
-		setBaseUrl("http://transparencia.junaeb.cl/sgs/index.php");
+		super("156", "http://transparencia.junaeb.cl/sgs/index.php");
 	}
 }
 

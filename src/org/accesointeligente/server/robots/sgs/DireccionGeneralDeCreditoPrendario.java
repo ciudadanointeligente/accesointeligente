@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class DireccionGeneralDeCreditoPrendario extends SGS {
 
 	public DireccionGeneralDeCreditoPrendario() {
-		super();
-		setIdEntidad("172");
-		setBaseUrl("http://sgs.dicrep.cl/index.php");
+		super("172", "http://sgs.dicrep.cl/index.php");
 	}
 }
 

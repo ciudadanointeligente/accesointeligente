@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDeInvestigaciones extends SGS {
 
 	public SubsecretariaDeInvestigaciones() {
-		super();
-		setIdEntidad("100");
-		setBaseUrl("http://www.ssi.gov.cl/sgs/index.php");
+		super("100", "http://www.ssi.gov.cl/sgs/index.php");
 	}
 }
 

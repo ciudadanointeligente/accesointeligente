@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class SubsecretariaDeBienesNacionales extends SGS {
 
 	public SubsecretariaDeBienesNacionales() {
-		super();
-		setIdEntidad("248");
-		setBaseUrl("http://scutum.dipres.cl:8080/sgs/index.php");
+		super("248", "http://scutum.dipres.cl:8080/sgs/index.php");
 	}
 }
 

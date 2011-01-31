@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class DireccionDeComprasYContratacionPublica extends SGS {
 
 	public DireccionDeComprasYContratacionPublica() {
-		super();
-		setIdEntidad("126");
-		setBaseUrl("http://transparencia.chilecompra.cl/index.php");
+		super("126", "http://transparencia.chilecompra.cl/index.php");
 	}
 }
 

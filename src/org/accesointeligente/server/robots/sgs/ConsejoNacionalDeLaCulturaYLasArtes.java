@@ -5,9 +5,7 @@ import org.accesointeligente.server.robots.SGS;
 public class ConsejoNacionalDeLaCulturaYLasArtes extends SGS {
 
 	public ConsejoNacionalDeLaCulturaYLasArtes() {
-		super();
-		setIdEntidad("261");
-		setBaseUrl("http://www.transparenciaencultura.cl/sgs/index.php");
+		super("261", "http://www.transparenciaencultura.cl/sgs/index.php");
 	}
 }
 
