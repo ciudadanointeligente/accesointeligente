@@ -1,8 +1,8 @@
 package org.accesointeligente.server.robots;
 
-import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.server.robots.sgs.*;
+import org.accesointeligente.shared.InstitutionClass;
 import org.accesointeligente.shared.RequestStatus;
 
 public abstract class Robot {
@@ -31,8 +31,8 @@ public abstract class Robot {
 		this.password = password;
 	}
 
-	public static Robot getRobot(Institution institution) {
-		switch (institution.getInstitutionClass()) {
+	public static Robot getRobot(InstitutionClass institutionClass) {
+		switch (institutionClass) {
 			case AgenciaDeCooperacionInternacional:
 				return new AgenciaDeCooperacionInternacional();
 			case ArmadaDeChile:
