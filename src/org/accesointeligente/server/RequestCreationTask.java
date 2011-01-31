@@ -15,24 +15,34 @@ import java.util.TimerTask;
 public class RequestCreationTask extends TimerTask {
 	@Override
 	public void run() {
+		System.err.println("Iniciando RequestCreationTask");
 		Session hibernate = HibernateUtil.getSession();
 
 		try {
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("status", RequestStatus.NEW));
 			List<Request> newRequests = criteria.list();
 			hibernate.getTransaction().commit();
 
 			for (Request request : newRequests) {
-				Robot robot = Robot.getRobot(request.getInstitution());
+				System.err.println("[INFO] RequestCreationTask: requestId = " + request.getId());
 
-				if (robot != null) {
-					request = robot.makeRequest(request);
-					hibernate.beginTransaction();
-					hibernate.update(request);
-					hibernate.getTransaction().commit();
+				try {
+					Robot robot = Robot.getRobot(request.getInstitution());
+
+					if (robot != null) {
+						request = robot.makeRequest(request);
+						hibernate = HibernateUtil.getSession();
+						hibernate.beginTransaction();
+						hibernate.update(request);
+						hibernate.getTransaction().commit();
+					}
+				} catch (Exception ex) {
+					System.err.println("[ERROR] RequestCreationTask: requestId = " + request.getId());
+					ex.printStackTrace();
 				}
 			}
 		} catch (Exception ex) {

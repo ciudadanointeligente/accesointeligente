@@ -15,29 +15,39 @@ import java.util.TimerTask;
 public class RequestUpdateTask extends TimerTask {
 	@Override
 	public void run() {
+		System.err.println("Iniciando RequestUpdateTask");
 		Session hibernate = HibernateUtil.getSession();
 
 		try {
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("status", RequestStatus.PENDING));
 			List<Request> newRequests = criteria.list();
 			hibernate.getTransaction().commit();
 
 			for (Request request : newRequests) {
-				Robot robot = Robot.getRobot(request.getInstitution());
+				System.err.println("[INFO] RequestUpdateTask: requestId = " + request.getId());
 
-				if (robot != null) {
-					RequestStatus status = robot.checkRequestStatus(request);
+				try {
+					Robot robot = Robot.getRobot(request.getInstitution());
 
-					if (status != null) {
-						request.setStatus(status);
+					if (robot != null) {
+						RequestStatus status = robot.checkRequestStatus(request);
+
+						if (status != null) {
+							request.setStatus(status);
+						}
+
+						hibernate = HibernateUtil.getSession();
+						hibernate.beginTransaction();
+						hibernate.update(request);
+						hibernate.getTransaction().commit();
 					}
-
-					hibernate.beginTransaction();
-					hibernate.update(request);
-					hibernate.getTransaction().commit();
+				} catch (Exception ex) {
+					System.err.println("[ERROR] RequestUpdateTask: requestId = " + request.getId());
+					ex.printStackTrace();
 				}
 			}
 		} catch (Exception ex) {
