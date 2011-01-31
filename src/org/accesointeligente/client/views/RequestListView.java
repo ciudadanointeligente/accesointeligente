@@ -198,6 +198,11 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
+	public void removeTableFavColumn() {
+		requestTable.removeColumn(6);
+	}
+
+	@Override
 	public void setRequests(ListDataProvider<Request> data) {
 		data.addDataDisplay(requestTable);
 	}

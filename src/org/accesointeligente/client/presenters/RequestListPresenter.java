@@ -30,6 +30,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void initTable();
 		void initTableColumns();
 		void initTableFavColumn();
+		void removeTableFavColumn();
 		void setRequests(ListDataProvider<Request> data);
 	}
 
@@ -47,6 +48,10 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		display.setSearchWidget(presenter.getDisplay().asWidget());
 
 		display.initTable();
+
+		if (ClientSessionUtil.checkSession()) {
+			display.initTableFavColumn();
+		}
 	}
 
 	@Override
@@ -59,13 +64,9 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void loadRequests(Integer offset, Integer limit, String type) {
-
-		if (ClientSessionUtil.checkSession() && !type.equals(RequestListType.MYREQUESTS.getType())) {
-			display.initTableFavColumn();
-		}
-
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
+			display.removeTableFavColumn();
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -138,6 +139,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
+			display.removeTableFavColumn();
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
