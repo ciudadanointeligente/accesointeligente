@@ -12,6 +12,7 @@ import java.util.List;
 @RemoteServiceRelativePath("request")
 public interface RequestService extends RemoteService {
 	Request saveRequest(Request request) throws ServiceException;
+	void deleteRequest(Request request) throws ServiceException;
 	List<RequestCategory> getCategories() throws ServiceException;
 	Request getRequest(Integer requestId) throws ServiceException;
 	Request getRequest(String remoteIdentifier) throws ServiceException;
