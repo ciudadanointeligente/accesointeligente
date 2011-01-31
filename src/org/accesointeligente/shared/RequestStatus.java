@@ -1,7 +1,7 @@
 package org.accesointeligente.shared;
 
 public enum RequestStatus {
-	NEW("Nueva", "images/pendiente.png"),
+	NEW("Pendiente", "images/pendiente.png"),
 	PENDING("Pendiente", "images/pendiente.png"),
 	EXPIRED("Vencida", "images/vencida.png"),
 	CLOSED("Cerrada", "images/cerrada.png"),
