@@ -47,10 +47,6 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		display.setSearchWidget(presenter.getDisplay().asWidget());
 
 		display.initTable();
-
-		if (ClientSessionUtil.checkSession()) {
-			display.initTableFavColumn();
-		}
 	}
 
 	@Override
@@ -63,6 +59,10 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void loadRequests(Integer offset, Integer limit, String type) {
+
+		if (ClientSessionUtil.checkSession() && !type.equals(RequestListType.MYREQUESTS.getType())) {
+			display.initTableFavColumn();
+		}
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
