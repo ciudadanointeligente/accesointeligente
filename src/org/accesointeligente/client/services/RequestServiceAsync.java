@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface RequestServiceAsync {
 	void saveRequest(Request request, AsyncCallback<Request> callback);
+	void deleteRequest(Request request, AsyncCallback<Void> callback);
 	void getCategories(AsyncCallback<List<RequestCategory>> callback);
 	void getRequest(Integer requestId, AsyncCallback<Request> callback);
 	void getRequest(String remoteIdentifier, AsyncCallback<Request> callback);

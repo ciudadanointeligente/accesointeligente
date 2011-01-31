@@ -121,6 +121,11 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 		History.newItem(AppPlace.EDITREQUEST.getToken() + "?requestId=" + presenter.getRequest().getId());
 	}
 
+	@UiHandler("deleteRequest")
+	public void onDeleteRequestClick(ClickEvent event) {
+		presenter.deleteRequest();
+	}
+
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
 		History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());

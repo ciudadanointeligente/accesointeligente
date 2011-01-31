@@ -42,6 +42,20 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		}
 	}
 
+	@Override
+	public void deleteRequest(Request request) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			hibernate.delete(request);
+			hibernate.getTransaction().commit();
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<RequestCategory> getCategories() throws ServiceException {

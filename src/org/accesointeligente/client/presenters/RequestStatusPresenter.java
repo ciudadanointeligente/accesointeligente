@@ -3,12 +3,13 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Date;
@@ -79,6 +80,24 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 	}
 
 	@Override
+	public void deleteRequest() {
+		RPC.getRequestService().deleteRequest(getRequest(), new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No se ha podido eliminar la solicitud", NotificationEventType.ERROR);
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				showNotification("Se ha eliminado la solicitud", NotificationEventType.SUCCESS);
+				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+			}
+
+		});
+	}
+
+	@Override
 	public Request getRequest() {
 		return request;
 	}
@@ -95,5 +114,13 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void showNotification(String message, NotificationEventType type) {
+		NotificationEventParams params = new NotificationEventParams();
+		params.setMessage(message);
+		params.setType(type);
+		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }
