@@ -1,11 +1,43 @@
-.commentWrapper {}
+.commentWrapper {
+	background: url("images/comments-icon.png") no-repeat scroll 0 10px
+		transparent;
+	border-bottom: 1px dashed #AFAFAF;
+	display: block;
+	overflow: hidden;
+	padding: 10px 10px 10px 35px;
+}
 
-.commentImage {}
+.commentImage {
+	
+}
 
-.commentTitleBar {}
+.commentTitleBar {
+	font-size: 8pt;
+	color: #000000;
+}
 
-.commentAuthor {}
+.commentTitleBar span,.commentTitleBar div {
+	float: left;
+	margin-right: 5px;
+}
 
-.commentDate {}
+.commentTitleBar span {
+	font-weight: bold;
+}
 
-.commentContent {}
+.commentAuthor{
+	padding-right: 10px;
+	font-weight: bold; 
+}
+.commentDate {
+	color: #C0C0C0;
+	font-family: Courier, Courier New, monospace, Andale Mono;
+	padding-right: 10px;
+	padding-top: 3px;
+}
+
+.commentContent {
+	clear: both;
+	font-size: 8pt;
+	padding: 10px 0 5px;
+}
