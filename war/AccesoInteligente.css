@@ -178,6 +178,10 @@ h1,h2,h3,h4,h5,h6 {
 	line-height: 120%;
 	float: left;
 }
+a.titleH1 {
+	color: #696969;
+	cursor: pointer;
+}
 
 .headSolicitud .reqMenuItem,.headSolicitud a.reqMenuItem {
 	float: right;
@@ -231,9 +235,9 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .body .gwt-Button{
-     -moz-border-radius: 15px; /* FF1+ */
-	-webkit-border-radius: 15px; /* Saf3-4 */
-	border-radius: 15px; /* Opera 10.5, IE 9, Saf5, Chrome */
+     -moz-border-radius: 4px; /* FF1+ */
+	-webkit-border-radius: 4px; /* Saf3-4 */
+	border-radius: 4px; /* Opera 10.5, IE 9, Saf5, Chrome */
 	font-size: 8pt;
 }
 .ClassicButton{
