@@ -34,7 +34,7 @@
 									</g:MenuBar>
 								</g:MenuItem>
 								<g:MenuItemSeparator />
-								<g:MenuItem ui:field="contact">Contacto</g:MenuItem>
+								<g:MenuItem ui:field="contact"><img src="images/menuBar/contact.png" /></g:MenuItem>
 							</g:MenuBar>
 						</div>
 				</g:HTMLPanel>
