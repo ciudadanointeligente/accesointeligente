@@ -26,6 +26,10 @@ a {
 	color: #19BDCF;
 }
 
+.body .gwt-TextArea, textarea{
+	resize: vertical;	
+}
+	
 h1 {
 	font-size: 1.45em;
 	font-weight: bold;
@@ -224,6 +228,16 @@ h1,h2,h3,h4,h5,h6 {
 .sendButton {
 	display: block;
 	font-size: 16pt;
+}
+
+.body .gwt-Button{
+     -moz-border-radius: 15px; /* FF1+ */
+	-webkit-border-radius: 15px; /* Saf3-4 */
+	border-radius: 15px; /* Opera 10.5, IE 9, Saf5, Chrome */
+	font-size: 8pt;
+}
+.ClassicButton{
+	letter-spacing: 0;
 }
 
 .gwt-CheckBox {

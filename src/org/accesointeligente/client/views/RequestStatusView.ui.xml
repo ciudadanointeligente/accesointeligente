@@ -2,26 +2,30 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestStatusView.css" />
-
 	<g:HTMLPanel>
 		<div class="headSolicitud clear">
 			<h1>Resumen de la solicitud</h1>
 		</div>
-		<g:Anchor ui:field="requestListLink">
-			Ir al listado de solicitudes
-		</g:Anchor>
-		<g:Anchor ui:field="editRequest">
-			Editar
-		</g:Anchor>
-		<g:Anchor ui:field="deleteRequest">
-			Eliminar
-		</g:Anchor>
-		<div class="{style.waterBlockDark} clear">
-			<div class="{style.iconReqResp}">
-				<g:Image ui:field="requestStatusHead" />
-			</div>
-			<div class="{style.titleReqResp}"></div>
-			<g:Label ui:field="requestTitleHead" />
+		<div class="{style.wBlockDark} clear">
+			<table style="float: left;">
+				<tr>
+					<td><g:Image ui:field="requestStatusHead" /></td>
+					<td><g:Label ui:field="requestTitleHead" /></td>
+					<td>
+						<div style="float: right;">
+							<g:Button ui:field="requestListLink" addStyleNames="ClassicButton">
+								Aceptar
+							</g:Button>
+							<g:Button ui:field="editRequest" addStyleNames="ClassicButton"> 
+								Editar
+							</g:Button>
+							<g:Button ui:field="deleteRequest" addStyleNames="ClassicButton">
+								Eliminar
+							</g:Button>
+						</div>
+					</td>
+				</tr>	
+			</table>
 		</div>
 		<table class="{style.statusTable}">
 			<tr>
@@ -85,5 +89,16 @@
 				</td>
 			</tr>
 		</table>
+		<div style="text-align: center;">
+			<g:Button ui:field="requestListLinkBottom" addStyleNames="ClassicButton">
+				Aceptar
+			</g:Button>
+			<g:Button ui:field="editRequestBottom" addStyleNames="ClassicButton">
+				Editar
+			</g:Button>
+			<g:Button ui:field="deleteRequestBottom" addStyleNames="ClassicButton">
+				Eliminar
+			</g:Button>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

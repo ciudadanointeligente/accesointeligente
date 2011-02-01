@@ -37,9 +37,12 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@UiField FlowPanel requestCategoryPanel;
 	@UiField RadioButton anotherInstitutionYes;
 	@UiField RadioButton anotherInstitutionNo;
-	@UiField Anchor requestListLink;
-	@UiField Anchor editRequest;
-	@UiField Anchor deleteRequest;
+	@UiField Button requestListLink;
+	@UiField Button editRequest;
+	@UiField Button deleteRequest;
+	@UiField Button requestListLinkBottom;
+	@UiField Button editRequestBottom;
+	@UiField Button deleteRequestBottom;
 
 	private RequestStatusPresenterIface presenter;
 
@@ -134,6 +137,23 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	public void onRequestListLinkClick(ClickEvent event) {
 		History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
 	}
+
+
+	@UiHandler("editRequestBottom")
+	public void onEditRequestBottomClick(ClickEvent event) {
+		History.newItem(AppPlace.EDITREQUEST.getToken() + "?requestId=" + presenter.getRequest().getId());
+	}
+
+	@UiHandler("deleteRequestBottom")
+	public void onDeleteRequestBottomClick(ClickEvent event) {
+		presenter.deleteRequest();
+	}
+
+	@UiHandler("requestListLinkBottom")
+	public void onRequestListLinkBottomClick(ClickEvent event) {
+		History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+	}
+
 
 	@Override
 	public void editOptions(Boolean allowEdit) {
