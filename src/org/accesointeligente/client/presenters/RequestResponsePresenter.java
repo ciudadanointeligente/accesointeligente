@@ -4,9 +4,7 @@ import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestListType;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
@@ -36,7 +34,6 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void initTable();
 		void initTableColumns();
 		void setComments(List<RequestComment> comments);
-		void displayMessage(String string);
 		void showNewCommentPanel();
 	}
 
@@ -65,7 +62,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar la solicitud");
+				showNotification("No es posible recuperar la solicitud", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -90,7 +87,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 						display.showNewCommentPanel();
 					}
 				} else {
-					display.displayMessage("No se puede cargar la solicitud");
+					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
 			}
 		});
@@ -102,7 +99,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar los archivos adjuntos");
+				showNotification("No es posible recuperar los archivos adjuntos", NotificationEventType.ERROR);
 				History.back();
 			}
 
@@ -125,11 +122,12 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible publicar su comentario");
+				showNotification("No es posible publicar su comentario", NotificationEventType.ERROR);
 			}
 
 			@Override
 			public void onSuccess(RequestComment comment) {
+				showNotification("Se ha publicado su comentario", NotificationEventType.SUCCESS);
 				loadComments(comment.getRequest());
 			}
 		});
@@ -142,7 +140,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar los archivos adjuntos");
+				showNotification("No es posible recuperar los archivos adjuntos", NotificationEventType.ERROR);
 				History.back();
 			}
 
@@ -163,5 +161,13 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 			link = AppController.getPreviousHistoryToken();
 
 		return link;
+	}
+
+	@Override
+	public void showNotification(String message, NotificationEventType type) {
+		NotificationEventParams params = new NotificationEventParams();
+		params.setMessage(message);
+		params.setType(type);
+		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }

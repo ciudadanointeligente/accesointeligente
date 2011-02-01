@@ -20,7 +20,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -166,11 +165,6 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@Override
 	public void showNewCommentPanel() {
 		newCommentPanel.setVisible(true);
-	}
-
-	@Override
-	public void displayMessage(String message) {
-		Window.alert(message);
 	}
 
 	@UiHandler("requestListLink")
