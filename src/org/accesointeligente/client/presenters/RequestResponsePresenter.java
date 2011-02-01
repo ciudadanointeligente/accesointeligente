@@ -80,7 +80,6 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					if (result.getResponse() != null) {
 						display.setResponseDate(result.getResponse().getDate());
 						display.setResponseInfo(result.getResponse().getInformation());
-						display.initTable();
 						loadAttachments(result.getResponse());
 					} else {
 						display.setResponseInfo("Esperando Respuesta");
@@ -149,8 +148,11 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 			@Override
 			public void onSuccess(List<Attachment> attachments) {
-				ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
-				display.setResponseAttachments(data);
+				if (attachments.size() > 0) {
+					display.initTable();
+					ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
+					display.setResponseAttachments(data);
+				}
 			}
 		});
 	}
