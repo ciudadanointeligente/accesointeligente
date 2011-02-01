@@ -9,6 +9,37 @@
 	margin: 3px 6px 3px 0px;
 }
 
+.wBlockDark {
+	background-color: #73C8CA;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	padding: 7px 25px 7px 5px;
+	color: #FFFFFF;
+	font-weight: normal;
+	letter-spacing: 1pt;
+	overflow: hidden;
+}
+
+.wBlockDark table {
+	width: 100%;
+}
+
+.wBlockDark table td:first-child {
+	width: 30px;
+}
+
+.wBlockDark table td:last-child {
+	max-width: 15%;
+}
+
+.wBlockDark table td {
+	vertical-align: middle;
+}
+
+.wBlockDark table td div {
+	margin-left: 10px;
+}
+
 .statusDetail td {
 	padding: 7px 350px 30px 20px;
 }
