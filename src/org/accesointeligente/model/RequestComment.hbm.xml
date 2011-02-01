@@ -11,6 +11,8 @@
 		<many-to-one name="request" column="requestId" not-null="true"/>
 		<many-to-one name="user" column="userId" not-null="true"/>
 		<property name="date"/>
-		<property name="text"/>
+		<property name="text">
+			<column name="text" sql-type="text"/>
+		</property>
 	</class>
 </hibernate-mapping>
