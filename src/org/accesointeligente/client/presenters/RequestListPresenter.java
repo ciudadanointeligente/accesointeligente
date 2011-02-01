@@ -26,6 +26,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void setPresenter(RequestListPresenterIface presenter);
 		void displayMessage(String message);
 		void setListTitle(String title);
+		void setListTitleStyle(String style);
 		void setSearchWidget(Widget widget);
 		void initTable();
 		void initTableColumns();
@@ -66,6 +67,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 	public void loadRequests(Integer offset, Integer limit, String type) {
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
+			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
 			display.removeTableFavColumn();
 
 			if (ClientSessionUtil.checkSession()) {
@@ -90,6 +92,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			display.setListTitle("Mis favoritas");
+			display.setListTitleStyle(RequestListType.FAVORITES.getType());
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -113,6 +116,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
 			display.setListTitle("Listado de solicitudes");
+			display.setListTitleStyle(RequestListType.GENERAL.getType());
 
 			RPC.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
@@ -139,6 +143,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
+			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
 			display.removeTableFavColumn();
 
 			if (ClientSessionUtil.checkSession()) {
@@ -163,6 +168,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			display.setListTitle("Mis favoritas");
+			display.setListTitleStyle(RequestListType.FAVORITES.getType());
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
@@ -186,6 +192,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
 			display.setListTitle("Listado de solicitudes");
+			display.setListTitleStyle(RequestListType.GENERAL.getType());
 
 			RPC.getRequestService().getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 

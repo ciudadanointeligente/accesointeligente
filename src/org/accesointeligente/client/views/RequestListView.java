@@ -60,6 +60,11 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
+	public void setListTitleStyle(String style)  {
+		listTitle.setStyleName(listTitle.getStyleName() + " " + style);
+	}
+
+	@Override
 	public void setSearchWidget(Widget widget) {
 		searchPanel.clear();
 		searchPanel.add(widget);
