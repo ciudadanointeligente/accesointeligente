@@ -6,7 +6,7 @@
 		<div class="{style.container}">
 			<g:HTMLPanel ui:field="headerPanel" visible="false">
 				<g:HTMLPanel addStyleNames="{style.bgDotted} {style.headerPanel}">
-					<g:Image ui:field="logo" addStyleNames="{style.logo}"
+					<g:Image ui:field="logo" title="Ir al home" addStyleNames="{style.logo}"
 						url="images/layout/logo_head.png" />
 					<div class="{style.headSlogan}">¿Qué quieres saber de los organismos públicos? </div>
 					<div class="{style.rightHeaderTop} ">
@@ -34,7 +34,7 @@
 									</g:MenuBar>
 								</g:MenuItem>
 								<g:MenuItemSeparator />
-								<g:MenuItem ui:field="contact"><img src="images/menuBar/contact.png" /></g:MenuItem>
+								<g:MenuItem ui:field="contact"><img title="Contáctanos" src="images/menuBar/contact.png" /></g:MenuItem>
 							</g:MenuBar>
 						</div>
 				</g:HTMLPanel>
