@@ -5,14 +5,11 @@
 
 	<g:HTMLPanel>
 		<g:HTMLPanel addStyleNames="leftContainer">
-			<g:HTMLPanel ui:field="navigationPanel">
-				<g:Anchor ui:field="requestListLink">
-					Ir al listado de solicitudes
+			<g:HTMLPanel ui:field="navigationPanel" addStyleNames="headSolicitud noMargin">
+				<g:Anchor ui:field="requestListLink" addStyleNames="titleH1">
+					&lt;&lt; Volver a la lista
 			</g:Anchor>
 			</g:HTMLPanel>
-			<div class="headSolicitud noMargin">
-				<h1>Listado de solicitudes</h1>
-			</div>
 			<g:HTMLPanel addStyleNames="{style.wBlockDark}">
 				<table>
 					<td>
@@ -33,7 +30,7 @@
 					<g:Label ui:field="responseDate"></g:Label>
 				</div>
 				<div class="{style.unit}">
-					<span>Comentarios</span>
+					<span> <img src="images/comments-icon-tagline.png" />Comentarios</span>
 					<g:Label ui:field="commentCount"/>
 				</div>
 				<div class="{style.unit}">
@@ -57,9 +54,9 @@
 						<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
 					</g:HTMLPanel>
 				</g:HTMLPanel>
-				<g:HTMLPanel ui:field="newCommentPanel" visible="false">
-					<g:TextArea ui:field="newCommentText"/>
-					<g:Button ui:field="newCommentSubmit">Comentar</g:Button>
+				<g:HTMLPanel ui:field="newCommentPanel" visible="false" addStyleNames="{style.commentPanel}">
+					<g:TextArea ui:field="newCommentText" addStyleNames="{style.newComment}" />
+					<g:Button ui:field="newCommentSubmit" addStyleNames="{style.commentButton}"><img src="images/comments-button.png" /> Comentar</g:Button>
 				</g:HTMLPanel>
 				<g:FlowPanel ui:field="commentsPanel" />
 			</g:HTMLPanel>

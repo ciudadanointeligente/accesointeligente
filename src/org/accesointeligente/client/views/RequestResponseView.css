@@ -36,6 +36,10 @@
 	overflow: hidden;
 }
 
+.tagline .unit span img{
+	margin: 1px 5px -1px -5px;
+}
+
 .tagline div {
 	float: left;
 }
@@ -81,4 +85,26 @@
 
 .downloadTable th:first-child {
 	background: none no-repeat scroll 0 0 transparent;
+}
+
+.commentPanel {
+	overflow: hidden;
+	padding: 0;
+	width: 100%;
+	margin-bottom: -12px;
+}
+
+.commentButton {
+	float: right;
+}
+
+.commentButton img {
+	margin-bottom: -4px;
+}
+
+.newComment {
+	border: 1px dashed #AFAFAF;
+	height: 120px;
+	padding: 5px;
+	width: 98%;
 }

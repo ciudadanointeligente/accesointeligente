@@ -3,11 +3,13 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="CommentWidget.css" />
 	<g:HTMLPanel addStyleNames="{style.commentWrapper}">
-		<g:Image ui:field="commentImage" addStyleNames="{style.commentImage}"/>
+		<g:Image ui:field="commentImage" addStyleNames="{style.commentImage}"
+			visible="false" />
 		<g:HTMLPanel addStyleNames="{style.commentTitleBar}">
-			<b>Por: </b><g:Label ui:field="commentAuthor" addStyleNames="{style.commentAuthor}"/> /
-			<b>Fecha: </b><g:Label ui:field="commentDate" addStyleNames="{style.commentDate}"/>
+			<span>Por </span>
+			<g:Label ui:field="commentAuthor" addStyleNames="{style.commentAuthor}" />
+			<g:Label ui:field="commentDate" addStyleNames="{style.commentDate}" />
 		</g:HTMLPanel>
-		<g:Label ui:field="commentContent" addStyleNames="{style.commentContent}"/>
+		<g:Label ui:field="commentContent" addStyleNames="{style.commentContent}" />
 	</g:HTMLPanel>
 </ui:UiBinder>
