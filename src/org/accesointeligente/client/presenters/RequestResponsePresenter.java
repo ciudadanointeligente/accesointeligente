@@ -35,6 +35,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void initTableColumns();
 		void setComments(List<RequestComment> comments);
 		void showNewCommentPanel();
+		void cleanNewCommentText();
 	}
 
 	private Request request;
@@ -128,6 +129,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 			@Override
 			public void onSuccess(RequestComment comment) {
 				showNotification("Se ha publicado su comentario", NotificationEventType.SUCCESS);
+				display.cleanNewCommentText();
 				loadComments(comment.getRequest());
 			}
 		});

@@ -167,6 +167,11 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 		newCommentPanel.setVisible(true);
 	}
 
+	@Override
+	public void cleanNewCommentText() {
+		newCommentText.setText("");
+	}
+
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
 		String link = presenter.getListLink();
