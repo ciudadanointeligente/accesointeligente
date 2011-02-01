@@ -135,7 +135,7 @@
 					</div>
 				</div>
 			</div>
-			<div>
+			<div style="display: none;">
 				<h2 class="{style.waterBlock} {style.borderBottomG}">
 					<span class="{style.circleNumber}">5</span>
 					<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
