@@ -5,7 +5,7 @@
 	width: 268px;
 }
 
-.padWhite .modulesHome:last-child, .modulesHomeBottom:last-child {
+.padWhite .modulesHome:last-child,.modulesHomeBottom:last-child {
 	margin-right: 0px;
 }
 
@@ -32,16 +32,17 @@
 .padWhite {
 	clear: both;
 	background-color: white;
-	padding: 12px 0px;
+	padding: 12px 0px 0px;
 	overflow: hidden;
 	width: 950px;
 }
 
 .padGrey {
 	clear: both;
-	background-color: #e3e3e3;
+	background-color: #f3f3f3;
 	display: block;
 	overflow: hidden;
+	margin-top: 12px;
 }
 
 .modulesHomeBottom {
@@ -52,16 +53,76 @@
 	float: left;
 	color: #333333;
 }
-.modulesHomeBottom h1{
-	 color: #333333;
-    font-weight: normal;
-    letter-spacing: 1.5pt;
-    text-transform: uppercase;
-}
 
 .modulesHomeBottom:first-child {
 	padding: 10px 20px;
 	width: 268px;
+}
+
+.modulesHomeBottom h1 {
+	color: #333333;
+	font-weight: normal;
+	letter-spacing: 1.5pt;
+	text-transform: uppercase;
+}
+
+.NGOSlinks {
+	font-size: 10px;
+	clear: both;
+	background-color: transparent;
+	display: block;
+	overflow: hidden;
+	margin-top: 12px;
+}
+
+.NGOSlinks .modulesHomeBottom {
+	background-color: white;
+	border: 1px solid #F3F3F3;
+	color: #333333;
+	float: left;
+	height: 150px;
+	margin: 10px 10px 0 0;
+	padding: 8px;
+	width: 288px;
+}
+
+.NGOSlinks .modulesHomeBottom:last-child {
+	margin-right: 0px
+}
+
+.modulesHomeBottom h3 {
+	background-color: #F3F3F3;
+	color: #333333;
+	display: block;
+	font-size: 95%;
+	font-weight: normal;
+	letter-spacing: 1.5pt;
+	margin: -8px -8px 10px;
+	padding: 5px;
+	text-transform: uppercase;
+}
+
+.modulesHomeBottom h3 a {
+	letter-spacing: 0.5pt;
+	color: grey;
+}
+
+.modulesHomeBottom table td {
+	padding: 10px 25px 0px 10px;
+	text-align: left;
+}
+
+.moreInfo h3 {
+	background: none repeat scroll 0 0 transparent;
+	border-top: 1px dashed #BCBCBC;
+	color: #333333;
+	display: block;
+	font-size: 95%;
+	font-weight: normal;
+	letter-spacing: 1.5pt;
+	margin: 0;
+	padding: 5px;
+	text-transform: uppercase;
 }
 
 .bgMano {
@@ -74,9 +135,14 @@
 }
 
 .bgManos {
-	background: url("images/mano.png") repeat-x scroll -9px bottom transparent;
-    height: 227px;
-    position: relative;
-    width: 271px;
-    cursor: pointer;
+	background: url("images/mano.png") repeat-x scroll -9px bottom
+		transparent;
+	height: 227px;
+	position: relative;
+	width: 271px;
+	cursor: pointer;
+}
+
+.NGOSlinks {
+	font-size: 10px;
 }
