@@ -28,7 +28,7 @@
 			</type>
 		</property>
 		<property name="date"/>
-		<one-to-one name="response"/>
+		<one-to-one name="response" class="Response" property-ref="request"/>
 		<property name="remoteIdentifier"/>
 		<set name="favorites" inverse="true">
 			<key column="requestId"/>

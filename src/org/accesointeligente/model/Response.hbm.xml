@@ -8,7 +8,7 @@
 		<id name="id">
 			<generator class="identity"/>
 		</id>
-		<many-to-one name="request" column="resquestId"/>
+		<many-to-one name="request" class="Request" column="resquestId" unique="true"/>
 		<property name="information"/>
 		<property name="date"/>
 		<set name="attachments" inverse="true">
