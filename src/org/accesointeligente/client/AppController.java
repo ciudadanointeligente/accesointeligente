@@ -3,14 +3,13 @@ package org.accesointeligente.client;
 import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.views.*;
-import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -96,7 +95,7 @@ public class AppController implements ValueChangeHandler<String> {
 						getLayout().clear();
 						getLayout().add(requestStatusPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
-						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
 					break;
 				case EDITREQUEST:
@@ -108,7 +107,7 @@ public class AppController implements ValueChangeHandler<String> {
 						getLayout().clear();
 						getLayout().add(editPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
-						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
 					break;
 				case RESPONSE:
@@ -120,7 +119,7 @@ public class AppController implements ValueChangeHandler<String> {
 						getLayout().clear();
 						getLayout().add(requestResponsePresenter.getDisplay().asWidget());
 					} catch (Exception e) {
-						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
 					break;
 				case LIST:
@@ -132,7 +131,7 @@ public class AppController implements ValueChangeHandler<String> {
 						getLayout().clear();
 						getLayout().add(requestListPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
-						Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
+						showNotification("Tipo de lista incorrecto: No se puede cargar la lista", NotificationEventType.ERROR);
 					}
 					break;
 				case STATISTICS:
@@ -189,7 +188,7 @@ public class AppController implements ValueChangeHandler<String> {
 						getLayout().clear();
 						getLayout().add(requestResponsePresenter.getDisplay().asWidget());
 					} catch (Exception e) {
-						Window.alert("Id incorrecta: No se puede cargar la solicitud");
+						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
 					break;
 				case LIST:
@@ -201,7 +200,7 @@ public class AppController implements ValueChangeHandler<String> {
 						getLayout().clear();
 						getLayout().add(requtesListPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
-						Window.alert("Tipo de lista incorrecto: No se puede cargar la lista");
+						showNotification("Tipo de lista incorrecto: No se puede cargar la lista", NotificationEventType.ERROR);
 					}
 					break;
 				case STATISTICS:
@@ -284,5 +283,12 @@ public class AppController implements ValueChangeHandler<String> {
 		}
 
 		return place;
+	}
+
+	public void showNotification(String message, NotificationEventType type) {
+		NotificationEventParams params = new NotificationEventParams();
+		params.setMessage(message);
+		params.setType(type);
+		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }
