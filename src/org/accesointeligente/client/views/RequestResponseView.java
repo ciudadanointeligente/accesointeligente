@@ -8,15 +8,16 @@ import org.accesointeligente.client.widgets.CommentWidget;
 import org.accesointeligente.model.Attachment;
 import org.accesointeligente.model.RequestComment;
 import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.NotificationEventType;
 import org.accesointeligente.shared.RequestStatus;
+
+import org.cobogw.gwt.user.client.ui.Rating;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.History;
@@ -39,6 +40,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField Label responseDate;
 	@UiField Label commentCount;
 	@UiField Label institutionName;
+	@UiField Rating requestRate;
 	@UiField Label requestInfo;
 	@UiField Label requestContext;
 	@UiField HTMLPanel responsePanel;
@@ -185,5 +187,15 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiHandler("newCommentSubmit")
 	public void onNewCommentClick(ClickEvent event) {
 		presenter.saveComment(newCommentText.getText());
+	}
+
+	@UiHandler("requestRate")
+	public void onRequestRateClick(ClickEvent event) {
+		presenter.showNotification(requestRate.getValue().toString(), NotificationEventType.SUCCESS);
+	}
+
+	@UiFactory
+	public Rating rateBuilder() {
+		return new Rating(0,5);
 	}
 }
