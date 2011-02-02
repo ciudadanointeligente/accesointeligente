@@ -274,7 +274,7 @@ public class AppController implements ValueChangeHandler<String> {
 		return AppPlace.HOME.getToken();
 	}
 
-	public AppPlace getPlace(String token) {
+	public static AppPlace getPlace(String token) {
 		AppPlace place = AppPlace.HOME;
 
 		try {
