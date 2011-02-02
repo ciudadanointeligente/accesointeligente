@@ -438,4 +438,39 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			throw new ServiceException();
 		}
 	}
+
+	@Override
+	public UserRequestQualification saveUserRequestQualification(UserRequestQualification qualification) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			qualification = (UserRequestQualification) persistentBeanManager.merge(qualification);
+			hibernate.saveOrUpdate(qualification);
+			hibernate.getTransaction().commit();
+			qualification.setRequest(updateRequestQualification(qualification.getRequest()));
+			return (UserRequestQualification) persistentBeanManager.clone(qualification);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Request updateRequestQualification(Request request) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			request = (Request) persistentBeanManager.merge(request);
+			Double averageQualification = (Double) hibernate.createQuery("select avg(qualification) from UserRequestQualification where Request = :request").setParameter("request", request).uniqueResult();
+			request.setQualification(averageQualification);
+			hibernate.update(request);
+			hibernate.getTransaction().commit();
+			return (Request) persistentBeanManager.clone(request);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
 }

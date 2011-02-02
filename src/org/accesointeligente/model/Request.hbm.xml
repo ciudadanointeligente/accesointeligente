@@ -38,5 +38,6 @@
 			<key column="requestId"/>
 			<one-to-many class="RequestComment"/>
 		</set>
+		<property name="qualification"/>
 	</class>
 </hibernate-mapping>

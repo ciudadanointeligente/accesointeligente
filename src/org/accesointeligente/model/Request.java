@@ -24,6 +24,7 @@ public class Request extends LightEntity {
 	private String remoteIdentifier;
 	private Set<UserFavoriteRequest> favorites;
 	private Set<RequestComment> comments;
+	private Double qualification;
 
 	public Integer getId() {
 		return id;
@@ -135,5 +136,13 @@ public class Request extends LightEntity {
 
 	public void setComments(Set<RequestComment> comments) {
 		this.comments = comments;
+	}
+
+	public Double getQualification() {
+		return qualification;
+	}
+
+	public void setQualification(Double qualification) {
+		this.qualification = qualification;
 	}
 }

@@ -36,6 +36,8 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void setComments(List<RequestComment> comments);
 		void showNewCommentPanel();
 		void cleanNewCommentText();
+		void setRatingValue(Integer rate);
+		void setRatingReadOnly(Boolean readOnly);
 	}
 
 	private Request request;
@@ -47,6 +49,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
+		display.setRatingReadOnly(true);
 	}
 
 	@Override
@@ -84,8 +87,10 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					}
 					request = result;
 					loadComments(result);
+					display.setRatingValue(request.getQualification().intValue());
 					if (ClientSessionUtil.checkSession()) {
 						display.showNewCommentPanel();
+						display.setRatingReadOnly(false);
 					}
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
@@ -153,6 +158,27 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
 					display.setResponseAttachments(data);
 				}
+			}
+		});
+	}
+
+	@Override
+	public void saveQualification(Integer rate) {
+		UserRequestQualification qualification = new UserRequestQualification();
+		qualification.setQualification(rate);
+		qualification.setRequest(this.request);
+		qualification.setUser(ClientSessionUtil.getUser());
+
+		RPC.getRequestService().saveUserRequestQualification(qualification, new AsyncCallback<UserRequestQualification>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No se puede almacenar su calificacion", NotificationEventType.ERROR);
+			}
+
+			@Override
+			public void onSuccess(UserRequestQualification result) {
+				display.setRatingValue(result.getRequest().getQualification().intValue());
 			}
 		});
 	}

@@ -10,6 +10,7 @@ public interface RequestResponsePresenterIface {
 	void loadComments(Request request);
 	void saveComment(String commentContent);
 	void loadAttachments(Response response);
+	void saveQualification(Integer rate);
 	String getListLink();
 	void showNotification(String message, NotificationEventType type);
 }

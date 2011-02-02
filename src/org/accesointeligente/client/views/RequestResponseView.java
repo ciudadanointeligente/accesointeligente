@@ -141,7 +141,6 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 			public AnchorCellParams getValue(Attachment attachment) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setUrl(attachment.getUrl());
-				// TODO add comment image url
 				params.setStyleNames("");
 				params.setValue(attachment.getName() + attachment.getType().getExtension());
 				return params;
@@ -174,6 +173,16 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 		newCommentText.setText("");
 	}
 
+	@Override
+	public void setRatingValue(Integer rate) {
+		requestRate.setValue(rate);
+	}
+
+	@Override
+	public void setRatingReadOnly(Boolean readOnly) {
+		requestRate.setReadOnly(readOnly);
+	}
+
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
 		String link = presenter.getListLink();
@@ -191,7 +200,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 
 	@UiHandler("requestRate")
 	public void onRequestRateClick(ClickEvent event) {
-		presenter.showNotification(requestRate.getValue().toString(), NotificationEventType.SUCCESS);
+		presenter.saveQualification(requestRate.getValue());
 	}
 
 	@UiFactory
