@@ -44,6 +44,10 @@
 	float: left;
 }
 
+.tagline .unit span, .tagline .unit div {
+	white-space: nowrap;
+}
+
 .contentResponse {
 	padding: 15px;
 	overflow: hidden;
