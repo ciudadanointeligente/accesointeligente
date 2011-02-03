@@ -188,8 +188,8 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		String link = null;
 		List<String> tokenList = AppController.getHistoryTokenList();
 
-		for(int i = tokenList.size(); i >= 0; i--) {
-			if (AppController.getPlace(tokenList.get(i)).toString().equals(AppPlace.LIST)) {
+		for(int i = tokenList.size() - 1; i >= 0; i--) {
+			if (AppController.getPlace(tokenList.get(i)).toString().equals(AppPlace.LIST.toString())) {
 				link = tokenList.get(i);
 			}
 		}
