@@ -2,7 +2,6 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.RequestEditPresenter;
 import org.accesointeligente.client.presenters.RequestEditPresenterIface;
-import org.accesointeligente.client.views.RequestView.State;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.RequestCategory;
 

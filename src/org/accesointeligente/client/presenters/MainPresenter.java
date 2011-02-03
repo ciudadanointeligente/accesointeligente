@@ -4,7 +4,7 @@ import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.client.views.MainView.DisplayMode;
+import org.accesointeligente.client.views.MainView;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implements MainPresenterIface, LoginRequiredEventHandler, LoginSuccessfulEventHandler, NotificationEventHandler {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(MainPresenterIface presenter);
-		void setDisplayMode(DisplayMode mode);
+		void setDisplayMode(MainView.DisplayMode mode);
 		FlowPanel getLayout();
 		void setWelcomeMessage(String message);
 		void setNotificationMessage(NotificationEventParams params);
@@ -45,13 +45,13 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 
 	@Override
 	public void loginRequired(LoginRequiredEvent event) {
-		display.setDisplayMode(DisplayMode.LoggedOut);
+		display.setDisplayMode(MainView.DisplayMode.LoggedOut);
 		display.setWelcomeMessage("");
 	}
 
 	@Override
 	public void loginSuccessful(LoginSuccessfulEvent event) {
-		display.setDisplayMode(DisplayMode.LoggedIn);
+		display.setDisplayMode(MainView.DisplayMode.LoggedIn);
 		display.setWelcomeMessage("Bienvenido: " + ClientSessionUtil.getUser().getFirstName());
 	}
 
@@ -59,7 +59,7 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 		final String sessionId = Cookies.getCookie("sessionId");
 
 		if (sessionId != null) {
-			display.setDisplayMode(DisplayMode.LoginPending);
+			display.setDisplayMode(MainView.DisplayMode.LoginPending);
 
 			RPC.getSessionService().getSessionData(new AsyncCallback<SessionData>() {
 				@Override

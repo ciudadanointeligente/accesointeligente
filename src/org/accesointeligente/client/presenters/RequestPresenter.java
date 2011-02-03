@@ -2,7 +2,7 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.client.views.RequestView.State;
+import org.accesointeligente.client.views.RequestView;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -22,8 +22,8 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestPresenterIface presenter);
 		void displayMessage(String message);
-		State getState();
-		void setState(State state);
+		RequestView.State getState();
+		void setState(RequestView.State state);
 		void setInstitutions(Map<String, Institution> institutions);
 		void cleanRequestCategories();
 		void addRequestCategories(RequestCategory category);
@@ -45,7 +45,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		display.setState(State.REQUEST);
+		display.setState(RequestView.State.REQUEST);
 		getRequestCategories();
 		getInstitutions();
 	}
@@ -161,7 +161,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 			@Override
 			public void onSuccess(Request result) {
 				request = result;
-				display.setState(State.SUCCESS);
+				display.setState(RequestView.State.SUCCESS);
 			}
 		});
 	}

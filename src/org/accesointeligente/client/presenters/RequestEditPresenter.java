@@ -2,7 +2,7 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.client.views.RequestEditView.State;
+import org.accesointeligente.client.views.RequestEditView;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -20,8 +20,8 @@ import java.util.*;
 public class RequestEditPresenter extends WidgetPresenter<RequestEditPresenter.Display> implements RequestEditPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestEditPresenterIface presenter);
-		State getState();
-		void setState(State state);
+		RequestEditView.State getState();
+		void setState(RequestEditView.State state);
 		Institution getInstitution();
 		void setInstitution(Institution institution);
 		String getRequestInfo();
@@ -48,7 +48,7 @@ public class RequestEditPresenter extends WidgetPresenter<RequestEditPresenter.D
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		display.setState(State.EDIT);
+		display.setState(RequestEditView.State.EDIT);
 		getInstitutions();
 	}
 
@@ -170,7 +170,7 @@ public class RequestEditPresenter extends WidgetPresenter<RequestEditPresenter.D
 			@Override
 			public void onSuccess(Request result) {
 				request = result;
-				display.setState(State.SUCCESS);
+				display.setState(RequestEditView.State.SUCCESS);
 			}
 		});
 	}
