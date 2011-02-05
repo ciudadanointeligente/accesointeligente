@@ -1,0 +1,34 @@
+.topTitle {
+	color: #45B0BC;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 13pt;
+	font-weight: normal;
+	letter-spacing: 1pt;
+	line-height: 120%;
+	padding: 15px 0 0 0;
+	text-transform: uppercase;
+}
+
+.note {
+	background-color: #D4ECED;
+	color: #45B0BC;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: inherit;
+	font-weight: normal;
+	letter-spacing: 0.4pt;
+	line-height: 120%;
+	padding: 6px 10px 6px 10px;
+	font-style: italic;
+}
+
+.noMarginVideo {
+	margin: 0 -10px;
+}
+
+.maxW {
+	max-width: 85%;
+	color: #5B595F;
+	line-height: 140%;
+}

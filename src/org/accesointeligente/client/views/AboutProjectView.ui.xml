@@ -3,5 +3,73 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="AboutProjectView.css" />
 	<g:HTMLPanel>
+		<div class="leftContainer">
+			<div class="contentPad {style.maxW}">
+				<h1 class="{style.topTitle}">ACERCA DEL PROYECTO</h1>
+				<p>AccesoInteligente.org es un proyecto la Fundación Ciudadano
+					Inteligente (junto a votainteligente.cl, donar.cl y crick.cl) que
+					busca promover la demanda de información a los órganos del Estado,
+					visibilizar y compartir las solicitudes de información que se
+					realizan junto a sus respuestas, y generar estudios y/o
+					estadísticas interesantes con dicha información que permita monitorear el
+					funcionamiento general de la Ley de Acceso a la Información.
+				</p>
+				<p>Finalidad: permitir a la ciudadanía conocer información de su
+					interés que está en poder del Gobierno, y permitir monitorear por
+					la vía del acceso a la información, lo que hacen y no hacen nuestros
+					órganos públicos.
+				</p>
+				<p>Por ello, todas las solicitudes que se realicen a través de este
+					sitio y las respuestas que se generen, serán publicadas
+					automáticamente en esta página web para que usted y cualquier otra
+					persona pueda acceder a ellas. La identidad del solicitante quedará
+					protegida cuando se publiquen las respuestas, por cuanto todas
+					estas figuran como dirigidas a la Fundación Ciudadano Inteligente.
+				</p>
+				<p>
+					Beneficios: esta plataforma genera múltiples beneficios para los
+					usuarios, ciudadanos (usuarios y no usuarios) y el Estado.
+					<ul>
+						<li>El usuario podrá realizar a través de una sola plataforma,
+							solicitudes de información a diversos organismos del Estado. Ello
+							evitará tener que registrarse en cada uno de los organismos
+							públicos a los cuales se le quiere solicitar información.
+						</li>
+						<li>El usuario creará su propia cuenta y podrá monitorear el
+							estado de sus solicitudes y plazos sin problemas!
+						</li>
+						<li>El usuario, podrá encontrar y obtener información de las
+							solicitudes que otras personas hayan realizado junto a sus
+							respuestas, lo que evitará perder tiempo y recursos preguntando
+							lo que otro ya preguntó.
+						</li>
+						<li>Tanto el usuario como la ciudadanía podrán acceder a la
+							información estadística que se generará periódicamente. Ella
+							permitirá monitorear el funcionamiento del sistema de gestión de
+							solicitudes, conocer información relevante acerca de ellas, de
+							las respuestas que otorguen los organismos requeridos y de los
+							solicitantes.
+						</li>
+						<li>El Estado optimizará sus recursos ya que el almacenamiento de
+							solicitudes realizadas y respuestas recibidas, permitirá obtener
+							la información sin realizar al Estado una nueva solicitud, lo que
+							incrementará el nivel de satisfacción por parte de los
+							requirentes y la eficiencia del aparato estatal.
+						</li>
+					</ul>
+				</p>
+				<p class="{style.note}">Este proyecto es financiado por el Fondo de Iniciativas
+					Especiales del Open Society Institute, y cuenta con el apoyo de las
+					siguientes organizaciones de la Sociedad Civil; Fundación
+					Proacceso, Corporación Ciudad Viva, Corporación Participa, y Fundación Pro Bono.
+			</p>
+			</div>
+		</div>
+		<div class="rightContainer">
+			<div class="rightContent">
+				<img class="{style.noMarginVideo}" src="images/dummies/video_lat.jpg" />
+				<p>VER VIDEO</p>
+			</div>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
