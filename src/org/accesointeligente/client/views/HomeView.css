@@ -47,7 +47,7 @@
 
 .modulesHomeBottom {
 	width: 288px;
-	height: 150px;
+	min-height: 150px;
 	margin-right: 12px;
 	padding: 10px;
 	float: left;
@@ -110,6 +110,11 @@
 .modulesHomeBottom table td {
 	padding: 10px 25px 0px 10px;
 	text-align: left;
+	max-width: 120px;
+}
+
+.modulesHomeBottom table td img {
+	max-width: 90%;
 }
 
 .moreInfo h3 {

@@ -47,9 +47,11 @@
 		<div class="{style.padGrey}">
 			<div class="{style.modulesHomeBottom}">
 				<h1>Saber +</h1>
+				<img src="images/dummies/guia-ley.jpg"/>
 			</div>
 			<div class="{style.modulesHomeBottom}">
-				<h1>VIDEO</h1>
+				<h1>Usar el sitio</h1>
+				<img src="images/dummies/video-home-tutorial.jpg"/>
 			</div>
 			<g:FlowPanel ui:field="lastResponses" addStyleNames="{style.modulesHomeBottom}">
 				<g:HTMLPanel>
@@ -76,9 +78,9 @@
 				<table>
 					<tr>
 						<td><a href=""><img src="images/logos/l_chiletransp.jpg"/></a></td>
+						<td><a href=""><img src="images/logos/l_transparentemos.jpg"/></a></td>
 						<td><a href=""><img src="images/logos/l_proacceso.jpg"/></a></td>
 						<td><a href=""><img src="images/logos/l_prticipa.jpg"/></a></td>
-						<td><a href=""><img src="images/logos/l_transparentemos.jpg"/></a></td>
 					</tr>
 					<tr>
 						<td><a href=""><img src="images/logos/l_probono.jpg"/></a></td>
