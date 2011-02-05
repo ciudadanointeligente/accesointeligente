@@ -2,129 +2,206 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RegisterView.css" />
+	<g:HTMLPanel>
+		<g:FormPanel addStyleNames="leftContainer">
+			<g:HTMLPanel addStyleNames="{style.contenedorRegistro}">
+				<h1 class="{style.greyBlock} {style.borderBottomW}">registro</h1>
+				<h2 class="{style.waterBlock} {style.borderBottomW} {style.noCaps}">Por favor responde estas preguntas. Sólo tendrás que
+					contestarlas una vez.</h2>
+				<g:HTMLPanel addStyleNames="{style.formSection}">
+					<h2 class="{style.waterBlock}">
+						<span class="{style.circleNumber}">1</span>
+						¿Pedirás la información para tí o para una institución?
+					</h2>
+					<g:RadioButton ui:field="person" name="person"
+						checked="true">Por mi (particular)</g:RadioButton>
+					<g:RadioButton ui:field="institution" name="person">Por una
+						institución</g:RadioButton>
+				</g:HTMLPanel>
+				<g:HTMLPanel ui:field="personPanel"
+					addStyleNames="{style.formSection} {style.bgWhite}">
+					<h2 class="{style.waterBlock}">
+						<span class="{style.circleNumber}">2</span>
+						Datos personales
+					</h2>
+					<table class="{style.formTable}">
+						<tbody>
+							<tr>
+								<td colspan="2">
+									<g:Label>Nombre</g:Label>
+									<g:TextBox ui:field="personFirstName" />
+								</td>
+								<td colspan="3">
+									<g:Label>Apellidos</g:Label>
+									<g:TextBox addStyleNames="{style.apellido}" ui:field="personLastName" />
+								</td>
 
-	<g:FormPanel>
-		<g:HTMLPanel addStyleNames="{style.contenedorRegistro}">
-			<h1 class="{style.greyBlock} {style.borderBottomW}">registro</h1>
-			<h2 class="{style.waterBlock} {style.borderBottomW} {style.noCaps}">Por favor responde estas preguntas. Sólo tendrás que
-				contestarlas una vez.</h2>
-			<g:HTMLPanel addStyleNames="{style.formSection}">
-				<h2 class="{style.waterBlock}">
-					<span class="{style.circleNumber}">1</span>
-					¿Pedirás la información para tí o para una institución?
-				</h2>
-				<g:RadioButton ui:field="person" name="person" checked="true">Por mi (particular)</g:RadioButton>
-				<g:RadioButton ui:field="institution" name="person">Por una institución</g:RadioButton>
-			</g:HTMLPanel>
-			<g:HTMLPanel ui:field="personPanel"
-				addStyleNames="{style.formSection} {style.bgWhite}">
-				<h2 class="{style.waterBlock}">
-					<span class="{style.circleNumber}">2</span>
-					Datos personales
-				</h2>
-				<table class="{style.formTable}">
-					<tbody>
+							</tr>
+							<tr>
+								<td>Sexo:</td>
+								<td>
+									<g:RadioButton ui:field="personGenderFemale"
+										name="personGender">Femenino</g:RadioButton>
+								</td>
+								<td>
+									<g:RadioButton ui:field="personGenderMale" name="personGender">Masculino</g:RadioButton>
+								</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Actividad</td>
+								<td colspan="4">
+									<g:ListBox ui:field="personActivity" />
+								</td>
+							</tr>
+							<tr>
+								<td>Edad</td>
+								<td colspan="4">
+									<g:ListBox ui:field="personAge" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</g:HTMLPanel>
+				<g:HTMLPanel ui:field="institutionPanel" visible="false"
+					addStyleNames="{style.formSection} {style.bgWhite}">
+					<h2 class="{style.waterBlock}">
+						<span class="{style.circleNumber}">2</span>
+						Datos de la institución
+					</h2>
+					<table class="{style.formTable}">
 						<tr>
+							<td>Razón
+								social &nbsp;&nbsp;&nbsp;
+								<g:TextBox addStyleNames="{style.apellido}" ui:field="institutionName" />
+							</td>
+						</tr>
+						<tr>
+							<td>¿Qué
+								tipo de institución es? &nbsp;&nbsp;&nbsp;
+								<g:ListBox ui:field="institutionType" />
+							</td>
+						</tr>
+					</table>
+					<g:Label>Marca a qué temas se dedican:</g:Label>
+					<g:FlowPanel ui:field="institutionActivities" />
+				</g:HTMLPanel>
+				<g:HTMLPanel addStyleNames="{style.formSection}">
+					<h2 class="{style.waterBlock}">
+						<span class="{style.circleNumber}">3</span>
+						Dónde vives
+					</h2>
+					<table class="{style.formTable}">
+						<tr>
+							<th>País</th>
+							<td>
+								<g:RadioButton ui:field="countryChile" name="country"
+									checked="true">Chile</g:RadioButton>
+							</td>
 							<td colspan="2">
-								<g:Label>Nombre</g:Label>
-								<g:TextBox ui:field="personFirstName" />
-							</td>
-							<td colspan="3">
-								<g:Label>Apellidos</g:Label>
-								<g:TextBox addStyleNames="{style.apellido}" ui:field="personLastName" />
-							</td>
-
-						</tr>
-						<tr>
-							<td>Sexo:</td>
-							<td>
-								<g:RadioButton ui:field="personGenderFemale" name="personGender">Femenino</g:RadioButton>
-							</td>
-							<td>
-								<g:RadioButton ui:field="personGenderMale" name="personGender">Masculino</g:RadioButton>
+								<g:RadioButton ui:field="countryOther" name="country">Resto
+									del mundo</g:RadioButton>
 							</td>
 							<td></td>
-							<td></td>
 						</tr>
 						<tr>
-							<td>Actividad</td>
+							<th>Región</th>
 							<td colspan="4">
-								<g:ListBox ui:field="personActivity" />
+								<g:ListBox ui:field="region" />
 							</td>
 						</tr>
-						<tr>
-							<td>Edad</td>
-							<td colspan="4">
-								<g:ListBox ui:field="personAge" />
-							</td>
-						</tr>
-					</tbody>
-				</table>
-
+					</table>
+				</g:HTMLPanel>
+				<g:HTMLPanel addStyleNames="{style.formSection}">
+					<h2 class="{style.waterBlock}">
+						<span class="{style.circleNumber}">4</span>
+						Ingresa tus datos para ingresar al sistema
+					</h2>
+					<g:Label>Email</g:Label>
+					<g:TextBox ui:field="email" />
+					<br />
+					<g:Label>Contraseña</g:Label>
+					<g:PasswordTextBox ui:field="password1" />
+					<br />
+					<g:Label>Confirma tu contraseña</g:Label>
+					<g:PasswordTextBox ui:field="password2" />
+				</g:HTMLPanel>
+				<div class="{style.formSection}">
+					<a href="#">He leído y acepto las condiciones</a>
+					<g:Button addStyleNames="{style.margRight}" ui:field="register">Ok,
+						regístrame</g:Button>
+				</div>
 			</g:HTMLPanel>
-			<g:HTMLPanel ui:field="institutionPanel" visible="false" addStyleNames="{style.formSection} {style.bgWhite}">
-				<h2 class="{style.waterBlock}">
-					<span class="{style.circleNumber}">2</span>
-					Datos de la institución
-				</h2>
-				<table class="{style.formTable}">
-					<tr>
-						<td>Razón social &nbsp;&nbsp;&nbsp;
-							<g:TextBox addStyleNames="{style.apellido}" ui:field="institutionName" />
-						</td>
-					</tr>
-					<tr>
-						<td>¿Qué tipo de institución es? &nbsp;&nbsp;&nbsp;
-							<g:ListBox ui:field="institutionType" />
-						</td>
-					</tr>
-				</table>
-				<g:Label>Marca a qué temas se dedican:</g:Label>
-				<g:FlowPanel ui:field="institutionActivities" />
-			</g:HTMLPanel>
-			<g:HTMLPanel addStyleNames="{style.formSection}">
-				<h2 class="{style.waterBlock}">
-					<span class="{style.circleNumber}">3</span>
-					Dónde vives
-				</h2>
-				<table class="{style.formTable}">
-					<tr>
-						<th>País</th>
-						<td>
-							<g:RadioButton ui:field="countryChile" name="country" checked="true">Chile</g:RadioButton>
-						</td>
-						<td colspan="2">
-							<g:RadioButton ui:field="countryOther" name="country">Resto del mundo</g:RadioButton>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>Región</th>
-						<td colspan="4">
-							<g:ListBox ui:field="region" />
-						</td>
-					</tr>
-				</table>
-
-			</g:HTMLPanel>
-			<g:HTMLPanel addStyleNames="{style.formSection}">
-				<h2 class="{style.waterBlock}">
-					<span class="{style.circleNumber}">4</span>
-					Ingresa tus datos para ingresar al sistema
-				</h2>
-
-				<g:Label>Email</g:Label>
-				<g:TextBox ui:field="email" />
-				<br />
-				<g:Label>Contraseña</g:Label>
-				<g:PasswordTextBox ui:field="password1" />
-				<br />
-				<g:Label>Confirma tu contraseña</g:Label>
-				<g:PasswordTextBox ui:field="password2" />
-			</g:HTMLPanel>
-			<div class="{style.formSection}">
-				<g:Button addStyleNames="{style.margRight}" ui:field="register">Registrarme</g:Button>
+		</g:FormPanel>
+		<div class="rightContainer {style.conditions}">
+			<div class="rightContent">
+				<label class="{style.trigger}">
+					<img src="images/asterisco.png" />
+					Bienvenido
+				</label>
+				<div class="{style.acorddionContent}">
+					<p>Una vez que te registres pasarás a formar parte de la comunidad
+						de usuarios de Acceso
+						Inteligente.</p>
+					<p>
+						Qué significa eso:
+						<br />
+						Podrás solicitar información a distintos órganos del Estado a
+						través de este sito, buscar
+						información, acceder rápidamente a tus solicitudes y hacerles seguimiento,
+						entre otros
+						beneficios.
+					</p>
+					<div class="{style.note}">
+						Al inscribirte en este sitio otorgas un mandato a la
+						<a href="http://ciudadanointeligente.cl" target="_blank">Fundación
+							Ciudadano Inteligente</a>
+						para mediar las solicitudes que hagas en el
+						sitio y proteger tu
+						confidencialidad.
+					<br />
+					<br />
+					Para más información asegúrate de leer los
+					<a href="">términos y condiciones.</a>
+				</div>
 			</div>
-		</g:HTMLPanel>
-	</g:FormPanel>
+			<div class="{style.acorddionContent}">
+				<label class="{style.trigger}">
+					<img src="images/lock.png" />
+					Para tu confidencialidad
+				</label>
+				<p>Los datos que nos entregues no serán publicados.</p>
+				<p>Pedimos tu nombre con el único fin de permitirte apelar frente al
+					Consejo para la Transparencia en caso de no quedes satisfecho con
+					la respuesta recibida.</p>
+				<p>Tu nombre sólo aparecerá publicado si posteas un comentario en
+					alguna solicitud del sitio. Sólo tu 1º nombre, no tu apellido, para
+					proteger tu privacidad.</p>
+				<p>
+					Datos como tu edad y región nos ayudan a generar estadísticas que
+					ayuden a saber qué le interesa a la ciudadanía y cómo está
+					funcionando la ley de transparencia a lo largo del país.
+					<strong>Muchas gracias por tu ayuda!</strong>
+				</p>
+			</div>
+			<div class="{style.acorddionContent}">
+				<label class="{style.trigger}">
+					<img src="images/money.png" />
+					Es gratis
+				</label>
+				<div class="{style.acorddionContent}">
+					<span class="{style.note}">
+						Este servicio es totalmente gratuito. Lo ofrecemos con el único
+						objetivo de promover mayor
+						transparencia en nuestra sociedad,
+						cumpliendo así la misión de nuestra
+						<a href="http://ciudadanointeligente.cl" target="_blank">Fundación</a>.
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	</g:HTMLPanel>
 </ui:UiBinder> 

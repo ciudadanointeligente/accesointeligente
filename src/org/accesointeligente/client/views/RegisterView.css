@@ -91,3 +91,66 @@ h1.greyBlock {
 .margRight {
 	margin-right: 5px;
 }
+
+.noteImg {
+	background: url("images/asterisco.png") no-repeat scroll 0 0 #D4ECED;
+	color: #45B0BC;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	font-weight: normal;
+	letter-spacing: 0.4pt;
+	line-height: 120%;
+	padding: 6px 10px 6px 30px;
+	font-style: italic;
+}
+
+.note {
+	background-color: #D4ECED;
+	color: #45B0BC;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: inherit;
+	font-weight: normal;
+	letter-spacing: 0.4pt;
+	line-height: 120%;
+	padding: 6px 10px 6px 10px;
+	font-style: italic;
+}
+.trigger {
+	border-bottom: thin dotted #45B0BC;
+	color: #45B0BC;
+	display: block;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 10pt;
+	padding-bottom: 5px;
+	text-transform: uppercase;
+	margin-top: 10px;
+}
+
+.trigger:first-child {
+	margin-top: 0;
+}
+
+.trigger img {
+	margin: -3px 5px 0 0;
+	vertical-align: middle;
+	font-size: 12px;
+}
+
+.conditions {
+	font-size: 11px;
+	line-height: 140%;
+}
+
+.acorddionContent {
+	padding-bottom: 15px;
+}
+
+.acorddionContent .note {
+	padding-bottom: 15px;
+}
+
+span.marker {
+	background-color: yellow;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:style src="AccesoInteligente.css" />
+<g:HTMLPanel>
+	<h2>Términos y condiciones del servicio</h2>
+	<br />
+	La Fundación Ciudadano Inteligente, como propietario del proyecto
+	Acceso Inteligente  podrá en cualquier momento y sin necesidad de
+	previo aviso modificar estas Condiciones Generales. Tales
+	modificaciones serán operativas a partir de su fijación en el sitio
+	accesointeligente.cl. Los usuarios deberán mantenerse actualizados en
+	cuanto al los términos aquí incluidos ingresando a.... (o serán
+	informados via mail...).
+	<br />
+	<br />
+	El uso de este sitio y la utilización de sus servicios está sujeta a
+	los términos y condiciones generales que se establecen a continuación.
+	<br />
+	Al registrarte en el sitio se entenderá que has leído y estás de
+	acuerdo con los Términos y Condiciones y te comprometes a respetarlos.
+	<br />
+	<br />
+	<strong>1. Mediación con los organismos públicos </strong>
+	<br />
+	Una vez que aceptes ser parte de la comunidad de usuarios de Acceso
+	Inteligente, autorizas a la Fundación Ciudadano Inteligente (en
+	adelante la Fundación o  nosotros) a realizar en nombre y
+	representación tuya cualquier solicitud de acceso a la información
+	pública que realices en el formulario &ldquo;Solicitud
+	de Información&rdquo;
+	de este sitio web.
+	<br />
+	<br />
+	Esto mantendrá la confidencialidad de tu nombre ante el Organismo
+	público y no perderás el derecho de reclamar ante el Consejo para la  
+	Transparencia en caso de que quedes disconforme con la respuesta que el
+	organismo solicitado te entregue. Se enviará a tu correo electrónico
+	una notificación que acredita que eres tú el solicitante y nosotros tu
+	apoderado sólo para realizar la solicitud de información.
+	<br />
+	<br />
+	El mandato que se otorga a la Fundación Ciudadano Inteligente, sólo nos
+	autoriza a realizar la solicitud de acceso a la información pública en
+	nombre y representación del usuario. No se amplía a otras funciones
+	como reclamar ante el Consejo para la Transparencia o la Corte de
+	Apelaciones que son derecho exclusivo del usuario.
+	<br />
+	<br />
+	<strong>2. Publicación de la información solicitada </strong>
+	<br />
+	Al aceptar las presentes condiciones autorizas a la       Fundación a
+	publicar el contenido de dichas solicitudes y sus respuestas. Acceso
+	Inteligente y la Fundación se compromente  a no publicar ninguno de tus
+	datos personales ni relacionar públicamente de forma alguna tus
+	solicitudes con tu nombre.
+	<br />
+	<br />
+	<strong>3. Privacidad </strong>
+	<br />
+	Pedimos registro porque nosotros actuaremos como tu apoderado y debemos
+	mantener una relación única entre tú y tus solicitudes para cuidar tu
+	derecho a reclamar ante el Consejo para la Transparencia en caso de
+	disconformidad con la respuesta. No te preocupes, tus datos serán
+	confidenciales y no los compartiremos.
+	<br />
+	<br />
+	<strong>4.Costos </strong>
+	<br />
+	Es uso de este servicio es completamente gratuito. Lo ofrecemos con el
+	único objetivo de promover mayor transparencia en nuestra sociedad,
+	cumpliendo así la misión de nuestra
+	<br />
+	Fundación.
+	<br />
+	Sin perjuicio de lo anterior la entrega de la información solicitada
+	puede suponer ciertos gastos para el organismo público (tales como
+	fotocopias, cds, u otros).  En caso de existir estos gastos su pago
+	será responsabilidad exclusiva del usuario solicitante y su pago  se
+	 realizará directamente al organismo público en el que se solicita la
+	información como pre-requisito para su entrega.
+</g:HTMLPanel>
