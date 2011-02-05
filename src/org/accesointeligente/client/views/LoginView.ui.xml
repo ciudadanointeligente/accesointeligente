@@ -2,13 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css" />
-			
 	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX"
 		height="400PX" ui:field="loginPanel">
 		<g:HTMLPanel ui:field="loginForm" addStyleNames="loginForm">
-		<g:Label ui:field="close" addStyleNames="{style.closeButton}"/>
+			<g:Label ui:field="close" addStyleNames="{style.closeButton}" />
 			<h1 class="{style.greyBlock}">LOGIN</h1>
-			<g:HTMLPanel ui:field="noticePanel" addStyleNames="error" visible="false">
+			<g:HTMLPanel ui:field="noticePanel" addStyleNames="error"
+				visible="false">
 				<g:Label ui:field="noticeClose" addStyleNames="closeNotice" />
 				<g:Label ui:field="noticeLabel" addStyleNames="fLeft" />
 			</g:HTMLPanel>
@@ -40,16 +40,17 @@
 				<br />
 				<h1>¿Por qué pedimos registro?</h1>
 				<p>
-					Aunque nosotros actuaremos como tu apoderado en tu solicitud, si
-					esta es rechazada y quieres apelar sólo podrás hacerlo si tu
-					nombre figura en el formulario.
-					<br />
-					Intentamos reducir al máximo los datos requeridos. Sólo tendrás
-					que rellenarlos una vez y de ser posible evitaremos utilizar tu rut
+				Pedimos registro porque <span title="La Fundación Ciudadano Inteligente">nosotros</span>
+	actuaremos como tu apoderado y debemos mantener una relación única
+	entre tú y tus solicitudes para cuidar tu derecho a reclamar ante el
+	Consejo para la Transparencia en caso de disconformidad con la
+	respuesta. No te preocupes, tus datos serán confidenciales y no los compartiremos
 				</p>
-				<p>Acceso Inteligente no usará tus datos personales con otros fines</p>
 				<p>
-					<a class="{style.link}" href="#">Ver política de privacidad</a>
+					Sólo tendrás que registrarte una vez!
+				</p>
+				<p>
+					<strong>El servicio es totalmente Gratuito.</strong>
 				</p>
 			</div>
 		</g:HTMLPanel>
