@@ -1,7 +1,39 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style src="AsociatesView.css" />
+	<ui:style src="HomeView.css" />
 	<g:HTMLPanel>
+		<div class="{style.NGOSlinks}">
+			<div class="{style.modulesHomeBottom}">
+				<h3>Info y Reclamos:</h3>
+				<a href="http://www.consejotransparencia.cl">
+					<img src="images/logos/logo_consejotransparencia.jpg" />
+				</a>
+				<div class="{style.moreInfo}">
+					<h3>
+						+ INFO:
+						<br />
+						<a href="http://www.leydetransparencia.gov.cl/">Comisión de Probidad y Transparencia del Estado</a>
+					</h3>
+				</div>
+			</div>
+			<div class="{style.modulesHomeBottom}" style="width: 616px">
+				<h3>Organizaciones pro transparencia</h3>
+				<table>
+					<tr>
+						<td><a href=""><img src="images/logos/l_chiletransp.jpg"/></a></td>
+						<td><a href=""><img src="images/logos/l_transparentemos.jpg"/></a></td>
+						<td><a href=""><img src="images/logos/l_proacceso.jpg"/></a></td>
+						<td><a href=""><img src="images/logos/l_prticipa.jpg"/></a></td>
+					</tr>
+					<tr>
+						<td><a href=""><img src="images/logos/l_probono.jpg"/></a></td>
+						<td><a href=""><img src="images/logos/l_udp.jpg"/></a></td>
+						<td><a href=""><img src="images/logos/l_ciudadviva.jpg"/></a></td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
