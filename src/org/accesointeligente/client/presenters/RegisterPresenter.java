@@ -1,28 +1,23 @@
 package org.accesointeligente.client.presenters;
 
 
+import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.SessionData;
+import org.accesointeligente.client.events.LoginSuccessfulEvent;
+import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.model.*;
+import org.accesointeligente.shared.*;
+
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.SessionData;
-import org.accesointeligente.client.events.LoginSuccessfulEvent;
-import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.model.Activity;
-import org.accesointeligente.model.Age;
-import org.accesointeligente.model.InstitutionType;
-import org.accesointeligente.model.Region;
-import org.accesointeligente.model.User;
-import org.accesointeligente.shared.*;
 
 public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
 	public interface Display extends WidgetDisplay {

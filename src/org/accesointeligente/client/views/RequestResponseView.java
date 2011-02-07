@@ -8,7 +8,6 @@ import org.accesointeligente.client.widgets.CommentWidget;
 import org.accesointeligente.model.Attachment;
 import org.accesointeligente.model.RequestComment;
 import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.NotificationEventType;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.cobogw.gwt.user.client.ui.Rating;

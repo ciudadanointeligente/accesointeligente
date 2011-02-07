@@ -9,7 +9,6 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;

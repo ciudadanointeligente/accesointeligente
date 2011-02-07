@@ -1,5 +1,10 @@
 package org.accesointeligente.client.views;
 
+import org.accesointeligente.client.presenters.RegisterPresenter;
+import org.accesointeligente.client.presenters.RegisterPresenterIface;
+import org.accesointeligente.model.*;
+import org.accesointeligente.shared.Country;
+import org.accesointeligente.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -7,29 +12,10 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import org.accesointeligente.client.presenters.RegisterPresenter;
-import org.accesointeligente.client.presenters.RegisterPresenterIface;
-import org.accesointeligente.model.Activity;
-import org.accesointeligente.model.Age;
-import org.accesointeligente.model.InstitutionType;
-import org.accesointeligente.model.Region;
-import org.accesointeligente.shared.Country;
-import org.accesointeligente.shared.Gender;
 
 public class RegisterView extends Composite implements RegisterPresenter.Display {
 	private static RegisterViewUiBinder uiBinder = GWT.create(RegisterViewUiBinder.class);

@@ -1,7 +1,6 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.model.Request;
-import org.accesointeligente.model.RequestComment;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.NotificationEventType;
 
