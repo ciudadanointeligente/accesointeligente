@@ -6,8 +6,7 @@ import org.accesointeligente.client.views.RequestView;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
@@ -21,7 +20,6 @@ import java.util.*;
 public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> implements RequestPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestPresenterIface presenter);
-		void displayMessage(String message);
 		RequestView.State getState();
 		void setState(RequestView.State state);
 		void setInstitutions(Map<String, Institution> institutions);
@@ -65,7 +63,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		RPC.getRequestService().getCategories(new AsyncCallback<List<RequestCategory>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("Error obteniendo actividades");
+				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -82,7 +80,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		RPC.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar las instituciones");
+				showNotification("No es posible recuperar las instituciones", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -103,7 +101,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		Institution institution = display.getInstitution();
 
 		if (institution == null) {
-			display.displayMessage("Por favor complete el campo de Institución");
+			showNotification("Por favor complete el campo de Institución", NotificationEventType.NOTICE);
 			return;
 		}
 
@@ -111,12 +109,12 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		String requestContext = display.getRequestContext();
 
 		if (requestInfo == null || requestInfo.trim().length() == 0) {
-			display.displayMessage("Por favor complete el campo de Información");
+			showNotification("Por favor complete el campo de Información", NotificationEventType.NOTICE);
 			return;
 		}
 
 		if (requestContext == null || requestContext.trim().length() == 0) {
-			display.displayMessage("Por favor complete el campo de Contexto");
+			showNotification("Por favor complete el campo de Contexto", NotificationEventType.NOTICE);
 			return;
 		}
 
@@ -126,12 +124,12 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		Boolean anotherInstitutionNo = display.getAnotherInstitutionNo();
 
 		if (requestTitle == null || requestTitle.trim().length() == 0) {
-			display.displayMessage("Por favor complete el campo de Titulo de la solicitud");
+			showNotification("Por favor complete el campo de Titulo de la solicitud", NotificationEventType.NOTICE);
 			return;
 		}
 
 		if(anotherInstitutionYes == false && anotherInstitutionNo == false) {
-			display.displayMessage("Por favor seleccione si desea solicitar esta información a otro organismo");
+			showNotification("Por favor seleccione si desea solicitar esta información a otro organismo", NotificationEventType.NOTICE);
 			return;
 		}
 
@@ -150,7 +148,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace(System.err);
-				display.displayMessage("No se ha podido almacenar su solicitud, intente nuevamente");
+				showNotification("No se ha podido almacenar su solicitud, intente nuevamente", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -166,7 +164,15 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		if (request != null) {
 			History.newItem(AppPlace.REQUESTSTATUS.getToken() + "?requestId=" + request.getId());
 		} else {
-			display.displayMessage("No se ha podido cargar la solicitud");
+			showNotification("No se ha podido cargar la solicitud", NotificationEventType.NOTICE);
 		}
+	}
+
+	@Override
+	public void showNotification(String message, NotificationEventType type) {
+		NotificationEventParams params = new NotificationEventParams();
+		params.setMessage(message);
+		params.setType(type);
+		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }

@@ -7,11 +7,14 @@ import org.accesointeligente.model.RequestCategory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.uibinder.client.*;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class RequestView extends Composite implements RequestPresenter.Display {
 	private static RequestViewUiBinder uiBinder = GWT.create(RequestViewUiBinder.class);
@@ -57,11 +60,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@Override
 	public void setPresenter(RequestPresenterIface presenter) {
 		this.presenter = presenter;
-	}
-
-	@Override
-	public void displayMessage(String message) {
-		Window.alert(message);
 	}
 
 	@Override
