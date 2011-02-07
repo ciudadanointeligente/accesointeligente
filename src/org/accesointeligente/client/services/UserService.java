@@ -34,4 +34,23 @@ public interface UserService extends RemoteService {
 	 * @throws ServiceException if something went wrong with the service
 	 */
 	User register(User user) throws RegisterException, ServiceException;
+
+	/**
+	 * Verifies if password belongs to user
+	 *
+	 * @param email the user's provided email address
+	 * @param password the user's provided password
+	 * @return the check result
+	 * @throws LoginException if the user provided incorrect credentials
+	 * @throws ServiceException if something went wrong with the service
+	 */
+	Boolean checkPass(String email, String password) throws LoginException, ServiceException;
+
+	/**
+	 * Updates the user information
+	 *
+	 * @param user the user to be updated
+	 * @throws ServiceException if something went wrong with the service
+	 */
+	void updateUser(User user) throws ServiceException;
 }
