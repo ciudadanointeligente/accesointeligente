@@ -5,7 +5,6 @@ import org.accesointeligente.shared.FileType;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class Attachment extends LightEntity {
-	private static final long serialVersionUID = 292919972917600668L;
 
 	private Long id;
 	private String name;

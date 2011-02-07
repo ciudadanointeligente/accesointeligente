@@ -5,7 +5,6 @@ import org.accesointeligente.shared.InstitutionClass;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class Institution extends LightEntity {
-	private static final long serialVersionUID = 3831874730148302921L;
 
 	private Integer id;
 	private String name;

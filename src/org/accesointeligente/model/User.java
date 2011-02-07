@@ -1,6 +1,5 @@
 package org.accesointeligente.model;
 
-
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 import java.util.Set;
@@ -9,7 +8,6 @@ import org.accesointeligente.shared.Country;
 import org.accesointeligente.shared.Gender;
 
 public class User extends LightEntity {
-	private static final long serialVersionUID = 6475258234495271306L;
 
 	private Long id;
 	private String email;

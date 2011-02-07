@@ -3,7 +3,6 @@ package org.accesointeligente.model;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class Age extends LightEntity {
-	private static final long serialVersionUID = -634279943784125750L;
 
 	private Integer id;
 	private String name;

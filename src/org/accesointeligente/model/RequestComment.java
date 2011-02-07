@@ -5,7 +5,6 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import java.util.Date;
 
 public class RequestComment extends LightEntity {
-	private static final long serialVersionUID = -8756460221154592397L;
 
 	private Integer id;
 	private Request request;

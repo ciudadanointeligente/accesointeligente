@@ -5,7 +5,6 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import java.io.Serializable;
 
 public class RequestCategory extends LightEntity implements Serializable {
-	private static final long serialVersionUID = 3442939892038068139L;
 
 	private Integer id;
 	private String name;

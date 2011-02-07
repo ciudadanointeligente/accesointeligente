@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.Set;
 
 public class Request extends LightEntity {
-	private static final long serialVersionUID = 3099494353260207511L;
 
 	private Integer id;
 	private User user;
