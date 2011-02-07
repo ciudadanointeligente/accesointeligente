@@ -3,7 +3,6 @@ package org.accesointeligente.model;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class Activity extends LightEntity {
-	private static final long serialVersionUID = -7949584853990558020L;
 
 	private Integer id;
 	private String name;
@@ -31,5 +30,27 @@ public class Activity extends LightEntity {
 
 	public Boolean isPerson() {
 		return person;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.id.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+
+		if (id == null) {
+			return false;
+		}
+
+		if (!(object instanceof Activity)) {
+			return false;
+		}
+
+		return id.equals(((Activity) object).getId());
 	}
 }
