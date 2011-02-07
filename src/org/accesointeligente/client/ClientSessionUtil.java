@@ -2,9 +2,9 @@ package org.accesointeligente.client;
 
 import org.accesointeligente.model.User;
 
-import java.util.Date;
-
 import com.google.gwt.user.client.Cookies;
+
+import java.util.Date;
 
 public class ClientSessionUtil {
 	private static SessionData sessionData;
@@ -32,5 +32,9 @@ public class ClientSessionUtil {
 
 	public static User getUser () {
 		return (User) sessionData.getData ().get ("user");
+	}
+
+	public static void setUser(User user) {
+		sessionData.getData().put("user", user);
 	}
 }
