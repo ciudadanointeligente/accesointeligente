@@ -1,0 +1,93 @@
+.contenedorRegistro {
+	background-color: #f3f3f3;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+}
+
+.formSection {
+	padding: 0 20px 20px;
+}
+
+.bgWhite {
+	background-color: white;
+}
+
+.apellido {
+	width: 190px;
+}
+
+.formSection .waterBlock {
+	margin: 0 -20px 10px;
+}
+
+.formTable {
+	width: 440px;
+}
+
+.formTable td {
+	padding: 5px 3px;
+}
+
+.formTable th {
+	text-align: left;
+	font-weight: normal;
+}
+
+.greyBlock {
+	background-color: #DEE1E6;
+	display: block;
+	padding: 6px 10px 6px 30px;
+}
+
+h1.greyBlock {
+	font-weight: normal;
+	font-variant: small-caps;
+	letter-spacing: 1pt;
+	font-size: 16pt;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+}
+
+.greyBlock h1.greyBlock {
+	padding: 6px 10px 6px 0px;
+}
+
+.waterBlock {
+	background-color: #D4ECED;
+	display: block;
+	line-height: 120%;
+	font-family: Trebuchet MS, Calibri, Arial, Sans Serif;
+	font-size: 9pt;
+	padding: 10px 10px 10px 30px;
+	color: #45B0BC;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1pt;
+}
+
+.noCaps {
+	text-transform: none;
+}
+
+.circleNumber {
+	background-color: #45B0BC;
+	color: #FFFFFF;
+	display: block;
+	float: left;
+	font-size: 9px;
+	height: 16px;
+	margin: 0 -22px;
+	position: relative;
+	text-align: center;
+	width: 16px;
+	-moz-border-radius: 8px; /* FF1+ */
+	-webkit-border-radius: 8px; /* Saf3-4 */
+	border-radius: 8px; /* Opera 10.5, IE 9, Saf5, Chrome */
+}
+
+.borderBottomW {
+	border-bottom: 2px solid #ffffff;
+}
+
+.margRight {
+	margin-right: 5px;
+}

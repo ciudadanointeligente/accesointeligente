@@ -1,0 +1,114 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="UserProfileEditView.css" />
+	<g:FormPanel>
+		<g:HTMLPanel addStyleNames="{style.contenedorRegistro}">
+			<h1 class="{style.greyBlock} {style.borderBottomW}">edita tus datos</h1>
+			<g:Label>Email</g:Label>
+			<g:Label ui:field="email"/>
+			<g:HTMLPanel addStyleNames="{style.formSection}">
+				<h2 class="{style.waterBlock}">
+					Cambia tu contraseña
+				</h2>
+				<g:Label>Contraseña actual</g:Label>
+				<g:PasswordTextBox ui:field="oldPassword" />
+				<br />
+				<g:Label>Contraseña nueva</g:Label>
+				<g:PasswordTextBox ui:field="password1" />
+				<br />
+				<g:Label>Confirma tu contraseña nueva</g:Label>
+				<g:PasswordTextBox ui:field="password2" />
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="personPanel"
+				addStyleNames="{style.formSection} {style.bgWhite}">
+				<h2 class="{style.waterBlock}">
+					Tus Datos
+				</h2>
+				<table class="{style.formTable}">
+					<tbody>
+						<tr>
+							<td colspan="2">
+								<g:Label>Nombre</g:Label>
+								<g:TextBox ui:field="personFirstName" />
+							</td>
+							<td colspan="3">
+								<g:Label>Apellidos</g:Label>
+								<g:TextBox addStyleNames="{style.apellido}" ui:field="personLastName" />
+							</td>
+						</tr>
+						<tr>
+							<td>Sexo:</td>
+							<td>
+								<g:RadioButton ui:field="personGenderFemale" name="personGender">Femenino</g:RadioButton>
+							</td>
+							<td>
+								<g:RadioButton ui:field="personGenderMale" name="personGender">Masculino</g:RadioButton>
+							</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Actividad</td>
+							<td colspan="4">
+								<g:ListBox ui:field="personActivity" />
+							</td>
+						</tr>
+						<tr>
+							<td>Edad</td>
+							<td colspan="4">
+								<g:ListBox ui:field="personAge" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="institutionPanel" visible="false" addStyleNames="{style.formSection} {style.bgWhite}">
+				<h2 class="{style.waterBlock}">
+					Datos de la institución
+				</h2>
+				<table class="{style.formTable}">
+					<tr>
+						<td>Razón social &nbsp;&nbsp;&nbsp;
+							<g:TextBox addStyleNames="{style.apellido}" ui:field="institutionName" />
+						</td>
+					</tr>
+					<tr>
+						<td>¿Qué tipo de institución es? &nbsp;&nbsp;&nbsp;
+							<g:ListBox ui:field="institutionType" />
+						</td>
+					</tr>
+				</table>
+				<g:Label>Marca a qué temas se dedican:</g:Label>
+				<g:FlowPanel ui:field="institutionActivities" />
+			</g:HTMLPanel>
+			<g:HTMLPanel addStyleNames="{style.formSection}">
+				<h2 class="{style.waterBlock}">
+					Dónde vives
+				</h2>
+				<table class="{style.formTable}">
+					<tr>
+						<th>País</th>
+						<td>
+							<g:RadioButton ui:field="countryChile" name="country" checked="true">Chile</g:RadioButton>
+						</td>
+						<td colspan="2">
+							<g:RadioButton ui:field="countryOther" name="country">Resto del mundo</g:RadioButton>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>Región</th>
+						<td colspan="4">
+							<g:ListBox ui:field="region" />
+						</td>
+					</tr>
+				</table>
+			</g:HTMLPanel>
+			<div class="{style.formSection}">
+				<g:Button addStyleNames="{style.margRight}" ui:field="saveChanges">Guardar</g:Button>
+			</div>
+		</g:HTMLPanel>
+	</g:FormPanel>
+</ui:UiBinder>
