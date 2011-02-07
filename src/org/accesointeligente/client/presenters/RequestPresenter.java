@@ -130,11 +130,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 			return;
 		}
 
-		if (categories.size() == 0) {
-			display.displayMessage("Por favor seleccione al menos una categoria");
-			return;
-		}
-
 		if(anotherInstitutionYes == false && anotherInstitutionNo == false) {
 			display.displayMessage("Por favor seleccione si desea solicitar esta información a otro organismo");
 			return;
