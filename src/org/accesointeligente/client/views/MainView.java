@@ -34,6 +34,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField MenuItem myMenu;
 	@UiField MenuItem myrequests;
 	@UiField MenuItem favorites;
+	@UiField MenuItem userProfile;
 	@UiField MenuItem logout;
 	@UiField MenuItem statistics;
 	@UiField MenuItem aboutProject;
@@ -59,6 +60,13 @@ public class MainView extends Composite implements MainPresenter.Display {
 			@Override
 			public void execute() {
 				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.FAVORITES.getType());
+			}
+		});
+
+		userProfile.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem(AppPlace.USERPROFILE.getToken());
 			}
 		});
 
@@ -115,6 +123,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		myrequests.setVisible(DisplayMode.LoggedIn.equals(mode));
 		favorites.setVisible(DisplayMode.LoggedIn.equals(mode));
+		userProfile.setVisible(DisplayMode.LoggedIn.equals(mode));
 		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
 		footerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		loginPending.setVisible(DisplayMode.LoginPending.equals(mode));

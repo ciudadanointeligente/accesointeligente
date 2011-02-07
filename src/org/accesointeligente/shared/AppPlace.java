@@ -13,7 +13,8 @@ public enum AppPlace {
 	ABOUTPROJECT,
 	ASOCIATES,
 	STATISTICS,
-	CONTACT;
+	CONTACT,
+	USERPROFILE;
 
 	public String getToken() {
 		return this.toString().toLowerCase();

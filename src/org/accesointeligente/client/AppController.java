@@ -152,6 +152,12 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(asociatesPresenter.getDisplay().asWidget());
 					break;
+				case USERPROFILE:
+					UserProfileEditPresenter userProfilePresenter = new UserProfileEditPresenter(new UserProfileEditView(), eventBus);
+					userProfilePresenter.bind();
+					getLayout().clear();
+					getLayout().add(userProfilePresenter.getDisplay().asWidget());
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}

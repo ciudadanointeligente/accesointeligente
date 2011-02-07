@@ -20,6 +20,7 @@
 									<g:MenuBar vertical="true">
 										<g:MenuItem ui:field="myrequests" visible="false">Mis solicitudes</g:MenuItem>
 										<g:MenuItem ui:field="favorites" visible="false">Mis favoritos</g:MenuItem>
+										<g:MenuItem ui:field="userProfile" visible="false">Mis datos</g:MenuItem>
 										<g:MenuItem ui:field="logout" visible="false">Salir</g:MenuItem>
 									</g:MenuBar>
 								</g:MenuItem>
