@@ -140,11 +140,6 @@ public class RequestEditPresenter extends WidgetPresenter<RequestEditPresenter.D
 			return;
 		}
 
-		if (categories.size() == 0) {
-			showNotification("Por favor seleccione al menos una categoria", NotificationEventType.ERROR);
-			return;
-		}
-
 		if(anotherInstitutionYes == false && anotherInstitutionNo == false) {
 			showNotification("Por favor seleccione si desea solicitar esta información a otro organismo", NotificationEventType.ERROR);
 			return;
