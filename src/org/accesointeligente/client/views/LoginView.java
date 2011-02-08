@@ -2,6 +2,7 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.LoginPresenter;
 import org.accesointeligente.client.presenters.LoginPresenterIface;
+import org.accesointeligente.shared.AppPlace;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -10,6 +11,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 
@@ -26,9 +28,10 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@UiField PasswordTextBox password;
 	@UiField Button login;
 	@UiField Label register;
+	@UiField Label passwordRecovery;
 	@UiField Label close;
 
-	Timer notificationTimer;
+	private Timer notificationTimer;
 	private LoginPresenterIface presenter;
 
 	public LoginView() {
@@ -77,6 +80,11 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	void onNoticeCloseClick(ClickEvent event) {
 		noticePanel.setVisible(false);
 		notificationTimer.cancel();
+	}
+
+	@UiHandler("passwordRecovery")
+	void onPasswordRecoveryClick(ClickEvent event) {
+		History.newItem(AppPlace.PASSWORDRECOVERY.getToken());
 	}
 
 	@Override

@@ -2,13 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css" />
+
 	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX"
 		height="400PX" ui:field="loginPanel">
 		<g:HTMLPanel ui:field="loginForm" addStyleNames="loginForm">
 			<g:Label ui:field="close" addStyleNames="{style.closeButton}" />
 			<h1 class="{style.greyBlock}">LOGIN</h1>
-			<g:HTMLPanel ui:field="noticePanel" addStyleNames="error"
-				visible="false">
+			<g:HTMLPanel ui:field="noticePanel" addStyleNames="error" visible="false">
 				<g:Label ui:field="noticeClose" addStyleNames="closeNotice" />
 				<g:Label ui:field="noticeLabel" addStyleNames="fLeft" />
 			</g:HTMLPanel>
@@ -30,9 +30,14 @@
 				</tr>
 				<tr>
 					<td colspan="3">
+						¿Olvidaste tu clave?
+						<g:Label addStyleNames="{style.link}" ui:field="passwordRecovery" text="Recuperala aquí" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
 						¿No eres miembro?
-						<g:Label addStyleNames="{style.link}" ui:field="register"
-							text="Regístrate gratis" />
+						<g:Label addStyleNames="{style.link}" ui:field="register" text="Regístrate gratis" />
 					</td>
 				</tr>
 			</table>
@@ -40,11 +45,14 @@
 				<br />
 				<h1>¿Por qué pedimos registro?</h1>
 				<p>
-				Pedimos registro porque <span title="La Fundación Ciudadano Inteligente">nosotros</span>
-	actuaremos como tu apoderado y debemos mantener una relación única
-	entre tú y tus solicitudes para cuidar tu derecho a reclamar ante el
-	Consejo para la Transparencia en caso de disconformidad con la
-	respuesta. No te preocupes, tus datos serán confidenciales y no los compartiremos
+					Pedimos registro porque
+					<span title="La Fundación Ciudadano Inteligente">nosotros</span>
+					actuaremos como tu apoderado y debemos mantener una relación única
+					entre tú y tus solicitudes para cuidar tu derecho a reclamar ante
+					el
+					Consejo para la Transparencia en caso de disconformidad con la
+					respuesta. No te preocupes, tus datos serán confidenciales y no los
+					compartiremos
 				</p>
 				<p>
 					Sólo tendrás que registrarte una vez!

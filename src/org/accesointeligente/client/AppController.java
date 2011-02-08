@@ -227,6 +227,12 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(asociatesPresenter.getDisplay().asWidget());
 					break;
+				case PASSWORDRECOVERY:
+					PasswordRecoveryPresenter passwordRecoveryPresenter = new PasswordRecoveryPresenter(new PasswordRecoveryView(), eventBus);
+					passwordRecoveryPresenter.bind();
+					getLayout().clear();
+					getLayout().add(passwordRecoveryPresenter.getDisplay().asWidget());
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
