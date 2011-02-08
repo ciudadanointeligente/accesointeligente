@@ -44,18 +44,18 @@
 				<table class="{style.tbCheck}">
 					<tr>
 						<td class="{style.Label}">
-							<g:CheckBox ui:field="statusPending">Pendiente</g:CheckBox>
+							<g:CheckBox ui:field="statusPending" checked="true">Pendiente</g:CheckBox>
 						</td>
 						<td>
-							<g:CheckBox ui:field="statusClosed">Respondido</g:CheckBox>
+							<g:CheckBox ui:field="statusClosed" checked="true">Respondido</g:CheckBox>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<g:CheckBox ui:field="statusExpired">Vencido</g:CheckBox>
+							<g:CheckBox ui:field="statusExpired" checked="true">Vencido</g:CheckBox>
 						</td>
 						<td>
-							<g:CheckBox ui:field="statusDerived">Derivado</g:CheckBox>
+							<g:CheckBox ui:field="statusDerived" checked="true">Derivado</g:CheckBox>
 						</td>
 					</tr>
 				</table>
