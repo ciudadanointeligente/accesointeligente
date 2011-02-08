@@ -53,4 +53,21 @@ public interface UserService extends RemoteService {
 	 * @throws ServiceException if something went wrong with the service
 	 */
 	void updateUser(User user) throws ServiceException;
+
+	/**
+	 * Verifies if the email exist in the user database
+	 *
+	 * @param email the user's provided email address
+	 * @return true if exists, false if not
+	 * @throws ServiceException if something went wrong with the service
+	 */
+	Boolean checkEmailExistence(String email) throws ServiceException;
+
+	/**
+	 * Generates, encrypts and updates a random password for the user
+	 *
+	 * @param email the user's provided email address
+	 * @throws ServiceException
+	 */
+	void resetPassword(String email) throws ServiceException;
 }

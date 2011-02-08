@@ -2,12 +2,8 @@ package org.accesointeligente.server.services;
 
 import org.accesointeligente.client.services.UserService;
 import org.accesointeligente.model.User;
-import org.accesointeligente.server.BCrypt;
-import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.server.SessionUtil;
-import org.accesointeligente.shared.LoginException;
-import org.accesointeligente.shared.RegisterException;
-import org.accesointeligente.shared.ServiceException;
+import org.accesointeligente.server.*;
+import org.accesointeligente.shared.*;
 
 import net.sf.gilead.core.PersistentBeanManager;
 import net.sf.gilead.gwt.PersistentRemoteService;
@@ -121,6 +117,7 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 		}
 	}
 
+	@Override
 	public void updateUser(User user) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
@@ -142,6 +139,60 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			hibernate.update(user);
 			hibernate.getTransaction().commit();
 			SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(user));
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Boolean checkEmailExistence(String email) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+		User user = null;
+
+		try {
+			Criteria criteria = hibernate.createCriteria(User.class);
+			criteria.add(Restrictions.eq("email", email));
+			user = (User) criteria.uniqueResult();
+			hibernate.getTransaction().commit();
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+
+		if (user == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public void resetPassword(String email) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+		String newPassword = null;
+
+		try {
+			Criteria criteria = hibernate.createCriteria(User.class);
+			criteria.add(Restrictions.eq("email", email));
+			User user = (User) criteria.uniqueResult();
+			hibernate.getTransaction().commit();
+
+			newPassword = RandomPassword.getRandomString(8);
+			user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			hibernate.update(user);
+			hibernate.getTransaction().commit();
+
+			Emailer emailer = new Emailer(user.getEmail(), "Accesointeligente le comunica: Se ha reestablecido su contraseña",
+					(user.getGender().equals(Gender.FEMALE))? "Sra." : "Sr." + user.getFirstName() + ", <br />" +
+					"<p>" + "ha solicitado a través de nuestro sistema de recuperación de contraseña la creación de una nueva<br />" +
+					"La cual le damos a continuación: " + newPassword + "</p>");
+			emailer.connectAndSend();
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
