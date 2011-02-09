@@ -9,5 +9,6 @@ public interface RequestStatusPresenterIface {
 	Request getRequest();
 	void setRequest(Request request);
 	Boolean requestIsEditable();
+	void confirmRequest();
 	void showNotification(String message, NotificationEventType type);
 }

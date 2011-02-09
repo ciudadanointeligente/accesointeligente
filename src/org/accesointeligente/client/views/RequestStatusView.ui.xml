@@ -14,7 +14,7 @@
 					<td>
 						<div style="float: right;">
 							<g:Button ui:field="requestListLink" addStyleNames="ClassicButton">
-								Aceptar
+								Confirmar
 							</g:Button>
 							<g:Button ui:field="editRequest" addStyleNames="ClassicButton"> 
 								Editar
@@ -91,7 +91,7 @@
 		</table>
 		<div style="text-align: center;">
 			<g:Button ui:field="requestListLinkBottom" addStyleNames="ClassicButton">
-				Aceptar
+				Confirmar
 			</g:Button>
 			<g:Button ui:field="editRequestBottom" addStyleNames="ClassicButton">
 				Editar

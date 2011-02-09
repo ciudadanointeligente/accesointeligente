@@ -14,7 +14,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.Date;
@@ -118,11 +117,6 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 		}
 	}
 
-	@Override
-	public void displayMessage(String message) {
-		Window.alert(message);
-	}
-
 	@UiHandler("editRequest")
 	public void onEditRequestClick(ClickEvent event) {
 		History.newItem(AppPlace.EDITREQUEST.getToken() + "?requestId=" + presenter.getRequest().getId());
@@ -135,7 +129,10 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+		if (presenter != null) {
+			presenter.confirmRequest();
+			History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+		}
 	}
 
 
@@ -151,15 +148,19 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 
 	@UiHandler("requestListLinkBottom")
 	public void onRequestListLinkBottomClick(ClickEvent event) {
-		History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+		if (presenter != null) {
+			presenter.confirmRequest();
+			History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+		}
 	}
-
 
 	@Override
 	public void editOptions(Boolean allowEdit) {
 		if (allowEdit == false) {
 			editRequest.setVisible(false);
 			deleteRequest.setVisible(false);
+			editRequestBottom.setVisible(false);
+			deleteRequestBottom.setVisible(false);
 		}
 	}
 }

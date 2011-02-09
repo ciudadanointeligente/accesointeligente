@@ -27,7 +27,6 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 		void addRequestCategories(RequestCategory category);
 		void setRequestCategories(Set<RequestCategory> categories);
 		void setAnotherInstitution(Boolean anotherInstitution);
-		void displayMessage(String string);
 		void editOptions(Boolean allowEdit);
 	}
 
@@ -56,7 +55,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar la solicitud");
+				showNotification("No es posible recuperar la solicitud", NotificationEventType.ERROR);
 			}
 
 			@Override
@@ -73,7 +72,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 					display.setDate(result.getDate());
 					display.editOptions(requestIsEditable());
 				} else {
-					display.displayMessage("No se puede cargar la solicitud");
+					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
 			}
 		});
@@ -93,7 +92,6 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 				showNotification("Se ha eliminado la solicitud", NotificationEventType.SUCCESS);
 				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
 			}
-
 		});
 	}
 
@@ -109,11 +107,28 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 
 	@Override
 	public Boolean requestIsEditable() {
-		if (request.getStatus() == RequestStatus.NEW) {
+		if (request.getStatus() == RequestStatus.DRAFT) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void confirmRequest() {
+		request.setStatus(RequestStatus.NEW);
+		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No es posible confirmar su borrador de solicitud, por favor intentelo nuevamente", NotificationEventType.NOTICE);
+			}
+
+			@Override
+			public void onSuccess(Request result) {
+				showNotification("Ha confirmado su borrador de solicitud. Su solicitud será procesada a la brevedad", NotificationEventType.SUCCESS);
+			}
+		});
 	}
 
 	@Override
