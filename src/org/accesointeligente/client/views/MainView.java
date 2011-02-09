@@ -33,6 +33,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField FlowPanel mainPanel;
 	@UiField MenuItem myMenu;
 	@UiField MenuItem myrequests;
+	@UiField MenuItem drafts;
 	@UiField MenuItem favorites;
 	@UiField MenuItem userProfile;
 	@UiField MenuItem logout;
@@ -53,6 +54,13 @@ public class MainView extends Composite implements MainPresenter.Display {
 			@Override
 			public void execute() {
 				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+			}
+		});
+
+		drafts.setCommand(new Command() {
+			@Override
+			public void execute() {
+				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.DRAFTS.getType());
 			}
 		});
 
@@ -122,6 +130,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 		welcomeMessage.setVisible(DisplayMode.LoggedIn.equals(mode));
 		mainPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		myrequests.setVisible(DisplayMode.LoggedIn.equals(mode));
+		drafts.setVisible(DisplayMode.LoggedIn.equals(mode));
 		favorites.setVisible(DisplayMode.LoggedIn.equals(mode));
 		userProfile.setVisible(DisplayMode.LoggedIn.equals(mode));
 		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
