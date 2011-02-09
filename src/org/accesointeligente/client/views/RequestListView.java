@@ -71,6 +71,12 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
+	public void removeSearchWidget() {
+		searchPanel.setVisible(false);
+		searchPanelHandle.setVisible(false);
+	}
+
+	@Override
 	public void initTable() {
 		initTableColumns();
 		requestPager.setDisplay(requestTable);
@@ -97,7 +103,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			public AnchorCellParams getValue(Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				params.setUrl("#response?requestId=" + request.getId());
+				params.setUrl(presenter.getRequestBaseUrlPlace() + request.getId());
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}

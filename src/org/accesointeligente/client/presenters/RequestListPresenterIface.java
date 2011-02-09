@@ -10,4 +10,5 @@ public interface RequestListPresenterIface {
 	void requestToggleFavorite(Request request);
 	void showNotification(String message, NotificationEventType type);
 	void showRequest(Integer requestId);
+	String getRequestBaseUrlPlace();
 }

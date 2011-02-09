@@ -28,12 +28,15 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void setListTitle(String title);
 		void setListTitleStyle(String style);
 		void setSearchWidget(Widget widget);
+		void removeSearchWidget();
 		void initTable();
 		void initTableColumns();
 		void initTableFavColumn();
 		void removeTableFavColumn();
 		void setRequests(ListDataProvider<Request> data);
 	}
+
+	private String listType;
 
 	public RequestListPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
@@ -65,6 +68,8 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void loadRequests(Integer offset, Integer limit, String type) {
+		listType = type;
+
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
 			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
@@ -96,6 +101,32 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
+						History.newItem(AppPlace.HOME.getToken());
+					}
+
+					@Override
+					public void onSuccess(List<Request> results) {
+						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
+						display.setRequests(data);
+					}
+				});
+			} else {
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
+				History.newItem(AppPlace.HOME.getToken());
+			}
+
+		} else if (type.equals(RequestListType.DRAFTS.getType())) {
+			display.setListTitle("Mis borradores");
+			display.setListTitleStyle(RequestListType.DRAFTS.getType());
+			display.removeTableFavColumn();
+			display.removeSearchWidget();
+
+			if (ClientSessionUtil.checkSession()) {
+				RPC.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -172,6 +203,32 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
+						History.newItem(AppPlace.HOME.getToken());
+					}
+
+					@Override
+					public void onSuccess(List<Request> results) {
+						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
+						display.setRequests(data);
+					}
+				});
+			} else {
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
+				History.newItem(AppPlace.HOME.getToken());
+			}
+
+		} else if (type.equals(RequestListType.DRAFTS.getType())) {
+			display.setListTitle("Mis borradores");
+			display.setListTitleStyle(RequestListType.DRAFTS.getType());
+			display.removeTableFavColumn();
+			display.removeSearchWidget();
+
+			if (ClientSessionUtil.checkSession()) {
+				RPC.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -275,12 +332,29 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 
 	@Override
 	public void showRequest(Integer requestId) {
-		History.newItem(AppPlace.RESPONSE.getToken() + "?requestId=" + requestId.toString());
+		if (listType.equals(RequestListType.DRAFTS.getType())) {
+			History.newItem(AppPlace.REQUESTSTATUS.getToken() + "?requestId=" + requestId.toString());
+		} else {
+			History.newItem(AppPlace.RESPONSE.getToken() + "?requestId=" + requestId.toString());
+		}
 	}
 
 	@Override
 	public void onSearch(RequestSearchEvent event) {
 		Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
 		loadRequests(0, 100, parameters.get("type"), event.getParams());
+	}
+
+	@Override
+	public String getRequestBaseUrlPlace() {
+		String baseUrl;
+
+		if (listType.equals(RequestListType.DRAFTS.getType())) {
+			baseUrl = "#" + AppPlace.REQUESTSTATUS.getToken() + "?requestId=";
+		} else {
+			baseUrl = "#" + AppPlace.RESPONSE.getToken() + "?requestId=";
+		}
+
+		return baseUrl;
 	}
 }
