@@ -1,6 +1,7 @@
 package org.accesointeligente.shared;
 
 public enum RequestStatus {
+	DRAFT("Borrador", "images/borrador.png"),
 	NEW("Pendiente", "images/pendiente.png"),
 	PENDING("Pendiente", "images/pendiente.png"),
 	EXPIRED("Vencida", "images/vencida.png"),

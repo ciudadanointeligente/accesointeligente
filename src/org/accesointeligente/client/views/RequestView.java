@@ -21,11 +21,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 
 	interface RequestViewUiBinder extends UiBinder<Widget, RequestView> {}
 
-	public enum State {
-		REQUEST,
-		SUCCESS
-	}
-
 	@UiField HTMLPanel institutionSearchPanel;
 	@UiField SuggestBox institutionSearch;
 
@@ -39,12 +34,8 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@UiField RadioButton anotherInstitutionYes;
 	@UiField RadioButton anotherInstitutionNo;
 
-	@UiField HTMLPanel successPanel;
-	@UiField Button showRequest;
-
 	@UiField Button submitRequest;
 
-	private State state;
 	private Map<String, Institution> institutions;
 	private RequestPresenterIface presenter;
 
@@ -60,23 +51,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@Override
 	public void setPresenter(RequestPresenterIface presenter) {
 		this.presenter = presenter;
-	}
-
-	@Override
-	public State getState() {
-		return state;
-	}
-
-	@Override
-	public void setState(State state) {
-		this.state = state;
-		// Panels
-		institutionSearchPanel.setVisible(State.REQUEST.equals(state));
-		requestPanel.setVisible(State.REQUEST.equals(state));
-		requestDetailPanel.setVisible(State.REQUEST.equals(state));
-		successPanel.setVisible(State.SUCCESS.equals(state));
-		// Buttons
-		submitRequest.setVisible(State.REQUEST.equals(state));
 	}
 
 	@Override
@@ -162,13 +136,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	protected void onNextClick(ClickEvent event) {
 		if (presenter != null) {
 			presenter.submitRequest();
-		}
-	}
-
-	@UiHandler("showRequest")
-	protected void onShowRequestClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.showRequest();
 		}
 	}
 }

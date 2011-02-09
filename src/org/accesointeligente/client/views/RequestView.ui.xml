@@ -2,17 +2,17 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestView.css" />
+
 	<g:HTMLPanel addStyleNames="{style.bgGrey}">
 		<div class="{style.headSolicitud}">
 			<h1>Solicitud de acceso a la información</h1>
 		</div>
-		<g:HTMLPanel ui:field="institutionSearchPanel" visible="false">
+		<g:HTMLPanel ui:field="institutionSearchPanel">
 			<div class="{style.waterBlockDark} {style.borderBottomG5}">
 				<div class="fLeft {style.wbdHead}">
 					<img class="{style.exclamations}" src="images/exclamations_w.png" />
 					<h1>Ahorremos tiempo y recursos</h1>
-					<span> ¿Estás seguro de que la información que buscas no ha sido
-						pedida antes?</span>
+					<span> ¿Estás seguro de que la información que buscas no ha sido pedida antes?</span>
 				</div>
 				<div class="fLeft">
 					<a href="#">
@@ -38,10 +38,7 @@
 			</div>
 		</g:HTMLPanel>
 
-
-
-
-		<g:HTMLPanel ui:field="requestPanel" visible="false">
+		<g:HTMLPanel ui:field="requestPanel">
 			<div>
 				<h2 class="{style.waterBlock} {style.borderBottomG}">
 					<span class="{style.circleNumber}">2</span>
@@ -49,8 +46,10 @@
 				</h2>
 				<div class="{style.whiteBlock} {style.borderBottomG}">
 					<img src="images/asterisco.png" class="{style.listIcon}" />
-					<i>No te alargues! Mientras más claro y preciso seas será más fácil
-						identificar lo que buscas...</i>
+					<i>
+						No te alargues! Mientras más claro y preciso seas será más fácil
+						identificar lo que buscas...
+					</i>
 				</div>
 			</div>
 			<div class="{style.greyBlock}">
@@ -62,13 +61,15 @@
 					<g:TextArea ui:field="requestInfo" />
 				</div>
 				<div class="{style.sideNote}">
-					<p>* Recuerda, este espacio no busca realizar sugerencias,
+					<p>
+						* Recuerda, este espacio no busca realizar sugerencias,
 						reclamos,
 						ni tampoco que argumentes sobre las razones por la que
 						éstas
 						haciendo la solicitud. Se respetuoso si no no será posible
 						enviar
-						tu solicitud</p>
+						tu solicitud
+					</p>
 				</div>
 			</div>
 
@@ -97,18 +98,20 @@
 					<g:TextArea ui:field="requestContext" />
 				</div>
 				<div class="{style.sideNote}">
-					<p>* Precisa temporalmente la información que necesitas ya que
+					<p>
+						* Precisa temporalmente la información que necesitas ya que
 						tu
 						solicitud puede ser rechazada si es demasiado genérica. Por
 						ejemplo: “Oficios emitidos por tal organismo” o
 						“Todos los
-						contratos celebrados con tal empresa”</p>
+						contratos celebrados con tal empresa”
+					</p>
 				</div>
 			</div>
 
 		</g:HTMLPanel>
 
-		<g:HTMLPanel ui:field="requestDetailPanel" visible="false">
+		<g:HTMLPanel ui:field="requestDetailPanel">
 			<div>
 				<h2 class="{style.waterBlock} {style.borderBottomG}">
 					<span class="{style.circleNumber}">4</span>
@@ -125,10 +128,8 @@
 						<g:TextBox addStyleNames="fLeft {style.W600}" ui:field="requestTitle" />
 					</div>
 					<div class="{style.bgW} fLeft">
-						<g:Label>¿Podrías circunscribir la información que solicitas en
-							alguna de estas categorías?</g:Label>
-						<span class="sideNote">* Responde sólo si estás seguro, si no déjalo
-							en blanco.</span>
+						<g:Label>¿Podrías circunscribir la información que solicitas en alguna de estas categorías?</g:Label>
+						<span class="sideNote">* Responde sólo si estás seguro, si no déjalo en blanco.</span>
 						<br />
 						<g:FlowPanel ui:field="requestCategoryPanel" />
 						<br />
@@ -142,58 +143,12 @@
 				</h2>
 				<div class="{style.greyBlock}">
 					<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
-					<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution"
-						checked="true">No</g:RadioButton>
+					<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" checked="true">No</g:RadioButton>
 				</div>
 			</div>
 		</g:HTMLPanel>
 		<div class="{style.greyBlock}">
-			<g:Button ui:field="submitRequest" visible="false">Enviar solicitud</g:Button>
+			<g:Button ui:field="submitRequest">Crear solicitud</g:Button>
 		</div>
-		<g:HTMLPanel ui:field="successPanel" visible="false"
-			addStyleNames="{style.succesPanel}">
-			<div class="{style.waterBlockDark} {style.borderBottomG}">
-				<table>
-					<tr>
-						<td>
-							<img src="images/bg_check_green.png" />
-						</td>
-						<td>
-							<h2>Tu solicitud ha sido despachada correctamente</h2>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="{style.waterBlockDark} {style.borderBottomG}">
-				<div class="fLeft">
-					<span>
-						*El órgano tiene 20 días hábiles para responder.
-						<br />
-						Te notificaremos por mail.
-						<br />
-						<br />
-						*Puedes revisar el estado de tu solicitud en
-						<a href="#"> tu perfil</a>
-					</span>
-				</div>
-				<g:Button addStyleNames="{style.giantButton} fLeft"
-					ui:field="showRequest">Ver resumen</g:Button>
-			</div>
-			<a href="#">
-				<div class="greyGrad">
-					<div class="{style.greyGradText}">
-						Te invitamos a revisar otras solicitudes
-						<h1>
-							Aquí
-					</h1>
-					</div>
-					<img class="{style.mano}" src="images/mano.png" />
-					<img class="{style.mano}" src="images/mano.png" />
-					<img class="{style.mano}" src="images/mano.png" />
-					<img class="{style.mano}" src="images/mano.png" />
-					<img class="{style.mano}" src="images/mano.png" />
-				</div>
-			</a>
-		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

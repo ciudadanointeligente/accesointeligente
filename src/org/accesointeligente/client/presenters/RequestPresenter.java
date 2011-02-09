@@ -20,8 +20,6 @@ import java.util.*;
 public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> implements RequestPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestPresenterIface presenter);
-		RequestView.State getState();
-		void setState(RequestView.State state);
 		void setInstitutions(Map<String, Institution> institutions);
 		void cleanRequestCategories();
 		void addRequestCategories(RequestCategory category);
@@ -43,7 +41,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		display.setState(RequestView.State.REQUEST);
 		getRequestCategories();
 		getInstitutions();
 	}
@@ -141,7 +138,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		request.setCategories(categories);
 		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
-		request.setStatus(RequestStatus.NEW);
+		request.setStatus(RequestStatus.DRAFT);
 		request.setDate(new Date());
 
 		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
@@ -154,7 +151,8 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 			@Override
 			public void onSuccess(Request result) {
 				request = result;
-				display.setState(RequestView.State.SUCCESS);
+//				display.setState(RequestView.State.SUCCESS);
+				showRequest();
 			}
 		});
 	}
