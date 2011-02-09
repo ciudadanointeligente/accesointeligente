@@ -20,11 +20,6 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 	private static RequestEditViewUiBinder uiBinder = GWT.create(RequestEditViewUiBinder.class);
 	interface RequestEditViewUiBinder extends UiBinder<Widget, RequestEditView> {}
 
-	public enum State {
-		EDIT,
-		SUCCESS
-	}
-
 	@UiField HTMLPanel institutionSearchPanel;
 	@UiField SuggestBox institutionSearch;
 
@@ -38,12 +33,8 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 	@UiField RadioButton anotherInstitutionYes;
 	@UiField RadioButton anotherInstitutionNo;
 
-	@UiField HTMLPanel successPanel;
-	@UiField Button showRequest;
-
 	@UiField Button submitRequest;
 
-	private State state;
 	private Map<String, Institution> institutions;
 	private RequestEditPresenterIface presenter;
 
@@ -54,23 +45,6 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 	@Override
 	public void setPresenter(RequestEditPresenterIface presenter) {
 		this.presenter = presenter;
-	}
-
-	@Override
-	public State getState() {
-		return state;
-	}
-
-	@Override
-	public void setState(State state) {
-		this.state = state;
-		// Panels
-		institutionSearchPanel.setVisible(State.EDIT.equals(state));
-		requestPanel.setVisible(State.EDIT.equals(state));
-		requestDetailPanel.setVisible(State.EDIT.equals(state));
-		successPanel.setVisible(State.SUCCESS.equals(state));
-		// Buttons
-		submitRequest.setVisible(State.EDIT.equals(state));
 	}
 
 	@Override
@@ -190,13 +164,6 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 	protected void onNextClick(ClickEvent event) {
 		if (presenter != null) {
 			presenter.submitRequest();
-		}
-	}
-
-	@UiHandler("showRequest")
-	protected void onShowRequestClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.showRequest();
 		}
 	}
 }
