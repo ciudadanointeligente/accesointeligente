@@ -110,7 +110,7 @@ public class SGS extends Robot {
 		try {
 			formParams = new ArrayList<NameValuePair>();
 			formParams.add(new BasicNameValuePair("id_entidad", idEntidad));
-			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getTitle() + "\n\n" + request.getInformation() + "\n\n" + request.getContext()));
+			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getInformation() + "\n\n" + request.getContext()));
 			formParams.add(new BasicNameValuePair("notificacion", "1"));
 			formParams.add(new BasicNameValuePair("id_forma_recepcion", "1")); // Email
 			formParams.add(new BasicNameValuePair("oficina", ""));
