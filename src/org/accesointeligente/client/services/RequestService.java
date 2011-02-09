@@ -20,6 +20,7 @@ public interface RequestService extends RemoteService {
 	List<Request> getUserRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
 	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
+	List<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
 	List<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
 	List<Attachment> getResponseAttachmentList(Response response) throws ServiceException;

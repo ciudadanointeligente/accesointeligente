@@ -17,6 +17,7 @@ public interface RequestServiceAsync {
 	void getUserRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<List<Request>> callback);
 	void getUserFavoriteRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<List<Request>> callback);
+	void getUserDraftList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<List<Request>> callback);
 	void getResponseAttachmentList(Response response, AsyncCallback<List<Attachment>> callback);

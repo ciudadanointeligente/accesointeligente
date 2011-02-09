@@ -97,7 +97,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 	}
 
 	@Override
-	public Request getRequest (String remoteIdentifier) throws ServiceException {
+	public Request getRequest(String remoteIdentifier) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
@@ -126,6 +126,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
@@ -153,6 +154,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
@@ -225,6 +227,33 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			User user = SessionUtil.getUser();
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.setFirstResult(offset);
+			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.eq("user", user));
+			criteria.add(Restrictions.eq("status", RequestStatus.DRAFT));
+			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("institution"));
+			criteria.setFetchMode("institution", FetchMode.JOIN);
+			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
@@ -234,6 +263,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
@@ -258,6 +288,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 			criteria.addOrder(Order.asc("date"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
