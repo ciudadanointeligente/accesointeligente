@@ -18,7 +18,9 @@ public class Request extends LightEntity {
 	private Set<RequestCategory> categories;
 	private Boolean anotherInstitution;
 	private RequestStatus status;
-	private Date date;
+	private Date creationDate;
+	private Date confirmationDate;
+	private Date processDate;
 	private Response response;
 	private String remoteIdentifier;
 	private Set<UserFavoriteRequest> favorites;
@@ -97,12 +99,28 @@ public class Request extends LightEntity {
 		this.status = status;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getConfirmationDate() {
+		return confirmationDate;
+	}
+
+	public void setConfirmationDate(Date confirmationDate) {
+		this.confirmationDate = confirmationDate;
+	}
+
+	public Date getProcessDate() {
+		return processDate;
+	}
+
+	public void setProcessDate(Date processDate) {
+		this.processDate = processDate;
 	}
 
 	public Response getResponse() {

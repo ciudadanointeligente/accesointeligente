@@ -127,7 +127,11 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			@Override
 			public CustomTextCellParams getValue(Request request) {
 				CustomTextCellParams params = new CustomTextCellParams();
-				params.setText(DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getDate()));
+				if (request.getConfirmationDate() == null) {
+					params.setText(DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getCreationDate()));
+				} else {
+					params.setText(DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getConfirmationDate()));
+				}
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableRequestDate());
 				return params;
 			}

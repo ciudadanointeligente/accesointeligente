@@ -32,11 +32,11 @@ public class SearchParamParseUtil {
 		}
 
 		if (params.getMinDate() != null && params.getMaxDate() != null) {
-			criteria.add(Restrictions.between("date", params.getMinDate(), params.getMaxDate()));
+			criteria.add(Restrictions.between("confirmationDate", params.getMinDate(), params.getMaxDate()));
 		} else if (params.getMinDate() != null) {
-			criteria.add(Restrictions.ge("date", params.getMinDate()));
+			criteria.add(Restrictions.ge("confirmationDate", params.getMinDate()));
 		} else if (params.getMaxDate() != null) {
-			criteria.add(Restrictions.le("date", params.getMaxDate()));
+			criteria.add(Restrictions.le("confirmationDate", params.getMaxDate()));
 		}
 
 		if (params.getStatusClosed() || params.getStatusDerived() || params.getStatusExpired() || params.getStatusPending()) {
@@ -90,11 +90,11 @@ public class SearchParamParseUtil {
 		}
 
 		if (params.getMinDate() != null && params.getMaxDate() != null) {
-			filters += " AND date BETWEEN :minDate AND :maxDate";
+			filters += " AND confirmationDate BETWEEN :minDate AND :maxDate";
 		} else if (params.getMinDate() != null) {
-			filters += " AND date >= :minDate ";
+			filters += " AND confirmationDate >= :minDate ";
 		} else if (params.getMaxDate() != null) {
-			filters += " AND date <= :maxDate ";
+			filters += " AND confirmationDate <= :maxDate ";
 		}
 
 		if (params.getStatusClosed() || params.getStatusDerived() || params.getStatusExpired() || params.getStatusPending()) {

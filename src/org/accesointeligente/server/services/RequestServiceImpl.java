@@ -127,7 +127,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("confirmationDate"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
@@ -155,7 +155,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("confirmationDate"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
@@ -203,7 +203,6 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			Query hQuery;
 			if(params != null) {
 				query += SearchParamParseUtil.queryAddSearchParams(params);
-				System.err.println(query);
 				hQuery = hibernate.createQuery(query);
 				hQuery.setParameter("user", user);
 				if (query.contains("minDate")) {
@@ -239,7 +238,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
 			criteria.add(Restrictions.eq("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("creationDate"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
@@ -264,7 +263,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("confirmationDate"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
@@ -289,7 +288,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFirstResult(offset);
 			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("date"));
+			criteria.addOrder(Order.asc("confirmationDate"));
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);

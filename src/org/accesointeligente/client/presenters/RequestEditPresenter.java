@@ -2,7 +2,6 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.client.views.RequestEditView;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -150,7 +149,6 @@ public class RequestEditPresenter extends WidgetPresenter<RequestEditPresenter.D
 		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
-		request.setDate(new Date());
 
 		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 			@Override

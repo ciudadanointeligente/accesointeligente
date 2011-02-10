@@ -69,7 +69,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 					display.setRequestTitle(result.getTitle());
 					display.setRequestCategories(result.getCategories());
 					display.setAnotherInstitution(result.getAnotherInstitution());
-					display.setDate(result.getDate());
+					display.setDate(result.getConfirmationDate());
 					display.editOptions(requestIsEditable());
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
@@ -117,6 +117,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 	@Override
 	public void confirmRequest() {
 		request.setStatus(RequestStatus.NEW);
+		request.setConfirmationDate(new Date());
 		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 
 			@Override

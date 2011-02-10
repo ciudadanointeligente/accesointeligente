@@ -27,7 +27,9 @@
 				<param name="enumClassName">org.accesointeligente.shared.RequestStatus</param>
 			</type>
 		</property>
-		<property name="date"/>
+		<property name="creationDate" />
+		<property name="confirmationDate"/>
+		<property name="processDate" />
 		<one-to-one name="response" class="Response" property-ref="request"/>
 		<property name="remoteIdentifier"/>
 		<set name="favorites" inverse="true">

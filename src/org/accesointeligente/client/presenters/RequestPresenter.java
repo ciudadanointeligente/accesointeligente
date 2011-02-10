@@ -2,7 +2,6 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.client.views.RequestView;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -139,7 +138,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
-		request.setDate(new Date());
+		request.setCreationDate(new Date());
 
 		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 			@Override
@@ -151,7 +150,6 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 			@Override
 			public void onSuccess(Request result) {
 				request = result;
-//				display.setState(RequestView.State.SUCCESS);
 				showRequest();
 			}
 		});

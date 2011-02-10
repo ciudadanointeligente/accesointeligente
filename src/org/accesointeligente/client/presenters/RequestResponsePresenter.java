@@ -74,7 +74,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 				if (result != null) {
 					display.setStatus(result.getStatus());
 					display.setRequestTitle(result.getTitle());
-					display.setRequestDate(result.getDate());
+					display.setRequestDate(result.getConfirmationDate());
 					display.setInstitutionName(result.getInstitution().getName());
 					display.setRequestInfo(result.getInformation());
 					display.setRequestContext(result.getContext());
