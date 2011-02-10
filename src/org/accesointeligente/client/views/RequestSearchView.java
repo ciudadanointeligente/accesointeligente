@@ -6,6 +6,7 @@ import org.accesointeligente.model.Institution;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
@@ -125,6 +126,24 @@ public class RequestSearchView extends Composite implements RequestSearchPresent
 	protected void onSearchKeyDown(KeyDownEvent event) {
 		if (presenter != null) {
 			presenter.requestSearch();
+		}
+	}
+
+	@UiHandler("keyWord")
+	protected void onKeyWordKeyDown(KeyDownEvent event) {
+		if (presenter != null) {
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				presenter.requestSearch();
+			}
+		}
+	}
+
+	@UiHandler("institution")
+	protected void onInstitutionKeyDown(KeyDownEvent event) {
+		if (presenter != null) {
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				presenter.requestSearch();
+			}
 		}
 	}
 
