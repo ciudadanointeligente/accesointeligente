@@ -1,11 +1,12 @@
 package org.accesointeligente.model;
 
-import net.sf.gilead.pojo.gwt.LightEntity;
-
-import java.util.Set;
-
 import org.accesointeligente.shared.Country;
 import org.accesointeligente.shared.Gender;
+
+import net.sf.gilead.pojo.gwt.LightEntity;
+
+import java.util.Date;
+import java.util.Set;
 
 public class User extends LightEntity {
 
@@ -21,6 +22,8 @@ public class User extends LightEntity {
 	private Region region;
 	private Boolean naturalPerson;
 	private InstitutionType institutionType;
+	private Date registerDate;
+	private Date lastLoginDate;
 
 	public Long getId() {
 		return id;
@@ -133,5 +136,21 @@ public class User extends LightEntity {
 		}
 
 		return getId().equals(((User) other).getId());
+	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
 }

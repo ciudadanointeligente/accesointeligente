@@ -30,5 +30,7 @@
 		<many-to-one name="region" lazy="false" column="regionId"/>
 		<property name="naturalPerson" />
 		<many-to-one name="institutionType" lazy="false" column="institutionTypeId"/>
+		<property name="registerDate" />
+		<property name="lastLoginDate" />
 	</class>
 </hibernate-mapping>
