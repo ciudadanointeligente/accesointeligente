@@ -34,6 +34,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void initTableFavColumn();
 		void removeTableFavColumn();
 		void setRequests(ListDataProvider<Request> data);
+		void searchPanelToggleVisible();
 	}
 
 	private String listType;
@@ -148,6 +149,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
 			display.setListTitle("Listado de solicitudes");
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
+			display.searchPanelToggleVisible();
 
 			RPC.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 

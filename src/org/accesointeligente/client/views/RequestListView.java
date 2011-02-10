@@ -218,6 +218,15 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 		data.addDataDisplay(requestTable);
 	}
 
+	@Override
+	public void searchPanelToggleVisible() {
+		if (searchPanel.isVisible()) {
+			searchPanel.setVisible(false);
+		} else {
+			searchPanel.setVisible(true);
+		}
+	}
+
 	@UiFactory
 	SimplePager getPager() {
 		requestPager = new SimplePager(TextLocation.CENTER);
@@ -231,10 +240,6 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@UiHandler("searchPanelHandle")
 	public void onSearchPanelHandleClick(ClickEvent event) {
-		if (searchPanel.isVisible()) {
-			searchPanel.setVisible(false);
-		} else {
-			searchPanel.setVisible(true);
-		}
+		searchPanelToggleVisible();
 	}
 }
