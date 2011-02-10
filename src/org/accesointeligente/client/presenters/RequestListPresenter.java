@@ -175,7 +175,6 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
 			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
-			display.removeTableFavColumn();
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
@@ -224,8 +223,6 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		} else if (type.equals(RequestListType.DRAFTS.getType())) {
 			display.setListTitle("Mis borradores");
 			display.setListTitleStyle(RequestListType.DRAFTS.getType());
-			display.removeTableFavColumn();
-			display.removeSearchWidget();
 
 			if (ClientSessionUtil.checkSession()) {
 				RPC.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {

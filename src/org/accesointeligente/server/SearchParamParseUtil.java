@@ -4,6 +4,7 @@ import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 
@@ -11,14 +12,19 @@ public class SearchParamParseUtil {
 
 	public static void criteriaAddSearchParams(Criteria criteria, RequestSearchParams params) {
 		if (params.getKeyWord() != null && !params.getKeyWord().equals("")) {
-			Disjunction keyWordDisjunction = Restrictions.disjunction();
+			Conjunction keywordConjunction = Restrictions.conjunction();
+			Disjunction keyWordDisjunction;
 			String[] keyWords = params.getKeyWord().split("[ ]");
+
 			for (int i = 0; i < keyWords.length; i++) {
-				keyWordDisjunction.add(Restrictions.ilike("information", keyWords[i]));
-				keyWordDisjunction.add(Restrictions.ilike("context", keyWords[i]));
-				keyWordDisjunction.add(Restrictions.ilike("title", keyWords[i]));
+				keyWords[i]  = keyWords[i].replaceAll("\\W", "");
+				keyWordDisjunction = Restrictions.disjunction();
+				keyWordDisjunction.add(Restrictions.ilike("information", keyWords[i] + "%"));
+				keyWordDisjunction.add(Restrictions.ilike("context", keyWords[i] + "%"));
+				keyWordDisjunction.add(Restrictions.ilike("title", keyWords[i]  + "%"));
+				keywordConjunction.add(keyWordDisjunction);
 			}
-			criteria.add(keyWordDisjunction);
+			criteria.add(keywordConjunction);
 		}
 
 		if (params.getInstitution() != null) {
@@ -71,6 +77,7 @@ public class SearchParamParseUtil {
 				if (i != 0) {
 					filters += " OR ";
 				}
+				keyWords[i]  = keyWords[i].replaceAll("\\W", "");
 				filters += " lower(information) like lower('%" + keyWords[i] + "%') OR ";
 				filters += " lower(context) like lower('%" + keyWords[i] + "%') OR ";
 				filters += " lower(title) like lower('%" + keyWords[i] + "%') ";
