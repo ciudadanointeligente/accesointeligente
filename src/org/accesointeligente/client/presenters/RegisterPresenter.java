@@ -15,9 +15,7 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
 	public interface Display extends WidgetDisplay {
@@ -190,6 +188,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 			user.setEmail(display.getEmail());
 			user.setPassword(display.getPassword());
 			user.setCountry(display.getCountry());
+			user.setRegisterDate(new Date());
 
 			if (display.getCountry().equals(Country.CHILE)) {
 				user.setRegion(display.getRegion());

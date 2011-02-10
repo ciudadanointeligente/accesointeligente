@@ -13,9 +13,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public class UserServiceImpl extends PersistentRemoteService implements UserService {
@@ -54,6 +52,8 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			if (!BCrypt.checkpw(password, user.getPassword())) {
 				throw new LoginException();
 			} else {
+				user.setLastLoginDate(new Date());
+				updateUser(user);
 				SessionUtil.setSession (getThreadLocalRequest ().getSession ());
 				SessionUtil.setAttribute ("sessionId", UUID.randomUUID ().toString ());
 				SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(user));
