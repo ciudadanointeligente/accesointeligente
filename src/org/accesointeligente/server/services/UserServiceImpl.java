@@ -189,9 +189,9 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			hibernate.getTransaction().commit();
 
 			Emailer emailer = new Emailer(user.getEmail(), "Accesointeligente le comunica: Se ha reestablecido su contraseña",
-					(user.getGender().equals(Gender.FEMALE))? "Sra." : "Sr." + user.getFirstName() + ", <br />" +
-					"<p>" + "ha solicitado a través de nuestro sistema de recuperación de contraseña la creación de una nueva<br />" +
-					"La cual le damos a continuación: " + newPassword + "</p>");
+					(user.getGender().equals(Gender.FEMALE))? "Sra. " : "Sr. " + user.getFirstName() + ", <br />" +
+					"<p>" + "Ud. ha solicitado a través de nuestro sistema de recuperación de contraseña la creación de una nueva.<br />" +
+					"Su nueva contraseña: <b>" + newPassword + "</b></p>");
 			emailer.connectAndSend();
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
