@@ -1,14 +1,13 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.shared.NotificationEvent;
-import org.accesointeligente.shared.NotificationEventParams;
-import org.accesointeligente.shared.NotificationEventType;
+import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class PasswordRecoveryPresenter extends WidgetPresenter<PasswordRecoveryPresenter.Display> implements PasswordRecoveryPresenterIface {
@@ -59,6 +58,7 @@ public class PasswordRecoveryPresenter extends WidgetPresenter<PasswordRecoveryP
 						public void onSuccess(Void result) {
 							showNotification("Se ha actualizado su contraseña. Dentro de la brevedad le será enviado un correo con su nueva contraseña",
 									NotificationEventType.SUCCESS);
+							History.newItem(AppPlace.HOME.getToken());
 						}
 					});
 				}
