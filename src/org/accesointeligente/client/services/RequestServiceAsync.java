@@ -28,7 +28,9 @@ public interface RequestServiceAsync {
 	void createRequestComment(RequestComment comment, AsyncCallback<RequestComment> callback);
 	void deleteRequestComment(RequestComment comment, AsyncCallback<Void> callback);
 	void saveResponse(Response response, AsyncCallback<Response> callback);
+	void deleteResponse(Response response, AsyncCallback<Void> callback);
 	void saveAttachment(Attachment attachment, AsyncCallback<Attachment> callback);
+	void deleteAttachment(Attachment attachment, AsyncCallback<Void> callback);
 	void saveUserRequestQualification(UserRequestQualification qualification, AsyncCallback<UserRequestQualification> callback);
 	void updateRequestQualification(Request request, AsyncCallback<Request> callback);
 }

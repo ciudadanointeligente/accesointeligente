@@ -453,6 +453,20 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 	}
 
 	@Override
+	public void deleteResponse(Response response) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			hibernate.delete(response);
+			hibernate.getTransaction().commit();
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
 	public Attachment saveAttachment(Attachment attachment) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
@@ -462,6 +476,21 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			hibernate.save(attachment);
 			hibernate.getTransaction().commit();
 			return attachment;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+
+	@Override
+	public void deleteAttachment(Attachment attachment) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			hibernate.delete(attachment);
+			hibernate.getTransaction().commit();
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
