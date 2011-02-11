@@ -7,13 +7,19 @@ import org.accesointeligente.server.services.RequestServiceImpl;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,65 +70,121 @@ public class ResponseChecker {
 					String disposition = part.getDisposition();
 
 					if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
-						// TODO: other formats
-						if (part.isMimeType("application/msword")) {
-							WordExtractor wordExtractor = new WordExtractor(part.getInputStream());
-							String[] paragraphs = wordExtractor.getParagraphText();
-							Pattern pattern = Pattern.compile("^Solicitud ([A-Z]{2}[0-9]{3}[A-Z]-[0-9]{7}) de *fecha.*$");
-							String remoteIdentifier = null;
+						Pattern pattern = Pattern.compile("([A-Z]{2}[0-9]{3}[A-Z]-{0,1}[0-9]{7})");
+						Matcher matcher;
+						String remoteIdentifier = null;
+						FileType filetype = null;
 
-							for (String paragraph : paragraphs) {
-								Matcher matcher = pattern.matcher(paragraph);
+						try {
+							// TODO: other formats
+							if (part.isMimeType("application/msword")) {
+								WordExtractor extractor = new WordExtractor(part.getInputStream());
+								StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
 
-								if (matcher.matches()) {
-									remoteIdentifier = matcher.group(1);
-									break;
+								while (tokenizer.hasMoreTokens()) {
+									matcher = pattern.matcher(tokenizer.nextToken());
+
+									if (matcher.matches()) {
+										filetype = FileType.DOC;
+										remoteIdentifier = matcher.group(1);
+										break;
+									}
+								}
+							} else if (part.isMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+								XWPFWordExtractor extractor = new XWPFWordExtractor(new XWPFDocument(part.getInputStream()));
+								StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
+
+								while (tokenizer.hasMoreTokens()) {
+									matcher = pattern.matcher(tokenizer.nextToken());
+
+									if (matcher.matches()) {
+										filetype = FileType.DOCX;
+										remoteIdentifier = matcher.group(1);
+										break;
+									}
+								}
+							} else if (part.isMimeType("application/pdf")) {
+								PdfReader reader = new PdfReader(part.getInputStream());
+
+								for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+									if (remoteIdentifier != null) {
+										break;
+									}
+
+									StringTokenizer tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
+
+									while (tokenizer.hasMoreTokens()) {
+										matcher = pattern.matcher(tokenizer.nextToken());
+
+										if (matcher.matches()) {
+											filetype = FileType.PDF;
+											remoteIdentifier = matcher.group(1);
+											reader.close();
+											break;
+										}
+									}
 								}
 							}
-
-							if (remoteIdentifier == null) {
-								break;
-							}
-
-							String directory = ApplicationProperties.getProperty("attachment.directory");
-							String baseUrl = ApplicationProperties.getProperty("attachment.baseurl");
-
-							String filename = MimeUtility.decodeText(part.getFileName());
-
-							if (filename != null) {
-								FileOutputStream out = new FileOutputStream(new File(directory + filename));
-								IOUtils.copy(part.getInputStream(), out);
-								out.close();
-							}
-
-							Request request = requestService.getRequest(remoteIdentifier);
-
-							if (request == null) {
-								continue;
-							}
-
-							request.setStatus(RequestStatus.CLOSED);
-							Response response = request.getResponse ();
-
-							if (response == null) {
-								response = new Response();
-								response.setRequest(request);
-							}
-
-							response.setDate(new Date());
-
-							Attachment attachment = new Attachment();
-							attachment.setName(filename);
-							attachment.setType(FileType.DOC);
-							attachment.setUrl(baseUrl + filename);
-							attachment.setResponse(response);
-
-							requestService.saveRequest(request);
-							requestService.saveResponse(response);
-							requestService.saveAttachment(attachment);
-
-							message.setFlag(Flag.SEEN, true);
+						} catch (Exception e) {
+							System.err.println("Error procesando " + MimeUtility.decodeText(part.getFileName()));
+							e.printStackTrace();
+							continue;
 						}
+
+						if (remoteIdentifier == null) {
+							continue;
+						}
+
+						String directory = ApplicationProperties.getProperty("attachment.directory");
+						String baseUrl = ApplicationProperties.getProperty("attachment.baseurl");
+
+						Request request = requestService.getRequest(remoteIdentifier);
+
+						if (request == null) {
+							continue;
+						}
+
+						Response response = request.getResponse ();
+						Boolean newResponse = false;
+
+						if (response == null) {
+							newResponse = true;
+							response = new Response();
+							response.setRequest(request);
+						}
+
+						response.setDate(new Date());
+						response = requestService.saveResponse(response);
+
+						Attachment attachment = new Attachment();
+						attachment.setResponse(response);
+						attachment = requestService.saveAttachment(attachment);
+
+						String filename = remoteIdentifier + "-" + response.getId() + "-" + attachment.getId() + filetype.getExtension();
+
+						attachment.setName(filename);
+						attachment.setType(filetype);
+						attachment.setUrl(baseUrl + filename);
+
+						try {
+							FileOutputStream out = new FileOutputStream(new File(directory + filename));
+							IOUtils.copy(part.getInputStream(), out);
+							out.close();
+						} catch (Exception e) {
+							requestService.deleteAttachment(attachment);
+
+							if (newResponse) {
+								requestService.deleteResponse(response);
+							}
+
+							System.err.println("Error saving " + directory + filename);
+							throw e;
+						}
+
+						requestService.saveAttachment(attachment);
+						request.setStatus(RequestStatus.CLOSED);
+						requestService.saveRequest(request);
+						message.setFlag(Flag.SEEN, true);
 					}
 				}
 			}
