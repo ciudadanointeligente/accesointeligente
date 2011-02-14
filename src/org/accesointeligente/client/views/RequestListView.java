@@ -5,6 +5,7 @@ import org.accesointeligente.client.CustomActionImageCell.Delegate;
 import org.accesointeligente.client.presenters.RequestListPresenter;
 import org.accesointeligente.client.presenters.RequestListPresenterIface;
 import org.accesointeligente.model.Request;
+import org.accesointeligente.model.Response;
 import org.accesointeligente.model.UserFavoriteRequest;
 import org.accesointeligente.shared.AppPlace;
 
@@ -18,6 +19,9 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RequestListView extends Composite implements RequestListPresenter.Display {
 	private static RequestListViewUiBinder uiBinder = GWT.create(RequestListViewUiBinder.class);
@@ -147,8 +151,9 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				try {
 					String responseDate = "Esperando respuesta";
 
-					if (request.getResponse() != null) {
-						responseDate = DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getResponse().getDate());
+					if (request.getResponses() != null && request.getResponses().size() > 0) {
+						List<Response> responses = new ArrayList<Response>(request.getResponses());
+						responseDate = DateTimeFormat.getFormat("dd/MM/yyyy").format(responses.get(0).getDate());
 					}
 					params.setText(responseDate);
 					return params;

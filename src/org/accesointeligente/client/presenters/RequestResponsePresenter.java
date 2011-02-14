@@ -14,6 +14,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,22 +73,28 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 			@Override
 			public void onSuccess(Request result) {
 				if (result != null) {
-					display.setStatus(result.getStatus());
-					display.setRequestTitle(result.getTitle());
-					display.setRequestDate(result.getConfirmationDate());
-					display.setInstitutionName(result.getInstitution().getName());
-					display.setRequestInfo(result.getInformation());
-					display.setRequestContext(result.getContext());
-					if (result.getResponse() != null) {
-						display.setResponseDate(result.getResponse().getDate());
-						display.setResponseInfo(result.getResponse().getInformation());
-						loadAttachments(result.getResponse());
+					request = result;
+					display.setStatus(request.getStatus());
+					display.setRequestTitle(request.getTitle());
+					display.setRequestDate(request.getConfirmationDate());
+					display.setInstitutionName(request.getInstitution().getName());
+					display.setRequestInfo(request.getInformation());
+					display.setRequestContext(request.getContext());
+					if (request.getResponses() != null && request.getResponses().size() > 0) {
+						List<Response> responses = new ArrayList<Response>(request.getResponses());
+						Response response = responses.get(0);
+						display.setResponseDate(response.getDate());
+						display.setResponseInfo(response.getInformation());
+						loadAttachments(response);
 					} else {
 						display.setResponseInfo("Esperando Respuesta");
 					}
-					request = result;
-					loadComments(result);
-					display.setRatingValue(request.getQualification().intValue());
+
+					loadComments(request);
+					if (request.getQualification() != null) {
+						display.setRatingValue(request.getQualification().intValue());
+					}
+
 					if (ClientSessionUtil.checkSession()) {
 						display.showNewCommentPanel();
 						display.setRatingReadOnly(false);

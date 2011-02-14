@@ -86,6 +86,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("categories", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			criteria.setFetchMode("responses", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("id", requestId));
 			Request request = (Request) criteria.uniqueResult();
 			hibernate.getTransaction().commit();
@@ -131,6 +132,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			criteria.setFetchMode("responses", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			hibernate.getTransaction().commit();
 			return requests;
@@ -159,6 +161,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			criteria.setFetchMode("responses", FetchMode.JOIN);
 			if(params != null) {
 				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
 			}
@@ -242,6 +245,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			criteria.setFetchMode("responses", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			hibernate.getTransaction().commit();
 			return requests;
@@ -267,6 +271,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			criteria.setFetchMode("responses", FetchMode.JOIN);
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			hibernate.getTransaction().commit();
 			return requests;
@@ -292,6 +297,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.addOrder(Order.asc("institution"));
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.setFetchMode("favorites", FetchMode.JOIN);
+			criteria.setFetchMode("responses", FetchMode.JOIN);
 			if(params != null) {
 				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
 			}

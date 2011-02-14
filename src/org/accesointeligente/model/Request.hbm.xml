@@ -30,7 +30,10 @@
 		<property name="creationDate" />
 		<property name="confirmationDate"/>
 		<property name="processDate" />
-		<one-to-one name="response" class="Response" property-ref="request"/>
+		<set name="responses" inverse="true">
+			<key column="requestId"/>
+			<one-to-many class="Response"/>
+		</set>
 		<property name="remoteIdentifier"/>
 		<set name="favorites" inverse="true">
 			<key column="requestId"/>

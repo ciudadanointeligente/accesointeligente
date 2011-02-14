@@ -144,7 +144,8 @@ public class ResponseChecker {
 							continue;
 						}
 
-						Response response = request.getResponse ();
+						Response[] responses = (Response[]) request.getResponses().toArray();
+						Response response = responses[0];
 						Boolean newResponse = false;
 
 						if (response == null) {
