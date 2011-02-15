@@ -182,7 +182,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			User user = SessionUtil.getUser();
-			String query = "select f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites where f.user = :user";
+			String query = "select distinct f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites left join fetch f.request.responses where f.user = :user";
 			Query hQuery = hibernate.createQuery(query);
 			hQuery.setParameter("user", user);
 			List<Request> requests = hQuery.list();
@@ -202,7 +202,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			User user = SessionUtil.getUser();
-			String query = "select f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites where f.user = :user";
+			String query = "select distinct f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites left join fetch f.request.responses where f.user = :user";
 			Query hQuery;
 			if(params != null) {
 				query += SearchParamParseUtil.queryAddSearchParams(params);
