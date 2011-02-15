@@ -5,8 +5,12 @@
 	<g:FormPanel>
 		<g:HTMLPanel addStyleNames="{style.contenedorRegistro}">
 			<h1 class="{style.greyBlock} {style.borderBottomW}">edita tus datos</h1>
-			<g:Label>Email</g:Label>
-			<g:Label ui:field="email"/>
+			<g:HTMLPanel addStyleNames="{style.formSection}">
+				<h2 class="{style.waterBlock}">
+					Email
+				</h2>
+				<g:Label ui:field="email"/>
+			</g:HTMLPanel>
 			<g:HTMLPanel addStyleNames="{style.formSection}">
 				<h2 class="{style.waterBlock}">
 					Cambia tu contraseña
