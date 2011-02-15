@@ -30,7 +30,7 @@
 		<property name="creationDate" />
 		<property name="confirmationDate"/>
 		<property name="processDate" />
-		<set name="responses" inverse="true">
+		<set name="responses" inverse="true" sort="natural">
 			<key column="requestId"/>
 			<one-to-many class="Response"/>
 		</set>

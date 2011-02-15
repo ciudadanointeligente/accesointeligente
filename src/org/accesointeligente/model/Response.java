@@ -5,7 +5,7 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import java.util.Date;
 import java.util.Set;
 
-public class Response extends LightEntity {
+public class Response extends LightEntity implements Comparable<Response> {
 
 	private Integer id;
 	private Request request;
@@ -51,5 +51,23 @@ public class Response extends LightEntity {
 
 	public void setAttachments(Set<Attachment> attachments) {
 		this.attachments = attachments;
+	}
+
+	@Override
+	public int compareTo(Response response) {
+		if (response == null) {
+			return -1;
+		}
+
+		Comparable<Integer> comparableThisResponse = this.getId();
+		Comparable<Integer> comparableThatResponse = response.getId();
+
+		if (comparableThisResponse == null) {
+			return 1;
+		} else if (comparableThatResponse == null) {
+			return -1;
+		} else {
+			return comparableThisResponse.compareTo((Integer) comparableThatResponse);
+		}
 	}
 }
