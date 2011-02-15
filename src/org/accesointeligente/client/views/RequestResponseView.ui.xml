@@ -27,10 +27,6 @@
 					<g:Label ui:field="requestDate"></g:Label>
 				</div>
 				<div class="{style.unit}">
-					<span>Respuesta</span>
-					<g:Label ui:field="responseDate"></g:Label>
-				</div>
-				<div class="{style.unit}">
 					<span> <img src="images/comments-icon-tagline.png" />Comentarios</span>
 					<g:Label ui:field="commentCount"/>
 				</div>
@@ -50,14 +46,7 @@
 					<h4>Contexto: </h4>
 					<g:Label ui:field="requestContext"></g:Label>
 				</g:HTMLPanel>
-				<g:HTMLPanel ui:field="responsePanel" addStyleNames="{style.responsePanel}">
-					<h3>Respuesta:</h3>
-					<g:Label ui:field="responseInfo"></g:Label>
-					<br />
-					<g:HTMLPanel ui:field="responseAttachmentsPanel">
-						<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
-					</g:HTMLPanel>
-				</g:HTMLPanel>
+				<g:FlowPanel ui:field="responsePanel" addStyleNames="{style.responsePanel}"/>
 				<g:HTMLPanel ui:field="newCommentPanel" visible="false" addStyleNames="{style.commentPanel}">
 					<g:TextArea ui:field="newCommentText" addStyleNames="{style.newComment}" />
 					<g:Button ui:field="newCommentSubmit" addStyleNames="{style.commentButton}"><img src="images/comments-button.png" /> Comentar</g:Button>

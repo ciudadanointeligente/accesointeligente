@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	<ui:style src="ResponseWidget.css" />
+
+	<g:HTMLPanel>
+		<h3>Respuesta</h3>
+		<g:Label ui:field="responseDate" addStyleNames="{style.responseDate}" />
+		<g:Label ui:field="responseInfo"></g:Label>
+		<br />
+		<g:HTMLPanel ui:field="responseAttachmentsPanel">
+			<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>

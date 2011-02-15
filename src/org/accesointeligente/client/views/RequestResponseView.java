@@ -1,27 +1,22 @@
 package org.accesointeligente.client.views;
 
-import org.accesointeligente.client.AnchorCell;
-import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
 import org.accesointeligente.client.widgets.CommentWidget;
-import org.accesointeligente.model.Attachment;
+import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.RequestComment;
+import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.cobogw.gwt.user.client.ui.Rating;
 
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Date;
 import java.util.List;
@@ -36,16 +31,12 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField Image requestStatus;
 	@UiField Label requestTitle;
 	@UiField Label requestDate;
-	@UiField Label responseDate;
 	@UiField Label commentCount;
 	@UiField Label institutionName;
 	@UiField Rating requestRate;
 	@UiField Label requestInfo;
 	@UiField Label requestContext;
-	@UiField HTMLPanel responsePanel;
-	@UiField Label responseInfo;
-	@UiField HTMLPanel responseAttachmentsPanel;
-	@UiField CellTable<Attachment> attachmentsTable;
+	@UiField FlowPanel responsePanel;
 	@UiField FlowPanel commentsPanel;
 	@UiField HTMLPanel newCommentPanel;
 	@UiField TextArea newCommentText;
@@ -80,11 +71,6 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	}
 
 	@Override
-	public void setResponseDate(Date date) {
-		responseDate.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(date));
-	}
-
-	@Override
 	public void setInstitutionName(String name) {
 		institutionName.setText(name);
 	}
@@ -100,64 +86,28 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	}
 
 	@Override
-	public void setResponseInfo(String info) {
-		responseInfo.setText(info);
-	}
+	public void setResponses(List<Response> responses) {
+		responsePanel.clear();
 
-	@Override
-	public void setResponseAttachments(ListDataProvider<Attachment> data) {
-		data.addDataDisplay(attachmentsTable);
-	}
-
-	@Override
-	public void initTable() {
-		initTableColumns();
-	}
-
-	@Override
-	public void initTableColumns() {
-		// Name
-		Column<Attachment, String> nameColumn = new Column<Attachment, String>(new TextCell()) {
-			@Override
-			public String getValue(Attachment attachment) {
-				return attachment.getName();
-			}
-		};
-		attachmentsTable.addColumn(nameColumn, "Nombre");
-
-		// Type
-		Column<Attachment, String> typeColumn = new Column<Attachment, String>(new TextCell()) {
-			@Override
-			public String getValue(Attachment attachment) {
-				return attachment.getType().getName() + " " + attachment.getType().getExtension();
-			}
-		};
-		attachmentsTable.addColumn(typeColumn, "Tipo");
-
-		// Download
-		Column<Attachment, AnchorCellParams> statusColumn = new Column<Attachment, AnchorCellParams>(new AnchorCell()) {
-			@Override
-			public AnchorCellParams getValue(Attachment attachment) {
-				AnchorCellParams params = new AnchorCellParams();
-				params.setUrl(attachment.getUrl());
-				params.setStyleNames("");
-				params.setValue(attachment.getName() + attachment.getType().getExtension());
-				return params;
-			}
-		};
-		attachmentsTable.addColumn(statusColumn, "Descarga");
+		for (Response response : responses) {
+			ResponseWidget responseWidget = new ResponseWidget();
+			responseWidget.setInfo(response.getInformation());
+			responseWidget.setDate(response.getDate());
+			presenter.loadAttachments(response, responseWidget);
+			responsePanel.add(responseWidget);
+		}
 	}
 
 	@Override
 	public void setComments(List<RequestComment> comments) {
 		commentsPanel.clear();
 		for (RequestComment comment : comments) {
-			CommentWidget cw = new CommentWidget();
-			cw.setImage("");
-			cw.setAuthor(comment.getUser().getFirstName());
-			cw.setDate(comment.getDate());
-			cw.setContent(comment.getText());
-			commentsPanel.add(cw);
+			CommentWidget commentWidget = new CommentWidget();
+			commentWidget.setImage("");
+			commentWidget.setAuthor(comment.getUser().getFirstName());
+			commentWidget.setDate(comment.getDate());
+			commentWidget.setContent(comment.getText());
+			commentsPanel.add(commentWidget);
 		}
 		commentCount.setText(new Integer(comments.size()).toString());
 	}

@@ -3,6 +3,7 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
@@ -25,15 +26,11 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void setStatus(RequestStatus status);
 		void setRequestTitle(String title);
 		void setRequestDate(Date date);
-		void setResponseDate(Date date);
 		void setInstitutionName(String name);
 		void setRequestInfo(String info);
 		void setRequestContext(String context);
 		// Response
-		void setResponseInfo(String info);
-		void setResponseAttachments(ListDataProvider<Attachment> data);
-		void initTable();
-		void initTableColumns();
+		void setResponses(List<Response> responses);
 		void setComments(List<RequestComment> comments);
 		void showNewCommentPanel();
 		void cleanNewCommentText();
@@ -80,15 +77,16 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 					display.setInstitutionName(request.getInstitution().getName());
 					display.setRequestInfo(request.getInformation());
 					display.setRequestContext(request.getContext());
+					List<Response> responses;
 					if (request.getResponses() != null && request.getResponses().size() > 0) {
-						List<Response> responses = new ArrayList<Response>(request.getResponses());
-						Response response = responses.get(0);
-						display.setResponseDate(response.getDate());
-						display.setResponseInfo(response.getInformation());
-						loadAttachments(response);
+						responses = new ArrayList<Response>(request.getResponses());
 					} else {
-						display.setResponseInfo("Esperando Respuesta");
+						responses = new ArrayList<Response>();
+						Response response = new Response();
+						response.setInformation("Esperando Respuesta");
+						responses.add(response);
 					}
+					display.setResponses(responses);
 
 					loadComments(request);
 					if (request.getQualification() != null) {
@@ -149,7 +147,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 	}
 
 	@Override
-	public void loadAttachments(Response response) {
+	public void loadAttachments(Response response, final ResponseWidget widget) {
 		RPC.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
 
 			@Override
@@ -160,10 +158,10 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 			@Override
 			public void onSuccess(List<Attachment> attachments) {
-				if (attachments.size() > 0) {
-					display.initTable();
+				if (attachments != null && attachments.size() > 0) {
+					widget.initTableColumns();
 					ListDataProvider<Attachment> data = new ListDataProvider<Attachment>(attachments);
-					display.setResponseAttachments(data);
+					widget.setResponseAttachments(data);
 				}
 			}
 		});

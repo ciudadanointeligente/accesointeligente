@@ -1,0 +1,26 @@
+.downloadTable {
+	width: 100%;
+	background: white;
+}
+
+.downloadTable th {
+	background: url("images/reqList/separator.png") no-repeat scroll 0 1px
+		transparent;
+	border-bottom: 1px dashed #6F7277;
+	border-top: 1px dashed #6F7277;
+	color: #5900AD;
+	padding: 10px 15px;
+	text-align: center;
+	text-shadow: none;
+}
+
+.downloadTable th:first-child {
+	background: none no-repeat scroll 0 0 transparent;
+}
+
+.responseDate {
+	color: grey;
+	font-family: Courier, Courier New, monospace, Andale Mono;
+	padding-right: 10px;
+	padding-top: 3px;
+}
