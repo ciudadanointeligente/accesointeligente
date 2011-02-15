@@ -47,5 +47,6 @@
 		<mapping resource="org/accesointeligente/model/User.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/UserFavoriteRequest.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/UserRequestQualification.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/UserResponse.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

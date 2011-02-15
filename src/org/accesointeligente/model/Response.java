@@ -12,6 +12,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private String information;
 	private Date date;
 	private Set<Attachment> attachments;
+	private UserResponse userResponse;
 
 	public Integer getId() {
 		return id;
@@ -51,6 +52,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setAttachments(Set<Attachment> attachments) {
 		this.attachments = attachments;
+	}
+
+	public UserResponse getUserResponse() {
+		return userResponse;
+	}
+
+	public void setUserResponse(UserResponse userResponse) {
+		this.userResponse = userResponse;
 	}
 
 	@Override
