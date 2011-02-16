@@ -33,4 +33,6 @@ public interface RequestServiceAsync {
 	void deleteAttachment(Attachment attachment, AsyncCallback<Void> callback);
 	void saveUserRequestQualification(UserRequestQualification qualification, AsyncCallback<UserRequestQualification> callback);
 	void updateRequestQualification(Request request, AsyncCallback<Request> callback);
+	void saveUserResponse(UserResponse userResponse, AsyncCallback<UserResponse> callback);
+	void getUserResponse(Response response, AsyncCallback<UserResponse> callback);
 }

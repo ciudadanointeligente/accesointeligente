@@ -36,4 +36,6 @@ public interface RequestService extends RemoteService {
 	void deleteAttachment(Attachment attachment) throws ServiceException;
 	UserRequestQualification saveUserRequestQualification(UserRequestQualification qualification) throws ServiceException;
 	Request updateRequestQualification(Request request) throws ServiceException;
+	UserResponse saveUserResponse(UserResponse userResponse) throws ServiceException;
+	UserResponse getUserResponse(Response response) throws ServiceException;
 }

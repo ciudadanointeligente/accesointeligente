@@ -537,4 +537,37 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			throw new ServiceException();
 		}
 	}
+
+	@Override
+	public UserResponse saveUserResponse(UserResponse userResponse) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			userResponse = (UserResponse) persistentBeanManager.merge(userResponse);
+			hibernate.saveOrUpdate(userResponse);
+			hibernate.getTransaction().commit();
+			return (UserResponse) persistentBeanManager.clone(userResponse);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public UserResponse getUserResponse(Response response) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+		try {
+			response = (Response) persistentBeanManager.merge(response);
+			Criteria criteria = hibernate.createCriteria(UserResponse.class);
+			criteria.add(Restrictions.eq("response", response));
+			UserResponse userResponse = (UserResponse) criteria.uniqueResult();
+			hibernate.getTransaction().commit();
+			return (UserResponse) persistentBeanManager.clone(userResponse);
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
 }
