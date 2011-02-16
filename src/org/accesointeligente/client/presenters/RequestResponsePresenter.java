@@ -4,6 +4,7 @@ import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.services.RPC;
 import org.accesointeligente.client.widgets.ResponseWidget;
+import org.accesointeligente.client.widgets.UserResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
@@ -11,8 +12,12 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.ArrayList;
@@ -36,6 +41,9 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void cleanNewCommentText();
 		void setRatingValue(Integer rate);
 		void setRatingReadOnly(Boolean readOnly);
+		void clearResponseWidget(ResponseWidget widget);
+		void setUserResponse(UserResponse userResponse, ResponseWidget widget);
+		void newUserResponse(Response response, ResponseWidget widget);
 	}
 
 	private Request request;
@@ -184,6 +192,51 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 			@Override
 			public void onSuccess(UserRequestQualification result) {
 				display.setRatingValue(result.getRequest().getQualification().intValue());
+			}
+		});
+	}
+
+	@Override
+	public void getUserResponse(final Response response, final ResponseWidget widget) {
+		RPC.getRequestService().getUserResponse(response, new AsyncCallback<UserResponse>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No se puede cargar la respuesta del usuario", NotificationEventType.ERROR);
+			}
+
+			@Override
+			public void onSuccess(UserResponse result) {
+				if (result != null) {
+					display.setUserResponse(result, widget);
+				} else {
+					if (ClientSessionUtil.checkSession() && response.getRequest().getUser() != null && response.getRequest().getUser().equals(ClientSessionUtil.getUser())) {
+						display.newUserResponse(response, widget);
+					}
+				}
+			}
+		});
+	}
+
+	@Override
+	public void saveUserResponse(String information, Response response, final ResponseWidget widget) {
+		UserResponse userResponse = new UserResponse();
+		userResponse.setResponse(response);
+		userResponse.setInformation(information);
+		userResponse.setDate(new Date());
+
+		RPC.getRequestService().saveUserResponse(userResponse, new AsyncCallback<UserResponse>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No se pudo guardar su respuesta, por favor intente nuevamente", NotificationEventType.ERROR);
+			}
+
+			@Override
+			public void onSuccess(UserResponse result) {
+				showNotification("Se ha guardado su respuesta", NotificationEventType.SUCCESS);
+				display.clearResponseWidget(widget);
+				display.setUserResponse(result, widget);
 			}
 		});
 	}

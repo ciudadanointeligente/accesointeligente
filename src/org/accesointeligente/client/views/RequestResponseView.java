@@ -4,8 +4,10 @@ import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
 import org.accesointeligente.client.widgets.CommentWidget;
 import org.accesointeligente.client.widgets.ResponseWidget;
+import org.accesointeligente.client.widgets.UserResponseWidget;
 import org.accesointeligente.model.RequestComment;
 import org.accesointeligente.model.Response;
+import org.accesointeligente.model.UserResponse;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
@@ -13,6 +15,7 @@ import org.cobogw.gwt.user.client.ui.Rating;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.History;
@@ -94,6 +97,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 			responseWidget.setInfo(response.getInformation());
 			responseWidget.setDate(response.getDate());
 			presenter.loadAttachments(response, responseWidget);
+			presenter.getUserResponse(response, responseWidget);
 			responsePanel.add(responseWidget);
 		}
 	}
@@ -130,6 +134,39 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@Override
 	public void setRatingReadOnly(Boolean readOnly) {
 		requestRate.setReadOnly(readOnly);
+	}
+
+	@Override
+	public void clearResponseWidget(ResponseWidget widget) {
+		widget.clearUserResponsePanel();
+	}
+
+	@Override
+	public void setUserResponse(UserResponse userResponse, ResponseWidget widget) {
+		UserResponseWidget userResponseWidget = new UserResponseWidget();
+		userResponseWidget.setInformation(userResponse.getInformation());
+		userResponseWidget.setDate(userResponse.getDate());
+		widget.add(userResponseWidget);
+	}
+
+	@Override
+	public void newUserResponse(final Response response, final ResponseWidget widget) {
+		FlowPanel userResponsePanel = new FlowPanel();
+		final TextArea userResponseTextBox = new TextArea();
+		Button userResponseButton = new Button("Responder", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.saveUserResponse(userResponseTextBox.getText(), response, widget);
+			}
+		});
+
+		userResponsePanel.addStyleName("userResponsePanel");
+		userResponseTextBox.addStyleName("newUserResponse");
+		userResponseButton.addStyleName("userResponseButton");
+
+		userResponsePanel.add(userResponseTextBox);
+		userResponsePanel.add(userResponseButton);
+		widget.add(userResponsePanel);
 	}
 
 	@UiHandler("requestListLink")
