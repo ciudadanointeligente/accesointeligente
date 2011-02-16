@@ -22,6 +22,7 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 		FlowPanel getLayout();
 		void setWelcomeMessage(String message);
 		void setNotificationMessage(NotificationEventParams params);
+		void clearNotifications();
 	}
 
 	public MainPresenter(Display display, EventBus eventBus) {

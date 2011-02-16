@@ -2,12 +2,11 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.MainPresenter;
 import org.accesointeligente.client.presenters.MainPresenterIface;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.NotificationEventParams;
-import org.accesointeligente.shared.RequestListType;
+import org.accesointeligente.shared.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -27,9 +26,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField HTMLPanel headerPanel;
 	@UiField Image logo;
 	@UiField Label welcomeMessage;
-	@UiField HTMLPanel notificationPanel;
-	@UiField Label notificationLabel;
-	@UiField Label notificationClose;
+	@UiField FlowPanel notificationPanel;
 	@UiField FlowPanel mainPanel;
 	@UiField MenuItem myMenu;
 	@UiField MenuItem myrequests;
@@ -44,7 +41,6 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField HTMLPanel footerPanel;
 	@UiField Label loginPending;
 
-	Timer notificationTimer;
 	private MainPresenterIface presenter;
 
 	public MainView() {
@@ -163,23 +159,46 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@Override
 	public void setNotificationMessage(NotificationEventParams params) {
-		notificationLabel.setText(params.getMessage());
-		notificationPanel.setStyleName(params.getType().getType());
-		notificationPanel.setVisible(true);
-		notificationTimer = new Timer() {
+		final FlowPanel notification = new FlowPanel();
+		Label notificationClose = new Label();
+		Label notificationLabel = new Label(params.getMessage());
+		notification.setStyleName(params.getType().getType());
+		notificationClose.addStyleName("closeNotice");
+		notificationLabel.addStyleName("fLeft");
+		notification.setVisible(true);
 
+		Timer notificationTimer = new Timer() {
 			@Override
 			public void run() {
-				notificationPanel.setVisible(false);
+				notification.setVisible(false);
 			}
 		};
 		notificationTimer.schedule(15000);
+
+		notificationClose.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				notification.setVisible(false);
+
+			}
+		});
+
+		notification.add(notificationClose);
+		notification.add(notificationLabel);
+		if(params.getType().equals(NotificationEventType.SUCCESS)) {
+			clearNotifications();
+		}
+		notificationPanel.insert(notification, 0);
+		if (notificationPanel.getWidgetCount() > 3) {
+			for (int i = 3; i < notificationPanel.getWidgetCount(); i++) {
+				notificationPanel.remove(i);
+			}
+		}
 	}
 
-	@UiHandler("notificationClose")
-	public void onNotificationCloseClick(ClickEvent event) {
-		notificationPanel.setVisible(false);
-		notificationTimer.cancel();
+	@Override
+	public void clearNotifications() {
+		notificationPanel.clear();
 	}
 
 	@UiHandler("logo")
