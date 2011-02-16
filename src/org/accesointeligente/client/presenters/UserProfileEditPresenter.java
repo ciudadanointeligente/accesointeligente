@@ -301,8 +301,6 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 					showNotification("Se han actualizado sus datos", NotificationEventType.SUCCESS);
 				}
 			});
-		} else {
-			showNotification("Datos incorrectos", NotificationEventType.ERROR);
 		}
 	}
 
