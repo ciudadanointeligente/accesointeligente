@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="UserResponseWidget.css" />
+
+	<g:HTMLPanel>
+		<h3>Solicitante responde:</h3>
+		<g:Label ui:field="userResponseDate" addStyleNames="{style.userResponseDate}" />
+		<g:Label ui:field="userResponseInformation"></g:Label>
+		<br />
+	</g:HTMLPanel>
+</ui:UiBinder> 
