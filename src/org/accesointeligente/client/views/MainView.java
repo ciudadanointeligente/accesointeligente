@@ -13,6 +13,9 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainView extends Composite implements MainPresenter.Display {
 	private static MainViewUiBinder uiBinder = GWT.create(MainViewUiBinder.class);
 	interface MainViewUiBinder extends UiBinder<Widget, MainView> {}
@@ -158,7 +161,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 	}
 
 	@Override
-	public void setNotificationMessage(NotificationEventParams params) {
+	public void setNotificationMessage(final NotificationEventParams params) {
 		final FlowPanel notification = new FlowPanel();
 		Label notificationClose = new Label();
 		Label notificationLabel = new Label(params.getMessage());
@@ -178,8 +181,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 		notificationClose.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				notification.setVisible(false);
-
+				notificationPanel.remove(notification);
 			}
 		});
 
@@ -190,8 +192,8 @@ public class MainView extends Composite implements MainPresenter.Display {
 		}
 		notificationPanel.insert(notification, 0);
 		if (notificationPanel.getWidgetCount() > 3) {
-			for (int i = 3; i < notificationPanel.getWidgetCount(); i++) {
-				notificationPanel.remove(i);
+			for (Integer index = 3; index < notificationPanel.getWidgetCount(); index++) {
+				notificationPanel.remove(index);
 			}
 		}
 	}

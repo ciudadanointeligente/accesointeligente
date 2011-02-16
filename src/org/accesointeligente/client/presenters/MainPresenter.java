@@ -91,4 +91,9 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 			display.setNotificationMessage(notificationEvent.getParams());
 		}
 	}
+
+	@Override
+	public void clearNotifications() {
+		display.clearNotifications();
+	}
 }
