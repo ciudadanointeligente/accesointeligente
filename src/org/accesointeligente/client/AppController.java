@@ -68,6 +68,10 @@ public class AppController implements ValueChangeHandler<String> {
 		Map<String, String> parameters = getHistoryTokenParameters(token);
 		AppPlace place = getPlace(token);
 
+		if (mainPresenter != null) {
+			mainPresenter.clearNotifications();
+		}
+
 		if (ClientSessionUtil.checkSession()) {
 			switch (place) {
 				case HOME:
