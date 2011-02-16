@@ -24,6 +24,7 @@ public class ResponseWidget extends Composite {
 	@UiField Label responseInfo;
 	@UiField HTMLPanel responseAttachmentsPanel;
 	@UiField CellTable<Attachment> attachmentsTable;
+	@UiField FlowPanel userResponsePanel;
 
 	public ResponseWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -72,5 +73,13 @@ public class ResponseWidget extends Composite {
 
 	public void setResponseAttachments(ListDataProvider<Attachment> data) {
 		data.addDataDisplay(attachmentsTable);
+	}
+
+	public void add(Widget widget) {
+		userResponsePanel.add(widget);
+	}
+
+	public void clearUserResponsePanel() {
+		userResponsePanel.clear();
 	}
 }

@@ -12,5 +12,6 @@
 		<g:HTMLPanel ui:field="responseAttachmentsPanel">
 			<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
 		</g:HTMLPanel>
+		<g:FlowPanel ui:field="userResponsePanel"/>
 	</g:HTMLPanel>
 </ui:UiBinder>
