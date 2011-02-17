@@ -9,6 +9,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	private Integer id;
 	private Request request;
+	private String sender;
 	private String information;
 	private Date date;
 	private Set<Attachment> attachments;
@@ -28,6 +29,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setRequest(Request request) {
 		this.request = request;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
 	}
 
 	public String getInformation() {
