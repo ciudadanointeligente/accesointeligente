@@ -3,8 +3,10 @@ package org.accesointeligente.server.robots;
 import org.accesointeligente.client.services.RequestService;
 import org.accesointeligente.model.*;
 import org.accesointeligente.server.ApplicationProperties;
+import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.services.RequestServiceImpl;
 import org.accesointeligente.shared.FileType;
+import org.accesointeligente.shared.Gender;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.itextpdf.text.pdf.PdfReader;
@@ -62,6 +64,7 @@ public class ResponseChecker {
 				}
 
 				System.out.println(message.getFrom()[0] + "\t" + message.getSubject());
+				Response response = new Response();
 
 				Multipart mp = (Multipart) message.getContent();
 
@@ -144,18 +147,9 @@ public class ResponseChecker {
 							continue;
 						}
 
-						Response[] responses = (Response[]) request.getResponses().toArray();
-						Response response = responses[0];
-						Boolean newResponse = false;
-
-						if (response == null) {
-							newResponse = true;
-							response = new Response();
-							response.setRequest(request);
-						}
-
+						response.setSender(message.getFrom().toString());
 						response.setDate(new Date());
-						response = requestService.saveResponse(response);
+						response.setRequest(request);
 
 						Attachment attachment = new Attachment();
 						attachment.setResponse(response);
@@ -174,19 +168,35 @@ public class ResponseChecker {
 						} catch (Exception e) {
 							requestService.deleteAttachment(attachment);
 
-							if (newResponse) {
-								requestService.deleteResponse(response);
-							}
-
 							System.err.println("Error saving " + directory + filename);
 							throw e;
 						}
+
 
 						requestService.saveAttachment(attachment);
 						request.setStatus(RequestStatus.CLOSED);
 						requestService.saveRequest(request);
 						message.setFlag(Flag.SEEN, true);
 					}
+				}
+
+				try {
+					if (response.getRequest() != null) {
+						response = requestService.saveResponse(response);
+
+						// TODO: send permalink to request
+						Request request = response.getRequest();
+						User user = request.getUser();
+
+						Emailer emailer = new Emailer();
+						emailer.setRecipient(user.getEmail());
+						emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
+						emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), (user.getGender().equals(Gender.FEMALE)) ? "Sra. " : "Sr. ", user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+						emailer.connectAndSend();
+					}
+				} catch (Exception e) {
+					requestService.deleteResponse(response);
+					throw e;
 				}
 			}
 		} catch (Exception e) {
