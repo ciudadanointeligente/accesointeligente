@@ -15,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
 
-
 public class UserServiceImpl extends PersistentRemoteService implements UserService {
 	private static final long serialVersionUID = -389660005156048126L;
 	private PersistentBeanManager persistentBeanManager;
@@ -54,9 +53,9 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			} else {
 				user.setLastLoginDate(new Date());
 				updateUser(user);
-				SessionUtil.setSession (getThreadLocalRequest ().getSession ());
-				SessionUtil.setAttribute ("sessionId", UUID.randomUUID ().toString ());
-				SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(user));
+				SessionUtil.setSession(getThreadLocalRequest().getSession());
+				SessionUtil.setAttribute("sessionId", UUID.randomUUID().toString());
+				SessionUtil.setAttribute("user", (User) persistentBeanManager.clone(user));
 			}
 		}
 	}
@@ -138,7 +137,7 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			hibernate.beginTransaction();
 			hibernate.update(user);
 			hibernate.getTransaction().commit();
-			SessionUtil.setAttribute ("user", (User) persistentBeanManager.clone(user));
+			SessionUtil.setAttribute("user", (User) persistentBeanManager.clone(user));
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
@@ -188,10 +187,10 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			hibernate.update(user);
 			hibernate.getTransaction().commit();
 
-			Emailer emailer = new Emailer(user.getEmail(), "Accesointeligente le comunica: Se ha reestablecido su contraseña",
-					(user.getGender().equals(Gender.FEMALE))? "Sra. " : "Sr. " + user.getFirstName() + ", <br />" +
-					"<p>" + "Ud. ha solicitado a través de nuestro sistema de recuperación de contraseña la creación de una nueva.<br />" +
-					"Su nueva contraseña: <b>" + newPassword + "</b></p>");
+			Emailer emailer = new Emailer();
+			emailer.setRecipient(user.getEmail());
+			emailer.setSubject(ApplicationProperties.getProperty("email.password.recovery.subject"));
+			emailer.setBody(String.format(ApplicationProperties.getProperty("email.password.recovery.body"), (user.getGender().equals(Gender.FEMALE)) ? "Sra. " : "Sr. ", user.getFirstName(), newPassword) + ApplicationProperties.getProperty("email.signature"));
 			emailer.connectAndSend();
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
