@@ -91,6 +91,10 @@
   </listener>
 
   <listener>
+    <listener-class>org.accesointeligente.server.RobotContext</listener-class>
+  </listener>
+
+  <listener>
     <listener-class>org.accesointeligente.server.BackgroundServiceManager</listener-class>
   </listener>
 

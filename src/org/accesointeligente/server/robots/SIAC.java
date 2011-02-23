@@ -35,6 +35,7 @@ import org.apache.http.util.EntityUtils;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 
+import java.beans.ConstructorProperties;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +55,9 @@ public class SIAC extends Robot {
 		client = new DefaultHttpClient();
 		HttpProtocolParams.setUserAgent(client.getParams(), "Mozilla/5.0 (X11; U; Linux x86_64; es-CL; rv:1.9.2.12) Gecko/20101027 Ubuntu/10.10 (maverick) Firefox/3.6.12");
 		cleaner = new HtmlCleaner();
-		// FIXME: these must be configurable
-		setUsername("accesoint");
-		setPassword("holanda895");
-		setUserId("416");
 	}
 
+	@ConstructorProperties({"idEntidad", "baseUrl"})
 	public SIAC(String idEntidad, String baseUrl) {
 		this();
 		setIdEntidad(idEntidad);

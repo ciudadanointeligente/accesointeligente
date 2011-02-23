@@ -49,7 +49,7 @@ public class RequestCreationTask extends TimerTask {
 				System.err.println("[INFO] RequestCreationTask: requestId = " + request.getId());
 
 				try {
-					Robot robot = Robot.getRobot(request.getInstitution().getInstitutionClass());
+					Robot robot = RobotContext.getRobot(request.getInstitution().getInstitutionClass());
 
 					if (robot != null) {
 						request = robot.makeRequest(request);

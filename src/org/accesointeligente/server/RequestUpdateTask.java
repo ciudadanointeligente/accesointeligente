@@ -49,7 +49,7 @@ public class RequestUpdateTask extends TimerTask {
 				System.err.println("[INFO] RequestUpdateTask: requestId = " + request.getId());
 
 				try {
-					Robot robot = Robot.getRobot(request.getInstitution().getInstitutionClass());
+					Robot robot = RobotContext.getRobot(request.getInstitution().getInstitutionClass());
 
 					if (robot != null) {
 						RequestStatus status = robot.checkRequestStatus(request);
