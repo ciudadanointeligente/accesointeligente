@@ -47,22 +47,31 @@
 				addStyleNames="{style.footerPanel} {style.bgDotted}">
 				<div class="{style.footerPanelContent} {style.footerGoldenDouble}">
 					<div class="{style.footerModule}">
-						<h1>Links</h1>
+						<h1>Otros Proyectos de Ciudadano Inteligente</h1>
 						<ul class="{style.link}">
 							<li>
-								<a href="#">www.hayquedefinirloslinks.cl</a>
+								<a href="http://www.votainteligente.cl">www.votainteligente.cl</a>
 							</li>
 							<li>
-								<a href="#">www.hayquedefinirloslinks.cl</a>
+								<a href="http://www.criik.com">www.criik.com</a>
 							</li>
 							<li>
-								<a href="#">www.hayquedefinirloslinks.cl</a>
+								<a href="http://www.donar.cl">www.donar.cl</a>
 							</li>
 						</ul>
 					</div>
-					<div class="{style.footerModule}"> jnsjkdnsjd</div>
+					<div class="{style.footerModule}">
+						Fundación Ciudadano Inteligente<br />
+						<a href="http://www.ciudadanointeligente.cl">www.ciudadanointeligente.cl</a><br />
+						+56 2 4192770 - Chile<br /><br />
+					</div>
 				</div>
 			</g:HTMLPanel>
+			<div class="{style.footerPanelContent}" style="text-align:center;">
+				Ciudadano Inteligente 2010 - 2011.
+				Disponible bajo licencia <a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License</a>.
+				Código fuente disponible en <a href="https://github.com/ciudadanointeligente/">github</a>.
+			</div>
 			<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
 		</div>
 	</g:HTMLPanel>
