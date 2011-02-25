@@ -37,9 +37,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Date;
-import java.util.Properties;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,7 +80,9 @@ public class ResponseChecker {
 				}
 
 				System.out.println(message.getFrom()[0] + "\t" + message.getSubject());
-				Response response = new Response();
+				String remoteIdentifier = null;
+				Pattern pattern = Pattern.compile("([A-Z]{2}[0-9]{3}[A-Z]-{0,1}[0-9]{7})");
+				List<Attachment> attachments = new ArrayList<Attachment>();
 
 				Multipart mp = (Multipart) message.getContent();
 
@@ -91,89 +91,74 @@ public class ResponseChecker {
 					String disposition = part.getDisposition();
 
 					if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
-						Pattern pattern = Pattern.compile("([A-Z]{2}[0-9]{3}[A-Z]-{0,1}[0-9]{7})");
 						Matcher matcher;
-						String remoteIdentifier = null;
 						FileType filetype = null;
 
-						try {
-							// TODO: other formats
-							if (part.isMimeType("application/msword")) {
-								WordExtractor extractor = new WordExtractor(part.getInputStream());
-								StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
-
-								while (tokenizer.hasMoreTokens()) {
-									matcher = pattern.matcher(tokenizer.nextToken());
-
-									if (matcher.matches()) {
-										filetype = FileType.DOC;
-										remoteIdentifier = matcher.group(1);
-										break;
-									}
-								}
-							} else if (part.isMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
-								XWPFWordExtractor extractor = new XWPFWordExtractor(new XWPFDocument(part.getInputStream()));
-								StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
-
-								while (tokenizer.hasMoreTokens()) {
-									matcher = pattern.matcher(tokenizer.nextToken());
-
-									if (matcher.matches()) {
-										filetype = FileType.DOCX;
-										remoteIdentifier = matcher.group(1);
-										break;
-									}
-								}
-							} else if (part.isMimeType("application/pdf")) {
-								PdfReader reader = new PdfReader(part.getInputStream());
-
-								for (int page = 1; page <= reader.getNumberOfPages(); page++) {
-									if (remoteIdentifier != null) {
-										break;
-									}
-
-									StringTokenizer tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
+						if (remoteIdentifier == null) {
+							try {
+								// TODO: other formats
+								if (part.isMimeType("application/msword")) {
+									WordExtractor extractor = new WordExtractor(part.getInputStream());
+									StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
 
 									while (tokenizer.hasMoreTokens()) {
 										matcher = pattern.matcher(tokenizer.nextToken());
 
 										if (matcher.matches()) {
-											filetype = FileType.PDF;
+											filetype = FileType.DOC;
 											remoteIdentifier = matcher.group(1);
-											reader.close();
 											break;
 										}
 									}
-								}
-							}
-						} catch (Exception e) {
-							System.err.println("Error procesando " + MimeUtility.decodeText(part.getFileName()));
-							e.printStackTrace();
-							continue;
-						}
+								} else if (part.isMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+									XWPFWordExtractor extractor = new XWPFWordExtractor(new XWPFDocument(part.getInputStream()));
+									StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
 
-						if (remoteIdentifier == null) {
-							continue;
+									while (tokenizer.hasMoreTokens()) {
+										matcher = pattern.matcher(tokenizer.nextToken());
+
+										if (matcher.matches()) {
+											filetype = FileType.DOCX;
+											remoteIdentifier = matcher.group(1);
+											break;
+										}
+									}
+								} else if (part.isMimeType("application/pdf")) {
+									PdfReader reader = new PdfReader(part.getInputStream());
+
+									for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+										if (remoteIdentifier != null) {
+											break;
+										}
+
+										StringTokenizer tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
+
+										while (tokenizer.hasMoreTokens()) {
+											matcher = pattern.matcher(tokenizer.nextToken());
+
+											if (matcher.matches()) {
+												filetype = FileType.PDF;
+												remoteIdentifier = matcher.group(1);
+												reader.close();
+												break;
+											}
+										}
+									}
+								}
+							} catch (Exception e) {
+								System.err.println("Error procesando " + MimeUtility.decodeText(part.getFileName()));
+								e.printStackTrace();
+								continue;
+							}
 						}
 
 						String directory = ApplicationProperties.getProperty("attachment.directory");
 						String baseUrl = ApplicationProperties.getProperty("attachment.baseurl");
 
-						Request request = requestService.getRequest(remoteIdentifier);
-
-						if (request == null) {
-							continue;
-						}
-
-						response.setSender(message.getFrom().toString());
-						response.setDate(new Date());
-						response.setRequest(request);
-
 						Attachment attachment = new Attachment();
-						attachment.setResponse(response);
 						attachment = requestService.saveAttachment(attachment);
 
-						String filename = remoteIdentifier + "-" + response.getId() + "-" + attachment.getId() + filetype.getExtension();
+						String filename = attachment.getId() + filetype.getExtension();
 
 						attachment.setName(filename);
 						attachment.setType(filetype);
@@ -185,36 +170,50 @@ public class ResponseChecker {
 							out.close();
 						} catch (Exception e) {
 							requestService.deleteAttachment(attachment);
-
 							System.err.println("Error saving " + directory + filename);
 							throw e;
 						}
 
-
 						requestService.saveAttachment(attachment);
-						request.setStatus(RequestStatus.CLOSED);
-						requestService.saveRequest(request);
-						message.setFlag(Flag.SEEN, true);
+						attachments.add(attachment);
 					}
 				}
 
-				try {
-					if (response.getRequest() != null) {
-						response = requestService.saveResponse(response);
-
-						// TODO: send permalink to request
-						Request request = response.getRequest();
-						User user = request.getUser();
-
-						Emailer emailer = new Emailer();
-						emailer.setRecipient(user.getEmail());
-						emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
-						emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), (user.getGender().equals(Gender.FEMALE)) ? "Sra. " : "Sr. ", user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
-						emailer.connectAndSend();
+				if (remoteIdentifier == null) {
+					for (Attachment attachment : attachments) {
+						requestService.deleteAttachment(attachment);
 					}
-				} catch (Exception e) {
-					requestService.deleteResponse(response);
-					throw e;
+				} else {
+					Request request = requestService.getRequest(remoteIdentifier);
+
+					if (request == null) {
+						for (Attachment attachment : attachments) {
+							requestService.deleteAttachment(attachment);
+						}
+					}
+
+					request.setStatus(RequestStatus.CLOSED);
+					requestService.saveRequest(request);
+
+					Response response = new Response();
+					response.setSender(message.getFrom().toString());
+					response.setDate(new Date());
+					response.setRequest(request);
+					response = requestService.saveResponse(response);
+
+					for (Attachment attachment : attachments) {
+						attachment.setResponse(response);
+						requestService.saveAttachment(attachment);
+					}
+
+					// TODO: send permalink to request
+					User user = request.getUser();
+
+					Emailer emailer = new Emailer();
+					emailer.setRecipient(user.getEmail());
+					emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
+					emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), (user.getGender().equals(Gender.FEMALE)) ? "Sra. " : "Sr. ", user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+					emailer.connectAndSend();
 				}
 			}
 		} catch (Exception e) {
