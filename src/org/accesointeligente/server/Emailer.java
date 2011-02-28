@@ -85,7 +85,7 @@ public class Emailer {
 			return false;
 		}
 
-		Session session = Session.getDefaultInstance(props, new Authenticator() {
+		Session session = Session.getInstance(props, new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(ApplicationProperties.getProperty("email.user"), ApplicationProperties.getProperty("email.password"));
