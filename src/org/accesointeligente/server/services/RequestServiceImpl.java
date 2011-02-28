@@ -560,7 +560,18 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		try {
 			userResponse = (UserResponse) persistentBeanManager.merge(userResponse);
 			hibernate.saveOrUpdate(userResponse);
+
+			Response response = userResponse.getResponse();
+			Request request = response.getRequest();
+			User user = request.getUser();
 			hibernate.getTransaction().commit();
+
+			Emailer emailer = new Emailer();
+			emailer.setRecipient(user.getEmail());
+			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.user.response.subject"), request.getRemoteIdentifier()));
+			emailer.setBody(String.format(ApplicationProperties.getProperty("email.user.response.body"),  userResponse.getInformation()) + ApplicationProperties.getProperty("email.signature"));
+			emailer.connectAndSend();
+
 			return (UserResponse) persistentBeanManager.clone(userResponse);
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
@@ -578,14 +589,6 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			criteria.add(Restrictions.eq("response", response));
 			UserResponse userResponse = (UserResponse) criteria.uniqueResult();
 			hibernate.getTransaction().commit();
-
-			User user = SessionUtil.getUser();
-
-			Emailer emailer = new Emailer();
-			emailer.setRecipient(user.getEmail());
-			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.user.response.subject"), userResponse.getResponse().getRequest().getRemoteIdentifier()));
-			emailer.setBody(String.format(ApplicationProperties.getProperty("email.user.response.body"),  userResponse.getInformation()) + ApplicationProperties.getProperty("email.signature"));
-			emailer.connectAndSend();
 
 			return (UserResponse) persistentBeanManager.clone(userResponse);
 		} catch (Throwable ex) {
