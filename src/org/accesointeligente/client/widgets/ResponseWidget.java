@@ -70,7 +70,7 @@ public class ResponseWidget extends Composite {
 		Column<Attachment, String> typeColumn = new Column<Attachment, String>(new TextCell()) {
 			@Override
 			public String getValue(Attachment attachment) {
-				return attachment.getType().getName() + " " + attachment.getType().getExtension();
+				return attachment.getType().getName();
 			}
 		};
 		attachmentsTable.addColumn(typeColumn, "Tipo");
@@ -82,7 +82,7 @@ public class ResponseWidget extends Composite {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setUrl(attachment.getUrl());
 				params.setStyleNames("");
-				params.setValue(attachment.getName() + attachment.getType().getExtension());
+				params.setValue(attachment.getName());
 				return params;
 			}
 		};

@@ -7,11 +7,15 @@
 	<g:HTMLPanel>
 		<h3>Respuesta</h3>
 		<g:Label ui:field="responseDate" addStyleNames="{style.responseDate}" />
-		<g:Label ui:field="responseInfo"></g:Label>
+		<pre>
+			<g:Label ui:field="responseInfo"></g:Label>
+		</pre>
 		<br />
 		<g:HTMLPanel ui:field="responseAttachmentsPanel">
 			<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
 		</g:HTMLPanel>
+		<br />
+		<br />
 		<g:FlowPanel ui:field="userResponsePanel"/>
 	</g:HTMLPanel>
 </ui:UiBinder>
