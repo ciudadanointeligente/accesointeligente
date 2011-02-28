@@ -58,10 +58,6 @@
 			<div class="rightContent">
 				<h2>Otras preguntas</h2>
 				<ul>
-					<li>pregunta1</li>
-					<li>pregunta1</li>
-					<li>pregunta1</li>
-					<li>pregunta1</li>
 				</ul>
 			</div>
 		</g:HTMLPanel>
