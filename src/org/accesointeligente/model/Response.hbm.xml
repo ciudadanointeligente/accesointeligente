@@ -10,7 +10,9 @@
 		</id>
 		<many-to-one name="request" column="requestId" not-null="true" />
 		<property name="sender"/>
-		<property name="information"/>
+		<property name="information">
+			<column name="information" sql-type="text"/>
+		</property>
 		<property name="date"/>
 		<set name="attachments" inverse="true">
 			<key column="responseId"/>

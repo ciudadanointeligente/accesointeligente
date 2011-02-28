@@ -493,7 +493,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			attachment = (Attachment) persistentBeanManager.merge(attachment);
-			hibernate.save(attachment);
+			hibernate.saveOrUpdate(attachment);
 			hibernate.getTransaction().commit();
 			return attachment;
 		} catch (Throwable ex) {

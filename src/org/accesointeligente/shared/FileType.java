@@ -32,7 +32,10 @@ public enum FileType {
 	PDF("Portable Document Format", ".pdf"),
 	TXT("Texto plano", ".txt"),
 	HTML("Documento HTML", ".html"),
-	XML("Documento XML", ".xml");
+	XML("Documento XML", ".xml"),
+	ZIP("Archivo Comprimido", ".zip"),
+	RAR("Archivo Comprimido", ".rar"),
+	BIN("Documento", ".bin");
 
 	private String name;
 	private String extension;
