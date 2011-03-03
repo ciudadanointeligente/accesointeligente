@@ -57,7 +57,11 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			result = (List<User>) criteria.list();
 			hibernate.getTransaction().commit();
 		} catch (Throwable ex) {
-			hibernate.getTransaction().rollback();
+			if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+				hibernate.getTransaction().rollback();
+
+			}
+
 			throw new ServiceException();
 		}
 
@@ -69,11 +73,22 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			if (!BCrypt.checkpw(password, user.getPassword())) {
 				throw new LoginException();
 			} else {
-				user.setLastLoginDate(new Date());
-				updateUser(user);
-				SessionUtil.setSession(getThreadLocalRequest().getSession());
-				SessionUtil.setAttribute("sessionId", UUID.randomUUID().toString());
-				SessionUtil.setAttribute("user", (User) persistentBeanManager.clone(user));
+				try {
+					hibernate = HibernateUtil.getSession();
+					hibernate.beginTransaction();
+					user.setLastLoginDate(new Date());
+					hibernate.update(user);
+					hibernate.getTransaction().commit();
+					SessionUtil.setSession(getThreadLocalRequest().getSession());
+					SessionUtil.setAttribute("sessionId", UUID.randomUUID().toString());
+					SessionUtil.setAttribute("user", (User) persistentBeanManager.clone(user));
+				} catch (Throwable ex) {
+					if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+						hibernate.getTransaction().rollback();
+					}
+
+					throw new ServiceException();
+				}
 			}
 		}
 	}
