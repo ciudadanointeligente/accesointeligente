@@ -28,9 +28,7 @@ import net.customware.gwt.presenter.client.EventBus;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.*;
 
 import java.util.*;
 
@@ -180,6 +178,14 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(userProfilePresenter.getDisplay().asWidget());
 					break;
+				case GUIDE:
+					Frame frame = new Frame("LeyAcceso.html");
+					frame.setHeight("600px");
+					frame.setStyleName("gwtIframe");
+					frame.getElement().setAttribute("scrolling", "no");
+					getLayout().clear();
+					getLayout().add(frame);
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
@@ -254,6 +260,14 @@ public class AppController implements ValueChangeHandler<String> {
 					passwordRecoveryPresenter.bind();
 					getLayout().clear();
 					getLayout().add(passwordRecoveryPresenter.getDisplay().asWidget());
+					break;
+				case GUIDE:
+					Frame frame = new Frame("LeyAcceso.html");
+					frame.setHeight("600px");
+					frame.setStyleName("gwtIframe");
+					frame.getElement().setAttribute("scrolling", "no");
+					getLayout().clear();
+					getLayout().add(frame);
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());

@@ -47,7 +47,9 @@
 		<div class="{style.padGrey}">
 			<div class="{style.modulesHomeBottom}">
 				<h1>Saber +</h1>
-				<img src="images/dummies/guia-ley.jpg"/>
+				<a href="#guide">
+					<img src="images/dummies/guia-ley.jpg"/>
+				</a>
 			</div>
 			<div class="{style.modulesHomeBottom}">
 				<h1>Usar el sitio</h1>
