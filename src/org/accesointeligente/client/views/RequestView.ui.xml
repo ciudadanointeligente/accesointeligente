@@ -32,7 +32,7 @@
 						solicitud no sea dirigida a otro organismo!</i>
 				</div>
 			</div>
-			<div class="{style.greyBlock}">
+			<div class="{style.greyBlock} w280">
 				<g:Label addStyleNames="fLeft">Escribe el nombre de la institucion</g:Label>
 				<g:SuggestBox addStyleNames="fLeft" ui:field="institutionSearch" />
 			</div>
@@ -65,10 +65,8 @@
 						* Recuerda, este espacio no busca realizar sugerencias,
 						reclamos,
 						ni tampoco que argumentes sobre las razones por la que
-						éstas
-						haciendo la solicitud. Se respetuoso si no no será posible
-						enviar
-						tu solicitud
+						éstas haciendo la solicitud. Se respetuoso de otra forma no será posible
+						enviar tu solicitud.
 					</p>
 				</div>
 			</div>
@@ -82,7 +80,7 @@
 					<img src="images/asterisco.png" class="{style.listIcon}" />
 					<i>
 						Es importante para que encuentren tu solicitud que la especifiques
-						lo más posible.
+						lo mejor posible.
 						<br />
 						Nosotros
 						te ayudaremos.
@@ -100,11 +98,7 @@
 				<div class="{style.sideNote}">
 					<p>
 						* Precisa temporalmente la información que necesitas ya que
-						tu
-						solicitud puede ser rechazada si es demasiado genérica. Por
-						ejemplo: “Oficios emitidos por tal organismo” o
-						“Todos los
-						contratos celebrados con tal empresa”
+						tu solicitud puede ser rechazada si es demasiado genérica. Ej: "Contratos celebrados entre marzo y abril de 2011"
 					</p>
 				</div>
 			</div>
@@ -148,7 +142,7 @@
 			</div>
 		</g:HTMLPanel>
 		<div class="{style.greyBlock}">
-			<g:Button ui:field="submitRequest">Crear solicitud</g:Button>
+			<g:Button ui:field="submitRequest">Continuar</g:Button>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 
