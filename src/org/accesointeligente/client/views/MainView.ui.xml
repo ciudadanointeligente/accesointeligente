@@ -50,13 +50,13 @@
 						<h1>Otros Proyectos de Ciudadano Inteligente</h1>
 						<ul class="{style.link}">
 							<li>
-								<a href="http://www.votainteligente.cl">www.votainteligente.cl</a>
+								<a href="http://www.votainteligente.cl" target="new">www.votainteligente.cl</a>
 							</li>
 							<li>
-								<a href="http://www.criik.com">www.criik.com</a>
+								<a href="http://www.criik.com" target="new">www.criik.com</a>
 							</li>
 							<li>
-								<a href="http://www.donar.cl">www.donar.cl</a>
+								<a href="http://www.donar.cl" target="new">www.donar.cl</a>
 							</li>
 						</ul>
 					</div>
