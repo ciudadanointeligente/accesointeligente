@@ -57,7 +57,6 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField MenuItem logout;
 	@UiField MenuItem statistics;
 	@UiField MenuItem aboutProject;
-	@UiField MenuItem asociates;
 	@UiField MenuItem contact;
 	@UiField HTMLPanel footerPanel;
 	@UiField Label loginPending;
@@ -113,13 +112,6 @@ public class MainView extends Composite implements MainPresenter.Display {
 			@Override
 			public void execute() {
 				History.newItem(AppPlace.ABOUTPROJECT.getToken());
-			}
-		});
-
-		asociates.setCommand(new Command() {
-			@Override
-			public void execute() {
-				History.newItem(AppPlace.ASOCIATES.getToken());
 			}
 		});
 

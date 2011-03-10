@@ -166,12 +166,6 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(aboutProjectPresenter.getDisplay().asWidget());
 					break;
-				case ASOCIATES:
-					AsociatesPresenter asociatesPresenter = new AsociatesPresenter(new AsociatesView(), eventBus);
-					asociatesPresenter.bind();
-					getLayout().clear();
-					getLayout().add(asociatesPresenter.getDisplay().asWidget());
-					break;
 				case USERPROFILE:
 					UserProfileEditPresenter userProfilePresenter = new UserProfileEditPresenter(new UserProfileEditView(), eventBus);
 					userProfilePresenter.bind();
@@ -248,12 +242,6 @@ public class AppController implements ValueChangeHandler<String> {
 					aboutProjectPresenter.bind();
 					getLayout().clear();
 					getLayout().add(aboutProjectPresenter.getDisplay().asWidget());
-					break;
-				case ASOCIATES:
-					AsociatesPresenter asociatesPresenter = new AsociatesPresenter(new AsociatesView(), eventBus);
-					asociatesPresenter.bind();
-					getLayout().clear();
-					getLayout().add(asociatesPresenter.getDisplay().asWidget());
 					break;
 				case PASSWORDRECOVERY:
 					PasswordRecoveryPresenter passwordRecoveryPresenter = new PasswordRecoveryPresenter(new PasswordRecoveryView(), eventBus);

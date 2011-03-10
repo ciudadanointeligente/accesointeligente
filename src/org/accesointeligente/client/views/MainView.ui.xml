@@ -32,7 +32,6 @@
 									Acerca del proyecto
 									<g:MenuBar vertical="true">
 										<g:MenuItem ui:field="aboutProject">Sobre el proyecto</g:MenuItem>
-										<g:MenuItem ui:field="asociates">Nos Apoyan</g:MenuItem>
 									</g:MenuBar>
 								</g:MenuItem>
 								<g:MenuItemSeparator />
