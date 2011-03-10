@@ -299,6 +299,10 @@ a.titleH1 {
 }
 
 /*--*/
+.w280 .gwt-SuggestBox{
+	width: 280px; 
+}
+
 .gwt-TextBox,.gwt-PasswordTextBox,.gwt-SuggestBox,.gwt-DateBox {
 	background-color: #FFFFFF;
 	border: 1px solid darkgrey;
