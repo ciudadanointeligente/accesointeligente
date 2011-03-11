@@ -15,7 +15,7 @@
 					<span> ¿Estás seguro de que la información que buscas no ha sido pedida antes?</span>
 				</div>
 				<div class="fLeft">
-					<a href="#">
+					<a href="#list?type=general">
 						<img src="images/irAlBuscador.png" />
 					</a>
 				</div>
@@ -145,4 +145,4 @@
 			<g:Button ui:field="submitRequest">Continuar</g:Button>
 		</div>
 	</g:HTMLPanel>
-</ui:UiBinder> 
+</ui:UiBinder>
