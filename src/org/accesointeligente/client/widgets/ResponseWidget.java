@@ -58,25 +58,7 @@ public class ResponseWidget extends Composite {
 
 	public void initTableColumns() {
 		// Name
-		Column<Attachment, String> nameColumn = new Column<Attachment, String>(new TextCell()) {
-			@Override
-			public String getValue(Attachment attachment) {
-				return attachment.getName();
-			}
-		};
-		attachmentsTable.addColumn(nameColumn, "Nombre");
-
-		// Type
-		Column<Attachment, String> typeColumn = new Column<Attachment, String>(new TextCell()) {
-			@Override
-			public String getValue(Attachment attachment) {
-				return attachment.getType().getName();
-			}
-		};
-		attachmentsTable.addColumn(typeColumn, "Tipo");
-
-		// Download
-		Column<Attachment, AnchorCellParams> statusColumn = new Column<Attachment, AnchorCellParams>(new AnchorCell()) {
+		Column<Attachment, AnchorCellParams> downloadColumn = new Column<Attachment, AnchorCellParams>(new AnchorCell()) {
 			@Override
 			public AnchorCellParams getValue(Attachment attachment) {
 				AnchorCellParams params = new AnchorCellParams();
@@ -86,7 +68,16 @@ public class ResponseWidget extends Composite {
 				return params;
 			}
 		};
-		attachmentsTable.addColumn(statusColumn, "Descarga");
+		attachmentsTable.addColumn(downloadColumn, "Nombre");
+
+		// Type
+		Column<Attachment, String> typeColumn = new Column<Attachment, String>(new TextCell()) {
+			@Override
+			public String getValue(Attachment attachment) {
+				return attachment.getType().getName();
+			}
+		};
+		attachmentsTable.addColumn(typeColumn, "Tipo");
 	}
 
 	public void setResponseAttachments(ListDataProvider<Attachment> data) {
