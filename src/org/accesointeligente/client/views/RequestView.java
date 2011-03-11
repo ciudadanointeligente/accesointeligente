@@ -20,10 +20,13 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.RequestPresenter;
 import org.accesointeligente.client.presenters.RequestPresenterIface;
+import org.accesointeligente.client.widgets.FocusSuggestBox;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.RequestCategory;
+import org.accesointeligente.shared.NotificationEventType;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -40,7 +43,7 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	interface RequestViewUiBinder extends UiBinder<Widget, RequestView> {}
 
 	@UiField HTMLPanel institutionSearchPanel;
-	@UiField SuggestBox institutionSearch;
+	@UiField FocusSuggestBox institutionSearch;
 
 	@UiField HTMLPanel requestPanel;
 	@UiField TextArea requestInfo;
@@ -154,6 +157,14 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	protected void onNextClick(ClickEvent event) {
 		if (presenter != null) {
 			presenter.submitRequest();
+		}
+	}
+
+	@UiHandler("institutionSearch")
+	protected void onInstitutionSearchBlur(BlurEvent event) {
+		Institution institution = getInstitution();
+		if (institution == null) {
+			presenter.showNotification("No encontramos esta institución. Comprueba que está bien escrita o intenta hacer tu solicitud directamente en la institución.", NotificationEventType.NOTICE);
 		}
 	}
 }
