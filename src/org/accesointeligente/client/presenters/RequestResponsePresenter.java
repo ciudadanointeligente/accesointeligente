@@ -261,12 +261,13 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	public String getListLink() {
-		String link = null;
+		String link = AppPlace.LIST.toString() + "?type=" + RequestListType.GENERAL.toString();
 		List<String> tokenList = AppController.getHistoryTokenList();
 
 		for(int i = tokenList.size() - 1; i >= 0; i--) {
 			if (AppController.getPlace(tokenList.get(i)).toString().equals(AppPlace.LIST.toString())) {
 				link = tokenList.get(i);
+				break;
 			}
 		}
 
