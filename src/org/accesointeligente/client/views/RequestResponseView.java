@@ -110,13 +110,17 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	public void setResponses(List<Response> responses) {
 		responsePanel.clear();
 
-		for (Response response : responses) {
-			ResponseWidget responseWidget = new ResponseWidget();
-			responseWidget.setInfo(response.getInformation());
-			responseWidget.setDate(response.getDate());
-			presenter.loadAttachments(response, responseWidget);
-			presenter.getUserResponse(response, responseWidget);
-			responsePanel.add(responseWidget);
+		if (responses != null) {
+			for (Response response : responses) {
+				ResponseWidget responseWidget = new ResponseWidget();
+				responseWidget.setInfo(response.getInformation());
+				if (response.getDate() != null) {
+					responseWidget.setDate(response.getDate());
+					presenter.loadAttachments(response, responseWidget);
+					presenter.getUserResponse(response, responseWidget);
+				}
+				responsePanel.add(responseWidget);
+			}
 		}
 	}
 
