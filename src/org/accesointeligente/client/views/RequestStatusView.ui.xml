@@ -3,6 +3,9 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="RequestStatusView.css" />
 	<g:HTMLPanel>
+		<div class="notice">
+			<div class="fLeft">Tu solicitud ha sido guardada como BORRADOR. Para confirmar presiona "Enviar"</div>
+		</div>
 		<div class="headSolicitud clear">
 			<h1>Resumen de la solicitud</h1>
 		</div>
