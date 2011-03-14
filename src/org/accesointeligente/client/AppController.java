@@ -180,6 +180,12 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().clear();
 					getLayout().add(frame);
 					break;
+				case CONTACT:
+					ContactPresenter contactPresenter = new ContactPresenter(new ContactView(), eventBus);
+					contactPresenter.bind();
+					getLayout().clear();
+					getLayout().add(contactPresenter.getDisplay().asWidget());
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
@@ -256,6 +262,12 @@ public class AppController implements ValueChangeHandler<String> {
 					frame.getElement().setAttribute("scrolling", "no");
 					getLayout().clear();
 					getLayout().add(frame);
+					break;
+				case CONTACT:
+					ContactPresenter contactPresenter = new ContactPresenter(new ContactView(), eventBus);
+					contactPresenter.bind();
+					getLayout().clear();
+					getLayout().add(contactPresenter.getDisplay().asWidget());
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
