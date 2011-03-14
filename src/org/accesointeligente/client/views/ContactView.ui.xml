@@ -1,0 +1,33 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="ContactView.css" />
+	<g:FormPanel ui:field="contactFormPanel">
+		<g:HTMLPanel>
+			<h1 class="{style.greyBlock} {style.borderBottomW}">contacto</h1>
+			<table class="{style.formTable}">
+				<tbody>
+					<tr>
+						<td><g:Label>Nombre (obligatorio)</g:Label></td>
+						<td><g:TextBox ui:field="contactName"/></td>
+					</tr>
+					<tr>
+						<td><g:Label>Email (obligatorio)</g:Label></td>
+						<td><g:TextBox ui:field="contactEmail"/></td>
+					</tr>
+					<tr>
+						<td><g:Label>Asunto (obligatorio)</g:Label></td>
+						<td><g:TextBox ui:field="contactSubject"/></td>
+					</tr>
+					<tr>
+						<td><g:Label>Mensaje (obligatorio)</g:Label></td>
+						<td><g:TextArea ui:field="contactMessage"/></td>
+					</tr>
+					<tr>
+						<td colspan="2"><g:Button addStyleNames="{style.margRight}" ui:field="send">Enviar</g:Button></td>
+					</tr>
+				</tbody>
+			</table>
+		</g:HTMLPanel>
+	</g:FormPanel>
+</ui:UiBinder>
