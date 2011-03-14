@@ -29,6 +29,7 @@ public class RPC {
 	private static SessionServiceAsync sessionService = null;
 	private static UserServiceAsync userService = null;
 	private static RequestServiceAsync requestService = null;
+	private static ContactServiceAsync contactService = null;
 
 	protected RPC() {
 	}
@@ -95,5 +96,13 @@ public class RPC {
 		}
 
 		return requestService;
+	}
+
+	public static ContactServiceAsync getContactService() {
+		if (contactService == null) {
+			contactService = GWT.create(ContactService.class);
+		}
+
+		return contactService;
 	}
 }

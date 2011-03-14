@@ -86,6 +86,16 @@
     <url-pattern>/accesointeligente/user</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>contactServlet</servlet-name>
+    <servlet-class>org.accesointeligente.server.services.ContactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>contactServlet</servlet-name>
+    <url-pattern>/accesointeligente/contact</url-pattern>
+  </servlet-mapping>
+
   <listener>
     <listener-class>org.accesointeligente.server.ApplicationProperties</listener-class>
   </listener>
