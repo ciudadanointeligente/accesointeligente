@@ -20,7 +20,10 @@ package org.accesointeligente.server.services;
 
 import org.accesointeligente.client.services.ContactService;
 import org.accesointeligente.model.Contact;
+import org.accesointeligente.server.ApplicationProperties;
+import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.shared.Gender;
 import org.accesointeligente.shared.ServiceException;
 
 import net.sf.gilead.core.PersistentBeanManager;
@@ -44,6 +47,13 @@ public class ContactServiceImpl extends PersistentRemoteService implements Conta
 		try {
 			hibernate.saveOrUpdate(contact);
 			hibernate.getTransaction().commit();
+
+			Emailer emailer = new Emailer();
+			emailer.setRecipient(contact.getEmail());
+			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.contact.subject"), contact.getSubject()));
+			emailer.setBody(String.format(ApplicationProperties.getProperty("email.contact.body"), "Sr(a).", contact.getName(), contact.getMessage()) + ApplicationProperties.getProperty("email.signature"));
+			emailer.connectAndSend();
+
 			return contact;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
