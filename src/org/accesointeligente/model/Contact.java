@@ -4,10 +4,19 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class Contact extends LightEntity {
 
+	private Integer id;
 	private String name;
 	private String email;
 	private String subject;
 	private String message;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
