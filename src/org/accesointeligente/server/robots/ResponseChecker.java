@@ -29,7 +29,7 @@ import org.accesointeligente.shared.RequestStatus;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -38,7 +38,6 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -301,9 +300,6 @@ public class ResponseChecker {
 				throw e;
 			}
 
-			String directory = ApplicationProperties.getProperty("attachment.directory");
-			String baseUrl = ApplicationProperties.getProperty("attachment.baseurl");
-
 			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 
@@ -312,16 +308,19 @@ public class ResponseChecker {
 
 			hibernate.getTransaction().commit();
 
-			String filename = attachment.getId() + filetype.getExtension();
+			String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
+			String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
+
+			String filename = MimeUtility.decodeText(part.getFileName());
 
 			attachment.setName(filename);
 			attachment.setType(filetype);
-			attachment.setUrl(baseUrl + filename);
+			attachment.setUrl(baseUrl + "/" + filename);
 
 			try {
-				FileOutputStream out = new FileOutputStream(new File(directory + filename));
-				IOUtils.copy(part.getInputStream(), out);
-				out.close();
+				File dir = new File(directory);
+				dir.mkdir();
+				FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
 			} catch (Exception e) {
 				hibernate = HibernateUtil.getSession();
 				hibernate.beginTransaction();
