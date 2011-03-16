@@ -33,10 +33,11 @@
 
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hbm2ddl.auto">update</property>
-		
+
 		<mapping resource="org/accesointeligente/model/Activity.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Age.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Attachment.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Contact.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Institution.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/InstitutionType.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Region.hbm.xml"/>
