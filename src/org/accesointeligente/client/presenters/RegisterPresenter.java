@@ -18,24 +18,24 @@
  */
 package org.accesointeligente.client.presenters;
 
-
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
+public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RegisterPresenterIface presenter);
 		void cleanPersonActivities();
@@ -64,18 +64,26 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 		Boolean validateForm();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+
+	@Inject
 	public RegisterPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
+	public void setup() {
 		getPersonActivities();
 		getInstitutionActivities();
 		getInstitutionTypes();
 		getPersonAges();
 		getRegions();
+	}
+
+	@Override
+	protected void onBind() {
+		display.setPresenter(this);
 	}
 
 	@Override
@@ -90,7 +98,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 	public void getPersonActivities() {
 		display.cleanPersonActivities();
 
-		RPC.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
+		serviceInjector.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -109,7 +117,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 	public void getInstitutionActivities() {
 		display.cleanInstitutionActivities();
 
-		RPC.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
+		serviceInjector.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -128,7 +136,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 	public void getInstitutionTypes() {
 		display.cleanInstitutionTypes();
 
-		RPC.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
+		serviceInjector.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo tipos de institución", NotificationEventType.ERROR);
@@ -148,7 +156,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 	public void getPersonAges() {
 		display.cleanPersonAges();
 
-		RPC.getAgeService().getAges(new AsyncCallback<List<Age>>() {
+		serviceInjector.getAgeService().getAges(new AsyncCallback<List<Age>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo edades", NotificationEventType.ERROR);
@@ -167,7 +175,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 	public void getRegions() {
 		display.cleanRegions();
 
-		RPC.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
+		serviceInjector.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo regiones", NotificationEventType.ERROR);
@@ -212,7 +220,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				user.setRegion(display.getRegion());
 			}
 
-			RPC.getUserService().register(user, new AsyncCallback<User>() {
+			serviceInjector.getUserService().register(user, new AsyncCallback<User>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					if (caught instanceof RegisterException) {
@@ -226,7 +234,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 				public void onSuccess(User result) {
 					showNotification("Registro exitoso!", NotificationEventType.SUCCESS);
 
-					RPC.getUserService().login(result.getEmail(), user.getPassword(), new AsyncCallback<Void>() {
+					serviceInjector.getUserService().login(result.getEmail(), user.getPassword(), new AsyncCallback<Void>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							if (caught instanceof ServiceException) {
@@ -238,7 +246,7 @@ public class RegisterPresenter extends WidgetPresenter<RegisterPresenter.Display
 
 						@Override
 						public void onSuccess(Void result) {
-							RPC.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
+							serviceInjector.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
 								@Override
 								public void onFailure (Throwable caught) {
 									showNotification("Error creando sesión", NotificationEventType.ERROR);

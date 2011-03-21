@@ -207,38 +207,42 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@Override
 	public void initTableFavColumn() {
-		// Favorite Request
-		Column<Request, CustomActionImageCellParams> favButtonColumn = new Column<Request, CustomActionImageCellParams>(
-				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
+		if (requestTable.getColumnCount() <= 6) {
+			// Favorite Request
+			Column<Request, CustomActionImageCellParams> favButtonColumn = new Column<Request, CustomActionImageCellParams>(
+					new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
-			public void execute(CustomActionImageCellParams params) {
-				presenter.requestToggleFavorite((Request) params.getValue());
-			}
-		})) {
-			@Override
-			public CustomActionImageCellParams getValue(Request request) {
-				CustomActionImageCellParams params = new CustomActionImageCellParams();
-				params.setUrl("images/reqList/no-favorite.png");
-				params.setTitle("Seguir");
-
-				for (UserFavoriteRequest favorite : request.getFavorites()) {
-					if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
-						params.setUrl("images/reqList/favorite.png");
-						params.setTitle("Dejar de seguir");
-						break;
-					}
+				public void execute(CustomActionImageCellParams params) {
+					presenter.requestToggleFavorite((Request) params.getValue());
 				}
+			})) {
+				@Override
+				public CustomActionImageCellParams getValue(Request request) {
+					CustomActionImageCellParams params = new CustomActionImageCellParams();
+					params.setUrl("images/reqList/no-favorite.png");
+					params.setTitle("Seguir");
 
-				params.setValue(request);
-				return params;
-			}
-		};
-		requestTable.addColumn(favButtonColumn, "Seguir");
+					for (UserFavoriteRequest favorite : request.getFavorites()) {
+						if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
+							params.setUrl("images/reqList/favorite.png");
+							params.setTitle("Dejar de seguir");
+							break;
+						}
+					}
+
+					params.setValue(request);
+					return params;
+				}
+			};
+			requestTable.addColumn(favButtonColumn, "Seguir");
+		}
 	}
 
 	@Override
 	public void removeTableFavColumn() {
-		requestTable.removeColumn(6);
+		if (requestTable.getColumnCount() > 6) {
+			requestTable.removeColumn(6);
+		}
 	}
 
 	@Override

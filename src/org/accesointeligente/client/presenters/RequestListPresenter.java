@@ -20,8 +20,8 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.services.RPC;
-import org.accesointeligente.client.views.RequestSearchView;
+import org.accesointeligente.client.inject.PresenterInjector;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.User;
 import org.accesointeligente.model.UserFavoriteRequest;
@@ -29,17 +29,18 @@ import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.inject.Inject;
 
 import java.util.List;
 import java.util.Map;
 
-public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.Display> implements RequestListPresenterIface, RequestSearchEventHandler {
+public class RequestListPresenter extends CustomWidgetPresenter<RequestListPresenter.Display> implements RequestListPresenterIface, RequestSearchEventHandler {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestListPresenterIface presenter);
 		void displayMessage(String message);
@@ -56,26 +57,32 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void searchToolTipToggleVisible();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+	private static final PresenterInjector presenterInjector = GWT.create(PresenterInjector.class);
 	private String listType;
 
+	@Inject
 	public RequestListPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		if (ClientSessionUtil.checkSession()) {
+			display.initTableFavColumn();
+		} else {
+			display.removeTableFavColumn();
+		}
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
 		eventBus.addHandler(RequestSearchEvent.TYPE, this);
-
-		RequestSearchPresenter presenter = new RequestSearchPresenter(new RequestSearchView(), eventBus);
-		presenter.bind();
+		RequestSearchPresenter presenter = presenterInjector.getRequestSearchPresenter();
 		display.setSearchWidget(presenter.getDisplay().asWidget());
-
 		display.initTable();
-
-		if (ClientSessionUtil.checkSession()) {
-			display.initTableFavColumn();
-		}
 	}
 
 	@Override
@@ -96,7 +103,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.removeTableFavColumn();
 
 			if (ClientSessionUtil.checkSession()) {
-				RPC.getRequestService().getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+				serviceInjector.getRequestService().getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -120,7 +127,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.setListTitleStyle(RequestListType.FAVORITES.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -146,7 +153,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.removeSearchWidget();
 
 			if (ClientSessionUtil.checkSession()) {
-				RPC.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
+				serviceInjector.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -170,7 +177,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
 			display.searchPanelToggleVisible();
 
-			RPC.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+			serviceInjector.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -198,7 +205,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				RPC.getRequestService().getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+				serviceInjector.getRequestService().getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -222,7 +229,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.setListTitleStyle(RequestListType.FAVORITES.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				RPC.getRequestService().getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -246,7 +253,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.setListTitleStyle(RequestListType.DRAFTS.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				RPC.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
+				serviceInjector.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -269,7 +276,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			display.setListTitle("Listado de solicitudes");
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
 
-			RPC.getRequestService().getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+			serviceInjector.getRequestService().getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -292,7 +299,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 	@Override
 	public void requestToggleFavorite(final Request request) {
 		final User user = ClientSessionUtil.getUser();
-		RPC.getRequestService().getFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
+		serviceInjector.getRequestService().getFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -302,7 +309,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 			@Override
 			public void onSuccess(UserFavoriteRequest result) {
 				if (result == null) {
-					RPC.getRequestService().createFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
+					serviceInjector.getRequestService().createFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
@@ -321,7 +328,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 					favorite.setRequest(request);
 					favorite.setUser(user);
 
-					RPC.getRequestService().deleteFavoriteRequest(favorite, new AsyncCallback<Void>() {
+					serviceInjector.getRequestService().deleteFavoriteRequest(favorite, new AsyncCallback<Void>() {
 
 						@Override
 						public void onFailure(Throwable caught) {

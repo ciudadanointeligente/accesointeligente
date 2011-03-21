@@ -19,7 +19,7 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Contact;
 import org.accesointeligente.model.User;
 import org.accesointeligente.shared.NotificationEvent;
@@ -28,11 +28,12 @@ import org.accesointeligente.shared.NotificationEventType;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
-public class ContactPresenter extends WidgetPresenter<ContactPresenter.Display> implements ContactPresenterIface {
+public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Display> implements ContactPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(ContactPresenterIface presenter);
 		String getName();
@@ -48,14 +49,22 @@ public class ContactPresenter extends WidgetPresenter<ContactPresenter.Display> 
 		Boolean checkContactForm();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+
+	@Inject
 	public ContactPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		checkUserSession();
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		checkUserSession();
 	}
 
 	@Override
@@ -83,7 +92,7 @@ public class ContactPresenter extends WidgetPresenter<ContactPresenter.Display> 
 		contact.setSubject(display.getSubject());
 		contact.setMessage(display.getMessage());
 
-		RPC.getContactService().saveContact(contact, new AsyncCallback<Contact>() {
+		serviceInjector.getContactService().saveContact(contact, new AsyncCallback<Contact>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

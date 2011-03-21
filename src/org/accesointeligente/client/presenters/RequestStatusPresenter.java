@@ -18,22 +18,23 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 import java.util.Date;
 import java.util.Set;
 
-public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresenter.Display> implements RequestStatusPresenterIface {
+public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusPresenter.Display> implements RequestStatusPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestStatusPresenterIface presenter);
 		void setDate(Date date);
@@ -48,10 +49,17 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 		void editOptions(Boolean allowEdit);
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 	private Request request;
 
+	@Inject
 	public RequestStatusPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
 	}
 
 	@Override
@@ -69,7 +77,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 
 	@Override
 	public void showRequest(Integer requestId) {
-		RPC.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
+		serviceInjector.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -98,7 +106,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 
 	@Override
 	public void deleteRequest() {
-		RPC.getRequestService().deleteRequest(getRequest(), new AsyncCallback<Void>() {
+		serviceInjector.getRequestService().deleteRequest(getRequest(), new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -136,7 +144,7 @@ public class RequestStatusPresenter extends WidgetPresenter<RequestStatusPresent
 	public void confirmRequest() {
 		request.setStatus(RequestStatus.NEW);
 		request.setConfirmationDate(new Date());
-		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
+		serviceInjector.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

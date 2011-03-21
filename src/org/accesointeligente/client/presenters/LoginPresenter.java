@@ -22,28 +22,39 @@ import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
-public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
+public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(LoginPresenterIface presenter);
+		void clearForm();
 		void showNotice(String message);
 		String getEmail();
 		String getPassword();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+
+	@Inject
 	public LoginPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		display.clearForm();
 	}
 
 	@Override
@@ -74,7 +85,7 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 			return;
 		}
 
-		RPC.getUserService().login(email, password, new AsyncCallback<Void>() {
+		serviceInjector.getUserService().login(email, password, new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				if (caught instanceof ServiceException) {
@@ -86,7 +97,7 @@ public class LoginPresenter extends WidgetPresenter<LoginPresenter.Display> impl
 
 			@Override
 			public void onSuccess(Void result) {
-				RPC.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
+				serviceInjector.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
 					@Override
 					public void onFailure (Throwable caught) {
 						display.showNotice ("Error creando sesión");

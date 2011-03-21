@@ -19,12 +19,13 @@
 package org.accesointeligente.client;
 
 import org.accesointeligente.client.events.*;
+import org.accesointeligente.client.inject.PresenterInjector;
 import org.accesointeligente.client.presenters.*;
-import org.accesointeligente.client.views.*;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
@@ -32,50 +33,45 @@ import com.google.gwt.user.client.ui.*;
 
 import java.util.*;
 
-public class AppController implements ValueChangeHandler<String> {
+public class AppController implements ValueChangeHandler<String>, LoginRequiredEventHandler, LoginSuccessfulEventHandler {
+	private final PresenterInjector presenterInjector = GWT.create(PresenterInjector.class);
 	private MainPresenter mainPresenter;
 	private EventBus eventBus;
 	private PopupPanel popup;
 	private static List<String> tokenHistory;
 
-	public AppController(EventBus eventBus) {
-		this.eventBus = eventBus;
-		mainPresenter = new MainPresenter(new MainView(), eventBus);
-		this.eventBus.addHandler(LoginRequiredEvent.TYPE, mainPresenter);
-		this.eventBus.addHandler(LoginSuccessfulEvent.TYPE, mainPresenter);
-		popup = new PopupPanel();
+	public AppController() {
+		eventBus = presenterInjector.getEventBus();
 		tokenHistory = new ArrayList<String>();
+		popup = new PopupPanel();
 	}
 
 	protected void setup() {
-		RootPanel.get().add(mainPresenter.getDisplay().asWidget());
-
-		mainPresenter.bind();
 		History.addValueChangeHandler(this);
-
-		eventBus.addHandler(LoginSuccessfulEvent.TYPE, new LoginSuccessfulEventHandler() {
-			@Override
-			public void loginSuccessful(LoginSuccessfulEvent event) {
-				History.newItem(getPreviousHistoryToken());
-			}
-		});
-
-		eventBus.addHandler(LoginRequiredEvent.TYPE, new LoginRequiredEventHandler() {
-			@Override
-			public void loginRequired(LoginRequiredEvent event) {
-				if (!AppPlace.HOME.equals(getPlace(History.getToken()))) {
-					History.newItem(AppPlace.HOME.getToken());
-				}
-			}
-		});
-
-		switchSection(History.getToken());
+		eventBus.addHandler(LoginSuccessfulEvent.TYPE, this);
+		eventBus.addHandler(LoginRequiredEvent.TYPE, this);
+		mainPresenter = presenterInjector.getMainPresenter();
+		mainPresenter.setup();
+		RootPanel.get().add(mainPresenter.getDisplay().asWidget());
+		switchSection("home");
 	}
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		String token = event.getValue();
 		switchSection(token);
+	}
+
+	@Override
+	public void loginSuccessful(LoginSuccessfulEvent event) {
+		History.newItem(getPreviousHistoryToken());
+	}
+
+	@Override
+	public void loginRequired(LoginRequiredEvent event) {
+		if (!AppPlace.HOME.equals(getPlace(History.getToken()))) {
+			History.newItem(AppPlace.HOME.getToken());
+		}
 	}
 
 	public void switchSection(String token) {
@@ -91,16 +87,10 @@ public class AppController implements ValueChangeHandler<String> {
 		if (ClientSessionUtil.checkSession()) {
 			switch (place) {
 				case HOME:
-					HomePresenter homePresenter = new HomePresenter(new HomeView(), eventBus);
-					homePresenter.bind();
-					getLayout().clear();
-					getLayout().add(homePresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getHomePresenter());
 					break;
 				case REQUEST:
-					RequestPresenter requestPresenter = new RequestPresenter(new RequestView(), eventBus);
-					requestPresenter.bind();
-					getLayout().clear();
-					getLayout().add(requestPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getRequestPresenter());
 					break;
 				case LOGOUT:
 					ClientSessionUtil.destroySession();
@@ -109,11 +99,9 @@ public class AppController implements ValueChangeHandler<String> {
 				case REQUESTSTATUS:
 					try {
 						Integer requestId = Integer.parseInt(parameters.get("requestId"));
-						RequestStatusPresenter requestStatusPresenter = new RequestStatusPresenter(new RequestStatusView(), eventBus);
-						requestStatusPresenter.bind();
+						RequestStatusPresenter requestStatusPresenter = presenterInjector.getRequestStatusPresenter();
+						setupPresenter(requestStatusPresenter);
 						requestStatusPresenter.showRequest(requestId);
-						getLayout().clear();
-						getLayout().add(requestStatusPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
 						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
@@ -121,11 +109,9 @@ public class AppController implements ValueChangeHandler<String> {
 				case EDITREQUEST:
 					try {
 						Integer requestId = Integer.parseInt(parameters.get("requestId"));
-						RequestEditPresenter editPresenter = new RequestEditPresenter(new RequestEditView(), eventBus);
-						editPresenter.bind();
+						RequestEditPresenter editPresenter = presenterInjector.getRequestEditPresenter();
+						setupPresenter(editPresenter);
 						editPresenter.showRequest(requestId);
-						getLayout().clear();
-						getLayout().add(editPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
 						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
@@ -133,11 +119,9 @@ public class AppController implements ValueChangeHandler<String> {
 				case RESPONSE:
 					try {
 						Integer requestId = Integer.parseInt(parameters.get("requestId"));
-						RequestResponsePresenter requestResponsePresenter = new RequestResponsePresenter(new RequestResponseView(), eventBus);
-						requestResponsePresenter.bind();
+						RequestResponsePresenter requestResponsePresenter = presenterInjector.getRequestResponsePresenter();
+						setupPresenter(requestResponsePresenter);
 						requestResponsePresenter.showRequest(requestId);
-						getLayout().clear();
-						getLayout().add(requestResponsePresenter.getDisplay().asWidget());
 					} catch (Exception e) {
 						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
@@ -145,32 +129,22 @@ public class AppController implements ValueChangeHandler<String> {
 				case LIST:
 					try {
 						String listType = parameters.get("type");
-						RequestListPresenter requestListPresenter = new RequestListPresenter(new RequestListView(), eventBus);
-						requestListPresenter.bind();
+						RequestListPresenter requestListPresenter = presenterInjector.getRequestListPresenter();
+						setupPresenter(requestListPresenter);
 						requestListPresenter.loadRequests(0, 100, listType);
-						getLayout().clear();
-						getLayout().add(requestListPresenter.getDisplay().asWidget());
 					} catch (Exception e) {
+						e.printStackTrace();
 						showNotification("Tipo de lista incorrecto: No se puede cargar la lista", NotificationEventType.ERROR);
 					}
 					break;
 				case STATISTICS:
-					StatisticsPresenter statistics = new StatisticsPresenter(new StatisticsView(), eventBus);
-					statistics.bind();
-					getLayout().clear();
-					getLayout().add(statistics.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getStatisticsPresenter());
 					break;
 				case ABOUTPROJECT:
-					AboutProjectPresenter aboutProjectPresenter = new AboutProjectPresenter(new AboutProjectView(), eventBus);
-					aboutProjectPresenter.bind();
-					getLayout().clear();
-					getLayout().add(aboutProjectPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getAboutProjectPresenter());
 					break;
 				case USERPROFILE:
-					UserProfileEditPresenter userProfilePresenter = new UserProfileEditPresenter(new UserProfileEditView(), eventBus);
-					userProfilePresenter.bind();
-					getLayout().clear();
-					getLayout().add(userProfilePresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getUserProfileEditPresenter());
 					break;
 				case GUIDE:
 					Frame frame = new Frame("LeyAcceso.html");
@@ -181,10 +155,7 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().add(frame);
 					break;
 				case CONTACT:
-					ContactPresenter contactPresenter = new ContactPresenter(new ContactView(), eventBus);
-					contactPresenter.bind();
-					getLayout().clear();
-					getLayout().add(contactPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getContactPresenter());
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
@@ -192,15 +163,12 @@ public class AppController implements ValueChangeHandler<String> {
 		} else {
 			switch (place) {
 				case HOME:
-					HomePresenter homePresenter = new HomePresenter(new HomeView(), eventBus);
-					homePresenter.bind();
-					getLayout().clear();
-					getLayout().add(homePresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getHomePresenter());
 					break;
 				case REQUEST:
 				case LOGIN:
-					LoginPresenter loginPresenter = new LoginPresenter(new LoginView(), eventBus);
-					loginPresenter.bind();
+					LoginPresenter loginPresenter = presenterInjector.getLoginPresenter();
+					loginPresenter.setup();
 					popup.setModal(true);
 					popup.setGlassEnabled(true);
 					popup.clear();
@@ -208,19 +176,14 @@ public class AppController implements ValueChangeHandler<String> {
 					popup.center();
 					break;
 				case REGISTER:
-					RegisterPresenter registerPresenter = new RegisterPresenter(new RegisterView(), eventBus);
-					registerPresenter.bind();
-					getLayout().clear();
-					getLayout().add(registerPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getRegisterPresenter());
 					break;
 				case RESPONSE:
 					try {
 						Integer requestId = Integer.parseInt(parameters.get("requestId"));
-						RequestResponsePresenter requestResponsePresenter = new RequestResponsePresenter(new RequestResponseView(), eventBus);
-						requestResponsePresenter.bind();
+						RequestResponsePresenter requestResponsePresenter = presenterInjector.getRequestResponsePresenter();
+						setupPresenter(requestResponsePresenter);
 						requestResponsePresenter.showRequest(requestId);
-						getLayout().clear();
-						getLayout().add(requestResponsePresenter.getDisplay().asWidget());
 					} catch (Exception e) {
 						showNotification("Id incorrecta: No se puede cargar la solicitud", NotificationEventType.ERROR);
 					}
@@ -228,32 +191,21 @@ public class AppController implements ValueChangeHandler<String> {
 				case LIST:
 					try {
 						String listType = parameters.get("type");
-						RequestListPresenter requtesListPresenter = new RequestListPresenter(new RequestListView(), eventBus);
-						requtesListPresenter.bind();
-						requtesListPresenter.loadRequests(0, 100, listType);
-						getLayout().clear();
-						getLayout().add(requtesListPresenter.getDisplay().asWidget());
+						RequestListPresenter requestListPresenter = presenterInjector.getRequestListPresenter();
+						setupPresenter(requestListPresenter);
+						requestListPresenter.loadRequests(0, 100, listType);
 					} catch (Exception e) {
 						showNotification("Tipo de lista incorrecto: No se puede cargar la lista", NotificationEventType.ERROR);
 					}
 					break;
 				case STATISTICS:
-					StatisticsPresenter statistics = new StatisticsPresenter(new StatisticsView(), eventBus);
-					statistics.bind();
-					getLayout().clear();
-					getLayout().add(statistics.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getStatisticsPresenter());
 					break;
 				case ABOUTPROJECT:
-					AboutProjectPresenter aboutProjectPresenter = new AboutProjectPresenter(new AboutProjectView(), eventBus);
-					aboutProjectPresenter.bind();
-					getLayout().clear();
-					getLayout().add(aboutProjectPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getAboutProjectPresenter());
 					break;
 				case PASSWORDRECOVERY:
-					PasswordRecoveryPresenter passwordRecoveryPresenter = new PasswordRecoveryPresenter(new PasswordRecoveryView(), eventBus);
-					passwordRecoveryPresenter.bind();
-					getLayout().clear();
-					getLayout().add(passwordRecoveryPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getPasswordRecoveryPresenter());
 					break;
 				case GUIDE:
 					Frame frame = new Frame("LeyAcceso.html");
@@ -264,15 +216,18 @@ public class AppController implements ValueChangeHandler<String> {
 					getLayout().add(frame);
 					break;
 				case CONTACT:
-					ContactPresenter contactPresenter = new ContactPresenter(new ContactView(), eventBus);
-					contactPresenter.bind();
-					getLayout().clear();
-					getLayout().add(contactPresenter.getDisplay().asWidget());
+					setupPresenter(presenterInjector.getContactPresenter());
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
 		}
+	}
+
+	public void setupPresenter(CustomWidgetPresenter presenter) {
+		presenter.setup();
+		getLayout().clear();
+		getLayout().add(presenter.getDisplay().asWidget());
 	}
 
 	public FlowPanel getLayout() {

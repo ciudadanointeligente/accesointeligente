@@ -21,19 +21,22 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.*;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.client.views.MainView;
-import org.accesointeligente.shared.*;
+import org.accesointeligente.shared.NotificationEvent;
+import org.accesointeligente.shared.NotificationEventHandler;
+import org.accesointeligente.shared.NotificationEventParams;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.inject.Inject;
 
-public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implements MainPresenterIface, LoginRequiredEventHandler, LoginSuccessfulEventHandler, NotificationEventHandler {
+public class MainPresenter extends CustomWidgetPresenter<MainPresenter.Display> implements MainPresenterIface, LoginRequiredEventHandler, LoginSuccessfulEventHandler, NotificationEventHandler {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(MainPresenterIface presenter);
 		void setDisplayMode(MainView.DisplayMode mode);
@@ -43,15 +46,25 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 		void clearNotifications();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+
+	@Inject
 	public MainPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		tryCookieLogin();
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
 		eventBus.addHandler(NotificationEvent.TYPE, this);
-		tryCookieLogin();
+		eventBus.addHandler(LoginRequiredEvent.TYPE, this);
+		eventBus.addHandler(LoginSuccessfulEvent.TYPE, this);
 	}
 
 	@Override
@@ -80,7 +93,7 @@ public class MainPresenter extends WidgetPresenter<MainPresenter.Display> implem
 		if (sessionId != null) {
 			display.setDisplayMode(MainView.DisplayMode.LoginPending);
 
-			RPC.getSessionService().getSessionData(new AsyncCallback<SessionData>() {
+			serviceInjector.getSessionService().getSessionData(new AsyncCallback<SessionData>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					ClientSessionUtil.destroySession();

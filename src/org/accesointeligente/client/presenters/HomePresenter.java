@@ -20,15 +20,22 @@ package org.accesointeligente.client.presenters;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-public class HomePresenter extends WidgetPresenter<HomePresenter.Display> implements HomePresenterIface {//, LoginRequiredEventHandler, LoginSuccessfulEventHandler {
+import com.google.inject.Inject;
+
+public class HomePresenter extends CustomWidgetPresenter<HomePresenter.Display> implements HomePresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(HomePresenterIface presenter);
 	}
 
+	@Inject
 	public HomePresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
 	}
 
 	@Override

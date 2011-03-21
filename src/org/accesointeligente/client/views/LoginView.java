@@ -39,6 +39,7 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 
 	@UiField FocusPanel loginPanel;
+	@UiField FormPanel loginForm;
 	@UiField HTMLPanel noticePanel;
 	@UiField Label noticeClose;
 	@UiField Label noticeLabel;
@@ -84,14 +85,16 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 
 	@UiHandler("loginPanel")
 	void onLoginPanelKeyDown(KeyDownEvent key) {
-		if(key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+		if (presenter != null && key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
 			presenter.close();
 		}
 	}
 
 	@UiHandler("close")
 	void onCloseClick(ClickEvent click) {
-		presenter.close();
+		if (presenter != null) {
+			presenter.close();
+		}
 	}
 
 	@UiHandler("noticeClose")
@@ -132,5 +135,10 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	@Override
 	public String getPassword() {
 		return password.getText();
+	}
+
+	@Override
+	public void clearForm() {
+		loginForm.reset();
 	}
 }

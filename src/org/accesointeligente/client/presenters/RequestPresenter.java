@@ -19,7 +19,7 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -27,14 +27,15 @@ import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> implements RequestPresenterIface {
+public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Display> implements RequestPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestPresenterIface presenter);
 		void setInstitutions(Map<String, Institution> institutions);
@@ -49,17 +50,24 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		Boolean getAnotherInstitutionNo();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 	private Request request;
 
+	@Inject
 	public RequestPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		getRequestCategories();
+		getInstitutions();
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		getRequestCategories();
-		getInstitutions();
 	}
 
 	@Override
@@ -74,7 +82,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 	public void getRequestCategories() {
 		display.cleanRequestCategories();
 
-		RPC.getRequestService().getCategories(new AsyncCallback<List<RequestCategory>>() {
+		serviceInjector.getRequestService().getCategories(new AsyncCallback<List<RequestCategory>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -91,7 +99,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 
 	@Override
 	public void getInstitutions() {
-		RPC.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
+		serviceInjector.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar las instituciones", NotificationEventType.ERROR);
@@ -158,7 +166,7 @@ public class RequestPresenter extends WidgetPresenter<RequestPresenter.Display> 
 		request.setStatus(RequestStatus.DRAFT);
 		request.setCreationDate(new Date());
 
-		RPC.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
+		serviceInjector.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace(System.err);

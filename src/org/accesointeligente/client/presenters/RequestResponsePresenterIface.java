@@ -19,7 +19,6 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.widgets.ResponseWidget;
-import org.accesointeligente.client.widgets.UserResponseWidget;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.NotificationEventType;

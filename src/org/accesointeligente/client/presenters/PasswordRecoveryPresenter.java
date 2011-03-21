@@ -18,24 +18,33 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
-public class PasswordRecoveryPresenter extends WidgetPresenter<PasswordRecoveryPresenter.Display> implements PasswordRecoveryPresenterIface {
+public class PasswordRecoveryPresenter extends CustomWidgetPresenter<PasswordRecoveryPresenter.Display> implements PasswordRecoveryPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(PasswordRecoveryPresenterIface presenter);
 		String getEmail();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+
+	@Inject
 	public PasswordRecoveryPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
 	}
 
 	@Override
@@ -53,7 +62,7 @@ public class PasswordRecoveryPresenter extends WidgetPresenter<PasswordRecoveryP
 
 	@Override
 	public void recoverPassword() {
-		RPC.getUserService().checkEmailExistence(display.getEmail(), new AsyncCallback<Boolean>() {
+		serviceInjector.getUserService().checkEmailExistence(display.getEmail(), new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -65,7 +74,7 @@ public class PasswordRecoveryPresenter extends WidgetPresenter<PasswordRecoveryP
 				if (!result) {
 					showNotification("La dirección de correo ingresada no existe en nuestra base de datos", NotificationEventType.NOTICE);
 				} else {
-					RPC.getUserService().resetPassword(display.getEmail(), new AsyncCallback<Void>() {
+					serviceInjector.getUserService().resetPassword(display.getEmail(), new AsyncCallback<Void>() {
 
 						@Override
 						public void onFailure(Throwable caught) {

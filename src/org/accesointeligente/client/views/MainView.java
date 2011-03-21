@@ -28,11 +28,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainView extends Composite implements MainPresenter.Display {
 	private static MainViewUiBinder uiBinder = GWT.create(MainViewUiBinder.class);

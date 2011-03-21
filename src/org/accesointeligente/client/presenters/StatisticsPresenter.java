@@ -20,15 +20,22 @@ package org.accesointeligente.client.presenters;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-public class StatisticsPresenter extends WidgetPresenter<StatisticsPresenter.Display> implements StatisticsPresenterIface {
+import com.google.inject.Inject;
+
+public class StatisticsPresenter extends CustomWidgetPresenter<StatisticsPresenter.Display> implements StatisticsPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(StatisticsPresenterIface presenter);
 	}
 
+	@Inject
 	public StatisticsPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
 	}
 
 	@Override

@@ -20,29 +20,25 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.client.widgets.ResponseWidget;
-import org.accesointeligente.client.widgets.UserResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePresenter.Display> implements RequestResponsePresenterIface {
+public class RequestResponsePresenter extends CustomWidgetPresenter<RequestResponsePresenter.Display> implements RequestResponsePresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestResponsePresenterIface presenter);
 		// Request
@@ -64,16 +60,23 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		void newUserResponse(Response response, ResponseWidget widget);
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 	private Request request;
 
+	@Inject
 	public RequestResponsePresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		display.setRatingReadOnly(true);
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		display.setRatingReadOnly(true);
 	}
 
 	@Override
@@ -86,7 +89,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	public void showRequest(Integer requestId) {
-		RPC.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
+		serviceInjector.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -132,7 +135,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	public void loadComments(Request request) {
-		RPC.getRequestService().getRequestComments(request, new AsyncCallback<List<RequestComment>>() {
+		serviceInjector.getRequestService().getRequestComments(request, new AsyncCallback<List<RequestComment>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -155,7 +158,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		comment.setUser(ClientSessionUtil.getUser());
 		comment.setRequest(request);
 
-		RPC.getRequestService().createRequestComment(comment, new AsyncCallback<RequestComment>() {
+		serviceInjector.getRequestService().createRequestComment(comment, new AsyncCallback<RequestComment>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -174,7 +177,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	public void loadAttachments(Response response, final ResponseWidget widget) {
-		RPC.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
+		serviceInjector.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -200,7 +203,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		qualification.setRequest(this.request);
 		qualification.setUser(ClientSessionUtil.getUser());
 
-		RPC.getRequestService().saveUserRequestQualification(qualification, new AsyncCallback<UserRequestQualification>() {
+		serviceInjector.getRequestService().saveUserRequestQualification(qualification, new AsyncCallback<UserRequestQualification>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -216,7 +219,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 
 	@Override
 	public void getUserResponse(final Response response, final ResponseWidget widget) {
-		RPC.getRequestService().getUserResponse(response, new AsyncCallback<UserResponse>() {
+		serviceInjector.getRequestService().getUserResponse(response, new AsyncCallback<UserResponse>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -243,7 +246,7 @@ public class RequestResponsePresenter extends WidgetPresenter<RequestResponsePre
 		userResponse.setInformation(information);
 		userResponse.setDate(new Date());
 
-		RPC.getRequestService().saveUserResponse(userResponse, new AsyncCallback<UserResponse>() {
+		serviceInjector.getRequestService().saveUserResponse(userResponse, new AsyncCallback<UserResponse>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

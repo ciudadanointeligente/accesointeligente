@@ -18,20 +18,21 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.shared.RequestSearchEvent;
 import org.accesointeligente.shared.RequestSearchParams;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RequestSearchPresenter extends WidgetPresenter<RequestSearchPresenter.Display> implements RequestSearchPresenterIface {
+public class RequestSearchPresenter extends CustomWidgetPresenter<RequestSearchPresenter.Display> implements RequestSearchPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestSearchPresenterIface presenter);
 		void displayMessage(String message);
@@ -46,14 +47,22 @@ public class RequestSearchPresenter extends WidgetPresenter<RequestSearchPresent
 		Boolean getStatusDerived();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
+
+	@Inject
 	public RequestSearchPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
+	}
+
+	@Override
+	public void setup() {
+		getInstitutions();
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
-		getInstitutions();
 	}
 
 	@Override
@@ -66,7 +75,7 @@ public class RequestSearchPresenter extends WidgetPresenter<RequestSearchPresent
 
 	@Override
 	public void getInstitutions() {
-		RPC.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
+		serviceInjector.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				display.displayMessage("No es posible recuperar las instituciones");

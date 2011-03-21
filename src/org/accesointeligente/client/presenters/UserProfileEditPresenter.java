@@ -19,21 +19,22 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.services.RPC;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
-import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPresenter.Display> implements UserProfileEditPresenterIface {
+public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileEditPresenter.Display> implements UserProfileEditPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(UserProfileEditPresenterIface presenter);
 		void cleanPersonActivities();
@@ -73,23 +74,30 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 		Boolean validateForm();
 	}
 
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 	User user = ClientSessionUtil.getUser();
 	Boolean passwordOk = false;
 	Boolean updatePassword = false;
 
+	@Inject
 	public UserProfileEditPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
+		bind();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
+	public void setup() {
 		getPersonActivities();
 		getInstitutionActivities();
 		getInstitutionTypes();
 		getPersonAges();
 		getRegions();
 		showUser();
+	}
+
+	@Override
+	protected void onBind() {
+		display.setPresenter(this);
 	}
 
 	@Override
@@ -129,7 +137,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 	public void getPersonActivities() {
 		display.cleanPersonActivities();
 
-		RPC.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
+		serviceInjector.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -151,7 +159,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 	public void getInstitutionActivities() {
 		display.cleanInstitutionActivities();
 
-		RPC.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
+		serviceInjector.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -174,7 +182,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 	public void getInstitutionTypes() {
 		display.cleanInstitutionTypes();
 
-		RPC.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
+		serviceInjector.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo tipos de institución", NotificationEventType.ERROR);
@@ -198,7 +206,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 	public void getPersonAges() {
 		display.cleanPersonAges();
 
-		RPC.getAgeService().getAges(new AsyncCallback<List<Age>>() {
+		serviceInjector.getAgeService().getAges(new AsyncCallback<List<Age>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo edades", NotificationEventType.ERROR);
@@ -220,7 +228,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 	public void getRegions() {
 		display.cleanRegions();
 
-		RPC.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
+		serviceInjector.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo regiones", NotificationEventType.ERROR);
@@ -240,7 +248,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 
 	@Override
 	public void checkPassword(String password) {
-		RPC.getUserService().checkPass(user.getEmail(), password, new AsyncCallback<Boolean>() {
+		serviceInjector.getUserService().checkPass(user.getEmail(), password, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -306,7 +314,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 				user.setRegion(display.getRegion());
 			}
 
-			RPC.getUserService().updateUser(user, new AsyncCallback<Void>() {
+			serviceInjector.getUserService().updateUser(user, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
