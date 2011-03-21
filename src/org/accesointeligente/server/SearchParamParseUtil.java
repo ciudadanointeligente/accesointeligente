@@ -22,9 +22,7 @@ import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 
 public class SearchParamParseUtil {
 
@@ -37,9 +35,9 @@ public class SearchParamParseUtil {
 			for (int i = 0; i < keyWords.length; i++) {
 				keyWords[i]  = keyWords[i].replaceAll("\\W", "");
 				keyWordDisjunction = Restrictions.disjunction();
-				keyWordDisjunction.add(Restrictions.ilike("information", keyWords[i] + "%"));
-				keyWordDisjunction.add(Restrictions.ilike("context", keyWords[i] + "%"));
-				keyWordDisjunction.add(Restrictions.ilike("title", keyWords[i]  + "%"));
+				keyWordDisjunction.add(Restrictions.ilike("information", keyWords[i], MatchMode.ANYWHERE));
+				keyWordDisjunction.add(Restrictions.ilike("context", keyWords[i], MatchMode.ANYWHERE));
+				keyWordDisjunction.add(Restrictions.ilike("title", keyWords[i], MatchMode.ANYWHERE));
 				keywordConjunction.add(keyWordDisjunction);
 			}
 			criteria.add(keywordConjunction);
