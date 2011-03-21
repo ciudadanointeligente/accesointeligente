@@ -344,6 +344,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		NotificationEventParams params = new NotificationEventParams();
 		params.setMessage(message);
 		params.setType(type);
+		params.setDuration(NotificationEventParams.DURATION_NORMAL);
 		eventBus.fireEvent(new NotificationEvent(params));
 	}
 

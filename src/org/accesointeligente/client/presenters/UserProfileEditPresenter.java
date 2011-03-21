@@ -327,6 +327,7 @@ public class UserProfileEditPresenter extends WidgetPresenter<UserProfileEditPre
 		NotificationEventParams params = new NotificationEventParams();
 		params.setMessage(message);
 		params.setType(type);
+		params.setDuration(NotificationEventParams.DURATION_NORMAL);
 		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }

@@ -89,6 +89,7 @@ public class PasswordRecoveryPresenter extends WidgetPresenter<PasswordRecoveryP
 		NotificationEventParams params = new NotificationEventParams();
 		params.setMessage(message);
 		params.setType(type);
+		params.setDuration(NotificationEventParams.DURATION_NORMAL);
 		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }

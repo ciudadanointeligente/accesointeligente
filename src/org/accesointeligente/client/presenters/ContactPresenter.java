@@ -104,6 +104,7 @@ public class ContactPresenter extends WidgetPresenter<ContactPresenter.Display> 
 		NotificationEventParams params = new NotificationEventParams();
 		params.setMessage(message);
 		params.setType(type);
+		params.setDuration(NotificationEventParams.DURATION_NORMAL);
 		eventBus.fireEvent(new NotificationEvent(params));
 	}
 }

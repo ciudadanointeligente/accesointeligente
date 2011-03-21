@@ -186,7 +186,9 @@ public class MainView extends Composite implements MainPresenter.Display {
 				notification.setVisible(false);
 			}
 		};
-		notificationTimer.schedule(15000);
+		if (params.getDuration() > 0) {
+			notificationTimer.schedule(params.getDuration());
+		}
 
 		notificationClose.addClickHandler(new ClickHandler() {
 			@Override
