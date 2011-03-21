@@ -51,7 +51,7 @@ public class ContactServiceImpl extends PersistentRemoteService implements Conta
 			Emailer emailer = new Emailer();
 			emailer.setRecipient(contact.getEmail());
 			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.contact.subject"), contact.getSubject()));
-			emailer.setBody(String.format(ApplicationProperties.getProperty("email.contact.body"), "Sr(a).", contact.getName(), contact.getMessage()) + ApplicationProperties.getProperty("email.signature"));
+			emailer.setBody(String.format(ApplicationProperties.getProperty("email.contact.body"), contact.getName(), contact.getMessage()) + ApplicationProperties.getProperty("email.signature"));
 			emailer.connectAndSend();
 
 			return contact;
