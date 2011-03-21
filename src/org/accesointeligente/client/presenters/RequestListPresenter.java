@@ -53,6 +53,7 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 		void removeTableFavColumn();
 		void setRequests(ListDataProvider<Request> data);
 		void searchPanelToggleVisible();
+		void searchToolTipToggleVisible();
 	}
 
 	private String listType;
@@ -360,7 +361,11 @@ public class RequestListPresenter extends WidgetPresenter<RequestListPresenter.D
 	@Override
 	public void onSearch(RequestSearchEvent event) {
 		Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
-		loadRequests(0, 100, parameters.get("type"), event.getParams());
+		String type = parameters.get("type");
+		if (type.equals(RequestListType.GENERAL.getType())) {
+			display.searchToolTipToggleVisible();
+		}
+		loadRequests(0, 100, type, event.getParams());
 	}
 
 	@Override

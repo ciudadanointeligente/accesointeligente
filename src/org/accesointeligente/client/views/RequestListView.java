@@ -48,6 +48,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@UiField Anchor requestLink;
+	@UiField HTMLPanel searchToolTip;
 	@UiField Label listTitle;
 	@UiField Anchor searchPanelHandle;
 	@UiField FlowPanel searchPanel;
@@ -251,6 +252,15 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			searchPanel.setVisible(false);
 		} else {
 			searchPanel.setVisible(true);
+		}
+	}
+
+	@Override
+	public void searchToolTipToggleVisible() {
+		if (searchToolTip.isVisible()) {
+			searchToolTip.setVisible(false);
+		} else {
+			searchToolTip.setVisible(true);
 		}
 	}
 

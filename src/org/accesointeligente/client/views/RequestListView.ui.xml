@@ -4,6 +4,7 @@
 	<ui:style src="RequestListView.css" />
 	<g:HTMLPanel addStyleNames="noOverflow">
 		<div class="{style.reqTableContainer} contentPad">
+			<g:HTMLPanel ui:field="searchToolTip" visible="false">¿No encontraste lo que buscabas?<br />Haz una solicitud.</g:HTMLPanel>
 			<div class="headSolicitud noMargin">
 				<g:Label addStyleNames="titleH1" ui:field="listTitle"/>
 				<g:Anchor addStyleNames="reqMenuItem newRequestButton" ui:field="requestLink">Haz una solicitud</g:Anchor>
