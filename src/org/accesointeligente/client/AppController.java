@@ -84,7 +84,7 @@ public class AppController implements ValueChangeHandler<String> {
 		Map<String, String> parameters = getHistoryTokenParameters(token);
 		AppPlace place = getPlace(token);
 
-		if (mainPresenter != null) {
+		if (mainPresenter != null && place != AppPlace.HOME && place != AppPlace.LIST && place != AppPlace.EDITREQUEST && place != AppPlace.REQUESTSTATUS) {
 			mainPresenter.clearNotifications();
 		}
 
