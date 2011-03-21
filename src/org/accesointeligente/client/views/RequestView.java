@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.HashSet;
@@ -162,9 +163,15 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 
 	@UiHandler("institutionSearch")
 	protected void onInstitutionSearchBlur(BlurEvent event) {
-		Institution institution = getInstitution();
-		if (institution == null) {
-			presenter.showNotification("No encontramos esta institución. Comprueba que está bien escrita o intenta hacer tu solicitud directamente en la institución.", NotificationEventType.NOTICE);
-		}
+		Timer timer = new Timer() {
+			@Override
+			public void run() {
+				Institution institution = getInstitution();
+				if (institution == null) {
+					presenter.showNotification("No encontramos esta institución. Comprueba que está bien escrita o intenta hacer tu solicitud directamente en la institución.", NotificationEventType.NOTICE);
+				}
+			}
+		};
+		timer.schedule(500);
 	}
 }
