@@ -35,6 +35,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserProfileEditView extends Composite implements UserProfileEditPresenter.Display {
@@ -104,6 +105,14 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 	@Override
 	public void addPersonActivity(Activity activity) {
 		personActivity.addItem(activity.getName(), activity.getId().toString());
+	}
+
+	@Override
+	public void updatePersonActivity(Activity selectedActivity, List<Activity> activities) {
+		for(Activity activity : activities){
+			personActivity.addItem(activity.getName(), activity.getId().toString());
+		}
+		personActivity.setSelectedIndex(activities.indexOf(selectedActivity) + 1);
 	}
 
 	@Override
@@ -243,6 +252,28 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 		}
 
 		return activities;
+	}
+
+	@Override
+	public void setInstitutionActivities(List<Activity> activities) {
+		for (int i = 0; i < institutionActivities.getWidgetCount(); i++) {
+			Widget widget = institutionActivities.getWidget(i);
+
+			if (widget instanceof CheckBox) {
+				CheckBox cb = (CheckBox) widget;
+
+				if (cb.getValue()) {
+					Activity activity = new Activity();
+					activity.setId(Integer.parseInt(cb.getFormValue()));
+					activity.setName(cb.getText());
+					if (activities.contains(activity)) {
+						cb.setValue(true);
+					} else {
+						cb.setValue(false);
+					}
+				}
+			}
+		}
 	}
 
 	@Override

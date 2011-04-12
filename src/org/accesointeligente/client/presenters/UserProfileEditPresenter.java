@@ -28,9 +28,7 @@ import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileEditPresenter.Display> implements UserProfileEditPresenterIface {
 	public interface Display extends WidgetDisplay {
@@ -41,6 +39,7 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 		void cleanPersonAges();
 		void cleanRegions();
 		void addPersonActivity(Activity activity);
+		void updatePersonActivity(Activity selectedActivity, List<Activity> activities);
 		void addInstitutionActivity(Activity activity, Boolean checked);
 		void addInstitutionType(InstitutionType institutionType);
 		void addPersonAge(Age age);
@@ -60,6 +59,7 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 		InstitutionType getInstitutionType();
 		void setInstitutionType(InstitutionType type);
 		Set<Activity> getInstitutionActivities();
+		void setInstitutionActivities(List<Activity> activities);
 		Country getCountry();
 		void setCountry(Country country);
 		Region getRegion();
@@ -142,12 +142,8 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 			@Override
 			public void onSuccess(List<Activity> result) {
-				for (Activity activity : result) {
-					display.addPersonActivity(activity);
-				}
-				if (user.getNaturalPerson()) {
-					display.setPersonActivity(result.get(0));
-				}
+				List<Activity> userActivities = new ArrayList<Activity>(user.getActivities());
+				display.updatePersonActivity(userActivities.get(0), result);
 			}
 		});
 	}
@@ -263,19 +259,31 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 	@Override
 	public void showUser() {
 		display.setEmail(user.getEmail());
+
 		if (user.getNaturalPerson()) {
 			display.setInstitutionPanelVisibility(false);
 			display.setPersonPanelVisibility(true);
 			display.setPersonFirstName(user.getFirstName());
 			display.setPersonLastName(user.getLastName());
 			display.setPersonGender(user.getGender());
+
+			List<Activity> activities = new ArrayList<Activity>(user.getActivities());
+			Activity activity = activities.get(0);
+			display.setPersonActivity(activity);
+
 		} else {
+
 			display.setInstitutionPanelVisibility(true);
 			display.setPersonPanelVisibility(false);
 			display.setInstitutionName(user.getFirstName());
+			List<Activity> activities = new ArrayList<Activity>(user.getActivities());
+			display.setInstitutionActivities(activities);
 		}
 
 		display.setCountry(user.getCountry());
+		if (user.getCountry().equals(Country.CHILE)) {
+			display.setRegion(user.getRegion());
+		}
 	}
 
 	@Override
