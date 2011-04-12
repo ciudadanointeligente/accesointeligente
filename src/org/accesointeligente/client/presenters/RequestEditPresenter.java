@@ -19,7 +19,6 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
@@ -28,7 +27,6 @@ import org.accesointeligente.shared.*;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -55,7 +53,6 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 		void setInstitutions(Map<String, Institution> institutions);
 	}
 
-	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 	private Request request;
 
 	@Inject

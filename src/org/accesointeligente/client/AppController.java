@@ -20,6 +20,7 @@ package org.accesointeligente.client;
 
 import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.inject.PresenterInjector;
+import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.shared.*;
 
@@ -34,7 +35,8 @@ import com.google.gwt.user.client.ui.*;
 import java.util.*;
 
 public class AppController implements ValueChangeHandler<String>, LoginRequiredEventHandler, LoginSuccessfulEventHandler {
-	private final PresenterInjector presenterInjector = GWT.create(PresenterInjector.class);
+	private static final PresenterInjector presenterInjector = GWT.create(PresenterInjector.class);
+	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 	private MainPresenter mainPresenter;
 	private EventBus eventBus;
 	private PopupPanel popup;
@@ -294,5 +296,13 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
 		eventBus.fireEvent(new NotificationEvent(params));
+	}
+
+	public static PresenterInjector getPresenterInjector() {
+		return presenterInjector;
+	}
+
+	public static ServiceInjector getServiceInjector() {
+		return serviceInjector;
 	}
 }

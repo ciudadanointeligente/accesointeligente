@@ -21,7 +21,6 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.*;
-import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.client.views.MainView;
 import org.accesointeligente.shared.NotificationEvent;
 import org.accesointeligente.shared.NotificationEventHandler;
@@ -30,7 +29,6 @@ import org.accesointeligente.shared.NotificationEventParams;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -45,8 +43,6 @@ public class MainPresenter extends CustomWidgetPresenter<MainPresenter.Display> 
 		void setNotificationMessage(NotificationEventParams params);
 		void clearNotifications();
 	}
-
-	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 
 	@Inject
 	public MainPresenter(Display display, EventBus eventBus) {

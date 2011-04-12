@@ -20,8 +20,6 @@ package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
-import org.accesointeligente.client.inject.PresenterInjector;
-import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.User;
 import org.accesointeligente.model.UserFavoriteRequest;
@@ -30,7 +28,6 @@ import org.accesointeligente.shared.*;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
@@ -57,8 +54,6 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		void searchToolTipToggleVisible();
 	}
 
-	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
-	private static final PresenterInjector presenterInjector = GWT.create(PresenterInjector.class);
 	private String listType;
 
 	@Inject
@@ -69,6 +64,10 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 	@Override
 	public void setup() {
+		RequestSearchPresenter presenter = presenterInjector.getRequestSearchPresenter();
+		presenter.setup();
+		display.setSearchWidget(presenter.getDisplay().asWidget());
+
 		if (ClientSessionUtil.checkSession()) {
 			display.initTableFavColumn();
 		} else {
@@ -80,8 +79,6 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	protected void onBind() {
 		display.setPresenter(this);
 		eventBus.addHandler(RequestSearchEvent.TYPE, this);
-		RequestSearchPresenter presenter = presenterInjector.getRequestSearchPresenter();
-		display.setSearchWidget(presenter.getDisplay().asWidget());
 		display.initTable();
 	}
 

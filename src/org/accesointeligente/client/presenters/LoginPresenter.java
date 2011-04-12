@@ -22,7 +22,6 @@ import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
-import org.accesointeligente.client.inject.ServiceInjector;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
@@ -30,7 +29,6 @@ import org.accesointeligente.shared.ServiceException;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -43,8 +41,6 @@ public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display
 		String getEmail();
 		String getPassword();
 	}
-
-	private static final ServiceInjector serviceInjector = GWT.create(ServiceInjector.class);
 
 	@Inject
 	public LoginPresenter(Display display, EventBus eventBus) {
