@@ -79,9 +79,8 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 					user.setLastLoginDate(new Date());
 					hibernate.update(user);
 					hibernate.getTransaction().commit();
-					SessionUtil.setSession(getThreadLocalRequest().getSession());
-					SessionUtil.setAttribute("sessionId", UUID.randomUUID().toString());
-					SessionUtil.setAttribute("user", (User) persistentBeanManager.clone(user));
+					SessionUtil.setAttribute(getThreadLocalRequest().getSession(), "sessionId", UUID.randomUUID().toString());
+					SessionUtil.setAttribute(getThreadLocalRequest().getSession(), "user", (User) persistentBeanManager.clone(user));
 				} catch (Throwable ex) {
 					if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 						hibernate.getTransaction().rollback();
@@ -170,7 +169,7 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			hibernate.beginTransaction();
 			hibernate.update(user);
 			hibernate.getTransaction().commit();
-			SessionUtil.setAttribute("user", (User) persistentBeanManager.clone(user));
+			SessionUtil.setAttribute(getThreadLocalRequest().getSession(), "user", (User) persistentBeanManager.clone(user));
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();

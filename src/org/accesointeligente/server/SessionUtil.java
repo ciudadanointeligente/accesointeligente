@@ -25,9 +25,7 @@ import org.accesointeligente.model.User;
 import javax.servlet.http.HttpSession;
 
 public class SessionUtil {
-	private static HttpSession session;
-
-	public static SessionData getSessionData () throws SessionServiceException {
+	public static SessionData getSessionData (HttpSession session) throws SessionServiceException {
 		if (session == null) {
 			throw new SessionServiceException ();
 		}
@@ -45,7 +43,7 @@ public class SessionUtil {
 		}
 	}
 
-	public static Object getAttribute (String name) {
+	public static Object getAttribute (HttpSession session,String name) {
 		if (session != null) {
 			return session.getAttribute (name);
 		} else {
@@ -53,21 +51,13 @@ public class SessionUtil {
 		}
 	}
 
-	public static void setAttribute (String name, Object value) {
+	public static void setAttribute (HttpSession session, String name, Object value) {
 		if (session != null) {
 			session.setAttribute (name, value);
 		}
 	}
 
-	public static void setSession (HttpSession session) {
-		SessionUtil.session = session;
-	}
-
-	public static HttpSession getSession () {
-		return session;
-	}
-
-	public static User getUser () {
+	public static User getUser (HttpSession session) {
 		return (User) session.getAttribute ("user");
 	}
 }

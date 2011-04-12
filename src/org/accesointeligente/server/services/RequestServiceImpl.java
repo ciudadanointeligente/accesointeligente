@@ -135,7 +135,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		hibernate.beginTransaction();
 
 		try {
-			User user = SessionUtil.getUser();
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFirstResult(offset);
@@ -164,7 +164,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			params = (RequestSearchParams) persistentBeanManager.merge(params);
-			User user = SessionUtil.getUser();
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFirstResult(offset);
@@ -195,7 +195,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		hibernate.beginTransaction();
 
 		try {
-			User user = SessionUtil.getUser();
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
 			String query = "select distinct f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites left join fetch f.request.responses where f.user = :user";
 			Query hQuery = hibernate.createQuery(query);
 			hQuery.setParameter("user", user);
@@ -215,7 +215,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		hibernate.beginTransaction();
 
 		try {
-			User user = SessionUtil.getUser();
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
 			String query = "select distinct f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites left join fetch f.request.responses where f.user = :user";
 			Query hQuery;
 			if(params != null) {
@@ -248,7 +248,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		hibernate.beginTransaction();
 
 		try {
-			User user = SessionUtil.getUser();
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFirstResult(offset);

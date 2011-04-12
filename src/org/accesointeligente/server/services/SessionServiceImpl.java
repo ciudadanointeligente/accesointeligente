@@ -38,6 +38,6 @@ public class SessionServiceImpl extends PersistentRemoteService implements Sessi
 
 	@Override
 	public SessionData getSessionData () throws SessionServiceException {
-		return (SessionData) persistentBeanManager.clone (SessionUtil.getSessionData ());
+		return (SessionData) persistentBeanManager.clone (SessionUtil.getSessionData (getThreadLocalRequest().getSession()));
 	}
 }
