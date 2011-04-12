@@ -184,6 +184,10 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 				@Override
 				public void onSuccess(List<Request> results) {
+					// TODO: implement style for tooltip
+					if (results.size() < 1) {
+						display.searchToolTipToggleVisible();
+					}
 					ListDataProvider<Request> data = new ListDataProvider<Request>(results);
 					display.setRequests(data);
 				}
@@ -283,6 +287,10 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 				@Override
 				public void onSuccess(List<Request> results) {
+					// TODO: implement style for tooltip
+					if (results.size() < 1) {
+						display.searchToolTipToggleVisible();
+					}
 					ListDataProvider<Request> data = new ListDataProvider<Request>(results);
 					display.setRequests(data);
 				}
@@ -366,9 +374,6 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	public void onSearch(RequestSearchEvent event) {
 		Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
 		String type = parameters.get("type");
-		if (type.equals(RequestListType.GENERAL.getType())) {
-			display.searchToolTipToggleVisible();
-		}
 		loadRequests(0, 100, type, event.getParams());
 	}
 
