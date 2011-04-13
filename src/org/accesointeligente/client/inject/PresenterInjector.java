@@ -25,4 +25,5 @@ public interface PresenterInjector extends Ginjector {
 	public LoginPresenter getLoginPresenter();
 	public RegisterPresenter getRegisterPresenter();
 	public PasswordRecoveryPresenter getPasswordRecoveryPresenter();
+	public UserGuideVideoPresenter getUserGuideVideoPresenter();
 }

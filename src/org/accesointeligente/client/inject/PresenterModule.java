@@ -28,5 +28,6 @@ public class PresenterModule extends AbstractPresenterModule {
 		bindPresenter(LoginPresenter.class, LoginPresenter.Display.class, LoginView.class);
 		bindPresenter(RegisterPresenter.class, RegisterPresenter.Display.class, RegisterView.class);
 		bindPresenter(PasswordRecoveryPresenter.class, PasswordRecoveryPresenter.Display.class, PasswordRecoveryView.class);
+		bindPresenter(UserGuideVideoPresenter.class, UserGuideVideoPresenter.Display.class, UserGuideVideoView.class);
 	}
 }
