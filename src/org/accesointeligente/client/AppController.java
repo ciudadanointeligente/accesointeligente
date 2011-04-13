@@ -159,6 +159,15 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 				case CONTACT:
 					setupPresenter(presenterInjector.getContactPresenter());
 					break;
+				case USERGUIDEVIDEO:
+					UserGuideVideoPresenter userGuideVideoPresenter  = presenterInjector.getUserGuideVideoPresenter();
+					userGuideVideoPresenter.setup();
+					popup.setModal(true);
+					popup.setGlassEnabled(true);
+					popup.clear();
+					popup.add(userGuideVideoPresenter.getDisplay().asWidget());
+					popup.center();
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
@@ -219,6 +228,15 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 					break;
 				case CONTACT:
 					setupPresenter(presenterInjector.getContactPresenter());
+					break;
+				case USERGUIDEVIDEO:
+					UserGuideVideoPresenter userGuideVideoPresenter  = presenterInjector.getUserGuideVideoPresenter();
+					userGuideVideoPresenter.setup();
+					popup.setModal(true);
+					popup.setGlassEnabled(true);
+					popup.clear();
+					popup.add(userGuideVideoPresenter.getDisplay().asWidget());
+					popup.center();
 					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());

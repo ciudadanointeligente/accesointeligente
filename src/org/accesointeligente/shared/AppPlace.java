@@ -33,6 +33,7 @@ public enum AppPlace {
 	STATISTICS,
 	CONTACT,
 	USERPROFILE,
+	USERGUIDEVIDEO,
 	GUIDE;
 
 	public String getToken() {
