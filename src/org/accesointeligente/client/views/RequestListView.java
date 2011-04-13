@@ -239,9 +239,41 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
+	public void initTableReceiptColumn() {
+		if (requestTable.getColumnCount() <= 7) {
+			// Favorite Request
+			Column<Request, CustomActionImageCellParams> receiptButtonColumn = new Column<Request, CustomActionImageCellParams>(
+					new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
+
+				public void execute(CustomActionImageCellParams params) {
+					Request request = (Request) params.getValue();
+					Window.Location.replace("receipt?requestId=" + request.getId());
+				}
+			})) {
+				@Override
+				public CustomActionImageCellParams getValue(Request request) {
+					CustomActionImageCellParams params = new CustomActionImageCellParams();
+					params.setUrl("images/mandato.png");
+					params.setTitle("Descarga el mandato");
+					params.setValue(request);
+					return params;
+				}
+			};
+			requestTable.addColumn(receiptButtonColumn, "Mandato");
+		}
+	}
+
+	@Override
 	public void removeTableFavColumn() {
 		if (requestTable.getColumnCount() > 6) {
 			requestTable.removeColumn(6);
+		}
+	}
+
+	@Override
+	public void removeTableReceiptColumn() {
+		if (requestTable.getColumnCount() > 7) {
+			requestTable.removeColumn(7);
 		}
 	}
 

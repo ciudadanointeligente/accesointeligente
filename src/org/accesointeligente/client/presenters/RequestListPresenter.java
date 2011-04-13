@@ -48,7 +48,9 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		void initTable();
 		void initTableColumns();
 		void initTableFavColumn();
+		void initTableReceiptColumn();
 		void removeTableFavColumn();
+		void removeTableReceiptColumn();
 		void setRequests(ListDataProvider<Request> data);
 		void searchPanelToggleVisible();
 		void searchToolTipToggleVisible();
@@ -70,7 +72,9 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 		if (ClientSessionUtil.checkSession()) {
 			display.initTableFavColumn();
+			display.initTableReceiptColumn();
 		} else {
+			display.removeTableReceiptColumn();
 			display.removeTableFavColumn();
 		}
 	}
@@ -122,6 +126,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			display.setListTitle("Mis favoritas");
 			display.setListTitleStyle(RequestListType.FAVORITES.getType());
+			display.removeTableReceiptColumn();
 
 			if (ClientSessionUtil.checkSession()) {
 				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -146,6 +151,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		} else if (type.equals(RequestListType.DRAFTS.getType())) {
 			display.setListTitle("Mis borradores");
 			display.setListTitleStyle(RequestListType.DRAFTS.getType());
+			display.removeTableReceiptColumn();
 			display.removeTableFavColumn();
 			display.removeSearchWidget();
 
@@ -173,6 +179,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 			display.setListTitle("Listado de solicitudes");
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
 			display.searchPanelToggleVisible();
+			display.removeTableReceiptColumn();
 
 			serviceInjector.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
