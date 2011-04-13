@@ -53,7 +53,9 @@
 			</div>
 			<div class="{style.modulesHomeBottom}">
 				<h1>Usar el sitio</h1>
-				<img src="images/dummies/video-home-tutorial.jpg"/>
+				<a href="#userguidevideo">
+					<img src="images/dummies/video-home-tutorial.jpg"/>
+				</a>
 			</div>
 			<g:FlowPanel ui:field="lastResponses" addStyleNames="{style.modulesHomeBottom}">
 				<g:HTMLPanel>
