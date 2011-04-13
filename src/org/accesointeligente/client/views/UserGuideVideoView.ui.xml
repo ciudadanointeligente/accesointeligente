@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="UserGuideVideoView.css" />
+	<g:FocusPanel ui:field="mainPanel" addStyleNames="{style.greyBlock}" width="550PX" height="450PX">
+		<g:HTMLPanel addStyleNames="{style.videoBlock}">
+			<g:Label ui:field="close" addStyleNames="{style.closeButton}" />
+			<br />
+			<g:HTMLPanel ui:field="videoPanel"></g:HTMLPanel>
+		</g:HTMLPanel>
+	</g:FocusPanel>
+</ui:UiBinder>
