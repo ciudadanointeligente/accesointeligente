@@ -96,6 +96,16 @@
     <url-pattern>/accesointeligente/contact</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>receiptServlet</servlet-name>
+    <servlet-class>org.accesointeligente.server.servlets.RequestReceiptServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>receiptServlet</servlet-name>
+    <url-pattern>/accesointeligente/receipt</url-pattern>
+  </servlet-mapping>
+
   <listener>
     <listener-class>org.accesointeligente.server.ApplicationProperties</listener-class>
   </listener>
