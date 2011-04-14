@@ -8,7 +8,7 @@
 				<h1 class="headSolicitud">ACERCA DEL PROYECTO</h1>
 				<div class="contentPad">
 					<p>AccesoInteligente.org es un proyecto la Fundación Ciudadano
-						Inteligente (junto a votainteligente.cl, donar.cl y crick.cl) que
+						Inteligente (junto a votainteligente.cl, donar.cl y criik.cl) que
 						busca promover la demanda de información a los órganos del Estado,
 						visibilizar y compartir las solicitudes de información que se
 						realizan junto a sus respuestas, y generar estudios y/o
@@ -69,8 +69,8 @@
 		</div>
 		<div class="rightContainer">
 			<div class="rightContent">
-				<img class="{style.noMarginVideo}" src="images/dummies/video_lat.jpg" />
-				<p>VER VIDEO</p>
+				<a href="#userguidevideo"><img class="{style.noMarginVideo}" src="images/dummies/video_lat.jpg" /></a>
+				<p><a href="#userguidevideo">VER VIDEO</a></p>
 			</div>
 		</div>
 	</g:HTMLPanel>
