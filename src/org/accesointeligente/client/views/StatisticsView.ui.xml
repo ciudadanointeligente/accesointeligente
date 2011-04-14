@@ -3,6 +3,11 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="StatisticsView.css" />
 	<g:HTMLPanel>
-		Este módulo esta deshabilitado, mientras no haya solicitudes suficientes para sacar conclusiones.
+		<div class="{style.maxW}">
+			<h1 class="headSolicitud">ESTADÍSTICAS</h1>
+			<div class="contentPad">
+				Este módulo esta deshabilitado, mientras no haya solicitudes suficientes para sacar conclusiones.
+			</div>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
