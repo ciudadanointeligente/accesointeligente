@@ -3,5 +3,6 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="StatisticsView.css" />
 	<g:HTMLPanel>
+		Este módulo esta deshabilitado, mientras no haya solicitudes suficientes para sacar conclusiones.
 	</g:HTMLPanel>
 </ui:UiBinder>
