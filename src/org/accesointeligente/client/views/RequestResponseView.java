@@ -213,6 +213,6 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 
 	@UiFactory
 	public Rating rateBuilder() {
-		return new Rating(0,5);
+		return new Rating(0, 5, Rating.LTR, "images/rankstars/rank_star_active.png", "images/rankstars/rank_star_over.png", "images/rankstars/rank_star.png", 12, 12);
 	}
 }
