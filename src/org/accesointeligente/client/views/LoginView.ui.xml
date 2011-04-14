@@ -3,8 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="LoginView.css" />
 
-	<g:FocusPanel addStyleNames="{style.greyBlock}" width="320PX"
-		height="400PX" ui:field="loginPanel">
+	<g:FocusPanel addStyleNames="{style.greyBlock}" width="400PX" height="520PX" ui:field="loginPanel">
 		<g:FormPanel ui:field="loginForm" addStyleNames="loginForm">
 			<g:HTMLPanel>
 				<g:Label ui:field="close" addStyleNames="{style.closeButton}" />
@@ -46,19 +45,19 @@
 					<br />
 					<h1>¿Por qué pedimos registro?</h1>
 					<p>
-						Pedimos registro porque
-						<span title="La Fundación Ciudadano Inteligente">nosotros</span>
-						actuaremos como tu apoderado y debemos mantener una relación única
-						entre tú y tus solicitudes para cuidar tu derecho a reclamar ante
-						el
-						Consejo para la Transparencia en caso de disconformidad con la
-						respuesta. No te preocupes, tus datos serán confidenciales y no los
-						compartiremos
+						Porque aunque la información la pides tú, en la práctica somos <span title="La Fundación Ciudadano Inteligente">nosotros</span> quienes vía web
+						la solicitamos como tus representantes. La información de tu registro es confidencial, sirve sólo para configurar un mandato del cual tú tendrás
+						copia, y sirve además para contar con información estadística sobre, por ejemplo, cuántos hombres o mujeres piden información al Estado, o desde
+						qué partes del país provienen las solicitudes. Es importante destacar que al pedir información vía accesointeligente.org tu identidad es protegida
+						frente al Estado, quien sólo sabrá que la solicitud proviene de nuestro sitio web. El receptor de la solicitud no sabrá que tú la mandaste, lo que
+						constituye una gran ventaja frente a la solicitud de información tradicional, que no permite el anonimato.
 					</p>
 					<p>
 						Sólo tendrás que registrarte una vez!
 					</p>
 					<p>
+						¡Sólo tendrás que registrarte una vez!,  tu sesión quedará guardada y desde ahí podrás enviar cuantas solicitudes quieras sin tener que registrarte
+						de nuevo.
 						<strong>El servicio es totalmente Gratuito.</strong>
 					</p>
 				</div>
