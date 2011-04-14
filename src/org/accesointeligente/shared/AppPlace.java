@@ -34,7 +34,8 @@ public enum AppPlace {
 	CONTACT,
 	USERPROFILE,
 	USERGUIDEVIDEO,
-	GUIDE;
+	GUIDE,
+	TERMSANDCONDITIONS;
 
 	public String getToken() {
 		return this.toString().toLowerCase();
