@@ -1,0 +1,123 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="TermsAndConditionsView.css" />
+	<g:FocusPanel ui:field="mainPanel" addStyleNames="{style.greyBlock}" width="700PX" height="600PX">
+		<g:HTMLPanel>
+			<g:Label ui:field="close" addStyleNames="{style.closeButton}" />
+			<h2>¿Cuáles son las condiciones de uso de este sitio?</h2>
+			<g:HTMLPanel addStyleNames="{style.content}">
+				<br />
+				Es importante que antes de que aceptes las condiciones de uso de este sitio tengas claridad acerca de cómo funciona,
+				y de su política de privacidad y responsabilidad.
+				<br />
+				<br />
+				<h3>Acerca del Mandato</h3>
+				Una vez que te registres, aceptes las condiciones de uso y realices una solicitud de acceso a la información pública a
+				través del formulario "Solicitud de Información", autorizarás a la Fundación Ciudadano Inteligente (en adelante FCI) a
+				realizar en nombre y representación tuya, tu solicitud de información.
+				<br />
+				Es decir, <strong>otorgarás un mandato</strong> en el cual tú serás el mandante y solicitante de la información y la FCI
+				tu mandatario o apoderado.
+				<br />
+				<br />
+				Este mandato sólo permitirá a la FCI realizar en nombre y representación tuya la solicitud de acceso de información que tú
+				realizaste a través del formulario "Solicitud de Información" y <strong>se ampliará a ninguna otra función</strong>, por
+				ejemplo al reclamar ante el Consejo para la Transparencia o la Corte de Apelaciones en caso de que quedes disconforme con
+				la respuesta que el organismo requerido te otorgue. Por lo tanto, <strong>es tu derecho reclamar</strong> en caso de que lo requieras.
+				<br />
+				<br />
+				Por esta razón una y cada vez que realices una solicitud de información se enviará a tu correo electrónico una copia del mandato que
+				acredita que eres tú el mandante y <strong>solicitante de la información y nosotros tu mandatario o apoderado sólo para realizarla</strong>.
+				<br />
+				<br />
+				Al ser la FCI quien actuará a nombre tuyo, se mantendrá la confidencialidad de tu nombre ante el Organismo Público al que pides información,
+				porque somos nosotros quienes vía web la solicitaremos como tus representantes. <strong>Ello no te exime del registro</strong>, ya que para
+				realizar una solicitud de información deberás registrarte y llenar la información que se te solicita. Ella es  fundamental para constituir
+				el mandato, mantenerte informado acerca de tu solicitud, de las aplicaciones, eventos y productos de la plataforma Acceso Inteligente y
+				también para generar información estadística.
+				<br />
+				<br />
+				<h3>Acerca de la Política de Privacidad de tus datos</h3>
+				Tu privacidad es importante. Por esta razón ponemos a disposición nuestra Política de Privacidad sobre los datos personales que se solicitan.
+				<br />
+				<br />
+				<strong>Por qué solicitamos datos personales.</strong>
+				<br />
+				FCI solicita datos personales porque, como hemos señalado, tú eres el solicitante de la información y nosotros tu mandatario o apoderado.
+				En ese sentido la ley de Transparencia número 20.285 en su artículo 12, obliga a los solicitantes de información a entregar determinada información
+				personal: nombre, apellidos, dirección y correo electrónico en caso de que quiera ser notificado por ese medio. A pesar de ello, diversos organismos
+				solicitan más información de la que la ley señala, por lo que creamos un formulario de registro que recoge esas exigencias.
+				<br />
+				<br />
+				Asimismo tus datos nos permitirán:
+				<ul>
+					<li>Mantenerte informado acerca de las aplicaciones, eventos y productos de la  plataforma Acceso Inteligente.</li>
+					<li>Enviarte notificaciones importantes como, por ejemplo, cuando el organismo público al que se le requirió información, da respuesta.</li>
+					<li>Elaborar estudios, estadísticas y análisis, donde se mantendrá la confidencialidad de aquellos datos que directamente permitan identificarte,
+					como tu nombre y apellido.</li>
+				</ul>
+				<br />
+				<strong>Divulgación de tus datos a terceros.</strong>
+				<br />
+				FCI se toma tu privacidad muy en serio. Por esta razón tus datos sólo serán utilizados con la finalidad que se señala en el punto anterior.
+				No se venderán, alquilaran ni compartirán tus datos con otras personas naturales o jurídicas, salvo los casos en que la ley nos obligue a hacerlo o si
+				consideramos que dicha divulgación es necesaria o conveniente por razones de seguridad nacional, para cumplir la legislación vigente o por cualesquiera
+				otros motivos importantes de orden público.
+				<br />
+				<br />
+				<strong>Derecho a acceder, rectificar y cancelar tus datos.</strong>
+				<br />
+				Como se trata de tus datos personales, FCI te otorga el derecho a acceder, rectificar y cancelar tus datos cuantas veces lo estimes necesario,
+				accediendo a tu cuenta.
+				<br />
+				<br />
+				<strong>Protección de datos de carácter personal.</strong>
+				<br />
+				FCI toma precauciones para evitar que tus datos de carácter personal se pierdan, sean robados, utilizados indebidamente, divulgados, modificados
+				o destruidos, o se acceda a los mismos de forma no autorizada.
+				<br />
+				<br />
+				<h3>Acerca de la Política de Descargo de Responsabilidad</h3>
+				Fundación Ciudadano Inteligente no se hará responsable:
+				<ul>
+					<li>
+						Por los contenidos que terceros proporcionen. Las solicitudes que se realizan a través del sitio Acceso Inteligente y las respuestas que
+						otorga el organismo público requerido, u otro usuario, son publicadas automáticamente en su plataforma Web. En consecuencia, FCI no se hará
+						responsable de su contenido, de los datos personales o sensibles que ella pueda contener, ni otorgará garantías de ningún tipo en cuanto a su
+						exactitud y actualización. Tampoco de los eventuales perjuicios que su utilización o conocimiento pudiera ocasionar.
+						<br />
+						Sin perjuicio de lo anterior, FCI se compromete a actuar con diligencia y eliminar de su sitio Web información personal o sensible, a la brevedad
+						posible, desde el momento en que tenga conocimiento de los mismos. Los usuarios de Acceso Inteligente tendrán la posibilidad de comunicar
+						la existencia de información personal y sensible a la cuenta administrador@accesointeligente.org
+					</li>
+					<li>
+						De las responsabilidades que la ley de Transparencia Nº 20.285 entrega a los solicitantes de información. La ley Nº 20.285 otorga a los
+						solicitantes de información diversas obligaciones y deberes que requieren de su actividad. FCI sólo actúa como mandatario o apoderado para
+						realizar la solicitud de información y para notificar todas las respuestas que otorgue el organismo requerido. No será responsable por ejemplo
+						de aclarar solicitudes realizadas, pagar los costos de la información o ir a buscar la información cuando el organismo señale que no la puede
+						enviar por correo electrónico. Tampoco de  reclamar ante las instancias pertinentes.
+					</li>
+					<li>
+						De la licitud del contenido suministrado por los usuarios y terceros, a través de cualquier manera de utilización de este sitio web.
+						<br />
+						En cualquier caso, FCI se compromete a actuar con diligencia para evitar la existencia en su sitio web de contenidos ilícitos y, en caso
+						de que tome conocimiento efectivo de estos contenidos, eliminarlos o impedir el acceso a los mismos.
+					</li>
+					<li>
+						De los errores del contenido suministrado por los usuarios y terceros.  Los documentos publicados podrían contener inconsistencias técnicas
+						o errores tipográficos involuntarios, de los cuales FCI no se hace responsable. Sin embargo, se compromete a subsanarlos con la mayor brevedad
+						posible, desde el momento en que tenga conocimiento de los mismos. Los usuarios de Acceso Inteligente tendrán la posibilidad de comunicar la
+						existencia de información personal y sensible a la cuenta administrador@accesointeligente.org
+					</li>
+					<li>
+						De los foros de debate, opiniones, comentarios. La FCI no se hace responsable de las opiniones, debates ni comentarios que se pudieran expresar
+						en los diferentes foros permanentes o espacios de comentarios que se desarrollen en el seno de este sitio. En cualquier caso, es el propósito de la
+						FCI procurar la correcta utilización de estos mecanismos, con el máximo respeto a la dignidad de las personas y a la libertad de expresión amparada
+						por la Constitución chilena.
+					</li>
+				</ul>
+			</g:HTMLPanel>
+		</g:HTMLPanel>
+	</g:FocusPanel>
+</ui:UiBinder>
