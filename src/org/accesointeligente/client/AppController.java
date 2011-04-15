@@ -168,6 +168,15 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 					popup.add(userGuideVideoPresenter.getDisplay().asWidget());
 					popup.center();
 					break;
+				case TERMSANDCONDITIONS:
+					TermsAndConditionsPresenter termsAndConditionsPresenter  = presenterInjector.getTermsAndConditionsPresenter();
+					termsAndConditionsPresenter.setup();
+					popup.setModal(true);
+					popup.setGlassEnabled(true);
+					popup.clear();
+					popup.add(termsAndConditionsPresenter.getDisplay().asWidget());
+					popup.center();
+					break;
 				default:
 					History.newItem(AppPlace.HOME.toString());
 			}
@@ -236,6 +245,15 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 					popup.setGlassEnabled(true);
 					popup.clear();
 					popup.add(userGuideVideoPresenter.getDisplay().asWidget());
+					popup.center();
+					break;
+				case TERMSANDCONDITIONS:
+					TermsAndConditionsPresenter termsAndConditionsPresenter  = presenterInjector.getTermsAndConditionsPresenter();
+					termsAndConditionsPresenter.setup();
+					popup.setModal(true);
+					popup.setGlassEnabled(true);
+					popup.clear();
+					popup.add(termsAndConditionsPresenter.getDisplay().asWidget());
 					popup.center();
 					break;
 				default:

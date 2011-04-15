@@ -129,9 +129,9 @@
 					<g:PasswordTextBox ui:field="password2" />
 				</g:HTMLPanel>
 				<div class="{style.formSection}">
-					<a href="#">He leído y acepto las condiciones</a>
-					<g:Button addStyleNames="{style.margRight}" ui:field="register">Ok,
-						regístrame</g:Button>
+					<a href="#termsandconditions">He leído y acepto las condiciones</a>
+					<br />
+					<g:Button addStyleNames="{style.margRight}" ui:field="register">Acepto,regístrame</g:Button>
 				</div>
 			</g:HTMLPanel>
 		</g:FormPanel>
@@ -204,4 +204,4 @@
 		</div>
 	</div>
 	</g:HTMLPanel>
-</ui:UiBinder> 
+</ui:UiBinder>
