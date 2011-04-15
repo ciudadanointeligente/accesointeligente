@@ -1,8 +1,14 @@
+div {
+	border-collapse: collapse;
+}
+
 .modulesHome {
 	float: left;
 	height: 237px;
 	margin-right: 12px;
-	width: 268px;
+	width: 266px;
+	border: 0;
+	border-collapse: collapse;
 }
 
 .padWhite .modulesHome:last-child,.modulesHomeBottom:last-child {
@@ -46,7 +52,7 @@
 }
 
 .modulesHomeBottom {
-	width: 288px;
+	width: 286px;
 	min-height: 150px;
 	margin-right: 12px;
 	padding: 10px;
@@ -56,7 +62,7 @@
 
 .modulesHomeBottom:first-child {
 	padding: 10px 20px;
-	width: 268px;
+	width: 266px;
 }
 
 .modulesHomeBottom h1 {
@@ -83,7 +89,7 @@
 	height: 150px;
 	margin: 10px 10px 0 0;
 	padding: 8px;
-	width: 288px;
+	width: 286px;
 }
 
 .NGOSlinks .modulesHomeBottom:last-child {

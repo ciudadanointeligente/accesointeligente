@@ -44,13 +44,13 @@
 			<div class="{style.modulesHomeBottom}">
 				<h1>Saber +</h1>
 				<a href="#guide">
-					<img src="images/dummies/guia-ley.jpg"/>
+					<img  style="width: 267px;" src="images/dummies/guia-ley.jpg"/>
 				</a>
 			</div>
 			<div class="{style.modulesHomeBottom}">
-				<h1>Usar el sitio</h1>
+				<h1>Video</h1>
 				<a href="#userguidevideo">
-					<img src="images/dummies/video-home-tutorial.jpg"/>
+					<img  style="width: 267px;"  src="images/dummies/video-home-tutorial.jpg"/>
 				</a>
 			</div>
 			<g:FlowPanel ui:field="lastResponses" addStyleNames="{style.modulesHomeBottom}">
