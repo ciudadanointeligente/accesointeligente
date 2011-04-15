@@ -30,7 +30,9 @@ h1.greyBlock {
 }
 
 .videoBlock video {
-	margin-left:0px;
+	margin-left: -18px;
+    margin-top: 5px;
+    width: 550px;
 }
 
 .closeButton {
@@ -46,6 +48,7 @@ h1.greyBlock {
 	float: right;
 	cursor: pointer;
 }
+
 
 .closeButton:hover {
 	background-color: #95959F;
