@@ -84,7 +84,7 @@
 	float: left;
 	min-height: 60px;
 	padding: 15px;
-	border-right: 1px dotted #4BC2C8;
+	border-left: 1px dotted #4BC2C8;
 }
 
 .footerModule h1 {
@@ -94,7 +94,7 @@
 	text-transform: uppercase;
 }
 
-.footerModule:last-child {
+.footerModule:first-child {
 	border-right: none;
 }
 
