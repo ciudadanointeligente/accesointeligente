@@ -24,3 +24,9 @@
 	padding-right: 10px;
 	padding-top: 3px;
 }
+.responseText {
+	display: block;
+	font-family: Courier, Courier New, monospace, Andale Mono;
+	line-height: 130%;
+	padding-top: 10px;
+}

@@ -7,9 +7,7 @@
 	<g:HTMLPanel>
 		<h3>Respuesta</h3>
 		<g:Label ui:field="responseDate" addStyleNames="{style.responseDate}" />
-		<pre>
-			<g:Label ui:field="responseInfo"></g:Label>
-		</pre>
+		<g:Label addStyleNames="{style.responseText}" ui:field="responseInfo"></g:Label>
 		<br />
 		<g:HTMLPanel ui:field="responseAttachmentsPanel">
 			<c:CellTable ui:field="attachmentsTable" addStyleNames="{style.downloadTable}" />
