@@ -2,6 +2,7 @@
 .project
 .settings/
 war/WEB-INF/classes/
+war/WEB-INF/deploy/
 war/accesointeligente
 extras/
 *Css.java
