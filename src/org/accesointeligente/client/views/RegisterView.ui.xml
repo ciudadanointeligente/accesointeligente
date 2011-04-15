@@ -129,9 +129,9 @@
 					<g:PasswordTextBox ui:field="password2" />
 				</g:HTMLPanel>
 				<div class="{style.formSection}">
-					<a href="#termsandconditions">He leído y acepto las condiciones</a>
+					<g:CheckBox ui:field="termsAndConditions"><a href="#termsandconditions">He leído y acepto las condiciones</a></g:CheckBox>
 					<br />
-					<g:Button addStyleNames="{style.margRight}" ui:field="register">Acepto,regístrame</g:Button>
+					<g:Button addStyleNames="{style.margRight}" ui:field="register" enabled="false">Acepto, regístrame</g:Button>
 				</div>
 			</g:HTMLPanel>
 		</g:FormPanel>

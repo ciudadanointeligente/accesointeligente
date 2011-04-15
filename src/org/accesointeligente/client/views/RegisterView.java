@@ -59,6 +59,7 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	@UiField TextBox email;
 	@UiField PasswordTextBox password1;
 	@UiField PasswordTextBox password2;
+	@UiField CheckBox termsAndConditions;
 	@UiField Button register;
 
 	private RegisterPresenterIface presenter;
@@ -304,6 +305,15 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	public void onRegisterClick(ClickEvent event) {
 		if (presenter != null) {
 			presenter.register();
+		}
+	}
+
+	@UiHandler("termsAndConditions")
+	public void onTermsAndConditionsChange(ValueChangeEvent<Boolean> event) {
+		if (termsAndConditions.getValue() == true) {
+			register.setEnabled(true);
+		} else {
+			register.setEnabled(false);
 		}
 	}
 }
