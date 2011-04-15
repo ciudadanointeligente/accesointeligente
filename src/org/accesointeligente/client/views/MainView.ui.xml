@@ -8,7 +8,7 @@
 				<g:HTMLPanel addStyleNames="{style.bgDotted} {style.headerPanel}">
 					<g:Image ui:field="logo" title="Ir al home" addStyleNames="{style.logo}"
 						url="images/layout/logo_head.png" />
-					<div class="{style.headSlogan}">¿Qué quieres saber de los organismos públicos? </div>
+					<div class="{style.headSlogan}">Es tu derecho<br/>ES FÁCIL</div>
 					<div class="{style.rightHeaderTop} ">
 						<g:Label ui:field="welcomeMessage" visible="false"
 							addStyleNames="{style.welcome}" />

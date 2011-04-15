@@ -48,15 +48,20 @@
 
 .headSlogan {
 	background: none repeat scroll 0 0 white;
-	bottom: -24px;
-	color: #4BC2C8;
-	float: left;
-	font-size: 10pt;
-	height: 52px;
-	margin-left: -23px;
-	padding: 30px 10px 10px 15px;
-	position: relative;
-	width: 160px;
+    bottom: -21px;
+    color: #4BC2C8;
+    float: left;
+    font-family: trebuchet MS;
+    font-size: 14pt;
+    font-variant: small-caps;
+    font-weight: bold;
+    height: 50px;
+    line-height: 100%;
+    margin-left: -23px;
+    padding: 30px 10px 10px 15px;
+    position: relative;
+    text-transform: lowercase;
+    width: 160px;
 }
 
 .headerPanel {
