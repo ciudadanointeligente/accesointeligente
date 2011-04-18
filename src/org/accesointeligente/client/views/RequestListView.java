@@ -207,73 +207,62 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@Override
 	public void initTableFavColumn() {
-		if (requestTable.getColumnCount() <= 6) {
-			// Favorite Request
-			Column<Request, CustomActionImageCellParams> favButtonColumn = new Column<Request, CustomActionImageCellParams>(
-					new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
+		// Favorite Request
+		Column<Request, CustomActionImageCellParams> favButtonColumn = new Column<Request, CustomActionImageCellParams>(
+				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
-				public void execute(CustomActionImageCellParams params) {
-					presenter.requestToggleFavorite((Request) params.getValue());
-				}
-			})) {
-				@Override
-				public CustomActionImageCellParams getValue(Request request) {
-					CustomActionImageCellParams params = new CustomActionImageCellParams();
-					params.setUrl("images/reqList/no-favorite.png");
-					params.setTitle("Seguir");
+			public void execute(CustomActionImageCellParams params) {
+				presenter.requestToggleFavorite((Request) params.getValue());
+			}
+		})) {
+			@Override
+			public CustomActionImageCellParams getValue(Request request) {
+				CustomActionImageCellParams params = new CustomActionImageCellParams();
+				params.setUrl("images/reqList/no-favorite.png");
+				params.setTitle("Seguir");
 
-					for (UserFavoriteRequest favorite : request.getFavorites()) {
-						if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
-							params.setUrl("images/reqList/favorite.png");
-							params.setTitle("Dejar de seguir");
-							break;
-						}
+				for (UserFavoriteRequest favorite : request.getFavorites()) {
+					if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
+						params.setUrl("images/reqList/favorite.png");
+						params.setTitle("Dejar de seguir");
+						break;
 					}
-
-					params.setValue(request);
-					return params;
 				}
-			};
-			requestTable.addColumn(favButtonColumn, "Seguir");
-		}
+
+				params.setValue(request);
+				return params;
+			}
+		};
+		requestTable.addColumn(favButtonColumn, "Seguir");
 	}
 
 	@Override
 	public void initTableReceiptColumn() {
-		if (requestTable.getColumnCount() <= 7) {
-			// Favorite Request
-			Column<Request, CustomActionImageCellParams> receiptButtonColumn = new Column<Request, CustomActionImageCellParams>(
-					new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
+		// Favorite Request
+		Column<Request, CustomActionImageCellParams> receiptButtonColumn = new Column<Request, CustomActionImageCellParams>(
+				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
-				public void execute(CustomActionImageCellParams params) {
-					Request request = (Request) params.getValue();
-					Window.Location.replace("receipt?requestId=" + request.getId());
-				}
-			})) {
-				@Override
-				public CustomActionImageCellParams getValue(Request request) {
-					CustomActionImageCellParams params = new CustomActionImageCellParams();
-					params.setUrl("images/mandato.png");
-					params.setTitle("Descarga el mandato");
-					params.setValue(request);
-					return params;
-				}
-			};
-			requestTable.addColumn(receiptButtonColumn, "Mandato");
-		}
+			public void execute(CustomActionImageCellParams params) {
+				Request request = (Request) params.getValue();
+				Window.Location.replace("receipt?requestId=" + request.getId());
+			}
+		})) {
+			@Override
+			public CustomActionImageCellParams getValue(Request request) {
+				CustomActionImageCellParams params = new CustomActionImageCellParams();
+				params.setUrl("images/mandato.png");
+				params.setTitle("Descarga el mandato");
+				params.setValue(request);
+				return params;
+			}
+		};
+		requestTable.addColumn(receiptButtonColumn, "Mandato");
 	}
 
 	@Override
-	public void removeTableFavColumn() {
-		if (requestTable.getColumnCount() > 6) {
-			requestTable.removeColumn(6);
-		}
-	}
-
-	@Override
-	public void removeTableReceiptColumn() {
-		if (requestTable.getColumnCount() > 7) {
-			requestTable.removeColumn(7);
+	public void removeColumns() {
+		while (requestTable.getColumnCount() > 0) {
+			requestTable.removeColumn(0);
 		}
 	}
 
