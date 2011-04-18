@@ -262,6 +262,9 @@ a.titleH1 {
 	cursor: default;
 	padding: 2px 6px;
 }
+.gwt-SuggestBoxPopup .item strong {
+	background-color: #AEE2E2;
+}
 
 .gwt-SuggestBoxPopup .suggestPopupTop div,.gwt-SuggestBoxPopup .suggestPopupMiddleLeft div,.gwt-SuggestBoxPopup .suggestPopupMiddleRight div,.gwt-SuggestBoxPopup .suggestPopupBottom div
 	{
