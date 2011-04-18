@@ -49,8 +49,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		void initTableColumns();
 		void initTableFavColumn();
 		void initTableReceiptColumn();
-		void removeTableFavColumn();
-		void removeTableReceiptColumn();
+		void removeColumns();
 		void setRequests(ListDataProvider<Request> data);
 		void searchPanelToggleVisible();
 		void searchToolTipToggleVisible();
@@ -69,21 +68,14 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		RequestSearchPresenter presenter = presenterInjector.getRequestSearchPresenter();
 		presenter.setup();
 		display.setSearchWidget(presenter.getDisplay().asWidget());
-
-		if (ClientSessionUtil.checkSession()) {
-			display.initTableFavColumn();
-			display.initTableReceiptColumn();
-		} else {
-			display.removeTableReceiptColumn();
-			display.removeTableFavColumn();
-		}
+		display.removeColumns();
+		display.initTable();
 	}
 
 	@Override
 	protected void onBind() {
 		display.setPresenter(this);
 		eventBus.addHandler(RequestSearchEvent.TYPE, this);
-		display.initTable();
 	}
 
 	@Override
@@ -101,7 +93,9 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
 			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
-			display.removeTableFavColumn();
+			if (ClientSessionUtil.checkSession() == true) {
+				display.initTableReceiptColumn();
+			}
 
 			if (ClientSessionUtil.checkSession()) {
 				serviceInjector.getRequestService().getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -126,7 +120,9 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			display.setListTitle("Mis favoritas");
 			display.setListTitleStyle(RequestListType.FAVORITES.getType());
-			display.removeTableReceiptColumn();
+			if (ClientSessionUtil.checkSession() == true) {
+				display.initTableFavColumn();
+			}
 
 			if (ClientSessionUtil.checkSession()) {
 				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -151,8 +147,6 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		} else if (type.equals(RequestListType.DRAFTS.getType())) {
 			display.setListTitle("Mis borradores");
 			display.setListTitleStyle(RequestListType.DRAFTS.getType());
-			display.removeTableReceiptColumn();
-			display.removeTableFavColumn();
 			display.removeSearchWidget();
 
 			if (ClientSessionUtil.checkSession()) {
@@ -179,7 +173,9 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 			display.setListTitle("Listado de solicitudes");
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
 			display.searchPanelToggleVisible();
-			display.removeTableReceiptColumn();
+			if (ClientSessionUtil.checkSession() == true) {
+				display.initTableFavColumn();
+			}
 
 			serviceInjector.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
