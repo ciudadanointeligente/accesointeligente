@@ -86,6 +86,8 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 			mainPresenter.clearNotifications();
 		}
 
+		trackHit(place.getToken());
+
 		if (ClientSessionUtil.checkSession()) {
 			switch (place) {
 				case HOME:
@@ -341,4 +343,8 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 	public static ServiceInjector getServiceInjector() {
 		return serviceInjector;
 	}
+
+	public native void trackHit(String pageName) /*-{
+		$wnd._gaq.push(['_trackPageview', pageName]);
+	}-*/;
 }
