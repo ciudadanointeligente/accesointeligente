@@ -18,14 +18,14 @@
  */
 package org.accesointeligente.client.views;
 
+import org.accesointeligente.client.AnchorCell;
+import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
 import org.accesointeligente.client.widgets.CommentWidget;
 import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.client.widgets.UserResponseWidget;
-import org.accesointeligente.model.RequestComment;
-import org.accesointeligente.model.Response;
-import org.accesointeligente.model.UserResponse;
+import org.accesointeligente.model.*;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
@@ -36,8 +36,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Date;
 import java.util.List;
@@ -62,7 +65,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField HTMLPanel newCommentPanel;
 	@UiField TextArea newCommentText;
 	@UiField Button newCommentSubmit;
-
+	@UiField CellTable<Request> bestVotedRequestTable;
 
 	private RequestResponsePresenterIface presenter;
 
@@ -189,6 +192,35 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 		userResponsePanel.add(userResponseTextBox);
 		userResponsePanel.add(userResponseButton);
 		widget.add(userResponsePanel);
+	}
+
+	@Override
+	public void initTable() {
+		// Title
+		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
+			@Override
+			public AnchorCellParams getValue(Request request) {
+				AnchorCellParams params = new AnchorCellParams();
+				params.setValue(request.getTitle());
+				String baseUrl = "#" + AppPlace.RESPONSE.getToken() + "?requestId=";
+				params.setUrl(baseUrl + request.getId());
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
+				return params;
+			}
+		};
+		bestVotedRequestTable.addColumn(titleColumn, "Solicitudes Mejor Rankeadas");
+	}
+
+	@Override
+	public void removeColumns() {
+		while (bestVotedRequestTable.getColumnCount() > 0) {
+			bestVotedRequestTable.removeColumn(0);
+		}
+	}
+
+	@Override
+	public void setRequests(ListDataProvider<Request> data) {
+		data.addDataDisplay(bestVotedRequestTable);
 	}
 
 	@UiHandler("requestListLink")

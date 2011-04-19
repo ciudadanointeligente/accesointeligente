@@ -56,6 +56,9 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		void clearResponseWidget(ResponseWidget widget);
 		void setUserResponse(UserResponse userResponse, ResponseWidget widget);
 		void newUserResponse(Response response, ResponseWidget widget);
+		void initTable();
+		void removeColumns();
+		void setRequests(ListDataProvider<Request> data);
 	}
 
 	private Request request;
@@ -69,6 +72,9 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 	@Override
 	public void setup() {
 		display.setRatingReadOnly(true);
+		display.removeColumns();
+		display.initTable();
+		loadBestVotedRequests();
 	}
 
 	@Override
@@ -255,6 +261,24 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 				showNotification("Se ha guardado su respuesta", NotificationEventType.SUCCESS);
 				display.clearResponseWidget(widget);
 				display.setUserResponse(result, widget);
+			}
+		});
+	}
+
+	@Override
+	public void loadBestVotedRequests() {
+		serviceInjector.getRequestService().getBestVotedRequests(new AsyncCallback<List<Request>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
+				History.newItem(AppPlace.HOME.getToken());
+			}
+
+			@Override
+			public void onSuccess(List<Request> results) {
+				ListDataProvider<Request> data = new ListDataProvider<Request>(results);
+				display.setRequests(data);
 			}
 		});
 	}

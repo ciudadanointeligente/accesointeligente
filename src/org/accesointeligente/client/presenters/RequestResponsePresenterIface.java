@@ -31,6 +31,7 @@ public interface RequestResponsePresenterIface {
 	void saveQualification(Integer rate);
 	void getUserResponse(Response response, ResponseWidget widget);
 	void saveUserResponse(String information, Response response, ResponseWidget widget);
+	void loadBestVotedRequests();
 	String getListLink();
 	void showNotification(String message, NotificationEventType type);
 }
