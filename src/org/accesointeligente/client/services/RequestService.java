@@ -56,4 +56,5 @@ public interface RequestService extends RemoteService {
 	Request updateRequestQualification(Request request) throws ServiceException;
 	UserResponse saveUserResponse(UserResponse userResponse) throws ServiceException;
 	UserResponse getUserResponse(Response response) throws ServiceException;
+	List<Request> getBestVotedRequests() throws ServiceException;
 }

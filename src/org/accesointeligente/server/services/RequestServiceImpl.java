@@ -596,4 +596,26 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			throw new ServiceException();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Request> getBestVotedRequests() throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+			criteria.addOrder(Order.desc("qualification"));
+			criteria.setFirstResult(0);
+			criteria.setMaxResults(5);
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
 }

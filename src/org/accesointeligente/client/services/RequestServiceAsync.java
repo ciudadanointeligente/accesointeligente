@@ -53,4 +53,5 @@ public interface RequestServiceAsync {
 	void updateRequestQualification(Request request, AsyncCallback<Request> callback);
 	void saveUserResponse(UserResponse userResponse, AsyncCallback<UserResponse> callback);
 	void getUserResponse(Response response, AsyncCallback<UserResponse> callback);
+	void getBestVotedRequests(AsyncCallback<List<Request>> callback);
 }
