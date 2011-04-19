@@ -2,6 +2,8 @@ package org.accesointeligente.model;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import java.util.Date;
+
 public class Contact extends LightEntity {
 
 	private Integer id;
@@ -9,6 +11,7 @@ public class Contact extends LightEntity {
 	private String email;
 	private String subject;
 	private String message;
+	private Date date;
 
 	public Integer getId() {
 		return id;
@@ -50,4 +53,11 @@ public class Contact extends LightEntity {
 		this.message = message;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
 }

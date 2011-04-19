@@ -31,6 +31,8 @@ import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
+import java.util.Date;
+
 public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Display> implements ContactPresenterIface {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(ContactPresenterIface presenter);
@@ -87,6 +89,7 @@ public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Dis
 		contact.setEmail(display.getEmail());
 		contact.setSubject(display.getSubject());
 		contact.setMessage(display.getMessage());
+		contact.setDate(new Date());
 
 		serviceInjector.getContactService().saveContact(contact, new AsyncCallback<Contact>() {
 
