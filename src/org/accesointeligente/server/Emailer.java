@@ -96,7 +96,7 @@ public class Emailer {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(ApplicationProperties.getProperty("email.user")));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(getRecipient()));
-			message.setSubject(getSubject());
+			message.setSubject(getSubject(), "UTF-8");
 			message.setContent(getBody(), "text/html;charset=UTF-8");
 			message.setSentDate(new Date());
 			Transport.send(message);

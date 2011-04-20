@@ -39,7 +39,7 @@ public class RequestReceiptServlet extends HttpServlet {
 
 			String filename = "AccesoInteligente-Mandato-ID" + userRequest.getId().toString() + ".pdf";
 
-			response.setContentType("application/pdf");
+			response.setContentType("application/pdf; charset=utf-8");
 			String disposition = "attachment; fileName=" + filename;
 			response.setHeader("Content-Disposition", disposition);
 			ServletOutputStream servletOutputStream = response.getOutputStream();
