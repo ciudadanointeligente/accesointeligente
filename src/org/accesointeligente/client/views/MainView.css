@@ -30,12 +30,12 @@
 }
 
 .welcome {
-	 background: none repeat scroll 0 0 #4BC2C8;
-    color: white;
-    float: left;
-    padding: 3px 12px 5px;
-    position: absolute;
-    right: 0;
+	background: none repeat scroll 0 0 #4BC2C8;
+	color: white;
+	float: left;
+	padding: 3px 12px 5px;
+	position: absolute;
+	right: 0;
 }
 
 .menuBar {
@@ -48,20 +48,21 @@
 
 .headSlogan {
 	background: none repeat scroll 0 0 white;
-    bottom: -21px;
-    color: #4BC2C8;
-    float: left;
-    font-family: trebuchet MS;
-    font-size: 14pt;
-    font-variant: small-caps;
-    font-weight: bold;
-    height: 50px;
-    line-height: 100%;
-    margin-left: -23px;
-    padding: 30px 10px 10px 15px;
-    position: relative;
-    text-transform: lowercase;
-    width: 160px;
+	bottom: -22px;
+	color: grey;
+	float: left;
+	font-family: Georgia, serif;
+	font-size: 14pt;
+	font-style: italic;
+	height: 55px;
+	line-height: 120%;
+	margin-left: -23px;
+	padding: 25px 10px 10px 15px;
+	position: relative;
+	width: 130px;
+}
+.betaRibbon{
+	background: url("images/layout/beta_ribbon.png") no-repeat scroll right bottom #FFFFFF;
 }
 
 .headerPanel {
