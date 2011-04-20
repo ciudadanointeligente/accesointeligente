@@ -26,7 +26,7 @@ a {
 	color: #19BDCF;
 }
 
-.body .gwt-TextArea, textarea{
+.body .gwt-TextArea,textarea {
 	resize: vertical;
 }
 
@@ -149,7 +149,6 @@ h1,h2,h3,h4,h5,h6 {
 	display: none;
 }
 
-
 /*---modules---*/
 .greyGrad {
 	background: url("images/bg_greyGrad.png") repeat-x scroll 0 bottom
@@ -178,6 +177,7 @@ h1,h2,h3,h4,h5,h6 {
 	line-height: 120%;
 	float: left;
 }
+
 a.titleH1 {
 	color: #696969;
 	cursor: pointer;
@@ -228,19 +228,19 @@ a.titleH1 {
 }
 
 /*---- GWT-----*/
-/** Example rules used by the template application (remove for your app) */
 .sendButton {
 	display: block;
 	font-size: 16pt;
 }
 
-.body .gwt-Button{
-     -moz-border-radius: 4px; /* FF1+ */
+.body .gwt-Button {
+	-moz-border-radius: 4px; /* FF1+ */
 	-webkit-border-radius: 4px; /* Saf3-4 */
 	border-radius: 4px; /* Opera 10.5, IE 9, Saf5, Chrome */
 	font-size: 8pt;
 }
-.ClassicButton{
+
+.ClassicButton {
 	letter-spacing: 0;
 }
 
@@ -255,13 +255,17 @@ a.titleH1 {
 .gwt-DialogBox {
 	width: 400px;
 }
-
+/* Rank */
+.body .tagline span.cbg-RatingItem, .body span.cbg-RatingItem {
+	padding: 0px;
+}
 /* SuggestItem*/
 .gwt-SuggestBoxPopup .item {
 	color: #424242;
 	cursor: default;
 	padding: 2px 6px;
 }
+
 .gwt-SuggestBoxPopup .item strong {
 	background-color: #AEE2E2;
 }
@@ -302,8 +306,8 @@ a.titleH1 {
 }
 
 /*--*/
-.w280 .gwt-SuggestBox{
-	width: 280px; 
+.w280 .gwt-SuggestBox {
+	width: 280px;
 }
 
 .gwt-TextBox,.gwt-PasswordTextBox,.gwt-SuggestBox,.gwt-DateBox {
@@ -438,6 +442,7 @@ a.titleH1 {
 }
 
 .body .menuPopupBottomCenterInner {
+	
 }
 
 .body .gwt-MenuBarPopup .gwt-MenuBar .gwt-MenuItem-selected {
@@ -451,6 +456,6 @@ a.titleH1 {
 }
 /*-----*/
 .gwtIframe {
-	border:none;
+	border: none;
 	width: 950px;
 }
