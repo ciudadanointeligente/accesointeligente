@@ -21,7 +21,7 @@
 					</tr>
 					<tr>
 						<td><g:Label>Mensaje (obligatorio)</g:Label></td>
-						<td><g:TextArea ui:field="contactMessage"/></td>
+						<td><g:TextArea addStyleNames="{style.contactMessage}" ui:field="contactMessage"/></td>
 					</tr>
 					<tr>
 						<td colspan="2"><g:Button addStyleNames="{style.margRight}" ui:field="send">Enviar</g:Button></td>

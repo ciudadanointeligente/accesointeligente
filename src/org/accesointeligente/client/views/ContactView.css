@@ -4,6 +4,7 @@
 
 .formTable td {
 	padding: 5px 3px;
+	vertical-align: top;
 }
 
 .formTable th {
@@ -36,4 +37,16 @@ h1.greyBlock {
 
 .margRight {
 	margin-right: 5px;
+}
+
+.contactMessage{
+	width: 450px;
+	height: 150px;
+	border: 1px solid darkgrey;
+	-moz-border-radius: 4px; /* FF1+ */
+	-webkit-border-radius: 4px; /* Saf3-4 */
+	border-radius: 4px; /* Opera 10.5, IE 9, Saf5, Chrome */
+	-moz-box-shadow: 1px 1px 1px #dcdcdc inset; /* FF3.5+ */
+	-webkit-box-shadow: inset 1px 1px 1px #dcdcdc; /* Saf3.0+, Chrome */
+	box-shadow: inset 1px 1px 1px #dcdcdc; /* Opera 10.5, IE9 */
 }
