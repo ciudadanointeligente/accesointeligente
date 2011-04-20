@@ -49,4 +49,26 @@ public class Region extends LightEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public int hashCode() {
+		return this.id.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+
+		if (id == null) {
+			return false;
+		}
+
+		if (!(object instanceof Region)) {
+			return false;
+		}
+
+		return id.equals(((Region) object).getId());
+	}
 }
