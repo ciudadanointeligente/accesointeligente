@@ -6,9 +6,9 @@ import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.services.RequestServiceImpl;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -39,6 +39,14 @@ public class RequestReceiptServlet extends HttpServlet {
 
 			String filename = "AccesoInteligente-Mandato-ID" + userRequest.getId().toString() + ".pdf";
 
+			BaseFont fontVeraMono = BaseFont.createFont("org/accesointeligente/server/servlets/VeraMono.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+			BaseFont fontVeraMonoBold = BaseFont.createFont("org/accesointeligente/server/servlets/VeraMoBd.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+			Font VERA_NORMAL = new Font(fontVeraMono, 12);
+			Font VERA_NORMAL_TINY = new Font(fontVeraMono, 8);
+			Font VERA_BOLD = new Font(fontVeraMonoBold, 12);
+			Font VERA_BOLD_TITLE = new Font(fontVeraMonoBold, 14);
+
 			response.setContentType("application/pdf; charset=utf-8");
 			String disposition = "attachment; fileName=" + filename;
 			response.setHeader("Content-Disposition", disposition);
@@ -48,33 +56,54 @@ public class RequestReceiptServlet extends HttpServlet {
 			PdfWriter writer = PdfWriter.getInstance(document, servletOutputStream);
 			document.open();
 
-			Paragraph documentTitle = new Paragraph(ApplicationProperties.getProperty("receipt.title"), FontFactory.getFont(FontFactory.COURIER_BOLD, 14));
+			document.addTitle("AccesoInteligente Mandato Solicitud: " + userRequest.getId().toString());
+			document.addAuthor("Acceso Inteligente");
+			document.addCreator("Acceso Inteligente");
+			document.addKeywords("Acceso");
+			document.addKeywords("Inteligente");
+			document.addKeywords("Mandato");
+			document.addKeywords("Transparencia");
+			document.addCreationDate();
+
+			Paragraph documentTitle = new Paragraph(ApplicationProperties.getProperty("receipt.title"), VERA_BOLD_TITLE);
+			addEmptyLine(documentTitle, 1);
 			document.add(documentTitle);
 
-			Paragraph sectionTopTitle = new Paragraph(ApplicationProperties.getProperty("receipt.body"), FontFactory.getFont(FontFactory.COURIER, 12));
+			Paragraph sectionTopTitle = new Paragraph(ApplicationProperties.getProperty("receipt.body"), VERA_NORMAL);
+			addEmptyLine(sectionTopTitle, 1);
 			document.add(sectionTopTitle);
 
-			Paragraph listTitle = new Paragraph(ApplicationProperties.getProperty("receipt.body.list.title"), FontFactory.getFont(FontFactory.COURIER, 12));
+			Paragraph listTitle = new Paragraph(ApplicationProperties.getProperty("receipt.body.list.title"), VERA_NORMAL);
 			document.add(listTitle);
 			List list = new List();
 			list.setListSymbol("- ");
-			list.add(new ListItem(ApplicationProperties.getProperty("receipt.body.list.item1"), FontFactory.getFont(FontFactory.COURIER, 12)));
-			list.add(new ListItem(ApplicationProperties.getProperty("receipt.body.list.item2"), FontFactory.getFont(FontFactory.COURIER, 12)));
+			list.add(new ListItem(ApplicationProperties.getProperty("receipt.body.list.item1"), VERA_NORMAL));
+			list.add(new ListItem(ApplicationProperties.getProperty("receipt.body.list.item2"), VERA_NORMAL));
 			document.add(list);
 
-			Paragraph documentCut = new Paragraph(ApplicationProperties.getProperty("receipt.cut"), FontFactory.getFont(FontFactory.COURIER_BOLD, 12));
+			Paragraph documentCut = new Paragraph(ApplicationProperties.getProperty("receipt.cut"), VERA_BOLD);
+			addEmptyLine(documentCut, 2);
 			document.add(documentCut);
 
-			Paragraph sectionBottomTitle = new Paragraph(ApplicationProperties.getProperty("receipt.footer.title"), FontFactory.getFont(FontFactory.COURIER, 12));
+			Paragraph sectionBottomTitle = new Paragraph(ApplicationProperties.getProperty("receipt.footer.title"), VERA_BOLD_TITLE);
+			addEmptyLine(sectionBottomTitle, 1);
 			document.add(sectionBottomTitle);
-			Paragraph footerBody = new Paragraph(String.format(ApplicationProperties.getProperty("receipt.footer.body"),
-				user.getFirstName() + " " + user.getLastName(), userRequest.getTitle(), userRequest.getId(), userRequest.getInstitution().getName()), FontFactory.getFont(FontFactory.COURIER, 12));
+
+			Paragraph footerBody = new Paragraph(String.format(ApplicationProperties.getProperty("receipt.footer.body"), user.getFirstName() + " " + user.getLastName(), userRequest.getTitle(), userRequest.getId(), userRequest.getInstitution().getName()), VERA_NORMAL);
+			addEmptyLine(footerBody, 2);
 			document.add(footerBody);
 
 			document.close();
+			writer.close();
 
 		} catch (Exception ex) {
 			throw new ServletException(ex.getMessage());
+		}
+	}
+
+	private static void addEmptyLine(Paragraph paragraph, int number) {
+		for (int i = 0; i < number; i++) {
+			paragraph.add(new Paragraph(" "));
 		}
 	}
 }
