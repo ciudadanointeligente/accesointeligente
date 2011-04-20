@@ -142,6 +142,14 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 	}
 
 	@Override
+	public void updateRegion(Region selectedRegion, List<Region> regions) {
+		for (Region region : regions) {
+			this.region.addItem(region.getName(), region.getId().toString());
+		}
+		this.region.setSelectedIndex(regions.indexOf(selectedRegion) + 1);
+	}
+
+	@Override
 	public String getPersonFirstName() {
 		return personFirstName.getText();
 	}

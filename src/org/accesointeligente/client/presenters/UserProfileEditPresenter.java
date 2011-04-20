@@ -43,6 +43,7 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 		void addInstitutionActivity(Activity activity, Boolean checked);
 		void addInstitutionType(InstitutionType institutionType);
 		void addPersonAge(Age age);
+		void updateRegion(Region selectedRegion, List<Region> regions);
 		void addRegion(Region region);
 		String getPersonFirstName();
 		void setPersonFirstName(String name);
@@ -229,12 +230,7 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 			@Override
 			public void onSuccess(List<Region> result) {
-				for (Region region : result) {
-					display.addRegion(region);
-				}
-				if (user.getCountry().equals(Country.CHILE)) {
-					display.setRegion(user.getRegion());
-				}
+				display.updateRegion(user.getRegion(), result);
 			}
 		});
 	}
