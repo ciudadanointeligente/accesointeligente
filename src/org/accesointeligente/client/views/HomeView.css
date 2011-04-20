@@ -6,9 +6,20 @@ div {
 	float: left;
 	height: 237px;
 	margin-right: 12px;
-	width: 266px;
+	width: 267px;
 	border: 0;
 	border-collapse: collapse;
+}
+
+.modulesHome:last-child {
+	margin-right: 0px;
+}
+
+@if user.agent ie6 ie8 {
+	.modulesHome {
+		margin-right: 10px;
+		width: 266px;
+	}
 }
 
 .padWhite .modulesHome:last-child,.modulesHomeBottom:last-child {
@@ -65,6 +76,17 @@ div {
 	width: 266px;
 }
 
+@if user.agent ie6 ie8 {
+		.modulesHomeBottom {
+		width: 285px;
+		margin-right: 10px;
+	}
+
+	.modulesHomeBottom:first-child {
+		width: 265px;
+	}
+}
+
 .modulesHomeBottom h1 {
 	color: #333333;
 	font-weight: normal;
@@ -92,9 +114,18 @@ div {
 	width: 286px;
 }
 
+@if user.agent ie6 ie8 {
+	.NGOSlinks .modulesHomeBottom {
+		margin: 10px 9px 0 0;
+		padding: 8px;
+		width: 280px;
+	}
+}
+
 .NGOSlinks .modulesHomeBottom:last-child {
 	margin-right: 0px
 }
+
 
 .modulesHomeBottom h3 {
 	background-color: #F3F3F3;
