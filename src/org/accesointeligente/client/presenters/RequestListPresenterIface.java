@@ -23,6 +23,7 @@ import org.accesointeligente.shared.NotificationEventType;
 import org.accesointeligente.shared.RequestSearchParams;
 
 public interface RequestListPresenterIface {
+	void loadColumns(String type);
 	void loadRequests(Integer offset, Integer limit, String type);
 	void loadRequests(Integer offset, Integer limit, String type, RequestSearchParams params);
 	void requestToggleFavorite(Request request);

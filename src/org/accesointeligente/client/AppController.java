@@ -135,7 +135,8 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 						String listType = parameters.get("type");
 						RequestListPresenter requestListPresenter = presenterInjector.getRequestListPresenter();
 						setupPresenter(requestListPresenter);
-						requestListPresenter.loadRequests(0, 100, listType);
+						requestListPresenter.loadColumns(listType);
+						requestListPresenter.loadRequests(0, 300, listType);
 					} catch (Exception e) {
 						e.printStackTrace();
 						showNotification("Tipo de lista incorrecto: No se puede cargar la lista", NotificationEventType.ERROR);
@@ -215,7 +216,8 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 						String listType = parameters.get("type");
 						RequestListPresenter requestListPresenter = presenterInjector.getRequestListPresenter();
 						setupPresenter(requestListPresenter);
-						requestListPresenter.loadRequests(0, 100, listType);
+						requestListPresenter.loadColumns(listType);
+						requestListPresenter.loadRequests(0, 300, listType);
 					} catch (Exception e) {
 						showNotification("Tipo de lista incorrecto: No se puede cargar la lista", NotificationEventType.ERROR);
 					}

@@ -87,15 +87,29 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	}
 
 	@Override
+	public void loadColumns(String type) {
+		if (type.equals(RequestListType.MYREQUESTS.getType())) {
+			if (ClientSessionUtil.checkSession() == true) {
+				display.initTableReceiptColumn();
+			}
+		} else if (type.equals(RequestListType.FAVORITES.getType())) {
+			if (ClientSessionUtil.checkSession() == true) {
+				display.initTableFavColumn();
+			}
+		} else if (type.equals(RequestListType.GENERAL.getType())) {
+			if (ClientSessionUtil.checkSession() == true) {
+				display.initTableFavColumn();
+			}
+		}
+	}
+
+	@Override
 	public void loadRequests(Integer offset, Integer limit, String type) {
 		listType = type;
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
 			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
-			if (ClientSessionUtil.checkSession() == true) {
-				display.initTableReceiptColumn();
-			}
 
 			if (ClientSessionUtil.checkSession()) {
 				serviceInjector.getRequestService().getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -120,9 +134,6 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			display.setListTitle("Mis favoritas");
 			display.setListTitleStyle(RequestListType.FAVORITES.getType());
-			if (ClientSessionUtil.checkSession() == true) {
-				display.initTableFavColumn();
-			}
 
 			if (ClientSessionUtil.checkSession()) {
 				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
@@ -173,9 +184,6 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 			display.setListTitle("Listado de solicitudes");
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
 			display.searchPanelToggleVisible();
-			if (ClientSessionUtil.checkSession() == true) {
-				display.initTableFavColumn();
-			}
 
 			serviceInjector.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
@@ -327,7 +335,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 						@Override
 						public void onSuccess(UserFavoriteRequest result) {
 							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
-							loadRequests(0, 100, parameters.get("type"));
+							loadRequests(0, 300, parameters.get("type"));
 							showNotification("Se ha agregado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
@@ -346,7 +354,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 						@Override
 						public void onSuccess(Void result) {
 							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
-							loadRequests(0, 100, parameters.get("type"));
+							loadRequests(0, 300, parameters.get("type"));
 							showNotification("Se ha eliminado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
