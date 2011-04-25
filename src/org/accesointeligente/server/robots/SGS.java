@@ -51,6 +51,7 @@ public class SGS extends Robot {
 	public SGS() {
 		client = new DefaultHttpClient();
 		HttpProtocolParams.setUserAgent(client.getParams(), "Mozilla/5.0 (X11; U; Linux x86_64; es-CL; rv:1.9.2.12) Gecko/20101027 Ubuntu/10.10 (maverick) Firefox/3.6.12");
+		HttpProtocolParams.setVersion(client.getParams(), HttpVersion.HTTP_1_0);
 		cleaner = new HtmlCleaner();
 	}
 
