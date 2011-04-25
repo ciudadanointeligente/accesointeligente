@@ -99,7 +99,7 @@ public class SGS extends Robot {
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 
-			if (document.getElementListByAttValue("href", "index.php?accion=Salir", true, true).isEmpty()) {
+			if (document.getElementListByAttValue("href", "index.php?accion=Salir", true, false).isEmpty()) {
 				throw new Exception();
 			}
 
