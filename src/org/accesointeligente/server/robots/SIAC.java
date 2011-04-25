@@ -79,7 +79,7 @@ public class SIAC extends Robot {
 			formParams = new ArrayList<NameValuePair>();
 			formParams.add(new BasicNameValuePair("usuario", username));
 			formParams.add(new BasicNameValuePair("clave", password));
-			formParams.add(new BasicNameValuePair("acction", "login"));
+			formParams.add(new BasicNameValuePair("accion", "login"));
 
 			post = new HttpPost(baseUrl);
 			post.addHeader("Referer", baseUrl + "?accion=ingresa");
