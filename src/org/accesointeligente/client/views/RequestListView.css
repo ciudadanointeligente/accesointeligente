@@ -20,6 +20,7 @@
 	text-align: center;
 	text-shadow: none;
 	min-width: 30px;
+	white-space: nowrap;
 }
 
 .requestTable th:first-child {

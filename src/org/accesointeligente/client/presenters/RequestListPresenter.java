@@ -31,6 +31,7 @@ import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.inject.Inject;
 
@@ -40,22 +41,22 @@ import java.util.Map;
 public class RequestListPresenter extends CustomWidgetPresenter<RequestListPresenter.Display> implements RequestListPresenterIface, RequestSearchEventHandler {
 	public interface Display extends WidgetDisplay {
 		void setPresenter(RequestListPresenterIface presenter);
-		void displayMessage(String message);
 		void setListTitle(String title);
 		void setListTitleStyle(String style);
 		void setSearchWidget(Widget widget);
 		void removeSearchWidget();
-		void initTable();
+		void initTable(AbstractDataProvider<Request> data);
 		void initTableColumns();
 		void initTableFavColumn();
 		void initTableReceiptColumn();
 		void removeColumns();
-		void setRequests(ListDataProvider<Request> data);
-		void searchPanelToggleVisible();
-		void searchToolTipToggleVisible();
+		void setRequests(AbstractDataProvider<Request> data);
+		void setSearchPanelVisible(Boolean visible);
+		void setSearchToolTipVisible(Boolean visible);
 	}
 
 	private String listType;
+	private AbstractDataProvider<Request> requestData;
 
 	@Inject
 	public RequestListPresenter(Display display, EventBus eventBus) {
@@ -67,9 +68,12 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	public void setup() {
 		RequestSearchPresenter presenter = presenterInjector.getRequestSearchPresenter();
 		presenter.setup();
+		display.setSearchPanelVisible(false);
+		display.setSearchToolTipVisible(false);
 		display.setSearchWidget(presenter.getDisplay().asWidget());
 		display.removeColumns();
-		display.initTable();
+		requestData = new ListDataProvider<Request>();
+		display.initTable(requestData);
 	}
 
 	@Override
@@ -84,6 +88,14 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 	@Override
 	protected void onRevealDisplay() {
+	}
+
+	public AbstractDataProvider<Request> getRequestData() {
+		return requestData;
+	}
+
+	public void setRequestData(AbstractDataProvider<Request> requestData) {
+		this.requestData = requestData;
 	}
 
 	@Override
@@ -106,6 +118,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	@Override
 	public void loadRequests(Integer offset, Integer limit, String type) {
 		listType = type;
+		requestData = new ListDataProvider<Request>();
+		display.setRequests(requestData);
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			display.setListTitle("Mis solicitudes");
@@ -122,8 +136,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 					@Override
 					public void onSuccess(List<Request> results) {
-						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-						display.setRequests(data);
+						requestData = new ListDataProvider<Request>(results);
+						display.setRequests(requestData);
 					}
 				});
 			} else {
@@ -146,8 +160,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 					@Override
 					public void onSuccess(List<Request> results) {
-						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-						display.setRequests(data);
+						requestData = new ListDataProvider<Request>(results);
+						display.setRequests(requestData);
 					}
 				});
 			} else {
@@ -171,8 +185,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 					@Override
 					public void onSuccess(List<Request> results) {
-						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-						display.setRequests(data);
+						requestData = new ListDataProvider<Request>(results);
+						display.setRequests(requestData);
 					}
 				});
 			} else {
@@ -183,7 +197,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
 			display.setListTitle("Listado de solicitudes");
 			display.setListTitleStyle(RequestListType.GENERAL.getType());
-			display.searchPanelToggleVisible();
+			display.setSearchPanelVisible(true);
 
 			serviceInjector.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
@@ -197,10 +211,10 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 				public void onSuccess(List<Request> results) {
 					// TODO: implement style for tooltip
 					if (results.size() < 1) {
-						display.searchToolTipToggleVisible();
+						display.setSearchToolTipVisible(true);
 					}
-					ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-					display.setRequests(data);
+					requestData = new ListDataProvider<Request>(results);
+					display.setRequests(requestData);
 				}
 			});
 		} else {
@@ -227,8 +241,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 					@Override
 					public void onSuccess(List<Request> results) {
-						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-						display.setRequests(data);
+						requestData = new ListDataProvider<Request>(results);
+						display.setRequests(requestData);
 					}
 				});
 			} else {
@@ -251,8 +265,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 					@Override
 					public void onSuccess(List<Request> results) {
-						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-						display.setRequests(data);
+						requestData = new ListDataProvider<Request>(results);
+						display.setRequests(requestData);
 					}
 				});
 			} else {
@@ -275,8 +289,8 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 					@Override
 					public void onSuccess(List<Request> results) {
-						ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-						display.setRequests(data);
+						requestData = new ListDataProvider<Request>(results);
+						display.setRequests(requestData);
 					}
 				});
 			} else {
@@ -300,10 +314,10 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 				public void onSuccess(List<Request> results) {
 					// TODO: implement style for tooltip
 					if (results.size() < 1) {
-						display.searchToolTipToggleVisible();
+						display.setSearchToolTipVisible(true);
 					}
-					ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-					display.setRequests(data);
+					requestData = new ListDataProvider<Request>(results);
+					display.setRequests(requestData);
 				}
 			});
 		} else {

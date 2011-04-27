@@ -31,12 +31,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
-import com.google.gwt.user.cellview.client.*;
-import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.AbstractDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@UiField Anchor searchPanelHandle;
 	@UiField FlowPanel searchPanel;
 	@UiField CellTable<Request> requestTable;
-	@UiField SimplePager requestPager;
+	@UiField CustomSimplePager requestPager;
 
 	private RequestListPresenterIface presenter;
 
@@ -70,11 +71,6 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@Override
 	public void setPresenter(RequestListPresenterIface presenter) {
 		this.presenter = presenter;
-	}
-
-	@Override
-	public void displayMessage(String message) {
-		Window.alert(message);
 	}
 
 	@Override
@@ -100,8 +96,9 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
-	public void initTable() {
+	public void initTable(AbstractDataProvider<Request> data) {
 		initTableColumns();
+		setRequests(data);
 		requestPager.setDisplay(requestTable);
 	}
 
@@ -267,31 +264,24 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
-	public void setRequests(ListDataProvider<Request> data) {
+	public void setRequests(AbstractDataProvider<Request> data) {
 		data.addDataDisplay(requestTable);
 	}
 
 	@Override
-	public void searchPanelToggleVisible() {
-		if (searchPanel.isVisible()) {
-			searchPanel.setVisible(false);
-		} else {
-			searchPanel.setVisible(true);
-		}
+	public void setSearchPanelVisible(Boolean visible) {
+		searchPanel.setVisible(visible);
 	}
 
 	@Override
-	public void searchToolTipToggleVisible() {
-		if (searchToolTip.isVisible()) {
-			searchToolTip.setVisible(false);
-		} else {
-			searchToolTip.setVisible(true);
-		}
+	public void setSearchToolTipVisible(Boolean visible) {
+		searchToolTip.setVisible(visible);
 	}
 
 	@UiFactory
-	SimplePager getPager() {
-		requestPager = new SimplePager(TextLocation.CENTER);
+	CustomSimplePager getPager() {
+		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+		requestPager = new CustomSimplePager(pagerResources);
 		return requestPager;
 	}
 
@@ -302,6 +292,6 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@UiHandler("searchPanelHandle")
 	public void onSearchPanelHandleClick(ClickEvent event) {
-		searchPanelToggleVisible();
+		setSearchPanelVisible(!searchPanel.isVisible());
 	}
 }
