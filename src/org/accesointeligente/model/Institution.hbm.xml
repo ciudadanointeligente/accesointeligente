@@ -14,5 +14,6 @@
 				<param name="enumClassName">org.accesointeligente.shared.InstitutionClass</param>
 			</type>
 		</property>
+		<property name="enabled"/>
 	</class>
 </hibernate-mapping>

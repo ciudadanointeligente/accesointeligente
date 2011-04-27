@@ -27,6 +27,7 @@ public class Institution extends LightEntity {
 	private Integer id;
 	private String name;
 	private InstitutionClass institutionClass;
+	private Boolean enabled;
 
 	public Integer getId() {
 		return id;
@@ -51,4 +52,13 @@ public class Institution extends LightEntity {
 	public void setInstitutionClass(InstitutionClass institutionClass) {
 		this.institutionClass = institutionClass;
 	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
 }

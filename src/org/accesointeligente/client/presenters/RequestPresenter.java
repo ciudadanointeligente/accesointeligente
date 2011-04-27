@@ -107,7 +107,9 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 				Map<String, Institution> institutions = new HashMap<String, Institution>();
 
 				for (Institution institution: result) {
-					institutions.put(institution.getName(), institution);
+					if (institution.getEnabled()) {
+						institutions.put(institution.getName(), institution);
+					}
 				}
 
 				display.setInstitutions(institutions);
