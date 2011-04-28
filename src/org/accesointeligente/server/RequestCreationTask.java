@@ -46,6 +46,10 @@ public class RequestCreationTask extends TimerTask {
 			hibernate.getTransaction().commit();
 
 			for (Request request : newRequests) {
+				if (!request.getInstitution().getEnabled()) {
+					continue;
+				}
+
 				System.err.println("[INFO] RequestCreationTask: requestId = " + request.getId());
 
 				try {
