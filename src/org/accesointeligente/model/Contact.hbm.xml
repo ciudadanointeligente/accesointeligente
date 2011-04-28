@@ -11,7 +11,9 @@
 		<property name="name"/>
 		<property name="email"/>
 		<property name="subject"/>
-		<property name="message"/>
+		<property name="message">
+			<column name="message" sql-type="text"/>
+		</property>
 		<property name="date"/>
 	</class>
 </hibernate-mapping>
