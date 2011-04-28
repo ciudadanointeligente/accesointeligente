@@ -163,7 +163,6 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
-		request.setCreationDate(new Date());
 
 		serviceInjector.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
 			@Override
