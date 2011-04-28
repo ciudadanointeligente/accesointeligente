@@ -46,6 +46,10 @@ public class RequestUpdateTask extends TimerTask {
 			hibernate.getTransaction().commit();
 
 			for (Request request : newRequests) {
+				if (!request.getInstitution().getEnabled()) {
+					continue;
+				}
+
 				System.err.println("[INFO] RequestUpdateTask: requestId = " + request.getId());
 
 				try {
