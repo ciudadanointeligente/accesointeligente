@@ -24,12 +24,15 @@ import org.accesointeligente.shared.RequestStatus;
 public abstract class Robot {
 	protected String username;
 	protected String password;
+	protected String idEntidad;
 
 	public abstract void login() throws RobotException;
 
 	public abstract Request makeRequest(Request request) throws RobotException;
 
 	public abstract RequestStatus checkRequestStatus(Request request) throws RobotException;
+
+	public abstract Boolean checkInstitutionId() throws RobotException;
 
 	public String getUsername() {
 		return username;
@@ -46,4 +49,13 @@ public abstract class Robot {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getIdEntidad() {
+		return idEntidad;
+	}
+
+	public void setIdEntidad(String idEntidad) {
+		this.idEntidad = idEntidad;
+	}
+
 }

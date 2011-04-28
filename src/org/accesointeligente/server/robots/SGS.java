@@ -20,7 +20,6 @@ package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Request;
 import org.accesointeligente.shared.RequestStatus;
-
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -46,7 +45,6 @@ public class SGS extends Robot {
 	private Boolean loggedIn = false;
 	private String characterEncoding = "ISO-8859-1";
 	private String baseUrl;
-	private String idEntidad;
 
 	public SGS() {
 		client = new DefaultHttpClient();
@@ -234,6 +232,38 @@ public class SGS extends Robot {
 		}
 	}
 
+	@Override
+	public Boolean checkInstitutionId() throws RobotException {
+		if (!loggedIn) {
+			login();
+		}
+
+		HttpGet get;
+		HttpResponse response;
+		TagNode document, selector;
+
+		try {
+			get = new HttpGet(baseUrl + "?accion=Solicitud-de-Informacion");
+			response = client.execute(get);
+			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+			selector = document.findElementByAttValue("name", "id_entidad", true, true);
+
+			if (selector == null) {
+				throw new Exception();
+			}
+
+			for (TagNode option : selector.getChildTags()) {
+				if (option.hasAttribute("value") && option.getAttributeByName("value").equals(idEntidad)) {
+					return true;
+				}
+			}
+
+			return false;
+		} catch (Throwable ex) {
+			throw new RobotException();
+		}
+	}
+
 	public String detectCharacterEncoding() {
 		HttpGet get;
 		HttpResponse response;
@@ -280,11 +310,4 @@ public class SGS extends Robot {
 		this.baseUrl = baseUrl;
 	}
 
-	public String getIdEntidad() {
-		return idEntidad;
-	}
-
-	public void setIdEntidad(String idEntidad) {
-		this.idEntidad = idEntidad;
-	}
 }

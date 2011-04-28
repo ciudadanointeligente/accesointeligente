@@ -15,5 +15,7 @@
 			</type>
 		</property>
 		<property name="enabled"/>
+		<property name="canLogin"/>
+		<property name="canMakeRequest"/>
 	</class>
 </hibernate-mapping>

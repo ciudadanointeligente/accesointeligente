@@ -28,6 +28,8 @@ public class Institution extends LightEntity {
 	private String name;
 	private InstitutionClass institutionClass;
 	private Boolean enabled;
+	private Boolean canLogin;
+	private Boolean canMakeRequest;
 
 	public Integer getId() {
 		return id;
@@ -59,6 +61,22 @@ public class Institution extends LightEntity {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Boolean getCanLogin() {
+		return canLogin;
+	}
+
+	public void setCanLogin(Boolean canLogin) {
+		this.canLogin = canLogin;
+	}
+
+	public Boolean getCanMakeRequest() {
+		return canMakeRequest;
+	}
+
+	public void setCanMakeRequest(Boolean canMakeRequest) {
+		this.canMakeRequest = canMakeRequest;
 	}
 
 }

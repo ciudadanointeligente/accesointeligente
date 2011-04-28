@@ -47,7 +47,6 @@ public class SIAC extends Robot {
 	private String characterEncoding = "ISO-8859-1";
 	private String baseUrl;
 	private String userId;
-	private String idEntidad;
 
 	public SIAC() {
 		client = new DefaultHttpClient();
@@ -215,6 +214,38 @@ public class SIAC extends Robot {
 		}
 	}
 
+	@Override
+	public Boolean checkInstitutionId() throws RobotException {
+		if (!loggedIn) {
+			login();
+		}
+
+		HttpGet get;
+		HttpResponse response;
+		TagNode document, selector;
+
+		try {
+			get = new HttpGet(baseUrl + "?accion=ingresa");
+			response = client.execute(get);
+			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+			selector = document.findElementByAttValue("name", "dirigido", true, true);
+
+			if (selector == null) {
+				throw new Exception();
+			}
+
+			for (TagNode option : selector.getElementsByName("option", true)) {
+				if (option.hasAttribute("value") && option.getAttributeByName("value").equals(idEntidad)) {
+					return true;
+				}
+			}
+
+			return false;
+		} catch (Throwable ex) {
+			throw new RobotException();
+		}
+	}
+
 	public String detectCharacterEncoding() {
 		HttpGet get;
 		HttpResponse response;
@@ -267,13 +298,5 @@ public class SIAC extends Robot {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getIdEntidad() {
-		return idEntidad;
-	}
-
-	public void setIdEntidad(String idEntidad) {
-		this.idEntidad = idEntidad;
 	}
 }

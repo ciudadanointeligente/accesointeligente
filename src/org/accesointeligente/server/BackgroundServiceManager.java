@@ -46,5 +46,9 @@ public class BackgroundServiceManager implements ServletContextListener {
 
 		timer.schedule(new RequestCreationTask(), cal.getTime(), 86400000);
 		timer.schedule(new RequestUpdateTask(), 60000, 3600000);
+
+		cal.add(Calendar.HOUR_OF_DAY, 3);
+
+		timer.schedule(new RobotCheckTask(), cal.getTime(), 86400000);
 	}
 }
