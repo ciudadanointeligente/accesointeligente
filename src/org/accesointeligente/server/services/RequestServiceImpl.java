@@ -30,6 +30,7 @@ import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.Date;
 import java.util.List;
 
 public class RequestServiceImpl extends PersistentRemoteService implements RequestService {
@@ -47,6 +48,10 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		hibernate.beginTransaction();
 
 		try {
+			if (request.getCreationDate() == null) {
+				request.setCreationDate(new Date());
+			}
+
 			hibernate.saveOrUpdate(request);
 			hibernate.getTransaction().commit();
 			return request;
