@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <!-- Modify these settings according to your needs -->
+	<!-- Modify these settings according to your needs -->
 	<bean id="PresidenciaDeLaRepublica" class="org.accesointeligente.server.robots.SGS" scope="prototype">
 		<constructor-arg name="idEntidad" value="1"/>
 		<constructor-arg name="baseUrl" value="http://www.votainteligente.cl/sgs/index.php"/>
-		<property name="username" value="user@name.com"/>
-		<property name="password" value="password"/>
+		<property name="username" value="test.uchile@gmail.com"/>
+		<property name="password" value="aSDF1234"/>
 	</bean>
 </beans>
