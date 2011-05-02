@@ -102,6 +102,7 @@ public class SGS extends Robot {
 
 			loggedIn = true;
 		} catch (Throwable ex) {
+			ex.printStackTrace();
 			throw new RobotException();
 		}
 	}
@@ -184,6 +185,7 @@ public class SGS extends Robot {
 
 			return request;
 		} catch (Throwable ex) {
+			ex.printStackTrace();
 			throw new RobotException();
 		}
 	}
@@ -227,6 +229,7 @@ public class SGS extends Robot {
 				return null;
 			}
 		} catch (Throwable ex) {
+			ex.printStackTrace();
 			throw new RobotException();
 		}
 	}
@@ -259,6 +262,7 @@ public class SGS extends Robot {
 
 			return false;
 		} catch (Throwable ex) {
+			ex.printStackTrace();
 			throw new RobotException();
 		}
 	}
