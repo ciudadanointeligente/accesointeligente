@@ -44,7 +44,7 @@ public class SIAC extends Robot {
 	private HttpClient client;
 	private HtmlCleaner cleaner;
 	private Boolean loggedIn = false;
-	private String characterEncoding = "ISO-8859-1";
+	private String characterEncoding = null;
 	private String baseUrl;
 	private String userId;
 
@@ -60,15 +60,14 @@ public class SIAC extends Robot {
 		this();
 		setIdEntidad(idEntidad);
 		setBaseUrl(baseUrl);
-		String characterEncoding = detectCharacterEncoding();
-
-		if (characterEncoding != null) {
-			setCharacterEncoding(characterEncoding);
-		}
 	}
 
 	@Override
 	public void login() throws RobotException {
+		if (characterEncoding == null) {
+			detectCharacterEncoding();
+		}
+
 		List<NameValuePair> formParams;
 		HttpPost post;
 		HttpResponse response;
@@ -176,6 +175,10 @@ public class SIAC extends Robot {
 
 	@Override
 	public RequestStatus checkRequestStatus(Request request) throws RobotException {
+		if (characterEncoding == null) {
+			detectCharacterEncoding();
+		}
+
 		List<NameValuePair> formParams;
 		HttpPost post;
 		HttpResponse response;
@@ -246,7 +249,7 @@ public class SIAC extends Robot {
 		}
 	}
 
-	public String detectCharacterEncoding() {
+	public void detectCharacterEncoding() {
 		HttpGet get;
 		HttpResponse response;
 		Header contentType;
@@ -260,19 +263,19 @@ public class SIAC extends Robot {
 			EntityUtils.consume(response.getEntity());
 
 			if (contentType == null || contentType.getValue() == null) {
-				return null;
+				characterEncoding = "ISO-8859-1";
 			}
 
 			pattern = Pattern.compile(".*charset=(.+)");
 			matcher = pattern.matcher(contentType.getValue());
 
 			if (!matcher.matches()) {
-				return null;
+				characterEncoding = "ISO-8859-1";
 			}
 
-			return matcher.group(1);
+			characterEncoding = matcher.group(1);
 		} catch (Exception e) {
-			return null;
+			characterEncoding = "ISO-8859-1";
 		}
 	}
 
