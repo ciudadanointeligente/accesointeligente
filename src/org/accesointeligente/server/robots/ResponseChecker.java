@@ -23,7 +23,6 @@ import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.FileType;
-import org.accesointeligente.shared.Gender;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.itextpdf.text.pdf.PdfReader;
@@ -133,7 +132,7 @@ public class ResponseChecker {
 					hibernate.beginTransaction();
 
 					request.setStatus(RequestStatus.CLOSED);
-					request.setProcessDate(new Date());
+					request.setResponseDate(new Date());
 					hibernate.update(request);
 
 					Response response = new Response();
