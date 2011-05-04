@@ -165,6 +165,7 @@ public class SIAC extends Robot {
 			}
 
 			if (request.getRemoteIdentifier() != null) {
+				request.setStatus(RequestStatus.PENDING);
 				request.setProcessDate(new Date());
 				return request;
 			} else {
