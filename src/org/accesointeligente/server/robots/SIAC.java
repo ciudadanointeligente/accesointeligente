@@ -36,6 +36,7 @@ import org.htmlcleaner.TagNode;
 import java.beans.ConstructorProperties;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -164,6 +165,7 @@ public class SIAC extends Robot {
 			}
 
 			if (request.getRemoteIdentifier() != null) {
+				request.setProcessDate(new Date());
 				return request;
 			} else {
 				throw new Exception();
