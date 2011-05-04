@@ -39,6 +39,7 @@ public class Request extends LightEntity {
 	private Date creationDate;
 	private Date confirmationDate;
 	private Date processDate;
+	private Date responseDate;
 	private Set<Response> responses;
 	private String remoteIdentifier;
 	private Set<UserFavoriteRequest> favorites;
@@ -139,6 +140,14 @@ public class Request extends LightEntity {
 
 	public void setProcessDate(Date processDate) {
 		this.processDate = processDate;
+	}
+
+	public Date getResponseDate() {
+		return responseDate;
+	}
+
+	public void setResponseDate(Date responseDate) {
+		this.responseDate = responseDate;
 	}
 
 	public Set<Response> getResponses() {
