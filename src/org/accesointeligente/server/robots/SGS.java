@@ -20,6 +20,7 @@ package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Request;
 import org.accesointeligente.shared.RequestStatus;
+
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -46,6 +47,15 @@ public class SGS extends Robot {
 	private Boolean loggedIn = false;
 	private String characterEncoding = null;
 	private String baseUrl;
+	private String loginAction = "?accion=login";
+	private String homeAction = "?accion=Home";
+	private String exitAction = "?accion=Salir";
+	private String requestFormAction = "?accion=Solicitud-de-Informacion";
+	private String requestCreationAction = "?accion=solicitud-de-informacion&act=4";
+	private String requestConfirmAction = "?accion=solicitud-de-informacion&act=6";
+	private String requestCreatedAction = "?accion=solicitud-de-informacion&act=5";
+	private String requestViewAction = "?accion=mis-solicitudes&act=1";
+	private String requestListAction = "?accion=Mis-Solicitudes";
 
 	public SGS() {
 		client = new DefaultHttpClient();
@@ -80,8 +90,8 @@ public class SGS extends Robot {
 			formParams.add(new BasicNameValuePair("password", password));
 			formParams.add(new BasicNameValuePair("Ingresar", "Ingresar"));
 
-			post = new HttpPost(baseUrl + "?accion=login");
-			post.addHeader("Referer", baseUrl + "?accion=Home");
+			post = new HttpPost(baseUrl + loginAction);
+			post.addHeader("Referer", baseUrl + homeAction);
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
 			location = response.getFirstHeader("Location");
@@ -93,11 +103,11 @@ public class SGS extends Robot {
 			EntityUtils.consume(response.getEntity());
 
 			get = new HttpGet(baseUrl + "");
-			get.addHeader("Referer", baseUrl + "?accion=Home");
+			get.addHeader("Referer", baseUrl + homeAction);
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 
-			if (document.getElementListByAttValue("href", "index.php?accion=Salir", true, false).isEmpty()) {
+			if (document.getElementListByAttValue("href", "index.php" + exitAction, true, false).isEmpty()) {
 				throw new Exception();
 			}
 
@@ -132,10 +142,10 @@ public class SGS extends Robot {
 			formParams.add(new BasicNameValuePair("id_forma_recepcion", "1")); // Email
 			formParams.add(new BasicNameValuePair("oficina", ""));
 			formParams.add(new BasicNameValuePair("id_formato_entrega", "2")); // Digital
-			formParams.add(new BasicNameValuePair("Registrarse", "Continuar"));
+			formParams.add(new BasicNameValuePair("Continuar", "Continuar"));
 
-			post = new HttpPost(baseUrl + "?accion=solicitud-de-informacion&act=4");
-			post.addHeader("Referer", baseUrl + "?accion=Solicitud-de-Informacion");
+			post = new HttpPost(baseUrl + requestCreationAction);
+			post.addHeader("Referer", baseUrl + requestFormAction);
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
@@ -156,8 +166,8 @@ public class SGS extends Robot {
 			formParams.add(new BasicNameValuePair("folio_hidden", folio.toString()));
 			formParams.add(new BasicNameValuePair("Aceptar", "Enviar Solicitud"));
 
-			post = new HttpPost(baseUrl + "?accion=solicitud-de-informacion&act=6");
-			post.addHeader("Referer", baseUrl + "?accion=solicitud-de-informacion&act=4");
+			post = new HttpPost(baseUrl + requestConfirmAction);
+			post.addHeader("Referer", baseUrl + requestCreationAction);
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
 			location = response.getFirstHeader("Location");
@@ -166,7 +176,7 @@ public class SGS extends Robot {
 				throw new Exception();
 			}
 
-			pattern = Pattern.compile("^index.php\\?accion=solicitud-de-informacion&act=5&folio=(.+)$");
+			pattern = Pattern.compile("^index.php\\" + requestCreatedAction + "&folio=(.+)$");
 			matcher = pattern.matcher(location.getValue());
 
 			if (!matcher.matches()) {
@@ -208,8 +218,8 @@ public class SGS extends Robot {
 				throw new Exception();
 			}
 
-			get = new HttpGet(baseUrl + "?accion=mis-solicitudes&act=1&folio=" + request.getRemoteIdentifier());
-			get.addHeader("Referer", baseUrl + "?accion=Mis-Solicitudes");
+			get = new HttpGet(baseUrl + requestViewAction + "&folio=" + request.getRemoteIdentifier());
+			get.addHeader("Referer", baseUrl + requestListAction);
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 			statusCell = document.findElementByAttValue("width", "36%", true, true);
@@ -247,7 +257,7 @@ public class SGS extends Robot {
 		TagNode document, selector;
 
 		try {
-			get = new HttpGet(baseUrl + "?accion=Solicitud-de-Informacion");
+			get = new HttpGet(baseUrl + requestFormAction);
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 			selector = document.findElementByAttValue("name", "id_entidad", true, true);
@@ -277,7 +287,7 @@ public class SGS extends Robot {
 		Matcher matcher;
 
 		try {
-			get = new HttpGet(baseUrl + "?accion=Home");
+			get = new HttpGet(baseUrl + homeAction);
 			response = client.execute(get);
 			contentType = response.getFirstHeader("Content-Type");
 			EntityUtils.consume(response.getEntity());
@@ -313,6 +323,78 @@ public class SGS extends Robot {
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
+	}
+
+	public String getLoginAction() {
+		return loginAction;
+	}
+
+	public void setLoginAction(String loginAction) {
+		this.loginAction = loginAction;
+	}
+
+	public String getHomeAction() {
+		return homeAction;
+	}
+
+	public void setHomeAction(String homeAction) {
+		this.homeAction = homeAction;
+	}
+
+	public String getExitAction() {
+		return exitAction;
+	}
+
+	public void setExitAction(String exitAction) {
+		this.exitAction = exitAction;
+	}
+
+	public String getRequestFormAction() {
+		return requestFormAction;
+	}
+
+	public void setRequestFormAction(String requestFormAction) {
+		this.requestFormAction = requestFormAction;
+	}
+
+	public String getRequestCreationAction() {
+		return requestCreationAction;
+	}
+
+	public void setRequestCreationAction(String requestCreationAction) {
+		this.requestCreationAction = requestCreationAction;
+	}
+
+	public String getRequestConfirmAction() {
+		return requestConfirmAction;
+	}
+
+	public void setRequestConfirmAction(String requestConfirmAction) {
+		this.requestConfirmAction = requestConfirmAction;
+	}
+
+	public String getRequestCreatedAction() {
+		return requestCreatedAction;
+	}
+
+	public void setRequestCreatedAction(String requestCreatedAction) {
+		this.requestCreatedAction = requestCreatedAction;
+	}
+
+	public String getRequestViewAction() {
+		return requestViewAction;
+	}
+
+	public void setRequestViewAction(String requestViewAction) {
+		this.requestViewAction = requestViewAction;
+	}
+
+	public String getRequestListAction() {
+		return requestListAction;
+	}
+
+	public void setRequestListAction(String requestListAction) {
+		this.requestListAction = requestListAction;
 	}
 
 }
