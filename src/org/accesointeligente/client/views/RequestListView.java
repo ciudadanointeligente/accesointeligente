@@ -158,6 +158,22 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 		};
 		requestTable.addColumn(requestDateColumn, "Consulta");
 
+		// Process Date
+		Column<Request, CustomTextCellParams> processDateColumn = new Column<Request, CustomTextCellParams>(new CustomTextCell()) {
+			@Override
+			public CustomTextCellParams getValue(Request request) {
+				CustomTextCellParams params = new CustomTextCellParams();
+				if (request.getProcessDate() != null) {
+					params.setText(DateTimeFormat.getFormat("dd/MM/yyyy").format(request.getProcessDate()));
+				} else {
+					params.setText("Pendiente de envío");
+				}
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableProcessDate());
+				return params;
+			}
+		};
+		requestTable.addColumn(processDateColumn, "Envío");
+
 		// Response Date
 		Column<Request, CustomTextCellParams> responseDateColumn = new Column<Request, CustomTextCellParams>(new CustomTextCell()) {
 			@Override
