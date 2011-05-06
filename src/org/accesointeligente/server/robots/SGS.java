@@ -135,6 +135,7 @@ public class SGS extends Robot {
 		String remoteIdentifier;
 
 		try {
+			EntityUtils.consume(client.execute(new HttpGet(baseUrl + requestFormAction)).getEntity());
 			formParams = new ArrayList<NameValuePair>();
 			formParams.add(new BasicNameValuePair("id_entidad", idEntidad));
 			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getInformation() + "\n\n" + request.getContext()));
