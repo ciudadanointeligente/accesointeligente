@@ -141,4 +141,9 @@ public class LoginView extends Composite implements LoginPresenter.Display {
 	public void clearForm() {
 		loginForm.reset();
 	}
+
+	@Override
+	public void setEmailFocus() {
+		email.setFocus(true);
+	}
 }

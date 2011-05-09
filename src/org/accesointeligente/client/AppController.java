@@ -197,6 +197,7 @@ public class AppController implements ValueChangeHandler<String>, LoginRequiredE
 					popup.clear();
 					popup.add(loginPresenter.getDisplay().asWidget());
 					popup.center();
+					loginPresenter.revealDisplay();
 					break;
 				case REGISTER:
 					setupPresenter(presenterInjector.getRegisterPresenter());
