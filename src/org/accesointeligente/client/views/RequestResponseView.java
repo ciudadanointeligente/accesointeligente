@@ -91,7 +91,11 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 
 	@Override
 	public void setRequestDate(Date date) {
-		requestDate.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(date));
+		if (date != null) {
+			requestDate.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(date));
+		} else {
+			requestDate.setText("");
+		}
 	}
 
 	@Override
