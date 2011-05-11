@@ -128,4 +128,14 @@
     <welcome-file>AccesoInteligente.html</welcome-file>
   </welcome-file-list>
 
+  <!-- Filter used to prevent caching of *.nocache.* files -->
+  <filter>
+    <filter-name>gwtCacheControlFilter</filter-name>
+    <filter-class>org.accesointeligente.server.GWTCacheControlFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>gwtCacheControlFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 </web-app>
