@@ -49,7 +49,7 @@ public class ResponseChecker {
 	private Properties props;
 	private Session session;
 	private Store store;
-	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z]-{0,1}[0-9]{7}).*");
+	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,7}).*");
 	private List<Attachment> attachments;
 	private String remoteIdentifier;
 	private String messageBody;
@@ -87,7 +87,7 @@ public class ResponseChecker {
 					Matcher matcher = pattern.matcher(message.getSubject());
 
 					if (matcher.matches()) {
-						remoteIdentifier = matcher.group(1);
+						remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 					}
 				}
 
@@ -189,7 +189,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(tokenizer.nextToken());
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -207,7 +207,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(tokenizer.nextToken());
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -249,7 +249,7 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifier = matcher.group(1);
+									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 									break;
 								}
 							}
@@ -264,7 +264,7 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifier = matcher.group(1);
+									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 									break;
 								}
 							}
@@ -285,7 +285,7 @@ public class ResponseChecker {
 									matcher = pattern.matcher(tokenizer.nextToken());
 
 									if (matcher.matches()) {
-										remoteIdentifier = matcher.group(1);
+										remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 										reader.close();
 										break;
 									}
@@ -349,7 +349,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(token);
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -367,7 +367,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(tokenizer.nextToken());
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -386,5 +386,9 @@ public class ResponseChecker {
 				}
 			}
 		}
+	}
+
+	private String formatIdentifier(String prefix, Integer number) {
+		return String.format("%s-%07d", prefix, number);
 	}
 }
