@@ -135,6 +135,7 @@ public class SGS extends Robot {
 		String remoteIdentifier;
 
 		try {
+			EntityUtils.consume(client.execute(new HttpGet(baseUrl + requestFormAction)).getEntity());
 			formParams = new ArrayList<NameValuePair>();
 			formParams.add(new BasicNameValuePair("id_entidad", idEntidad));
 			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getInformation() + "\n\n" + request.getContext()));
@@ -170,30 +171,67 @@ public class SGS extends Robot {
 			post.addHeader("Referer", baseUrl + requestCreationAction);
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
-			location = response.getFirstHeader("Location");
-
-			if (location == null) {
-				throw new Exception();
-			}
-
-			pattern = Pattern.compile("^index.php\\" + requestCreatedAction + "&folio=(.+)$");
-			matcher = pattern.matcher(location.getValue());
-
-			if (!matcher.matches()) {
-				throw new Exception();
-			}
-
-			remoteIdentifier = matcher.group(1);
-
-			if (remoteIdentifier == null || remoteIdentifier.length() == 0) {
-				throw new Exception();
-			}
-
-			EntityUtils.consume(response.getEntity());
-
-			request.setRemoteIdentifier(remoteIdentifier);
 			request.setStatus(RequestStatus.PENDING);
 			request.setProcessDate(new Date());
+
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+				location = response.getFirstHeader("Location");
+
+				if (location == null) {
+					throw new Exception();
+				}
+
+				pattern = Pattern.compile("^index.php\\" + requestCreatedAction + "&folio=(.+)$");
+				matcher = pattern.matcher(location.getValue());
+
+				if (!matcher.matches()) {
+					throw new Exception();
+				}
+
+				remoteIdentifier = matcher.group(1);
+
+				if (remoteIdentifier == null || remoteIdentifier.length() == 0) {
+					throw new Exception();
+				}
+
+				EntityUtils.consume(response.getEntity());
+
+				request.setRemoteIdentifier(remoteIdentifier);
+			} else {
+				// Something went wrong after creating the request, assuming that the request was saved,
+				// we must check for its code in the request list page
+				EntityUtils.consume(response.getEntity());
+				response = client.execute(new HttpGet(baseUrl + requestListAction));
+				document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+				TagNode form = document.findElementByAttValue("id", "form1", true, true);
+
+				if (form == null) {
+					return request;
+				}
+
+				TagNode pager = form.findElementByName("strong", true);
+
+				if (pager != null) {
+					pattern = Pattern.compile("^(\\d+) Paginas$");
+					matcher = pattern.matcher(pager.getText());
+
+					if (matcher.matches()) {
+						// Go to the last page
+						response = client.execute(new HttpGet(baseUrl + requestListAction + "&act=0&p=" + matcher.group(1)));
+						document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+					}
+				}
+
+				// The last row of the table has the request
+				TagNode tableContainer = document.findElementByAttValue("id", "table-block", true, true);
+				TagNode[] tableRows = tableContainer.getChildTags()[0].getChildTags()[0].getChildTags();
+				TagNode lastRow = tableRows[tableRows.length - 1];
+
+				if (lastRow.getChildTags().length == 6) {
+					remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
+					request.setRemoteIdentifier(remoteIdentifier);
+				}
+			}
 
 			return request;
 		} catch (Throwable ex) {

@@ -40,6 +40,7 @@ public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display
 		void showNotice(String message);
 		String getEmail();
 		String getPassword();
+		void setEmailFocus();
 	}
 
 	@Inject
@@ -64,6 +65,7 @@ public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display
 
 	@Override
 	protected void onRevealDisplay() {
+		display.setEmailFocus();
 	}
 
 	@Override
