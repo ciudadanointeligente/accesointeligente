@@ -83,10 +83,12 @@ public class ResponseChecker {
 				messageBody = null;
 				attachments = new ArrayList<Attachment>();
 
-				Matcher matcher = pattern.matcher(message.getSubject());
+				if (message.getSubject() != null) {
+					Matcher matcher = pattern.matcher(message.getSubject());
 
-				if (matcher.matches()) {
-					remoteIdentifier = matcher.group(1);
+					if (matcher.matches()) {
+						remoteIdentifier = matcher.group(1);
+					}
 				}
 
 				Multipart mp = (Multipart) message.getContent();
