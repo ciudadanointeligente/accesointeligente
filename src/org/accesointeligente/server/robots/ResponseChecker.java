@@ -106,7 +106,7 @@ public class ResponseChecker {
 					hibernate.beginTransaction();
 					Response response = new Response();
 					response.setSender(message.getFrom()[0].toString());
-					response.setDate(new Date());
+					response.setDate(message.getSentDate());
 					response.setSubject(message.getSubject());
 					response.setInformation(messageBody);
 					hibernate.save(response);
