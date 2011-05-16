@@ -42,6 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.mail.*;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.MimeUtility;
 import javax.mail.search.FlagTerm;
 
@@ -49,7 +50,7 @@ public class ResponseChecker {
 	private Properties props;
 	private Session session;
 	private Store store;
-	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z]-{0,1}[0-9]{7}).*");
+	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,7}).*");
 	private List<Attachment> attachments;
 	private String remoteIdentifier;
 	private String messageBody;
@@ -62,7 +63,8 @@ public class ResponseChecker {
 	public void connectAndCheck() {
 		if (ApplicationProperties.getProperty("email.server") == null || ApplicationProperties.getProperty("email.user") == null ||
 				ApplicationProperties.getProperty("email.password") == null || ApplicationProperties.getProperty("email.folder") == null ||
-				ApplicationProperties.getProperty("attachment.directory") == null || ApplicationProperties.getProperty("attachment.baseurl") == null) {
+				ApplicationProperties.getProperty("email.failfolder") == null || ApplicationProperties.getProperty("attachment.directory") == null ||
+				ApplicationProperties.getProperty("attachment.baseurl") == null) {
 			System.err.println("ResponseChecker: No estan definidas las propiedades!");
 			return;
 		}
@@ -74,73 +76,71 @@ public class ResponseChecker {
 			store = session.getStore("imaps");
 			store.connect(ApplicationProperties.getProperty("email.server"), ApplicationProperties.getProperty("email.user"), ApplicationProperties.getProperty("email.password"));
 
-			Folder folder = store.getFolder(ApplicationProperties.getProperty("email.folder"));
-			folder.open(Folder.READ_WRITE);
+			Folder failbox = store.getFolder(ApplicationProperties.getProperty("email.failfolder"));
+			Folder inbox = store.getFolder(ApplicationProperties.getProperty("email.folder"));
+			inbox.open(Folder.READ_WRITE);
 
-			for (Message message : folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))) {
-				System.out.println(message.getFrom()[0] + "\t" + message.getSubject());
-				remoteIdentifier = null;
-				messageBody = null;
-				attachments = new ArrayList<Attachment>();
+			for (Message message : inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))) {
+				try {
+					System.out.println(message.getFrom()[0] + "\t" + message.getSubject());
+					remoteIdentifier = null;
+					messageBody = null;
+					attachments = new ArrayList<Attachment>();
 
-				Matcher matcher = pattern.matcher(message.getSubject());
+					if (message.getSubject() != null) {
+						Matcher matcher = pattern.matcher(message.getSubject());
 
-				if (matcher.matches()) {
-					remoteIdentifier = matcher.group(1);
-				}
-
-				Multipart mp = (Multipart) message.getContent();
-
-				for (int i = 0, n = mp.getCount(); i < n; i++) {
-					Part part = mp.getBodyPart(i);
-					processPart(part);
-				}
-
-				if (remoteIdentifier == null) {
-					hibernate = HibernateUtil.getSession();
-					hibernate.beginTransaction();
-
-					for (Attachment attachment : attachments) {
-						hibernate.delete(attachment);
+						if (matcher.matches()) {
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
+						}
 					}
 
-					hibernate.getTransaction().commit();
-					continue;
-				} else {
-					hibernate = HibernateUtil.getSession();
-					hibernate.beginTransaction();
+					Object content = message.getContent();
 
-					Criteria criteria = hibernate.createCriteria(Request.class);
-					criteria.add(Restrictions.eq("remoteIdentifier", remoteIdentifier));
-					criteria.setFetchMode("user", FetchMode.JOIN);
-					Request request = (Request) criteria.uniqueResult();
-					hibernate.getTransaction().commit();
+					if (content instanceof Multipart) {
+						Multipart mp = (Multipart) message.getContent();
 
-					if (request == null) {
-						hibernate = HibernateUtil.getSession();
-						hibernate.beginTransaction();
-
-						for (Attachment attachment : attachments) {
-							hibernate.delete(attachment);
+						for (int i = 0, n = mp.getCount(); i < n; i++) {
+							Part part = mp.getBodyPart(i);
+							processPart(part);
 						}
+					} else if (content instanceof String) {
+						messageBody = (String) content;
 
-						hibernate.getTransaction().commit();
+						if (remoteIdentifier == null) {
+							Matcher matcher;
+							StringTokenizer tokenizer = new StringTokenizer(messageBody);
+
+							while (tokenizer.hasMoreTokens()) {
+								String token = tokenizer.nextToken();
+								matcher = pattern.matcher(token);
+
+								if (matcher.matches()) {
+									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
+									break;
+								}
+							}
+						}
+					} else {
+						message.setFlag(Flag.SEEN, false);
+						inbox.copyMessages(new Message[] {message}, failbox);
+						message.setFlag(Flag.DELETED, true);
+						inbox.expunge();
 						continue;
 					}
 
 					hibernate = HibernateUtil.getSession();
 					hibernate.beginTransaction();
-
-					request.setStatus(RequestStatus.CLOSED);
-					request.setResponseDate(new Date());
-					hibernate.update(request);
-
 					Response response = new Response();
 					response.setSender(message.getFrom()[0].toString());
-					response.setDate(new Date());
-					response.setRequest(request);
+					response.setDate(message.getSentDate());
+					response.setSubject(message.getSubject());
 					response.setInformation(messageBody);
 					hibernate.save(response);
+					hibernate.getTransaction().commit();
+
+					hibernate = HibernateUtil.getSession();
+					hibernate.beginTransaction();
 
 					for (Attachment attachment : attachments) {
 						attachment.setResponse(response);
@@ -149,14 +149,49 @@ public class ResponseChecker {
 
 					hibernate.getTransaction().commit();
 
-					// TODO: send permalink to request
-					User user = request.getUser();
+					Request request = null;
 
-					Emailer emailer = new Emailer();
-					emailer.setRecipient(user.getEmail());
-					emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
-					emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
-					emailer.connectAndSend();
+					if (remoteIdentifier != null) {
+						hibernate = HibernateUtil.getSession();
+						hibernate.beginTransaction();
+
+						Criteria criteria = hibernate.createCriteria(Request.class);
+						criteria.add(Restrictions.eq("remoteIdentifier", remoteIdentifier));
+						criteria.setFetchMode("user", FetchMode.JOIN);
+						request = (Request) criteria.uniqueResult();
+						hibernate.getTransaction().commit();
+					}
+
+					if (request == null) {
+						message.setFlag(Flag.SEEN, false);
+						inbox.copyMessages(new Message[] {message}, failbox);
+						message.setFlag(Flag.DELETED, true);
+						inbox.expunge();
+					} else {
+						hibernate = HibernateUtil.getSession();
+						hibernate.beginTransaction();
+
+						response.setRequest(request);
+						request.setStatus(RequestStatus.CLOSED);
+						request.setResponseDate(new Date());
+						hibernate.update(request);
+						hibernate.update(response);
+
+						// TODO: send permalink to request
+						User user = request.getUser();
+
+						Emailer emailer = new Emailer();
+						emailer.setRecipient(user.getEmail());
+						emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
+						emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+						emailer.connectAndSend();
+					}
+				} catch (Exception e) {
+					if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+						hibernate.getTransaction().rollback();
+					}
+
+					e.printStackTrace(System.err);
 				}
 			}
 		} catch (Exception e) {
@@ -187,7 +222,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(tokenizer.nextToken());
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -205,7 +240,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(tokenizer.nextToken());
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -247,7 +282,7 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifier = matcher.group(1);
+									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 									break;
 								}
 							}
@@ -262,7 +297,7 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifier = matcher.group(1);
+									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 									break;
 								}
 							}
@@ -283,7 +318,7 @@ public class ResponseChecker {
 									matcher = pattern.matcher(tokenizer.nextToken());
 
 									if (matcher.matches()) {
-										remoteIdentifier = matcher.group(1);
+										remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 										reader.close();
 										break;
 									}
@@ -347,7 +382,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(token);
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -365,7 +400,7 @@ public class ResponseChecker {
 						matcher = pattern.matcher(tokenizer.nextToken());
 
 						if (matcher.matches()) {
-							remoteIdentifier = matcher.group(1);
+							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
 							break;
 						}
 					}
@@ -384,5 +419,9 @@ public class ResponseChecker {
 				}
 			}
 		}
+	}
+
+	private String formatIdentifier(String prefix, Integer number) {
+		return String.format("%s-%07d", prefix, number);
 	}
 }

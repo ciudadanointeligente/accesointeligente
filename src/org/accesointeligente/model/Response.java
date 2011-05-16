@@ -28,6 +28,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private Integer id;
 	private Request request;
 	private String sender;
+	private String subject;
 	private String information;
 	private Date date;
 	private Set<Attachment> attachments;
@@ -55,6 +56,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setSender(String sender) {
 		this.sender = sender;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	public String getInformation() {
