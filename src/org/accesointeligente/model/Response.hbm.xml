@@ -8,8 +8,9 @@
 		<id name="id">
 			<generator class="identity"/>
 		</id>
-		<many-to-one name="request" column="requestId" not-null="true" />
+		<many-to-one name="request" column="requestId" not-null="false" />
 		<property name="sender"/>
+		<property name="subject"/>
 		<property name="information">
 			<column name="information" sql-type="text"/>
 		</property>
