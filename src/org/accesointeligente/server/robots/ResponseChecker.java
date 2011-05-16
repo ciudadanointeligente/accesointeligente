@@ -95,11 +95,38 @@ public class ResponseChecker {
 						}
 					}
 
-					Multipart mp = (Multipart) message.getContent();
+					Object content = message.getContent();
 
-					for (int i = 0, n = mp.getCount(); i < n; i++) {
-						Part part = mp.getBodyPart(i);
-						processPart(part);
+					if (content instanceof Multipart) {
+						Multipart mp = (Multipart) message.getContent();
+
+						for (int i = 0, n = mp.getCount(); i < n; i++) {
+							Part part = mp.getBodyPart(i);
+							processPart(part);
+						}
+					} else if (content instanceof String) {
+						messageBody = (String) content;
+
+						if (remoteIdentifier == null) {
+							Matcher matcher;
+							StringTokenizer tokenizer = new StringTokenizer(messageBody);
+
+							while (tokenizer.hasMoreTokens()) {
+								String token = tokenizer.nextToken();
+								matcher = pattern.matcher(token);
+
+								if (matcher.matches()) {
+									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
+									break;
+								}
+							}
+						}
+					} else {
+						message.setFlag(Flag.SEEN, false);
+						inbox.copyMessages(new Message[] {message}, failbox);
+						message.setFlag(Flag.DELETED, true);
+						inbox.expunge();
+						continue;
 					}
 
 					hibernate = HibernateUtil.getSession();
