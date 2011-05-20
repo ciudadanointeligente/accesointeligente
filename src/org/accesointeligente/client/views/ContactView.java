@@ -19,6 +19,7 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.ContactPresenter;
+import org.accesointeligente.client.presenters.ContactPresenter.Display;
 import org.accesointeligente.client.presenters.ContactPresenterIface;
 import org.accesointeligente.shared.NotificationEventType;
 import org.accesointeligente.shared.Validator;
@@ -37,7 +38,7 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 	@UiField FormPanel contactFormPanel;
 	@UiField TextBox contactName;
 	@UiField TextBox contactEmail;
-	@UiField TextBox contactSubject;
+	@UiField ListBox contactSubject;
 	@UiField TextArea contactMessage;
 	@UiField Button send;
 
@@ -79,12 +80,16 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 
 	@Override
 	public String getSubject() {
-		return contactSubject.getText();
+		return contactSubject.getItemText(contactSubject.getSelectedIndex());
 	}
 
 	@Override
-	public void setSubject(String subject) {
-		contactSubject.setText(subject);
+	public void subjectAddOptions() {
+		contactSubject.addItem("Selecciona tu asunto", "0");
+		contactSubject.addItem("Reclamo", "1");
+		contactSubject.addItem("Sugerencia", "2");
+		contactSubject.addItem("Consulta sobre uso del sitio", "3");
+		contactSubject.addItem("Consulta sobre el funcionamiento de la ley de transparencia", "4");
 	}
 
 	@Override
@@ -115,7 +120,18 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 
 	@Override
 	public Boolean checkContactForm() {
-		if (getName() == null || getEmail() == null || !checkEmail() || getSubject() == null || getMessage() == null) {
+		if (getName() == null || getEmail() == null || checkEmail() || !checkSubject() || getMessage() == null) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean checkSubject() {
+		if (contactSubject.getSelectedIndex() < 1) {
+			if (presenter != null) {
+				presenter.showNotification("Asunto no válido, seleccione uno según el contexto de su mensaje", NotificationEventType.ERROR);
+			}
 			return false;
 		}
 		return true;
@@ -138,5 +154,10 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 		if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER || presenter != null || checkContactForm()) {
 			presenter.saveContactForm();
 		}
+	}
+
+	@UiHandler("contactSubject")
+	public void onSubjectBlur(BlurEvent event) {
+		checkSubject();
 	}
 }

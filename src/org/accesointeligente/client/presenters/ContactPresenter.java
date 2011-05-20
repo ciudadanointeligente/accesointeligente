@@ -41,12 +41,13 @@ public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Dis
 		String getEmail();
 		void setEmail(String email);
 		String getSubject();
-		void setSubject(String subject);
 		String getMessage();
 		void setMessage(String message);
 		void cleanContactForm();
 		Boolean checkEmail();
 		Boolean checkContactForm();
+		Boolean checkSubject();
+		void subjectAddOptions();
 	}
 
 	@Inject
@@ -58,6 +59,7 @@ public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Dis
 	@Override
 	public void setup() {
 		checkUserSession();
+		display.subjectAddOptions();
 	}
 
 	@Override
@@ -114,5 +116,10 @@ public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Dis
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
 		eventBus.fireEvent(new NotificationEvent(params));
+	}
+
+	@Override
+	public void subjectAddOptions() {
+		display.subjectAddOptions();
 	}
 }
