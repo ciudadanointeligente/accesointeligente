@@ -17,7 +17,7 @@
 					</tr>
 					<tr>
 						<td><g:Label>Asunto (obligatorio)</g:Label></td>
-						<td><g:TextBox ui:field="contactSubject"/></td>
+						<td><g:ListBox ui:field="contactSubject"/></td>
 					</tr>
 					<tr>
 						<td><g:Label>Mensaje (obligatorio)</g:Label></td>

@@ -24,4 +24,5 @@ public interface ContactPresenterIface {
 	void checkUserSession();
 	void saveContactForm();
 	void showNotification(String message, NotificationEventType type);
+	void subjectAddOptions();
 }
