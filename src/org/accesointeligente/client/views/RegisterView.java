@@ -21,8 +21,7 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.presenters.RegisterPresenter;
 import org.accesointeligente.client.presenters.RegisterPresenterIface;
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.Country;
-import org.accesointeligente.shared.Gender;
+import org.accesointeligente.shared.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -104,7 +103,7 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	@Override
 	public void cleanRegions() {
 		region.clear();
-		region.addItem("Selecciona tu region");
+		region.addItem("Selecciona tu región");
 	}
 
 	@Override
@@ -244,20 +243,27 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 	public Boolean validateForm() {
 		if (person.getValue()) {
 			if (!personFirstName.getText().matches(".*\\w+.*")) {
+				presenter.showNotification("Debe ingresar su nombre", NotificationEventType.NOTICE);
 				return false;
 			} else if (!personLastName.getText().matches(".*\\w+.*")) {
+				presenter.showNotification("Debe ingresar su apellido", NotificationEventType.NOTICE);
 				return false;
 			} else if (!personGenderFemale.getValue() && !personGenderMale.getValue()) {
+				presenter.showNotification("Debe seleccionar su sexo", NotificationEventType.NOTICE);
 				return false;
 			} else if (personActivity.getSelectedIndex() < 1) {
+				presenter.showNotification("Actividad no válida, debe seleccionar una", NotificationEventType.NOTICE);
 				return false;
 			} else if (personAge.getSelectedIndex() < 1) {
+				presenter.showNotification("Edad no válida, debe seleccionar una", NotificationEventType.NOTICE);
 				return false;
 			}
 		} else if (institution.getValue()) {
 			if (!institutionName.getText().matches(".*\\w+.*")) {
+				presenter.showNotification("Debe ingresar su razón social", NotificationEventType.NOTICE);
 				return false;
 			} else if (institutionType.getSelectedIndex() < 1) {
+				presenter.showNotification("Tipo de institución no válida, debe seleccionar una", NotificationEventType.NOTICE);
 				return false;
 			}
 		} else {
@@ -265,14 +271,19 @@ public class RegisterView extends Composite implements RegisterPresenter.Display
 		}
 
 		if (!countryChile.getValue() && !countryOther.getValue()) {
+			presenter.showNotification("País no válido, debe seleccionar uno", NotificationEventType.NOTICE);
 			return false;
 		} else if (region.getSelectedIndex() < 1 && countryChile.getValue()) {
+			presenter.showNotification("Región no válida, debe seleccionar una", NotificationEventType.NOTICE);
 			return false;
-		} else if (!email.getText().matches("\\S+")) {
+		} else if (!Validator.validateEmail(getEmail())) {
+			presenter.showNotification("Dirección de email no válida", NotificationEventType.NOTICE);
 			return false;
 		} else if (!password1.getText().matches("\\w+")) {
+			presenter.showNotification("Contraseña no válida", NotificationEventType.NOTICE);
 			return false;
 		} else if (!password1.getText().equals(password2.getText())) {
+			presenter.showNotification("Revise los campos de ingreso de contraseñas, no coinciden", NotificationEventType.NOTICE);
 			return false;
 		}
 
