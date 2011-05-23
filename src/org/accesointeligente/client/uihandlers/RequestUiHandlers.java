@@ -16,10 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client.uihandlers;
 
-public interface LoginPresenterIface {
-	void login();
-	void register();
-	void close();
+import org.accesointeligente.shared.NotificationEventType;
+
+import com.gwtplatform.mvp.client.UiHandlers;
+
+public interface RequestUiHandlers extends UiHandlers {
+	void getRequestCategories();
+	void getInstitutions();
+	void submitRequest();
+	void showRequest();
+	void showNotification(String message, NotificationEventType type);
 }

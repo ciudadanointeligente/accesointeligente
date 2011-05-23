@@ -21,13 +21,15 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.AnchorCell;
 import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
-import org.accesointeligente.client.presenters.RequestResponsePresenterIface;
+import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.CommentWidget;
 import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.client.widgets.UserResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import org.cobogw.gwt.user.client.ui.Rating;
 
@@ -38,16 +40,16 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.Date;
 import java.util.List;
 
-public class RequestResponseView extends Composite implements RequestResponsePresenter.Display {
+public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHandlers> implements RequestResponsePresenter.MyView {
 	private static RequestResponseViewUiBinder uiBinder = GWT.create(RequestResponseViewUiBinder.class);
 	interface RequestResponseViewUiBinder extends UiBinder<Widget, RequestResponseView> {}
+	private final Widget widget;
 
 	// Fields
 	@UiField HTMLPanel navigationPanel;
@@ -67,15 +69,13 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	@UiField Button newCommentSubmit;
 	@UiField CellTable<Request> bestVotedRequestTable;
 
-	private RequestResponsePresenterIface presenter;
-
 	public RequestResponseView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(RequestResponsePresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 
 	@Override
@@ -123,8 +123,8 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 				responseWidget.setInfo(response.getInformation());
 				if (response.getDate() != null) {
 					responseWidget.setDate(response.getDate());
-					presenter.loadAttachments(response, responseWidget);
-					presenter.getUserResponse(response, responseWidget);
+					getUiHandlers().loadAttachments(response, responseWidget);
+					getUiHandlers().getUserResponse(response, responseWidget);
 				}
 				responsePanel.add(responseWidget);
 			}
@@ -146,8 +146,8 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 	}
 
 	@Override
-	public void showNewCommentPanel() {
-		newCommentPanel.setVisible(true);
+	public void showNewCommentPanel(Boolean show) {
+		newCommentPanel.setVisible(show);
 	}
 
 	@Override
@@ -185,7 +185,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 		Button userResponseButton = new Button("Responder", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				presenter.saveUserResponse(userResponseTextBox.getText(), response, widget);
+				getUiHandlers().saveUserResponse(userResponseTextBox.getText(), response, widget);
 			}
 		});
 
@@ -206,7 +206,7 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 			public AnchorCellParams getValue(Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				String baseUrl = "#" + AppPlace.RESPONSE.getToken() + "?requestId=";
+				String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
 				params.setUrl(baseUrl + request.getId());
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
@@ -229,22 +229,17 @@ public class RequestResponseView extends Composite implements RequestResponsePre
 
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		String link = presenter.getListLink();
-		if (link == null) {
-			link = AppPlace.HOME.getToken();
-		}
-
-		History.newItem(link);
+		getUiHandlers().goBack();
 	}
 
 	@UiHandler("newCommentSubmit")
 	public void onNewCommentClick(ClickEvent event) {
-		presenter.saveComment(newCommentText.getText());
+		getUiHandlers().saveComment(newCommentText.getText());
 	}
 
 	@UiHandler("requestRate")
 	public void onRequestRateClick(ClickEvent event) {
-		presenter.saveQualification(requestRate.getValue());
+		getUiHandlers().saveQualification(requestRate.getValue());
 	}
 
 	@UiFactory

@@ -16,17 +16,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client;
 
-import org.accesointeligente.model.Request;
-import org.accesointeligente.shared.NotificationEventType;
+import org.accesointeligente.client.events.*;
 
-public interface RequestStatusPresenterIface {
-	void showRequest(Integer requestId);
-	void deleteRequest();
-	Request getRequest();
-	void setRequest(Request request);
-	Boolean requestIsEditable();
-	void confirmRequest();
-	void showNotification(String message, NotificationEventType type);
+import com.gwtplatform.mvp.client.proxy.Gatekeeper;
+
+public class UserGatekeeper implements Gatekeeper, LoginSuccessfulEventHandler, LoginRequiredEventHandler {
+	private Boolean loggedIn = false;
+
+	@Override
+	public boolean canReveal() {
+		return loggedIn;
+	}
+
+	@Override
+	public void loginSuccessful(LoginSuccessfulEvent event) {
+		loggedIn = true;
+	}
+
+	@Override
+	public void loginRequired(LoginRequiredEvent event) {
+		loggedIn = false;
+	}
 }

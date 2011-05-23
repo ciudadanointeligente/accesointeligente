@@ -18,21 +18,25 @@
  */
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.services.InstitutionServiceAsync;
+import org.accesointeligente.client.uihandlers.RequestSearchUiHandlers;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.shared.RequestSearchEvent;
 import org.accesointeligente.shared.RequestSearchParams;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RequestSearchPresenter extends CustomWidgetPresenter<RequestSearchPresenter.Display> implements RequestSearchPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RequestSearchPresenterIface presenter);
+import javax.inject.Inject;
+
+public class RequestSearchPresenter extends PresenterWidget<RequestSearchPresenter.MyView> implements RequestSearchUiHandlers {
+	public interface MyView extends View, HasUiHandlers<RequestSearchUiHandlers> {
 		void displayMessage(String message);
 		void setInstitutions(Map<String, Institution> institutions);
 		String getKeyWord();
@@ -43,38 +47,30 @@ public class RequestSearchPresenter extends CustomWidgetPresenter<RequestSearchP
 		Boolean getStatusClosed();
 		Boolean getStatusExpired();
 		Boolean getStatusDerived();
+		void resetFilters();
 	}
 
 	@Inject
-	public RequestSearchPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private InstitutionServiceAsync institutionService;
+
+	@Inject
+	public RequestSearchPresenter(EventBus eventBus, MyView view) {
+		super(eventBus, view);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
+	public void onReset() {
+		getView().resetFilters();
 		getInstitutions();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
-	}
-
-	@Override
 	public void getInstitutions() {
-		serviceInjector.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
+		institutionService.getInstitutions(new AsyncCallback<List<Institution>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				display.displayMessage("No es posible recuperar las instituciones");
+				getView().displayMessage("No es posible recuperar las instituciones");
 			}
 
 			@Override
@@ -85,7 +81,7 @@ public class RequestSearchPresenter extends CustomWidgetPresenter<RequestSearchP
 					institutions.put(institution.getName(), institution);
 				}
 
-				display.setInstitutions(institutions);
+				getView().setInstitutions(institutions);
 			}
 		});
 	}
@@ -93,14 +89,14 @@ public class RequestSearchPresenter extends CustomWidgetPresenter<RequestSearchP
 	@Override
 	public void requestSearch() {
 		RequestSearchParams params = new RequestSearchParams();
-		params.setInstitution(display.getInstitution());
-		params.setKeyWord(display.getKeyWord());
-		params.setMinDate(display.getMinDate());
-		params.setMaxDate(display.getMaxDate());
-		params.setStatusPending(display.getStatusPending());
-		params.setStatusClosed(display.getStatusClosed());
-		params.setStatusExpired(display.getStatusExpired());
-		params.setStatusDerived(display.getStatusDerived());
-		eventBus.fireEvent(new RequestSearchEvent(params));
+		params.setInstitution(getView().getInstitution());
+		params.setKeyWord(getView().getKeyWord());
+		params.setMinDate(getView().getMinDate());
+		params.setMaxDate(getView().getMaxDate());
+		params.setStatusPending(getView().getStatusPending());
+		params.setStatusClosed(getView().getStatusClosed());
+		params.setStatusExpired(getView().getStatusExpired());
+		params.setStatusDerived(getView().getStatusDerived());
+		fireEvent(new RequestSearchEvent(params));
 	}
 }

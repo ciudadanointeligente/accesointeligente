@@ -21,21 +21,27 @@ package org.accesointeligente.client.presenters;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
+import org.accesointeligente.client.services.*;
+import org.accesointeligente.client.uihandlers.RegisterUiHandlers;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.*;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.Display> implements RegisterPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RegisterPresenterIface presenter);
+import javax.inject.Inject;
+
+public class RegisterPresenter extends Presenter<RegisterPresenter.MyView, RegisterPresenter.MyProxy> implements RegisterUiHandlers {
+	public interface MyView extends View, HasUiHandlers<RegisterUiHandlers> {
 		void cleanPersonActivities();
 		void cleanInstitutionActivities();
 		void cleanInstitutionTypes();
@@ -62,14 +68,40 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 		Boolean validateForm();
 	}
 
+	@ProxyCodeSplit
+	@NameToken(AppPlace.REGISTER)
+	public interface MyProxy extends ProxyPlace<RegisterPresenter> {
+	}
+
 	@Inject
-	public RegisterPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private PlaceManager placeManager;
+
+	@Inject
+	private ActivityServiceAsync activityService;
+
+	@Inject
+	private AgeServiceAsync ageService;
+
+	@Inject
+	private InstitutionTypeServiceAsync institutionTypeService;
+
+	@Inject
+	private RegionServiceAsync regionService;
+
+	@Inject
+	private SessionServiceAsync sessionService;
+
+	@Inject
+	private UserServiceAsync userService;
+
+	@Inject
+	public RegisterPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
+	public void onReset() {
 		getPersonActivities();
 		getInstitutionActivities();
 		getInstitutionTypes();
@@ -78,23 +110,15 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
 	public void getPersonActivities() {
-		display.cleanPersonActivities();
+		getView().cleanPersonActivities();
 
-		serviceInjector.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
+		activityService.getActivities(true, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -103,7 +127,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 			@Override
 			public void onSuccess(List<Activity> result) {
 				for (Activity activity : result) {
-					display.addPersonActivity(activity);
+					getView().addPersonActivity(activity);
 				}
 			}
 		});
@@ -111,9 +135,9 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 
 	@Override
 	public void getInstitutionActivities() {
-		display.cleanInstitutionActivities();
+		getView().cleanInstitutionActivities();
 
-		serviceInjector.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
+		activityService.getActivities(false, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -122,7 +146,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 			@Override
 			public void onSuccess(List<Activity> result) {
 				for (Activity activity : result) {
-					display.addInstitutionActivity(activity);
+					getView().addInstitutionActivity(activity);
 				}
 			}
 		});
@@ -130,9 +154,9 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 
 	@Override
 	public void getInstitutionTypes() {
-		display.cleanInstitutionTypes();
+		getView().cleanInstitutionTypes();
 
-		serviceInjector.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
+		institutionTypeService.getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo tipos de institución", NotificationEventType.ERROR);
@@ -141,7 +165,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 			@Override
 			public void onSuccess(List<InstitutionType> result) {
 				for (InstitutionType institutionType : result) {
-					display.addInstitutionType(institutionType);
+					getView().addInstitutionType(institutionType);
 				}
 			}
 		});
@@ -150,9 +174,9 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 
 	@Override
 	public void getPersonAges() {
-		display.cleanPersonAges();
+		getView().cleanPersonAges();
 
-		serviceInjector.getAgeService().getAges(new AsyncCallback<List<Age>>() {
+		ageService.getAges(new AsyncCallback<List<Age>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo edades", NotificationEventType.ERROR);
@@ -161,7 +185,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 			@Override
 			public void onSuccess(List<Age> result) {
 				for (Age age : result) {
-					display.addPersonAge(age);
+					getView().addPersonAge(age);
 				}
 			}
 		});
@@ -169,9 +193,9 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 
 	@Override
 	public void getRegions() {
-		display.cleanRegions();
+		getView().cleanRegions();
 
-		serviceInjector.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
+		regionService.getRegions(new AsyncCallback<List<Region>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo regiones", NotificationEventType.ERROR);
@@ -180,7 +204,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 			@Override
 			public void onSuccess(List<Region> result) {
 				for (Region region : result) {
-					display.addRegion(region);
+					getView().addRegion(region);
 				}
 			}
 		});
@@ -188,35 +212,35 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 
 	@Override
 	public void register() {
-		if (display.validateForm()) {
+		if (getView().validateForm()) {
 			final User user = new User();
 
-			if (display.isPerson()) {
-				user.setFirstName(display.getPersonFirstName());
-				user.setLastName(display.getPersonLastName());
+			if (getView().isPerson()) {
+				user.setFirstName(getView().getPersonFirstName());
+				user.setLastName(getView().getPersonLastName());
 				Set<Activity> activities = new HashSet<Activity>();
-				activities.add(display.getPersonActivity());
-				user.setGender(display.getPersonGender());
+				activities.add(getView().getPersonActivity());
+				user.setGender(getView().getPersonGender());
 				user.setActivities(activities);
-				user.setAge(display.getPersonAge());
+				user.setAge(getView().getPersonAge());
 				user.setNaturalPerson(true);
 			} else {
-				user.setFirstName(display.getInstitutionName());
-				user.setActivities(display.getInstitutionActivities());
-				user.setInstitutionType(display.getInstitutionType());
+				user.setFirstName(getView().getInstitutionName());
+				user.setActivities(getView().getInstitutionActivities());
+				user.setInstitutionType(getView().getInstitutionType());
 				user.setNaturalPerson(false);
 			}
 
-			user.setEmail(display.getEmail());
-			user.setPassword(display.getPassword());
-			user.setCountry(display.getCountry());
+			user.setEmail(getView().getEmail());
+			user.setPassword(getView().getPassword());
+			user.setCountry(getView().getCountry());
 			user.setRegisterDate(new Date());
 
-			if (display.getCountry().equals(Country.CHILE)) {
-				user.setRegion(display.getRegion());
+			if (getView().getCountry().equals(Country.CHILE)) {
+				user.setRegion(getView().getRegion());
 			}
 
-			serviceInjector.getUserService().register(user, new AsyncCallback<User>() {
+			userService.register(user, new AsyncCallback<User>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					if (caught instanceof RegisterException) {
@@ -230,7 +254,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 				public void onSuccess(User result) {
 					showNotification("Registro exitoso!", NotificationEventType.SUCCESS);
 
-					serviceInjector.getUserService().login(result.getEmail(), user.getPassword(), new AsyncCallback<Void>() {
+					userService.login(result.getEmail(), user.getPassword(), new AsyncCallback<Void>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							if (caught instanceof ServiceException) {
@@ -242,7 +266,7 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 
 						@Override
 						public void onSuccess(Void result) {
-							serviceInjector.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
+							sessionService.getSessionData (new AsyncCallback<SessionData> () {
 								@Override
 								public void onFailure (Throwable caught) {
 									showNotification("Error creando sesión", NotificationEventType.ERROR);
@@ -251,12 +275,13 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 								@Override
 								public void onSuccess (SessionData result) {
 									ClientSessionUtil.createSession (result);
-									eventBus.fireEvent (new LoginSuccessfulEvent ());
+									fireEvent (new LoginSuccessfulEvent ());
 								}
 							});
 						}
 					});
-					History.newItem(AppPlace.HOME.getToken());
+
+					placeManager.revealDefaultPlace();
 				}
 			});
 		}
@@ -268,6 +293,6 @@ public class RegisterPresenter extends CustomWidgetPresenter<RegisterPresenter.D
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
 }

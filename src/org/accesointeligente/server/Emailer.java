@@ -18,7 +18,6 @@
  */
 package org.accesointeligente.server;
 
-
 import java.util.Date;
 import java.util.Properties;
 

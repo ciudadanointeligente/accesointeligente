@@ -18,27 +18,33 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.services.RequestServiceAsync;
+import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.*;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RequestResponsePresenter extends CustomWidgetPresenter<RequestResponsePresenter.Display> implements RequestResponsePresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RequestResponsePresenterIface presenter);
+import javax.inject.Inject;
+
+public class RequestResponsePresenter extends Presenter<RequestResponsePresenter.MyView, RequestResponsePresenter.MyProxy> implements RequestResponseUiHandlers {
+	public interface MyView extends View, HasUiHandlers<RequestResponseUiHandlers> {
 		// Request
 		void setStatus(RequestStatus status);
 		void setRequestTitle(String title);
@@ -49,7 +55,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		// Response
 		void setResponses(List<Response> responses);
 		void setComments(List<RequestComment> comments);
-		void showNewCommentPanel();
+		void showNewCommentPanel(Boolean show);
 		void cleanNewCommentText();
 		void setRatingValue(Integer rate);
 		void setRatingReadOnly(Boolean readOnly);
@@ -61,38 +67,57 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		void setRequests(ListDataProvider<Request> data);
 	}
 
+	@ProxyCodeSplit
+	@NameToken(AppPlace.RESPONSE)
+	public interface MyProxy extends ProxyPlace<RequestResponsePresenter> {
+	}
+
+	@Inject
+	private PlaceManager placeManager;
+
+	@Inject
+	private RequestServiceAsync requestService;
+
+	private Integer requestId;
 	private Request request;
 
 	@Inject
-	public RequestResponsePresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	public RequestResponsePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
-		display.setRatingReadOnly(true);
-		display.removeColumns();
-		display.initTable();
+	public void onReset() {
+		getView().setRatingReadOnly(true);
+		getView().removeColumns();
+		getView().initTable();
 		loadBestVotedRequests();
+
+		if (requestId != null) {
+			showRequest(requestId);
+		}
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
-	protected void onUnbind() {
-	}
+	public void prepareFromRequest(PlaceRequest request) {
+		super.prepareFromRequest(request);
 
-	@Override
-	protected void onRevealDisplay() {
+		try {
+			requestId = Integer.parseInt(request.getParameter("requestId", null));
+		} catch (Exception ex) {
+			requestId = null;
+		}
 	}
 
 	@Override
 	public void showRequest(Integer requestId) {
-		serviceInjector.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
+		requestService.getRequest(requestId, new AsyncCallback<Request>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -103,12 +128,12 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 			public void onSuccess(Request result) {
 				if (result != null) {
 					request = result;
-					display.setStatus(request.getStatus());
-					display.setRequestTitle(request.getTitle());
-					display.setRequestDate(request.getConfirmationDate());
-					display.setInstitutionName(request.getInstitution().getName());
-					display.setRequestInfo(request.getInformation());
-					display.setRequestContext(request.getContext());
+					getView().setStatus(request.getStatus());
+					getView().setRequestTitle(request.getTitle());
+					getView().setRequestDate(request.getConfirmationDate());
+					getView().setInstitutionName(request.getInstitution().getName());
+					getView().setRequestInfo(request.getInformation());
+					getView().setRequestContext(request.getContext());
 					List<Response> responses;
 					if (request.getResponses() != null && request.getResponses().size() > 0) {
 						responses = new ArrayList<Response>(request.getResponses());
@@ -118,17 +143,16 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 						response.setInformation("Esperando Respuesta");
 						responses.add(response);
 					}
-					display.setResponses(responses);
+					getView().setResponses(responses);
 
 					loadComments(request);
 					if (request.getQualification() != null) {
-						display.setRatingValue(request.getQualification().intValue());
+						getView().setRatingValue(request.getQualification().intValue());
 					}
 
-					if (ClientSessionUtil.checkSession()) {
-						display.showNewCommentPanel();
-						display.setRatingReadOnly(false);
-					}
+					Boolean loggedIn = ClientSessionUtil.checkSession();
+					getView().showNewCommentPanel(loggedIn);
+					getView().setRatingReadOnly(!loggedIn);
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
@@ -138,7 +162,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 
 	@Override
 	public void loadComments(Request request) {
-		serviceInjector.getRequestService().getRequestComments(request, new AsyncCallback<List<RequestComment>>() {
+		requestService.getRequestComments(request, new AsyncCallback<List<RequestComment>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -148,7 +172,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 
 			@Override
 			public void onSuccess(List<RequestComment> comments) {
-				display.setComments(comments);
+				getView().setComments(comments);
 			}
 		});
 	}
@@ -161,7 +185,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		comment.setUser(ClientSessionUtil.getUser());
 		comment.setRequest(request);
 
-		serviceInjector.getRequestService().createRequestComment(comment, new AsyncCallback<RequestComment>() {
+		requestService.createRequestComment(comment, new AsyncCallback<RequestComment>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -171,7 +195,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 			@Override
 			public void onSuccess(RequestComment comment) {
 				showNotification("Se ha publicado su comentario", NotificationEventType.SUCCESS);
-				display.cleanNewCommentText();
+				getView().cleanNewCommentText();
 				loadComments(comment.getRequest());
 			}
 		});
@@ -180,7 +204,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 
 	@Override
 	public void loadAttachments(Response response, final ResponseWidget widget) {
-		serviceInjector.getRequestService().getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
+		requestService.getResponseAttachmentList(response, new AsyncCallback<List<Attachment>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -206,7 +230,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		qualification.setRequest(this.request);
 		qualification.setUser(ClientSessionUtil.getUser());
 
-		serviceInjector.getRequestService().saveUserRequestQualification(qualification, new AsyncCallback<UserRequestQualification>() {
+		requestService.saveUserRequestQualification(qualification, new AsyncCallback<UserRequestQualification>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -215,14 +239,14 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 
 			@Override
 			public void onSuccess(UserRequestQualification result) {
-				display.setRatingValue(result.getRequest().getQualification().intValue());
+				getView().setRatingValue(result.getRequest().getQualification().intValue());
 			}
 		});
 	}
 
 	@Override
 	public void getUserResponse(final Response response, final ResponseWidget widget) {
-		serviceInjector.getRequestService().getUserResponse(response, new AsyncCallback<UserResponse>() {
+		requestService.getUserResponse(response, new AsyncCallback<UserResponse>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -232,10 +256,10 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 			@Override
 			public void onSuccess(UserResponse result) {
 				if (result != null) {
-					display.setUserResponse(result, widget);
+					getView().setUserResponse(result, widget);
 				} else {
 					if (ClientSessionUtil.checkSession() && response.getRequest().getUser() != null && response.getRequest().getUser().equals(ClientSessionUtil.getUser())) {
-						display.newUserResponse(response, widget);
+						getView().newUserResponse(response, widget);
 					}
 				}
 			}
@@ -249,7 +273,7 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		userResponse.setInformation(information);
 		userResponse.setDate(new Date());
 
-		serviceInjector.getRequestService().saveUserResponse(userResponse, new AsyncCallback<UserResponse>() {
+		requestService.saveUserResponse(userResponse, new AsyncCallback<UserResponse>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -259,43 +283,33 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 			@Override
 			public void onSuccess(UserResponse result) {
 				showNotification("Se ha guardado su respuesta", NotificationEventType.SUCCESS);
-				display.clearResponseWidget(widget);
-				display.setUserResponse(result, widget);
+				getView().clearResponseWidget(widget);
+				getView().setUserResponse(result, widget);
 			}
 		});
 	}
 
 	@Override
 	public void loadBestVotedRequests() {
-		serviceInjector.getRequestService().getBestVotedRequests(new AsyncCallback<List<Request>>() {
+		requestService.getBestVotedRequests(new AsyncCallback<List<Request>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
 			}
 
 			@Override
 			public void onSuccess(List<Request> results) {
 				ListDataProvider<Request> data = new ListDataProvider<Request>(results);
-				display.setRequests(data);
+				getView().setRequests(data);
 			}
 		});
 	}
 
 	@Override
-	public String getListLink() {
-		String link = AppPlace.LIST.toString() + "?type=" + RequestListType.GENERAL.toString();
-		List<String> tokenList = AppController.getHistoryTokenList();
-
-		for(int i = tokenList.size() - 1; i >= 0; i--) {
-			if (AppController.getPlace(tokenList.get(i)).toString().equals(AppPlace.LIST.toString())) {
-				link = tokenList.get(i);
-				break;
-			}
-		}
-
-		return link;
+	public void goBack() {
+		History.back();
 	}
 
 	@Override
@@ -304,6 +318,6 @@ public class RequestResponsePresenter extends CustomWidgetPresenter<RequestRespo
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
 }

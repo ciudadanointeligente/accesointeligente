@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client.uihandlers;
 
-public interface RequestSearchPresenterIface {
-	void getInstitutions();
-	void requestSearch();
+import com.gwtplatform.mvp.client.UiHandlers;
+
+public interface LoginUiHandlers extends UiHandlers {
+	void login();
+	void register();
+	void close();
+	void gotoPasswordRecovery();
 }

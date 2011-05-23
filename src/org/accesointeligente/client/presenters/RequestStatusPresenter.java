@@ -18,23 +18,31 @@
  */
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.UserGatekeeper;
+import org.accesointeligente.client.services.RequestServiceAsync;
+import org.accesointeligente.client.uihandlers.RequestStatusUiHandlers;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
+import com.gwtplatform.mvp.client.proxy.*;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import java.util.Date;
 import java.util.Set;
 
-public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusPresenter.Display> implements RequestStatusPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RequestStatusPresenterIface presenter);
+import javax.inject.Inject;
+
+public class RequestStatusPresenter extends Presenter<RequestStatusPresenter.MyView, RequestStatusPresenter.MyProxy> implements RequestStatusUiHandlers {
+	public interface MyView extends View, HasUiHandlers<RequestStatusUiHandlers> {
 		void setDate(Date date);
 		void setStatus(RequestStatus status);
 		void setInstitutionName(String name);
@@ -47,34 +55,53 @@ public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusP
 		void editOptions(Boolean allowEdit);
 	}
 
-	private Request request;
+	@ProxyCodeSplit
+	@UseGatekeeper(UserGatekeeper.class)
+	@NameToken(AppPlace.REQUESTSTATUS)
+	public interface MyProxy extends ProxyPlace<RequestStatusPresenter> {
+	}
 
 	@Inject
-	public RequestStatusPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private PlaceManager placeManager;
+
+	@Inject
+	private RequestServiceAsync requestService;
+
+	@Inject
+	public RequestStatusPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
+	}
+
+	private Integer requestId;
+	private Request request;
+
+	@Override
+	protected void onReset() {
+		if (requestId != null) {
+			showRequest(requestId);
+		}
 	}
 
 	@Override
-	public void setup() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
+	public void prepareFromRequest(PlaceRequest request) {
+		super.prepareFromRequest(request);
 
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+		try {
+			requestId = Integer.parseInt(request.getParameter("requestId", null));
+		} catch (Exception ex) {
+			requestId = null;
+		}
 	}
 
 	@Override
 	public void showRequest(Integer requestId) {
-		serviceInjector.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
+		requestService.getRequest(requestId, new AsyncCallback<Request>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -85,15 +112,15 @@ public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusP
 			public void onSuccess(Request result) {
 				if (result != null) {
 					setRequest(result);
-					display.setStatus(result.getStatus());
-					display.setInstitutionName(result.getInstitution().getName());
-					display.setRequestInfo(result.getInformation());
-					display.setRequestContext(result.getContext());
-					display.setRequestTitle(result.getTitle());
-					display.setRequestCategories(result.getCategories());
-					display.setAnotherInstitution(result.getAnotherInstitution());
-					display.setDate(result.getConfirmationDate());
-					display.editOptions(requestIsEditable());
+					getView().setStatus(result.getStatus());
+					getView().setInstitutionName(result.getInstitution().getName());
+					getView().setRequestInfo(result.getInformation());
+					getView().setRequestContext(result.getContext());
+					getView().setRequestTitle(result.getTitle());
+					getView().setRequestCategories(result.getCategories());
+					getView().setAnotherInstitution(result.getAnotherInstitution());
+					getView().setDate(result.getConfirmationDate());
+					getView().editOptions(requestIsEditable());
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
@@ -103,7 +130,7 @@ public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusP
 
 	@Override
 	public void deleteRequest() {
-		serviceInjector.getRequestService().deleteRequest(getRequest(), new AsyncCallback<Void>() {
+		requestService.deleteRequest(getRequest(), new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -113,7 +140,7 @@ public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusP
 			@Override
 			public void onSuccess(Void result) {
 				showNotification("Se ha eliminado la solicitud", NotificationEventType.SUCCESS);
-				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+				placeManager.revealPlace(new PlaceRequest(AppPlace.LIST).with("type", RequestListType.MYREQUESTS.getType()));
 			}
 		});
 	}
@@ -141,7 +168,7 @@ public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusP
 	public void confirmRequest() {
 		request.setStatus(RequestStatus.NEW);
 		request.setConfirmationDate(new Date());
-		serviceInjector.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
+		requestService.saveRequest(request, new AsyncCallback<Request>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -161,6 +188,16 @@ public class RequestStatusPresenter extends CustomWidgetPresenter<RequestStatusP
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
+	}
+
+	@Override
+	public void editRequest() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.EDITREQUEST).with("requestId", request.getId().toString()));
+	}
+
+	@Override
+	public void gotoMyRequests() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.LIST).with("type", RequestListType.MYREQUESTS.getType()));
 	}
 }

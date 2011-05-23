@@ -19,23 +19,28 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.MainPresenter;
-import org.accesointeligente.client.presenters.MainPresenterIface;
-import org.accesointeligente.shared.*;
+import org.accesointeligente.client.uihandlers.MainUiHandlers;
+import org.accesointeligente.shared.NotificationEventParams;
+import org.accesointeligente.shared.NotificationEventType;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 
-public class MainView extends Composite implements MainPresenter.Display {
+public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements MainPresenter.MyView {
 	private static MainViewUiBinder uiBinder = GWT.create(MainViewUiBinder.class);
 	interface MainViewUiBinder extends UiBinder<Widget, MainView> {}
+	private final Widget widget;
 
 	public enum DisplayMode {
 		LoggedIn,
@@ -59,77 +64,103 @@ public class MainView extends Composite implements MainPresenter.Display {
 	@UiField MenuItem contact;
 	@UiField HTMLPanel footerPanel;
 	@UiField Label loginPending;
-
-	private MainPresenterIface presenter;
+	private PopupPanel popup;
 
 	public MainView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
+		popup = new PopupPanel();
+		popup.setGlassEnabled(true);
+		popup.setModal(true);
+		popup.setAutoHideOnHistoryEventsEnabled(true);
+
+		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				getUiHandlers().clearPopupSlot();
+			}
+		});
 
 		myrequests.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
+				getUiHandlers().gotoMyRequests();
 			}
 		});
 
 		drafts.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.DRAFTS.getType());
+				getUiHandlers().gotoDrafts();
 			}
 		});
 
 		favorites.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.FAVORITES.getType());
+				getUiHandlers().gotoFavorites();
 			}
 		});
 
 		userProfile.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.USERPROFILE.getToken());
+				getUiHandlers().gotoProfile();
 			}
 		});
 
 		logout.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.LOGOUT.getToken());
+				getUiHandlers().gotoLogout();
 			}
 		});
 
 		statistics.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.STATISTICS.getToken());
+				getUiHandlers().gotoStatistics();
 			}
 		});
 
 		aboutProject.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.ABOUTPROJECT.getToken());
+				getUiHandlers().gotoAboutProject();
 			}
 		});
 
 		contact.setCommand(new Command() {
 			@Override
 			public void execute() {
-				History.newItem(AppPlace.CONTACT.getToken());
+				getUiHandlers().gotoContact();
 			}
 		});
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
+		return widget;
 	}
 
 	@Override
-	public void setPresenter(MainPresenterIface presenter) {
-		this.presenter = presenter;
+	public void setInSlot(Object slot, Widget content) {
+		if (MainPresenter.SLOT_MAIN_CONTENT.equals(slot)) {
+			popup.hide();
+			mainPanel.clear();
+
+			if (content != null) {
+				mainPanel.add(content);
+			}
+		} else if (MainPresenter.SLOT_POPUP_CONTENT.equals(slot)) {
+			popup.clear();
+
+			if (content != null) {
+				popup.add(content);
+				popup.center();
+			}
+		} else {
+			super.addToSlot(slot, content);
+		}
 	}
 
 	@Override
@@ -153,15 +184,10 @@ public class MainView extends Composite implements MainPresenter.Display {
 			myMenu.setCommand(new Command() {
 				@Override
 				public void execute() {
-						History.newItem(AppPlace.LOGIN.getToken());
+					getUiHandlers().gotoLogin();
 				}
 			});
 		}
-	}
-
-	@Override
-	public FlowPanel getLayout() {
-		return mainPanel;
 	}
 
 	@Override
@@ -185,6 +211,7 @@ public class MainView extends Composite implements MainPresenter.Display {
 				notification.setVisible(false);
 			}
 		};
+
 		if (params.getDuration() > 0) {
 			notificationTimer.schedule(params.getDuration());
 		}
@@ -198,10 +225,13 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 		notification.add(notificationClose);
 		notification.add(notificationLabel);
-		if(params.getType().equals(NotificationEventType.SUCCESS)) {
+
+		if (params.getType().equals(NotificationEventType.SUCCESS)) {
 			clearNotifications();
 		}
+
 		notificationPanel.insert(notification, 0);
+
 		if (notificationPanel.getWidgetCount() > 3) {
 			for (Integer index = 3; index < notificationPanel.getWidgetCount(); index++) {
 				notificationPanel.remove(index);
@@ -216,6 +246,11 @@ public class MainView extends Composite implements MainPresenter.Display {
 
 	@UiHandler("logo")
 	public void onLogoClick(ClickEvent event) {
-		History.newItem(AppPlace.HOME.getToken());
+		getUiHandlers().gotoHome();
+	}
+
+	@Override
+	public void hidePopup() {
+		popup.hide();
 	}
 }

@@ -19,11 +19,11 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.RequestStatusPresenter;
-import org.accesointeligente.client.presenters.RequestStatusPresenterIface;
+import org.accesointeligente.client.uihandlers.RequestStatusUiHandlers;
 import org.accesointeligente.model.RequestCategory;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestListType;
 import org.accesointeligente.shared.RequestStatus;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -31,16 +31,16 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-public class RequestStatusView extends Composite implements RequestStatusPresenter.Display {
+public class RequestStatusView extends ViewWithUiHandlers<RequestStatusUiHandlers> implements RequestStatusPresenter.MyView {
 	private static RequestStatusViewUiBinder uiBinder = GWT.create(RequestStatusViewUiBinder.class);
 	interface RequestStatusViewUiBinder extends UiBinder<Widget, RequestStatusView> {}
+	private final Widget widget;
 
 	// UIFields
 	@UiField Image requestStatusHead;
@@ -61,20 +61,13 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 	@UiField Button editRequestBottom;
 	@UiField Button deleteRequestBottom;
 
-	private RequestStatusPresenterIface presenter;
-
 	public RequestStatusView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
-	}
-
-	@Override
-	public void setPresenter(RequestStatusPresenterIface presenter) {
-		this.presenter = presenter;
+		return widget;
 	}
 
 	@Override
@@ -137,39 +130,35 @@ public class RequestStatusView extends Composite implements RequestStatusPresent
 
 	@UiHandler("editRequest")
 	public void onEditRequestClick(ClickEvent event) {
-		History.newItem(AppPlace.EDITREQUEST.getToken() + "?requestId=" + presenter.getRequest().getId());
+		getUiHandlers().editRequest();
 	}
 
 	@UiHandler("deleteRequest")
 	public void onDeleteRequestClick(ClickEvent event) {
-		presenter.deleteRequest();
+		getUiHandlers().deleteRequest();
 	}
 
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.confirmRequest();
-			History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
-		}
+		getUiHandlers().confirmRequest();
+		getUiHandlers().gotoMyRequests();
 	}
 
 
 	@UiHandler("editRequestBottom")
 	public void onEditRequestBottomClick(ClickEvent event) {
-		History.newItem(AppPlace.EDITREQUEST.getToken() + "?requestId=" + presenter.getRequest().getId());
+		getUiHandlers().editRequest();
 	}
 
 	@UiHandler("deleteRequestBottom")
 	public void onDeleteRequestBottomClick(ClickEvent event) {
-		presenter.deleteRequest();
+		getUiHandlers().deleteRequest();
 	}
 
 	@UiHandler("requestListLinkBottom")
 	public void onRequestListLinkBottomClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.confirmRequest();
-			History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.MYREQUESTS.getType());
-		}
+		getUiHandlers().confirmRequest();
+		getUiHandlers().gotoMyRequests();
 	}
 
 	@Override

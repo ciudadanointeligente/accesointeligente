@@ -19,8 +19,10 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.RequestSearchPresenter;
-import org.accesointeligente.client.presenters.RequestSearchPresenterIface;
+import org.accesointeligente.client.uihandlers.RequestSearchUiHandlers;
 import org.accesointeligente.model.Institution;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -35,11 +37,12 @@ import com.google.gwt.user.datepicker.client.DateBox;
 import java.util.Date;
 import java.util.Map;
 
-public class RequestSearchView extends Composite implements RequestSearchPresenter.Display {
+public class RequestSearchView extends ViewWithUiHandlers<RequestSearchUiHandlers> implements RequestSearchPresenter.MyView {
 	private static RequestSearchViewUiBinder uiBinder = GWT.create(RequestSearchViewUiBinder.class);
-
 	interface RequestSearchViewUiBinder extends UiBinder<Widget, RequestSearchView> {}
+	private final Widget widget;
 
+	@UiField FormPanel searchForm;
 	@UiField TextBox keyWord;
 	@UiField SuggestBox institution;
 	@UiField DateBox minDate;
@@ -52,20 +55,14 @@ public class RequestSearchView extends Composite implements RequestSearchPresent
 	@UiField Button clear;
 
 	private Map<String, Institution> institutions;
-	private RequestSearchPresenterIface presenter;
 
 	public RequestSearchView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
-	}
-
-	@Override
-	public void setPresenter(RequestSearchPresenterIface presenter) {
-		this.presenter = presenter;
+		return widget;
 	}
 
 	@Override
@@ -126,6 +123,15 @@ public class RequestSearchView extends Composite implements RequestSearchPresent
 		}
 	}
 
+	@Override
+	public void resetFilters() {
+		searchForm.reset();
+		statusPending.setValue(true);
+		statusClosed.setValue(true);
+		statusExpired.setValue(true);
+		statusDerived.setValue(true);
+	}
+
 	@UiFactory
 	DateBox getDateBox() {
 		DateBox myDateBox = new DateBox();
@@ -135,33 +141,25 @@ public class RequestSearchView extends Composite implements RequestSearchPresent
 
 	@UiHandler("search")
 	protected void onSearchClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.requestSearch();
-		}
+		getUiHandlers().requestSearch();
 	}
 
 	@UiHandler("search")
 	protected void onSearchKeyDown(KeyDownEvent event) {
-		if (presenter != null) {
-			presenter.requestSearch();
-		}
+		getUiHandlers().requestSearch();
 	}
 
 	@UiHandler("keyWord")
 	protected void onKeyWordKeyDown(KeyDownEvent event) {
-		if (presenter != null) {
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				presenter.requestSearch();
-			}
+		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+			getUiHandlers().requestSearch();
 		}
 	}
 
 	@UiHandler("institution")
 	protected void onInstitutionKeyDown(KeyDownEvent event) {
-		if (presenter != null) {
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				presenter.requestSearch();
-			}
+		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+			getUiHandlers().requestSearch();
 		}
 	}
 

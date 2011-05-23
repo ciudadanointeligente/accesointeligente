@@ -19,23 +19,32 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.UserGatekeeper;
+import org.accesointeligente.client.services.InstitutionServiceAsync;
+import org.accesointeligente.client.services.RequestServiceAsync;
+import org.accesointeligente.client.uihandlers.RequestUiHandlers;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
+import com.gwtplatform.mvp.client.proxy.*;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Display> implements RequestPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RequestPresenterIface presenter);
+import javax.inject.Inject;
+
+public class RequestPresenter extends Presenter<RequestPresenter.MyView, RequestPresenter.MyProxy> implements RequestUiHandlers {
+	public interface MyView extends View, HasUiHandlers<RequestUiHandlers> {
 		void setInstitutions(Map<String, Institution> institutions);
 		void cleanRequestCategories();
 		void addRequestCategories(RequestCategory category);
@@ -48,38 +57,45 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 		Boolean getAnotherInstitutionNo();
 	}
 
+	@ProxyCodeSplit
+	@UseGatekeeper(UserGatekeeper.class)
+	@NameToken(AppPlace.REQUEST)
+	public interface MyProxy extends ProxyPlace<RequestPresenter> {
+	}
+
+	@Inject
+	private PlaceManager placeManager;
+
+	@Inject
+	private InstitutionServiceAsync institutionService;
+
+	@Inject
+	private RequestServiceAsync requestService;
+
 	private Request request;
 
 	@Inject
-	public RequestPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	public RequestPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
+	public void onReset() {
 		getRequestCategories();
 		getInstitutions();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
 	public void getRequestCategories() {
-		display.cleanRequestCategories();
+		getView().cleanRequestCategories();
 
-		serviceInjector.getRequestService().getCategories(new AsyncCallback<List<RequestCategory>>() {
+		requestService.getCategories(new AsyncCallback<List<RequestCategory>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -88,7 +104,7 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 			@Override
 			public void onSuccess(List<RequestCategory> result) {
 				for (RequestCategory category : result) {
-					display.addRequestCategories(category);
+					getView().addRequestCategories(category);
 				}
 			}
 		});
@@ -96,7 +112,7 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 
 	@Override
 	public void getInstitutions() {
-		serviceInjector.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
+		institutionService.getInstitutions(new AsyncCallback<List<Institution>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar las instituciones", NotificationEventType.ERROR);
@@ -112,22 +128,22 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 					}
 				}
 
-				display.setInstitutions(institutions);
+				getView().setInstitutions(institutions);
 			}
 		});
 	}
 
 	@Override
 	public void submitRequest() {
-		Institution institution = display.getInstitution();
+		Institution institution = getView().getInstitution();
 
 		if (institution == null) {
 			showNotification("Por favor complete el campo de Institución", NotificationEventType.NOTICE);
 			return;
 		}
 
-		String requestInfo = display.getRequestInfo();
-		String requestContext = display.getRequestContext();
+		String requestInfo = getView().getRequestInfo();
+		String requestContext = getView().getRequestContext();
 
 		if (requestInfo == null || requestInfo.trim().length() == 0) {
 			showNotification("Por favor complete el campo de Información", NotificationEventType.NOTICE);
@@ -139,17 +155,17 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 			return;
 		}
 
-		String requestTitle = display.getRequestTitle();
-		Set<RequestCategory> categories = display.getRequestCategories();
-		Boolean anotherInstitutionYes = display.getAnotherInstitutionYes();
-		Boolean anotherInstitutionNo = display.getAnotherInstitutionNo();
+		String requestTitle = getView().getRequestTitle();
+		Set<RequestCategory> categories = getView().getRequestCategories();
+		Boolean anotherInstitutionYes = getView().getAnotherInstitutionYes();
+		Boolean anotherInstitutionNo = getView().getAnotherInstitutionNo();
 
 		if (requestTitle == null || requestTitle.trim().length() == 0) {
 			showNotification("Por favor complete el campo de Titulo de la solicitud", NotificationEventType.NOTICE);
 			return;
 		}
 
-		if(anotherInstitutionYes == false && anotherInstitutionNo == false) {
+		if (anotherInstitutionYes == false && anotherInstitutionNo == false) {
 			showNotification("Por favor seleccione si desea solicitar esta información a otro organismo", NotificationEventType.NOTICE);
 			return;
 		}
@@ -164,7 +180,7 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
 
-		serviceInjector.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
+		requestService.saveRequest(request, new AsyncCallback<Request>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace(System.err);
@@ -182,7 +198,7 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 	@Override
 	public void showRequest() {
 		if (request != null) {
-			History.newItem(AppPlace.REQUESTSTATUS.getToken() + "?requestId=" + request.getId());
+			placeManager.revealPlace(new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", request.getId().toString()));
 		} else {
 			showNotification("No se ha podido cargar la solicitud", NotificationEventType.NOTICE);
 		}
@@ -194,6 +210,7 @@ public class RequestPresenter extends CustomWidgetPresenter<RequestPresenter.Dis
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
+
 }

@@ -16,27 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.views;
+package org.accesointeligente.client.uihandlers;
 
-import org.accesointeligente.client.presenters.AboutProjectPresenter;
+import com.gwtplatform.mvp.client.UiHandlers;
 
-import com.gwtplatform.mvp.client.ViewImpl;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.ui.Widget;
-
-public class AboutProjectView extends ViewImpl implements AboutProjectPresenter.MyView {
-	private static AboutProjectViewUiBinder uiBinder = GWT.create(AboutProjectViewUiBinder.class);
-	interface AboutProjectViewUiBinder extends UiBinder<Widget, AboutProjectView> {}
-	private final Widget widget;
-
-	public AboutProjectView() {
-		widget = uiBinder.createAndBindUi(this);
-	}
-
-	@Override
-	public Widget asWidget() {
-		return widget;
-	}
+public interface RequestSearchUiHandlers extends UiHandlers {
+	void getInstitutions();
+	void requestSearch();
 }

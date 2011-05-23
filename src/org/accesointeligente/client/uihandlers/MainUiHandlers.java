@@ -16,8 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client.uihandlers;
 
-public interface AboutProjectPresenterIface {
+import com.gwtplatform.mvp.client.UiHandlers;
 
+public interface MainUiHandlers extends UiHandlers {
+	void clearNotifications();
+	void gotoMyRequests();
+	void gotoDrafts();
+	void gotoFavorites();
+	void gotoProfile();
+	void gotoLogout();
+	void gotoStatistics();
+	void gotoAboutProject();
+	void gotoContact();
+	void gotoLogin();
+	void gotoHome();
+	void clearPopupSlot();
 }

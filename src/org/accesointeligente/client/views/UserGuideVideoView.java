@@ -1,7 +1,27 @@
+/**
+ * Acceso Inteligente
+ *
+ * Copyright (C) 2010-2011 Fundación Ciudadano Inteligente
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.UserGuideVideoPresenter;
-import org.accesointeligente.client.presenters.UserGuideVideoPresenterIface;
+import org.accesointeligente.client.uihandlers.UserGuideVideoUiHandlers;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -11,28 +31,24 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 
-public class UserGuideVideoView extends Composite implements UserGuideVideoPresenter.Display {
+public class UserGuideVideoView extends ViewWithUiHandlers<UserGuideVideoUiHandlers> implements UserGuideVideoPresenter.MyView {
 	private static UserGuideVideoViewUiBinder uiBinder = GWT.create(UserGuideVideoViewUiBinder.class);
 	interface UserGuideVideoViewUiBinder extends UiBinder<Widget, UserGuideVideoView> {}
+	private final Widget widget;
 
 	@UiField FocusPanel mainPanel;
 	@UiField HTMLPanel videoPanel;
 	@UiField Label close;
 
-	private UserGuideVideoPresenterIface presenter;
 	private Video userGuideVideo;
 
 	public UserGuideVideoView() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
-
-	public UserGuideVideoView(String firstName) {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(UserGuideVideoPresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 
 	@Override
@@ -45,8 +61,8 @@ public class UserGuideVideoView extends Composite implements UserGuideVideoPrese
 
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
-				if (presenter != null && event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
-					presenter.close();
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+					getUiHandlers().close();
 				}
 			}
 		});
@@ -56,15 +72,13 @@ public class UserGuideVideoView extends Composite implements UserGuideVideoPrese
 
 	@UiHandler("mainPanel")
 	void onLoginPanelKeyDown(KeyDownEvent key) {
-		if (presenter != null && key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
-			presenter.close();
+		if (key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+			getUiHandlers().close();
 		}
 	}
 
 	@UiHandler("close")
 	void onCloseClick(ClickEvent click) {
-		if (presenter != null) {
-			presenter.close();
-		}
+		getUiHandlers().close();
 	}
 }

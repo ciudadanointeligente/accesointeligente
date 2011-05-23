@@ -16,7 +16,7 @@
 					<span> ¿Estás seguro de que la información que buscas no ha sido pedida antes?</span>
 				</div>
 				<div class="fLeft">
-					<a href="#list?type=general">
+					<a href="#list;type=general">
 						<img src="images/irAlBuscador.png" />
 					</a>
 				</div>

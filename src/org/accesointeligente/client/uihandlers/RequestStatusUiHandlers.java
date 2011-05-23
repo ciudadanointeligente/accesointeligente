@@ -16,22 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client.uihandlers;
 
-import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.Request;
-import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.NotificationEventType;
 
-public interface RequestResponsePresenterIface {
+import com.gwtplatform.mvp.client.UiHandlers;
+
+public interface RequestStatusUiHandlers extends UiHandlers {
 	void showRequest(Integer requestId);
-	void loadComments(Request request);
-	void saveComment(String commentContent);
-	void loadAttachments(Response response, ResponseWidget widget);
-	void saveQualification(Integer rate);
-	void getUserResponse(Response response, ResponseWidget widget);
-	void saveUserResponse(String information, Response response, ResponseWidget widget);
-	void loadBestVotedRequests();
-	String getListLink();
+	void deleteRequest();
+	Request getRequest();
+	void setRequest(Request request);
+	Boolean requestIsEditable();
+	void confirmRequest();
 	void showNotification(String message, NotificationEventType type);
+	void editRequest();
+	void gotoMyRequests();
 }

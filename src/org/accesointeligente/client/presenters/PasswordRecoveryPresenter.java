@@ -18,47 +18,54 @@
  */
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.services.UserServiceAsync;
+import org.accesointeligente.client.uihandlers.PasswordRecoveryUiHandlers;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
-public class PasswordRecoveryPresenter extends CustomWidgetPresenter<PasswordRecoveryPresenter.Display> implements PasswordRecoveryPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(PasswordRecoveryPresenterIface presenter);
+import javax.inject.Inject;
+
+public class PasswordRecoveryPresenter extends Presenter<PasswordRecoveryPresenter.MyView, PasswordRecoveryPresenter.MyProxy> implements PasswordRecoveryUiHandlers {
+	public interface MyView extends View, HasUiHandlers<PasswordRecoveryUiHandlers> {
 		String getEmail();
 	}
 
+	@ProxyCodeSplit
+	@NameToken(AppPlace.PASSWORDRECOVERY)
+	public interface MyProxy extends ProxyPlace<PasswordRecoveryPresenter> {
+	}
+
 	@Inject
-	public PasswordRecoveryPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private PlaceManager placeManager;
+
+	@Inject
+	private UserServiceAsync userService;
+
+	@Inject
+	public PasswordRecoveryPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
-	}
-
-	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
 	public void recoverPassword() {
-		serviceInjector.getUserService().checkEmailExistence(display.getEmail(), new AsyncCallback<Boolean>() {
+		userService.checkEmailExistence(getView().getEmail(), new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -70,7 +77,7 @@ public class PasswordRecoveryPresenter extends CustomWidgetPresenter<PasswordRec
 				if (!result) {
 					showNotification("La dirección de correo ingresada no existe en nuestra base de datos", NotificationEventType.NOTICE);
 				} else {
-					serviceInjector.getUserService().resetPassword(display.getEmail(), new AsyncCallback<Void>() {
+					userService.resetPassword(getView().getEmail(), new AsyncCallback<Void>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
@@ -79,9 +86,8 @@ public class PasswordRecoveryPresenter extends CustomWidgetPresenter<PasswordRec
 
 						@Override
 						public void onSuccess(Void result) {
-							showNotification("Se ha actualizado su contraseña. Dentro de la brevedad le será enviado un correo con su nueva contraseña",
-									NotificationEventType.SUCCESS);
-							History.newItem(AppPlace.HOME.getToken());
+							showNotification("Se ha actualizado su contraseña. Dentro de la brevedad le será enviado un correo con su nueva contraseña", NotificationEventType.SUCCESS);
+							placeManager.revealDefaultPlace();
 						}
 					});
 				}
@@ -95,6 +101,6 @@ public class PasswordRecoveryPresenter extends CustomWidgetPresenter<PasswordRec
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
 }

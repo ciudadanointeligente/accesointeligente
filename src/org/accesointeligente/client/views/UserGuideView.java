@@ -16,24 +16,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client.views;
 
-import org.accesointeligente.model.User;
-import org.accesointeligente.shared.NotificationEventType;
+import org.accesointeligente.client.presenters.UserGuidePresenter;
 
-public interface UserProfileEditPresenterIface {
-	User getUser();
-	Boolean getPasswordOk();
-	void setPasswordOk(Boolean ok);
-	Boolean getUpdatePassword();
-	void setUpdatePassword(Boolean update);
-	void getPersonActivities();
-	void getInstitutionActivities();
-	void getInstitutionTypes();
-	void getPersonAges();
-	void getRegions();
-	void checkPassword(String password);
-	void showUser();
-	void saveChanges();
-	void showNotification(String message, NotificationEventType type);
+import com.gwtplatform.mvp.client.ViewImpl;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.ui.Widget;
+
+public class UserGuideView extends ViewImpl implements UserGuidePresenter.MyView {
+	private static UserGuideViewUiBinder uiBinder = GWT.create(UserGuideViewUiBinder.class);
+	interface UserGuideViewUiBinder extends UiBinder<Widget, UserGuideView> {}
+	private final Widget widget;
+
+	public UserGuideView() {
+		widget = uiBinder.createAndBindUi(this);
+	}
+
+	@Override
+	public Widget asWidget() {
+		return widget;
+	}
 }

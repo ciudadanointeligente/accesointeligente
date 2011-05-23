@@ -19,31 +19,34 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.PasswordRecoveryPresenter;
-import org.accesointeligente.client.presenters.PasswordRecoveryPresenterIface;
+import org.accesointeligente.client.uihandlers.PasswordRecoveryUiHandlers;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
-public class PasswordRecoveryView extends Composite implements PasswordRecoveryPresenter.Display {
+public class PasswordRecoveryView extends ViewWithUiHandlers<PasswordRecoveryUiHandlers> implements PasswordRecoveryPresenter.MyView {
 	private static PasswordRecoveryViewUiBinder uiBinder = GWT.create(PasswordRecoveryViewUiBinder.class);
 	interface PasswordRecoveryViewUiBinder extends UiBinder<Widget, PasswordRecoveryView> {}
+	private final Widget widget;
 
 	@UiField TextBox email;
 	@UiField Button sendMail;
 
-	PasswordRecoveryPresenterIface presenter;
-
 	public PasswordRecoveryView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(PasswordRecoveryPresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 
 	@Override
@@ -53,8 +56,6 @@ public class PasswordRecoveryView extends Composite implements PasswordRecoveryP
 
 	@UiHandler("sendMail")
 	public void onSendMailClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.recoverPassword();
-		}
+		getUiHandlers().recoverPassword();
 	}
 }
