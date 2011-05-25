@@ -53,8 +53,6 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 		String getRequestContext();
 		String getRequestTitle();
 		Set<RequestCategory> getRequestCategories();
-		Boolean getAnotherInstitutionYes();
-		Boolean getAnotherInstitutionNo();
 	}
 
 	@ProxyCodeSplit
@@ -157,16 +155,9 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 
 		String requestTitle = getView().getRequestTitle();
 		Set<RequestCategory> categories = getView().getRequestCategories();
-		Boolean anotherInstitutionYes = getView().getAnotherInstitutionYes();
-		Boolean anotherInstitutionNo = getView().getAnotherInstitutionNo();
 
 		if (requestTitle == null || requestTitle.trim().length() == 0) {
 			showNotification("Por favor complete el campo de Titulo de la solicitud", NotificationEventType.NOTICE);
-			return;
-		}
-
-		if (anotherInstitutionYes == false && anotherInstitutionNo == false) {
-			showNotification("Por favor seleccione si desea solicitar esta información a otro organismo", NotificationEventType.NOTICE);
 			return;
 		}
 
@@ -176,7 +167,6 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 		request.setContext(requestContext);
 		request.setTitle(requestTitle);
 		request.setCategories(categories);
-		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
 

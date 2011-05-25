@@ -55,8 +55,6 @@ public class RequestView extends ViewWithUiHandlers<RequestUiHandlers> implement
 	@UiField HTMLPanel requestDetailPanel;
 	@UiField TextBox requestTitle;
 	@UiField FlowPanel requestCategoryPanel;
-	@UiField RadioButton anotherInstitutionYes;
-	@UiField RadioButton anotherInstitutionNo;
 
 	@UiField Button submitRequest;
 
@@ -93,16 +91,6 @@ public class RequestView extends ViewWithUiHandlers<RequestUiHandlers> implement
 	@Override
 	public String getRequestTitle() {
 		return requestTitle.getValue();
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionYes() {
-		return anotherInstitutionYes.getValue();
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionNo() {
-		return anotherInstitutionNo.getValue();
 	}
 
 	@Override

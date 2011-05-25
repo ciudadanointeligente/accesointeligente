@@ -123,10 +123,6 @@
 					<span class="{style.circleNumber}">5</span>
 					<g:Label>¿Quieres solicitar esta información a otro organismo?</g:Label>
 				</h2>
-				<div class="{style.greyBlock}">
-					<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution">Si</g:RadioButton>
-					<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution" checked="true">No</g:RadioButton>
-				</div>
 			</div>
 		</g:HTMLPanel>
 		<div class="{style.greyBlock}">

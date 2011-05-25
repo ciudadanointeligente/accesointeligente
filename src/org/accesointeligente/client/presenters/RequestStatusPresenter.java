@@ -51,7 +51,6 @@ public class RequestStatusPresenter extends Presenter<RequestStatusPresenter.MyV
 		void setRequestTitle(String title);
 		void addRequestCategories(RequestCategory category);
 		void setRequestCategories(Set<RequestCategory> categories);
-		void setAnotherInstitution(Boolean anotherInstitution);
 		void editOptions(Boolean allowEdit);
 	}
 
@@ -118,7 +117,6 @@ public class RequestStatusPresenter extends Presenter<RequestStatusPresenter.MyV
 					getView().setRequestContext(result.getContext());
 					getView().setRequestTitle(result.getTitle());
 					getView().setRequestCategories(result.getCategories());
-					getView().setAnotherInstitution(result.getAnotherInstitution());
 					getView().setDate(result.getConfirmationDate());
 					getView().editOptions(requestIsEditable());
 				} else {

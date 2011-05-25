@@ -51,8 +51,6 @@ public class RequestEditView extends ViewWithUiHandlers<RequestEditUiHandlers> i
 	@UiField HTMLPanel requestDetailPanel;
 	@UiField TextBox requestTitle;
 	@UiField FlowPanel requestCategoryPanel;
-	@UiField RadioButton anotherInstitutionYes;
-	@UiField RadioButton anotherInstitutionNo;
 
 	@UiField Button submitRequest;
 
@@ -109,27 +107,6 @@ public class RequestEditView extends ViewWithUiHandlers<RequestEditUiHandlers> i
 	@Override
 	public void setRequestTitle(String title) {
 		requestTitle.setText(title);
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionYes() {
-		return anotherInstitutionYes.getValue();
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionNo() {
-		return anotherInstitutionNo.getValue();
-	}
-
-	@Override
-	public void setAnotherInstitution(Boolean another) {
-		if (another) {
-			anotherInstitutionYes.setValue(true);
-			anotherInstitutionNo.setValue(false);
-		} else {
-			anotherInstitutionYes.setValue(false);
-			anotherInstitutionNo.setValue(true);
-		}
 	}
 
 	@Override

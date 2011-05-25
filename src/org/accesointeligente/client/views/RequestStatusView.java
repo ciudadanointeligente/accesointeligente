@@ -52,8 +52,6 @@ public class RequestStatusView extends ViewWithUiHandlers<RequestStatusUiHandler
 	@UiField Label requestContext;
 	@UiField Label requestTitle;
 	@UiField FlowPanel requestCategoryPanel;
-	@UiField RadioButton anotherInstitutionYes;
-	@UiField RadioButton anotherInstitutionNo;
 	@UiField Button requestListLink;
 	@UiField Button editRequest;
 	@UiField Button deleteRequest;
@@ -116,15 +114,6 @@ public class RequestStatusView extends ViewWithUiHandlers<RequestStatusUiHandler
 		while (iterator.hasNext()) {
 			RequestCategory category = iterator.next();
 			addRequestCategories(category);
-		}
-	}
-
-	@Override
-	public void setAnotherInstitution(Boolean anotherInstitution) {
-		if (anotherInstitution) {
-			anotherInstitutionYes.setValue(true);
-		} else {
-			anotherInstitutionNo.setValue(true);
 		}
 	}
 

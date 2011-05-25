@@ -34,7 +34,6 @@ public class Request extends LightEntity {
 	private String context;
 	private String title;
 	private Set<RequestCategory> categories;
-	private Boolean anotherInstitution;
 	private RequestStatus status;
 	private Date creationDate;
 	private Date confirmationDate;
@@ -100,14 +99,6 @@ public class Request extends LightEntity {
 
 	public void setCategories(Set<RequestCategory> categories) {
 		this.categories = categories;
-	}
-
-	public Boolean getAnotherInstitution() {
-		return anotherInstitution;
-	}
-
-	public void setAnotherInstitution(Boolean anotherInstitution) {
-		this.anotherInstitution = anotherInstitution;
 	}
 
 	public RequestStatus getStatus() {

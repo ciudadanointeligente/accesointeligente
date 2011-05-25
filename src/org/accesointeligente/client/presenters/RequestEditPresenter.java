@@ -53,9 +53,6 @@ public class RequestEditPresenter extends Presenter<RequestEditPresenter.MyView,
 		void setRequestContext(String context);
 		String getRequestContext();
 		void setRequestTitle(String title);
-		Boolean getAnotherInstitutionYes();
-		Boolean getAnotherInstitutionNo();
-		void setAnotherInstitution(Boolean another);
 		void cleanRequestCategories();
 		void addRequestCategories(RequestCategory category, Boolean checked);
 		Set<RequestCategory> getRequestCategories();
@@ -183,16 +180,9 @@ public class RequestEditPresenter extends Presenter<RequestEditPresenter.MyView,
 
 		String requestTitle = getView().getRequestTitle();
 		Set<RequestCategory> categories = getView().getRequestCategories();
-		Boolean anotherInstitutionYes = getView().getAnotherInstitutionYes();
-		Boolean anotherInstitutionNo = getView().getAnotherInstitutionNo();
 
 		if (requestTitle == null || requestTitle.trim().length() == 0) {
 			showNotification("Por favor complete el campo de Titulo de la solicitud", NotificationEventType.ERROR);
-			return;
-		}
-
-		if(anotherInstitutionYes == false && anotherInstitutionNo == false) {
-			showNotification("Por favor seleccione si desea solicitar esta información a otro organismo", NotificationEventType.ERROR);
 			return;
 		}
 
@@ -201,7 +191,6 @@ public class RequestEditPresenter extends Presenter<RequestEditPresenter.MyView,
 		request.setContext(requestContext);
 		request.setTitle(requestTitle);
 		request.setCategories(categories);
-		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
 
@@ -245,7 +234,6 @@ public class RequestEditPresenter extends Presenter<RequestEditPresenter.MyView,
 					getView().setRequestContext(request.getContext());
 					getView().setRequestInfo(request.getInformation());
 					getView().setRequestTitle(request.getTitle());
-					getView().setAnotherInstitution(request.getAnotherInstitution());
 					getRequestCategories(request);
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
