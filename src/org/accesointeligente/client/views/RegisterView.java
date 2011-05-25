@@ -274,7 +274,7 @@ public class RegisterView extends ViewWithUiHandlers<RegisterUiHandlers> impleme
 		} else if (!Validator.validateEmail(getEmail())) {
 			getUiHandlers().showNotification("Dirección de email no válida", NotificationEventType.NOTICE);
 			return false;
-		} else if (!password1.getText().matches("\\w+")) {
+		} else if (!password1.getText().matches("[A-Za-z0-9!@#$%^&*\\(\\):\\-_=+]+")) {
 			getUiHandlers().showNotification("Contraseña no válida", NotificationEventType.NOTICE);
 			return false;
 		} else if (!password1.getText().equals(password2.getText())) {
