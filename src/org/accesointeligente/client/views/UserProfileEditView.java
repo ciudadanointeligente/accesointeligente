@@ -384,8 +384,10 @@ public class UserProfileEditView extends ViewWithUiHandlers<UserProfileEditUiHan
 			return false;
 		}
 
-		if (oldPassword.getText().matches("\\w+") || password1.getText().matches("\\w+") || password2.getText().matches("\\w+")) {
-			if (!oldPassword.getText().matches("\\w+") || !password1.getText().matches("\\w+") || !password2.getText().matches("\\w+")) {
+		String passwordMatch = "[A-Za-z0-9!@#$%^&*\\(\\):\\-_=+]+";
+
+		if (oldPassword.getText().matches(passwordMatch) || password1.getText().matches(passwordMatch) || password2.getText().matches(passwordMatch)) {
+			if (!oldPassword.getText().matches(passwordMatch) || !password1.getText().matches(passwordMatch) || !password2.getText().matches(passwordMatch)) {
 				getUiHandlers().showNotification("Para actualizar la contraseña debe completar todos los campos de contraseña", NotificationEventType.ERROR);
 				return false;
 			} else if (!getUiHandlers().getPasswordOk()) {
