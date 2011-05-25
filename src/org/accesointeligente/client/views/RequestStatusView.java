@@ -70,7 +70,11 @@ public class RequestStatusView extends ViewWithUiHandlers<RequestStatusUiHandler
 
 	@Override
 	public void setDate(Date date) {
-		requestDate.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(date));
+		if (date != null) {
+			requestDate.setText(DateTimeFormat.getFormat("dd/MM/yyyy HH:mm").format(date));
+		} else {
+			requestDate.setText("");
+		}
 	}
 
 	@Override
