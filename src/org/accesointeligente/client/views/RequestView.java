@@ -19,11 +19,13 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.RequestPresenter;
-import org.accesointeligente.client.presenters.RequestPresenterIface;
+import org.accesointeligente.client.uihandlers.RequestUiHandlers;
 import org.accesointeligente.client.widgets.FocusSuggestBox;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.NotificationEventType;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -38,11 +40,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class RequestView extends Composite implements RequestPresenter.Display {
+public class RequestView extends ViewWithUiHandlers<RequestUiHandlers> implements RequestPresenter.MyView {
 	private static RequestViewUiBinder uiBinder = GWT.create(RequestViewUiBinder.class);
-
 	interface RequestViewUiBinder extends UiBinder<Widget, RequestView> {}
+	private final Widget widget;
 
+	@UiField FormPanel requestForm;
 	@UiField HTMLPanel institutionSearchPanel;
 	@UiField FocusSuggestBox institutionSearch;
 
@@ -53,26 +56,23 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@UiField HTMLPanel requestDetailPanel;
 	@UiField TextBox requestTitle;
 	@UiField FlowPanel requestCategoryPanel;
-	@UiField RadioButton anotherInstitutionYes;
-	@UiField RadioButton anotherInstitutionNo;
 
 	@UiField Button submitRequest;
 
 	private Map<String, Institution> institutions;
-	private RequestPresenterIface presenter;
 
 	public RequestView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
+		return widget;
 	}
 
 	@Override
-	public void setPresenter(RequestPresenterIface presenter) {
-		this.presenter = presenter;
+	public void resetForm() {
+		requestForm.reset();
 	}
 
 	@Override
@@ -97,16 +97,6 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 	@Override
 	public String getRequestTitle() {
 		return requestTitle.getValue();
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionYes() {
-		return anotherInstitutionYes.getValue();
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionNo() {
-		return anotherInstitutionNo.getValue();
 	}
 
 	@Override
@@ -156,9 +146,7 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 
 	@UiHandler("submitRequest")
 	protected void onNextClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.submitRequest();
-		}
+		getUiHandlers().submitRequest();
 	}
 
 	@UiHandler("institutionSearch")
@@ -166,9 +154,8 @@ public class RequestView extends Composite implements RequestPresenter.Display {
 		Timer timer = new Timer() {
 			@Override
 			public void run() {
-				Institution institution = getInstitution();
-				if (institution == null) {
-					presenter.showNotification("No encontramos esta institución. Comprueba que está bien escrita o intenta hacer tu solicitud directamente en la institución.", NotificationEventType.NOTICE);
+				if (getInstitution() == null) {
+					getUiHandlers().showNotification("No encontramos esta institución. Comprueba que está bien escrita o intenta hacer tu solicitud directamente en la institución.", NotificationEventType.NOTICE);
 				}
 			}
 		};

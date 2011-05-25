@@ -1,7 +1,27 @@
+/**
+ * Acceso Inteligente
+ *
+ * Copyright (C) 2010-2011 Fundación Ciudadano Inteligente
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.TermsAndConditionsPresenter;
-import org.accesointeligente.client.presenters.TermsAndConditionsPresenterIface;
+import org.accesointeligente.client.uihandlers.TermsAndConditionsUiHandlers;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -10,42 +30,36 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
-public class TermsAndConditionsView extends Composite implements TermsAndConditionsPresenter.Display {
+public class TermsAndConditionsView extends ViewWithUiHandlers<TermsAndConditionsUiHandlers> implements TermsAndConditionsPresenter.MyView {
 	private static TermsAndConditionsViewUiBinder uiBinder = GWT.create(TermsAndConditionsViewUiBinder.class);
 	interface TermsAndConditionsViewUiBinder extends UiBinder<Widget, TermsAndConditionsView> {}
+	private final Widget widget;
 
 	@UiField FocusPanel mainPanel;
 	@UiField Label close;
 
-	TermsAndConditionsPresenterIface presenter;
-
 	public TermsAndConditionsView() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
-
-	public TermsAndConditionsView(String firstName) {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(TermsAndConditionsPresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 
 	@UiHandler("mainPanel")
 	void onLoginPanelKeyDown(KeyDownEvent key) {
-		if (presenter != null && key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
-			presenter.close();
+		if (key.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+			getUiHandlers().close();
 		}
 	}
 
 	@UiHandler("close")
 	void onCloseClick(ClickEvent click) {
-		if (presenter != null) {
-			presenter.close();
-		}
+		getUiHandlers().close();
 	}
 }

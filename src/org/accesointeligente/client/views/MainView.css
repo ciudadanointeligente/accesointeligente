@@ -85,6 +85,14 @@
 	margin: 20px;
 }
 
+.creditsPanelContent {
+	background-color: white;
+	display: block;
+	overflow: hidden;
+	margin: 20px;
+	text-align: center;
+}
+
 .footerModule {
 	color: #333333;
 	float: left;

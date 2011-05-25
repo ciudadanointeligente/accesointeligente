@@ -19,11 +19,13 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.UserProfileEditPresenter;
-import org.accesointeligente.client.presenters.UserProfileEditPresenterIface;
+import org.accesointeligente.client.uihandlers.UserProfileEditUiHandlers;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.Country;
 import org.accesointeligente.shared.Gender;
 import org.accesointeligente.shared.NotificationEventType;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -38,9 +40,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class UserProfileEditView extends Composite implements UserProfileEditPresenter.Display {
+public class UserProfileEditView extends ViewWithUiHandlers<UserProfileEditUiHandlers> implements UserProfileEditPresenter.MyView {
 	private static UserProfileEditViewUiBinder uiBinder = GWT.create(UserProfileEditViewUiBinder.class);
 	interface UserProfileEditViewUiBinder extends UiBinder<Widget, UserProfileEditView> {}
+	private final Widget widget;
 
 	@UiField Label email;
 	@UiField HTMLPanel personPanel;
@@ -62,15 +65,13 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 	@UiField PasswordTextBox password2;
 	@UiField Button saveChanges;
 
-	UserProfileEditPresenterIface presenter;
-
 	public UserProfileEditView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(UserProfileEditPresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 
 	@Override
@@ -345,34 +346,30 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 
 	@Override
 	public Boolean validateForm() {
-		if (presenter == null) {
-			return false;
-		}
-
-		presenter.setUpdatePassword(false);
-		if (presenter.getUser().getNaturalPerson()) {
+		getUiHandlers().setUpdatePassword(false);
+		if (getUiHandlers().getUser().getNaturalPerson()) {
 			if (!personFirstName.getText().matches(".*\\w+.*")) {
-				presenter.showNotification("Debe ingresar un nombre", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe ingresar un nombre", NotificationEventType.ERROR);
 				return false;
 			} else if (!personLastName.getText().matches(".*\\w+.*")) {
-				presenter.showNotification("Debe ingresar un apellido", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe ingresar un apellido", NotificationEventType.ERROR);
 				return false;
 			} else if (!personGenderFemale.getValue() && !personGenderMale.getValue()) {
-				presenter.showNotification("Debe seleccionar un genero", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe seleccionar un genero", NotificationEventType.ERROR);
 				return false;
 			} else if (personActivity.getSelectedIndex() < 1) {
-				presenter.showNotification("Debe seleccionar una actividad", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe seleccionar una actividad", NotificationEventType.ERROR);
 				return false;
 			} else if (personAge.getSelectedIndex() < 1) {
-				presenter.showNotification("Debe seleccionar una edad", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe seleccionar una edad", NotificationEventType.ERROR);
 				return false;
 			}
-		} else if (!presenter.getUser().getNaturalPerson()) {
+		} else if (!getUiHandlers().getUser().getNaturalPerson()) {
 			if (!institutionName.getText().matches(".*\\w+.*")) {
-				presenter.showNotification("Debe ingresar la razon social", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe ingresar la razon social", NotificationEventType.ERROR);
 				return false;
 			} else if (institutionType.getSelectedIndex() < 1) {
-				presenter.showNotification("Debe seleccionar un tipo de institución", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("Debe seleccionar un tipo de institución", NotificationEventType.ERROR);
 				return false;
 			}
 		} else {
@@ -380,25 +377,27 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 		}
 
 		if (!countryChile.getValue() && !countryOther.getValue()) {
-			presenter.showNotification("Debe seleccionar Chile o Resto del mundo", NotificationEventType.ERROR);
+			getUiHandlers().showNotification("Debe seleccionar Chile o Resto del mundo", NotificationEventType.ERROR);
 			return false;
 		} else if (region.getSelectedIndex() < 1 && countryChile.getValue()) {
-			presenter.showNotification("Debe seleccionar una región", NotificationEventType.ERROR);
+			getUiHandlers().showNotification("Debe seleccionar una región", NotificationEventType.ERROR);
 			return false;
 		}
 
-		if (oldPassword.getText().matches("\\w+") || password1.getText().matches("\\w+") || password2.getText().matches("\\w+")) {
-			if (!oldPassword.getText().matches("\\w+") || !password1.getText().matches("\\w+") || !password2.getText().matches("\\w+")) {
-				presenter.showNotification("Para actualizar la contraseña debe completar todos los campos de contraseña", NotificationEventType.ERROR);
+		String passwordMatch = "[A-Za-z0-9!@#$%^&*\\(\\):\\-_=+]+";
+
+		if (oldPassword.getText().matches(passwordMatch) || password1.getText().matches(passwordMatch) || password2.getText().matches(passwordMatch)) {
+			if (!oldPassword.getText().matches(passwordMatch) || !password1.getText().matches(passwordMatch) || !password2.getText().matches(passwordMatch)) {
+				getUiHandlers().showNotification("Para actualizar la contraseña debe completar todos los campos de contraseña", NotificationEventType.ERROR);
 				return false;
-			} else if (!presenter.getPasswordOk()) {
-				presenter.showNotification("La contraseña actual no es correcta", NotificationEventType.ERROR);
+			} else if (!getUiHandlers().getPasswordOk()) {
+				getUiHandlers().showNotification("La contraseña actual no es correcta", NotificationEventType.ERROR);
 				return false;
 			} else if (!password1.getText().equals(password2.getText())) {
-				presenter.showNotification("La contraseña nueva no coincide", NotificationEventType.ERROR);
+				getUiHandlers().showNotification("La contraseña nueva no coincide", NotificationEventType.ERROR);
 				return false;
 			}
-			presenter.setUpdatePassword(true);
+			getUiHandlers().setUpdatePassword(true);
 			return true;
 		}
 
@@ -407,7 +406,7 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 
 	@UiHandler("oldPassword")
 	public void onOldPasswordBlur(BlurEvent event) {
-		presenter.checkPassword(oldPassword.getText());
+		getUiHandlers().checkPassword(oldPassword.getText());
 	}
 
 	@UiHandler("countryChile")
@@ -422,12 +421,10 @@ public class UserProfileEditView extends Composite implements UserProfileEditPre
 
 	@UiHandler("saveChanges")
 	public void onRegisterClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.saveChanges();
-			oldPassword.setText("");
-			password1.setText("");
-			password2.setText("");
-			presenter.setPasswordOk(false);
-		}
+		getUiHandlers().saveChanges();
+		oldPassword.setText("");
+		password1.setText("");
+		password2.setText("");
+		getUiHandlers().setPasswordOk(false);
 	}
 }

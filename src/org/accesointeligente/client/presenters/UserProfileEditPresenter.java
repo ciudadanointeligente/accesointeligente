@@ -19,20 +19,30 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.UserGatekeeper;
+import org.accesointeligente.client.services.*;
+import org.accesointeligente.client.uihandlers.UserProfileEditUiHandlers;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import java.util.*;
 
-public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileEditPresenter.Display> implements UserProfileEditPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(UserProfileEditPresenterIface presenter);
+import javax.inject.Inject;
+
+public class UserProfileEditPresenter extends Presenter<UserProfileEditPresenter.MyView, UserProfileEditPresenter.MyProxy> implements UserProfileEditUiHandlers {
+	public interface MyView extends View, HasUiHandlers<UserProfileEditUiHandlers> {
 		void cleanPersonActivities();
 		void cleanInstitutionActivities();
 		void cleanInstitutionTypes();
@@ -73,18 +83,40 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 		Boolean validateForm();
 	}
 
-	User user = ClientSessionUtil.getUser();
-	Boolean passwordOk = false;
-	Boolean updatePassword = false;
+	@ProxyCodeSplit
+	@UseGatekeeper(UserGatekeeper.class)
+	@NameToken(AppPlace.USERPROFILE)
+	public interface MyProxy extends ProxyPlace<UserProfileEditPresenter> {
+	}
 
 	@Inject
-	public UserProfileEditPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private ActivityServiceAsync activityService;
+
+	@Inject
+	private AgeServiceAsync ageService;
+
+	@Inject
+	private InstitutionTypeServiceAsync institutionTypeService;
+
+	@Inject
+	private RegionServiceAsync regionService;
+
+	@Inject
+	private UserServiceAsync userService;
+
+	private User user;
+	private Boolean passwordOk = false;
+	private Boolean updatePassword = false;
+
+	@Inject
+	public UserProfileEditPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
+	public void onReset() {
+		user = ClientSessionUtil.getUser();
 		getPersonActivities();
 		getInstitutionActivities();
 		getInstitutionTypes();
@@ -94,16 +126,8 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
@@ -133,9 +157,9 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 	@Override
 	public void getPersonActivities() {
-		display.cleanPersonActivities();
+		getView().cleanPersonActivities();
 
-		serviceInjector.getActivityService().getActivities(true, new AsyncCallback<List<Activity>>() {
+		activityService.getActivities(true, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -144,16 +168,16 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 			@Override
 			public void onSuccess(List<Activity> result) {
 				List<Activity> userActivities = new ArrayList<Activity>(user.getActivities());
-				display.updatePersonActivity(userActivities.get(0), result);
+				getView().updatePersonActivity(userActivities.get(0), result);
 			}
 		});
 	}
 
 	@Override
 	public void getInstitutionActivities() {
-		display.cleanInstitutionActivities();
+		getView().cleanInstitutionActivities();
 
-		serviceInjector.getActivityService().getActivities(false, new AsyncCallback<List<Activity>>() {
+		activityService.getActivities(false, new AsyncCallback<List<Activity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -163,9 +187,9 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 			public void onSuccess(List<Activity> result) {
 				for (Activity activity : result) {
 					if(user.getActivities().contains(activity)) {
-						display.addInstitutionActivity(activity, true);
+						getView().addInstitutionActivity(activity, true);
 					} else {
-						display.addInstitutionActivity(activity, false);
+						getView().addInstitutionActivity(activity, false);
 					}
 				}
 			}
@@ -174,9 +198,9 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 	@Override
 	public void getInstitutionTypes() {
-		display.cleanInstitutionTypes();
+		getView().cleanInstitutionTypes();
 
-		serviceInjector.getInstitutionTypeService().getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
+		institutionTypeService.getInstitutionTypes(new AsyncCallback<List<InstitutionType>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo tipos de institución", NotificationEventType.ERROR);
@@ -185,10 +209,10 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 			@Override
 			public void onSuccess(List<InstitutionType> result) {
 				for (InstitutionType institutionType : result) {
-					display.addInstitutionType(institutionType);
+					getView().addInstitutionType(institutionType);
 				}
 				if (!user.getNaturalPerson()) {
-					display.setInstitutionType(user.getInstitutionType());
+					getView().setInstitutionType(user.getInstitutionType());
 				}
 
 			}
@@ -198,9 +222,9 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 	@Override
 	public void getPersonAges() {
-		display.cleanPersonAges();
+		getView().cleanPersonAges();
 
-		serviceInjector.getAgeService().getAges(new AsyncCallback<List<Age>>() {
+		ageService.getAges(new AsyncCallback<List<Age>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo edades", NotificationEventType.ERROR);
@@ -209,10 +233,10 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 			@Override
 			public void onSuccess(List<Age> result) {
 				for (Age age : result) {
-					display.addPersonAge(age);
+					getView().addPersonAge(age);
 				}
 				if (user.getNaturalPerson()) {
-					display.setPersonAge(user.getAge());
+					getView().setPersonAge(user.getAge());
 				}
 			}
 		});
@@ -220,9 +244,9 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 	@Override
 	public void getRegions() {
-		display.cleanRegions();
+		getView().cleanRegions();
 
-		serviceInjector.getRegionService().getRegions(new AsyncCallback<List<Region>>() {
+		regionService.getRegions(new AsyncCallback<List<Region>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo regiones", NotificationEventType.ERROR);
@@ -230,14 +254,14 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 			@Override
 			public void onSuccess(List<Region> result) {
-				display.updateRegion(user.getRegion(), result);
+				getView().updateRegion(user.getRegion(), result);
 			}
 		});
 	}
 
 	@Override
 	public void checkPassword(String password) {
-		serviceInjector.getUserService().checkPass(user.getEmail(), password, new AsyncCallback<Boolean>() {
+		userService.checkPass(user.getEmail(), password, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -254,68 +278,68 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 
 	@Override
 	public void showUser() {
-		display.setEmail(user.getEmail());
+		getView().setEmail(user.getEmail());
 
 		if (user.getNaturalPerson()) {
-			display.setInstitutionPanelVisibility(false);
-			display.setPersonPanelVisibility(true);
-			display.setPersonFirstName(user.getFirstName());
-			display.setPersonLastName(user.getLastName());
-			display.setPersonGender(user.getGender());
+			getView().setInstitutionPanelVisibility(false);
+			getView().setPersonPanelVisibility(true);
+			getView().setPersonFirstName(user.getFirstName());
+			getView().setPersonLastName(user.getLastName());
+			getView().setPersonGender(user.getGender());
 
 			List<Activity> activities = new ArrayList<Activity>(user.getActivities());
 			Activity activity = activities.get(0);
-			display.setPersonActivity(activity);
+			getView().setPersonActivity(activity);
 
 		} else {
 
-			display.setInstitutionPanelVisibility(true);
-			display.setPersonPanelVisibility(false);
-			display.setInstitutionName(user.getFirstName());
+			getView().setInstitutionPanelVisibility(true);
+			getView().setPersonPanelVisibility(false);
+			getView().setInstitutionName(user.getFirstName());
 			List<Activity> activities = new ArrayList<Activity>(user.getActivities());
-			display.setInstitutionActivities(activities);
+			getView().setInstitutionActivities(activities);
 		}
 
-		display.setCountry(user.getCountry());
+		getView().setCountry(user.getCountry());
 		if (user.getCountry().equals(Country.CHILE)) {
-			display.setRegion(user.getRegion());
+			getView().setRegion(user.getRegion());
 		}
 	}
 
 	@Override
 	public void saveChanges() {
-		if (display.validateForm()) {
+		if (getView().validateForm()) {
 			user = new User();
 			user.setId(ClientSessionUtil.getUser().getId());
 			user.setNaturalPerson(ClientSessionUtil.getUser().getNaturalPerson());
 			user.setEmail(ClientSessionUtil.getUser().getEmail());
 			if (user.getNaturalPerson()) {
-				user.setFirstName(display.getPersonFirstName());
-				user.setLastName(display.getPersonLastName());
+				user.setFirstName(getView().getPersonFirstName());
+				user.setLastName(getView().getPersonLastName());
 				Set<Activity> activities = new HashSet<Activity>();
-				activities.add(display.getPersonActivity());
-				user.setGender(display.getPersonGender());
+				activities.add(getView().getPersonActivity());
+				user.setGender(getView().getPersonGender());
 				user.setActivities(activities);
-				user.setAge(display.getPersonAge());
+				user.setAge(getView().getPersonAge());
 			} else {
-				user.setFirstName(display.getInstitutionName());
-				user.setActivities(display.getInstitutionActivities());
-				user.setInstitutionType(display.getInstitutionType());
+				user.setFirstName(getView().getInstitutionName());
+				user.setActivities(getView().getInstitutionActivities());
+				user.setInstitutionType(getView().getInstitutionType());
 			}
 
 			if (updatePassword) {
-				user.setPassword(display.getPassword());
+				user.setPassword(getView().getPassword());
 			} else {
 				user.setPassword(ClientSessionUtil.getUser().getPassword());
 			}
 
-			user.setCountry(display.getCountry());
+			user.setCountry(getView().getCountry());
 
-			if (display.getCountry().equals(Country.CHILE)) {
-				user.setRegion(display.getRegion());
+			if (getView().getCountry().equals(Country.CHILE)) {
+				user.setRegion(getView().getRegion());
 			}
 
-			serviceInjector.getUserService().updateUser(user, new AsyncCallback<Void>() {
+			userService.updateUser(user, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -337,6 +361,6 @@ public class UserProfileEditPresenter extends CustomWidgetPresenter<UserProfileE
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
 }

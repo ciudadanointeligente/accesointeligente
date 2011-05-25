@@ -16,7 +16,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client;
 
-public interface HomePresenterIface {
+import com.gwtplatform.mvp.client.proxy.Gatekeeper;
+
+public class UserGatekeeper implements Gatekeeper {
+	@Override
+	public boolean canReveal() {
+		return ClientSessionUtil.getUser() != null;
+	}
 }

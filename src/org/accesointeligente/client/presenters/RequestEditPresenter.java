@@ -19,23 +19,32 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.UserGatekeeper;
+import org.accesointeligente.client.services.InstitutionServiceAsync;
+import org.accesointeligente.client.services.RequestServiceAsync;
+import org.accesointeligente.client.uihandlers.RequestEditUiHandlers;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
+import com.gwtplatform.mvp.client.proxy.*;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
 import java.util.*;
 
-public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPresenter.Display> implements RequestEditPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RequestEditPresenterIface presenter);
+import javax.inject.Inject;
+
+public class RequestEditPresenter extends Presenter<RequestEditPresenter.MyView, RequestEditPresenter.MyProxy> implements RequestEditUiHandlers {
+	public interface MyView extends View, HasUiHandlers<RequestEditUiHandlers> {
 		Institution getInstitution();
 		void setInstitution(Institution institution);
 		String getRequestInfo();
@@ -44,46 +53,62 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 		void setRequestContext(String context);
 		String getRequestContext();
 		void setRequestTitle(String title);
-		Boolean getAnotherInstitutionYes();
-		Boolean getAnotherInstitutionNo();
-		void setAnotherInstitution(Boolean another);
 		void cleanRequestCategories();
 		void addRequestCategories(RequestCategory category, Boolean checked);
 		Set<RequestCategory> getRequestCategories();
 		void setInstitutions(Map<String, Institution> institutions);
 	}
 
+	@ProxyCodeSplit
+	@UseGatekeeper(UserGatekeeper.class)
+	@NameToken(AppPlace.EDITREQUEST)
+	public interface MyProxy extends ProxyPlace<RequestEditPresenter> {
+	}
+
+	@Inject
+	private PlaceManager placeManager;
+
+	@Inject
+	private InstitutionServiceAsync institutionService;
+
+	@Inject
+	private RequestServiceAsync requestService;
+
+	private Integer requestId;
 	private Request request;
 
 	@Inject
-	public RequestEditPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	public RequestEditPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
+	public void onReset() {
 		getInstitutions();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
-	protected void onUnbind() {
-	}
+	public void prepareFromRequest(PlaceRequest request) {
+		super.prepareFromRequest(request);
 
-	@Override
-	protected void onRevealDisplay() {
+		try {
+			requestId = Integer.parseInt(request.getParameter("requestId", null));
+		} catch (Exception ex) {
+			requestId = null;
+		}
 	}
 
 	@Override
 	public void getRequestCategories(final Request request) {
-		display.cleanRequestCategories();
+		getView().cleanRequestCategories();
 
-		serviceInjector.getRequestService().getCategories(new AsyncCallback<List<RequestCategory>>() {
+		requestService.getCategories(new AsyncCallback<List<RequestCategory>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("Error obteniendo actividades", NotificationEventType.ERROR);
@@ -94,12 +119,12 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 				for (RequestCategory category : result) {
 					if (request != null) {
 						if (request.getCategories().contains(category)) {
-							display.addRequestCategories(category, true);
+							getView().addRequestCategories(category, true);
 						} else {
-							display.addRequestCategories(category, false);
+							getView().addRequestCategories(category, false);
 						}
 					} else {
-						display.addRequestCategories(category, false);
+						getView().addRequestCategories(category, false);
 					}
 				}
 			}
@@ -108,7 +133,7 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 
 	@Override
 	public void getInstitutions() {
-		serviceInjector.getInstitutionService().getInstitutions(new AsyncCallback<List<Institution>>() {
+		institutionService.getInstitutions(new AsyncCallback<List<Institution>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar las instituciones", NotificationEventType.ERROR);
@@ -122,22 +147,26 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 					institutions.put(institution.getName(), institution);
 				}
 
-				display.setInstitutions(institutions);
+				getView().setInstitutions(institutions);
+
+				if (requestId != null) {
+					showRequest(requestId);
+				}
 			}
 		});
 	}
 
 	@Override
 	public void submitRequest() {
-		Institution institution = display.getInstitution();
+		Institution institution = getView().getInstitution();
 
 		if (institution == null) {
 			showNotification("Por favor complete el campo de Institución", NotificationEventType.ERROR);
 			return;
 		}
 
-		String requestInfo = display.getRequestInfo();
-		String requestContext = display.getRequestContext();
+		String requestInfo = getView().getRequestInfo();
+		String requestContext = getView().getRequestContext();
 
 		if (requestInfo == null || requestInfo.trim().length() == 0) {
 			showNotification("Por favor complete el campo de Información", NotificationEventType.ERROR);
@@ -149,18 +178,11 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 			return;
 		}
 
-		String requestTitle = display.getRequestTitle();
-		Set<RequestCategory> categories = display.getRequestCategories();
-		Boolean anotherInstitutionYes = display.getAnotherInstitutionYes();
-		Boolean anotherInstitutionNo = display.getAnotherInstitutionNo();
+		String requestTitle = getView().getRequestTitle();
+		Set<RequestCategory> categories = getView().getRequestCategories();
 
 		if (requestTitle == null || requestTitle.trim().length() == 0) {
 			showNotification("Por favor complete el campo de Titulo de la solicitud", NotificationEventType.ERROR);
-			return;
-		}
-
-		if(anotherInstitutionYes == false && anotherInstitutionNo == false) {
-			showNotification("Por favor seleccione si desea solicitar esta información a otro organismo", NotificationEventType.ERROR);
 			return;
 		}
 
@@ -169,11 +191,10 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 		request.setContext(requestContext);
 		request.setTitle(requestTitle);
 		request.setCategories(categories);
-		request.setAnotherInstitution(anotherInstitutionYes);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
 
-		serviceInjector.getRequestService().saveRequest(request, new AsyncCallback<Request>() {
+		requestService.saveRequest(request, new AsyncCallback<Request>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace(System.err);
@@ -191,7 +212,7 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 	@Override
 	public void showRequest() {
 		if (request != null) {
-			History.newItem(AppPlace.REQUESTSTATUS.getToken() + "?requestId=" + request.getId());
+			placeManager.revealPlace(new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", request.getId().toString()));
 		} else {
 			showNotification("No se ha podido cargar la solicitud", NotificationEventType.ERROR);
 		}
@@ -199,8 +220,7 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 
 	@Override
 	public void showRequest(Integer requestId) {
-		serviceInjector.getRequestService().getRequest(requestId, new AsyncCallback<Request>() {
-
+		requestService.getRequest(requestId, new AsyncCallback<Request>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar la solicitud", NotificationEventType.ERROR);
@@ -210,11 +230,10 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 			public void onSuccess(Request result) {
 				if (result != null) {
 					request = result;
-					display.setInstitution(request.getInstitution());
-					display.setRequestContext(request.getContext());
-					display.setRequestInfo(request.getInformation());
-					display.setRequestTitle(request.getTitle());
-					display.setAnotherInstitution(request.getAnotherInstitution());
+					getView().setInstitution(request.getInstitution());
+					getView().setRequestContext(request.getContext());
+					getView().setRequestInfo(request.getInformation());
+					getView().setRequestTitle(request.getTitle());
 					getRequestCategories(request);
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
@@ -229,6 +248,6 @@ public class RequestEditPresenter extends CustomWidgetPresenter<RequestEditPrese
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
 }

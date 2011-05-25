@@ -19,9 +19,11 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.RequestEditPresenter;
-import org.accesointeligente.client.presenters.RequestEditPresenterIface;
+import org.accesointeligente.client.uihandlers.RequestEditUiHandlers;
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.model.RequestCategory;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,9 +36,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class RequestEditView extends Composite implements RequestEditPresenter.Display {
+public class RequestEditView extends ViewWithUiHandlers<RequestEditUiHandlers> implements RequestEditPresenter.MyView {
 	private static RequestEditViewUiBinder uiBinder = GWT.create(RequestEditViewUiBinder.class);
 	interface RequestEditViewUiBinder extends UiBinder<Widget, RequestEditView> {}
+	private final Widget widget;
 
 	@UiField HTMLPanel institutionSearchPanel;
 	@UiField SuggestBox institutionSearch;
@@ -48,21 +51,18 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 	@UiField HTMLPanel requestDetailPanel;
 	@UiField TextBox requestTitle;
 	@UiField FlowPanel requestCategoryPanel;
-	@UiField RadioButton anotherInstitutionYes;
-	@UiField RadioButton anotherInstitutionNo;
 
 	@UiField Button submitRequest;
 
 	private Map<String, Institution> institutions;
-	private RequestEditPresenterIface presenter;
 
 	public RequestEditView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(RequestEditPresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 
 	@Override
@@ -107,27 +107,6 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 	@Override
 	public void setRequestTitle(String title) {
 		requestTitle.setText(title);
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionYes() {
-		return anotherInstitutionYes.getValue();
-	}
-
-	@Override
-	public Boolean getAnotherInstitutionNo() {
-		return anotherInstitutionNo.getValue();
-	}
-
-	@Override
-	public void setAnotherInstitution(Boolean another) {
-		if (another) {
-			anotherInstitutionYes.setValue(true);
-			anotherInstitutionNo.setValue(false);
-		} else {
-			anotherInstitutionYes.setValue(false);
-			anotherInstitutionNo.setValue(true);
-		}
 	}
 
 	@Override
@@ -180,8 +159,6 @@ public class RequestEditView extends Composite implements RequestEditPresenter.D
 
 	@UiHandler("submitRequest")
 	protected void onNextClick(ClickEvent event) {
-		if (presenter != null) {
-			presenter.submitRequest();
-		}
+		getUiHandlers().submitRequest();
 	}
 }

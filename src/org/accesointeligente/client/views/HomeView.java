@@ -19,49 +19,44 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.HomePresenter;
-import org.accesointeligente.client.presenters.HomePresenterIface;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestListType;
+import org.accesointeligente.client.uihandlers.HomeUiHandlers;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class HomeView extends Composite implements HomePresenter.Display {
+public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 	private static HomeViewUiBinder uiBinder = GWT.create(HomeViewUiBinder.class);
 	interface HomeViewUiBinder extends UiBinder<Widget, HomeView> {}
+	private final Widget widget;
 
 	@UiField FocusPanel requestFormLink;
 	@UiField FocusPanel requestListLink;
 	@UiField FlowPanel lastResponses;
 
-	private HomePresenterIface presenter;
-
 	public HomeView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
-	}
-
-	@Override
-	public void setPresenter(HomePresenterIface presenter) {
-		this.presenter = presenter;
+		return widget;
 	}
 
 	@UiHandler("requestFormLink")
 	public void onRequestFormLinkClick(ClickEvent event) {
-		History.newItem(AppPlace.REQUEST.getToken());
+		getUiHandlers().gotoRequest();
 	}
 
-   @UiHandler("requestListLink")
-   public void onRequestListLinkClick(ClickEvent event) {
-           History.newItem(AppPlace.LIST.getToken() + "?type=" + RequestListType.GENERAL.getType());
-   }
+	@UiHandler("requestListLink")
+	public void onRequestListLinkClick(ClickEvent event) {
+		getUiHandlers().gotoList();
+	}
 }

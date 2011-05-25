@@ -35,11 +35,6 @@
 				<th>Estado</th>
 				<th>Título de la solicitud</th>
 				<th>Institución</th>
-				<th>
-					Solicita a
-					<br />
-					otro organismo
-				</th>
 				<th>Fecha</th>
 			</tr>
 			<tr>
@@ -51,12 +46,6 @@
 				</td>
 				<td class="{style.institution}">
 					<g:Label ui:field="institutionName"></g:Label>
-				</td>
-				<td>
-					<g:RadioButton ui:field="anotherInstitutionYes" name="anotherInstitution"
-						enabled="false">Si</g:RadioButton>
-					<g:RadioButton ui:field="anotherInstitutionNo" name="anotherInstitution"
-						enabled="false">No</g:RadioButton>
 				</td>
 				<td>
 					<g:Label ui:field="requestDate"></g:Label>

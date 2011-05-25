@@ -31,17 +31,17 @@ import com.google.gwt.event.shared.EventBus;
 
 import javax.inject.Inject;
 
-public class StatisticsPresenter extends Presenter<StatisticsPresenter.MyView, StatisticsPresenter.MyProxy> {
+public class UserGuidePresenter extends Presenter<UserGuidePresenter.MyView, UserGuidePresenter.MyProxy> {
 	public interface MyView extends View {
 	}
 
 	@ProxyCodeSplit
-	@NameToken(AppPlace.STATISTICS)
-	public interface MyProxy extends ProxyPlace<StatisticsPresenter> {
+	@NameToken(AppPlace.GUIDE)
+	public interface MyProxy extends ProxyPlace<UserGuidePresenter> {
 	}
 
 	@Inject
-	public StatisticsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+	public UserGuidePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
 	}
 

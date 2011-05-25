@@ -12,13 +12,18 @@
 
   <!-- Other module inherits                                      -->
   <inherits name='com.google.gwt.inject.Inject'/>
-  <inherits name='net.customware.gwt.presenter.Presenter' />
+  <inherits name="com.gwtplatform.mvp.Mvp" />
   <inherits name="net.sf.gilead.Gilead4Gwt"/>
   <inherits name="com.google.gwt.i18n.I18N"/>
   <inherits name='org.cobogw.gwt.user.User' />
 
   <extend-property name="locale" values="es" />
   <set-property name="locale" value="es"/>
+
+  <set-configuration-property name="UiBinder.useSafeHtmlTemplates" value="true" />
+
+  <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
+  <set-configuration-property name="gin.ginjector" value="org.accesointeligente.client.inject.AppInjector" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.accesointeligente.client.AccesoInteligente'/>

@@ -16,8 +16,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.presenters;
+package org.accesointeligente.client.uihandlers;
 
-public interface MainPresenterIface {
-	void clearNotifications();
+import org.accesointeligente.shared.NotificationEventType;
+
+import com.gwtplatform.mvp.client.UiHandlers;
+
+public interface PasswordRecoveryUiHandlers extends UiHandlers {
+	void recoverPassword();
+	void showNotification(String message, NotificationEventType type);
 }

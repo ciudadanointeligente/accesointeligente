@@ -18,76 +18,103 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.services.RequestServiceAsync;
+import org.accesointeligente.client.uihandlers.RequestListUiHandlers;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.User;
 import org.accesointeligente.model.UserFavoriteRequest;
 import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.ContentSlot;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.*;
 
-import com.google.gwt.user.client.History;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.inject.Inject;
 
 import java.util.List;
-import java.util.Map;
 
-public class RequestListPresenter extends CustomWidgetPresenter<RequestListPresenter.Display> implements RequestListPresenterIface, RequestSearchEventHandler {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(RequestListPresenterIface presenter);
+import javax.inject.Inject;
+
+public class RequestListPresenter extends Presenter<RequestListPresenter.MyView, RequestListPresenter.MyProxy> implements RequestListUiHandlers, RequestSearchEventHandler {
+	@ContentSlot
+	public static final Type<RevealContentHandler<?>> SLOT_SEARCH_WIDGET = new Type<RevealContentHandler<?>>();
+
+	public interface MyView extends View, HasUiHandlers<RequestListUiHandlers> {
 		void setListTitle(String title);
 		void setListTitleStyle(String style);
-		void setSearchWidget(Widget widget);
-		void removeSearchWidget();
 		void initTable(AbstractDataProvider<Request> data);
 		void initTableColumns();
 		void initTableFavColumn();
 		void initTableReceiptColumn();
 		void removeColumns();
 		void setRequests(AbstractDataProvider<Request> data);
-		void setSearchPanelVisible(Boolean visible);
+		void setSearchButtonVisible(Boolean visible);
+		void setSearchHandleVisible(Boolean visible);
 		void setSearchToolTipVisible(Boolean visible);
 	}
+
+	@ProxyCodeSplit
+	@NameToken(AppPlace.LIST)
+	public interface MyProxy extends ProxyPlace<RequestListPresenter> {
+	}
+
+	@Inject
+	private PlaceManager placeManager;
+
+	@Inject
+	private RequestSearchPresenter requestSearchPresenter;
+
+	@Inject
+	private RequestServiceAsync requestService;
 
 	private String listType;
 	private AbstractDataProvider<Request> requestData;
 
 	@Inject
-	public RequestListPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
-	}
-
-	@Override
-	public void setup() {
-		RequestSearchPresenter presenter = presenterInjector.getRequestSearchPresenter();
-		presenter.setup();
-		display.setSearchPanelVisible(false);
-		display.setSearchToolTipVisible(false);
-		display.setSearchWidget(presenter.getDisplay().asWidget());
-		display.removeColumns();
-		requestData = new ListDataProvider<Request>();
-		display.initTable(requestData);
+	public RequestListPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
 	protected void onBind() {
-		display.setPresenter(this);
-		eventBus.addHandler(RequestSearchEvent.TYPE, this);
+		addHandler(RequestSearchEvent.TYPE, this);
 	}
 
 	@Override
-	protected void onUnbind() {
+	public void onReset() {
+		clearSlot(SLOT_SEARCH_WIDGET);
+		getView().setSearchButtonVisible(false);
+		getView().setSearchHandleVisible(false);
+		getView().setSearchToolTipVisible(false);
+		getView().removeColumns();
+		requestData = new ListDataProvider<Request>();
+		getView().initTable(requestData);
+
+		if (listType != null) {
+			loadColumns(listType);
+			// FIXME: this only loads a maximum of 300 request
+			loadRequests(0, 300, listType);
+		}
 	}
 
 	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
+	}
+
+	@Override
+	public void prepareFromRequest(PlaceRequest request) {
+		listType = request.getParameter("type", null);
 	}
 
 	public AbstractDataProvider<Request> getRequestData() {
@@ -102,15 +129,15 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	public void loadColumns(String type) {
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
 			if (ClientSessionUtil.checkSession() == true) {
-				display.initTableReceiptColumn();
+				getView().initTableReceiptColumn();
 			}
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
 			if (ClientSessionUtil.checkSession() == true) {
-				display.initTableFavColumn();
+				getView().initTableFavColumn();
 			}
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
 			if (ClientSessionUtil.checkSession() == true) {
-				display.initTableFavColumn();
+				getView().initTableFavColumn();
 			}
 		}
 	}
@@ -119,107 +146,113 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	public void loadRequests(Integer offset, Integer limit, String type) {
 		listType = type;
 		requestData = new ListDataProvider<Request>();
-		display.setRequests(requestData);
+		getView().setRequests(requestData);
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
-			display.setListTitle("Mis solicitudes");
-			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
+			getView().setListTitle("Mis solicitudes");
+			getView().setListTitleStyle(RequestListType.MYREQUESTS.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				serviceInjector.getRequestService().getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+				requestService.getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						History.newItem(AppPlace.HOME.getToken());
+						placeManager.revealDefaultPlace();
 					}
 
 					@Override
 					public void onSuccess(List<Request> results) {
 						requestData = new ListDataProvider<Request>(results);
-						display.setRequests(requestData);
+						getView().setRequests(requestData);
 					}
 				});
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
 			}
 
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
-			display.setListTitle("Mis favoritas");
-			display.setListTitleStyle(RequestListType.FAVORITES.getType());
+			getView().setListTitle("Mis favoritas");
+			getView().setListTitleStyle(RequestListType.FAVORITES.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+				requestService.getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						History.newItem(AppPlace.HOME.getToken());
+						placeManager.revealDefaultPlace();
+
 					}
 
 					@Override
 					public void onSuccess(List<Request> results) {
 						requestData = new ListDataProvider<Request>(results);
-						display.setRequests(requestData);
+						getView().setRequests(requestData);
 					}
 				});
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
+
 			}
 
 		} else if (type.equals(RequestListType.DRAFTS.getType())) {
-			display.setListTitle("Mis borradores");
-			display.setListTitleStyle(RequestListType.DRAFTS.getType());
-			display.removeSearchWidget();
+			getView().setListTitle("Mis borradores");
+			getView().setListTitleStyle(RequestListType.DRAFTS.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				serviceInjector.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
+				requestService.getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						History.newItem(AppPlace.HOME.getToken());
+						placeManager.revealDefaultPlace();
+
 					}
 
 					@Override
 					public void onSuccess(List<Request> results) {
 						requestData = new ListDataProvider<Request>(results);
-						display.setRequests(requestData);
+						getView().setRequests(requestData);
 					}
 				});
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
+
 			}
 
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
-			display.setListTitle("Listado de solicitudes");
-			display.setListTitleStyle(RequestListType.GENERAL.getType());
-			display.setSearchPanelVisible(true);
+			getView().setListTitle("Listado de solicitudes");
+			getView().setListTitleStyle(RequestListType.GENERAL.getType());
+			setInSlot(SLOT_SEARCH_WIDGET, requestSearchPresenter);
+			getView().setSearchButtonVisible(true);
+			getView().setSearchHandleVisible(true);
 
-			serviceInjector.getRequestService().getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
+			requestService.getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
 					showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-					History.newItem(AppPlace.HOME.getToken());
+					placeManager.revealDefaultPlace();
+
 				}
 
 				@Override
 				public void onSuccess(List<Request> results) {
 					// TODO: implement style for tooltip
 					if (results.size() < 1) {
-						display.setSearchToolTipVisible(true);
+						getView().setSearchToolTipVisible(true);
 					}
 					requestData = new ListDataProvider<Request>(results);
-					display.setRequests(requestData);
+					getView().setRequests(requestData);
 				}
 			});
 		} else {
 			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
-			History.newItem(AppPlace.HOME.getToken());
+			placeManager.revealDefaultPlace();
 		}
 	}
 
@@ -227,109 +260,116 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 	public void loadRequests(Integer offset, Integer limit, String type, RequestSearchParams params) {
 
 		if (type.equals(RequestListType.MYREQUESTS.getType())) {
-			display.setListTitle("Mis solicitudes");
-			display.setListTitleStyle(RequestListType.MYREQUESTS.getType());
+			getView().setListTitle("Mis solicitudes");
+			getView().setListTitleStyle(RequestListType.MYREQUESTS.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				serviceInjector.getRequestService().getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+				requestService.getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						History.newItem(AppPlace.HOME.getToken());
+						placeManager.revealDefaultPlace();
+
 					}
 
 					@Override
 					public void onSuccess(List<Request> results) {
 						requestData = new ListDataProvider<Request>(results);
-						display.setRequests(requestData);
+						getView().setRequests(requestData);
 					}
 				});
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
+
 			}
 
 		} else if (type.equals(RequestListType.FAVORITES.getType())) {
-			display.setListTitle("Mis favoritas");
-			display.setListTitleStyle(RequestListType.FAVORITES.getType());
+			getView().setListTitle("Mis favoritas");
+			getView().setListTitleStyle(RequestListType.FAVORITES.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				serviceInjector.getRequestService().getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+				requestService.getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						History.newItem(AppPlace.HOME.getToken());
+						placeManager.revealDefaultPlace();
+
 					}
 
 					@Override
 					public void onSuccess(List<Request> results) {
 						requestData = new ListDataProvider<Request>(results);
-						display.setRequests(requestData);
+						getView().setRequests(requestData);
 					}
 				});
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
+
 			}
 
 		} else if (type.equals(RequestListType.DRAFTS.getType())) {
-			display.setListTitle("Mis borradores");
-			display.setListTitleStyle(RequestListType.DRAFTS.getType());
+			getView().setListTitle("Mis borradores");
+			getView().setListTitleStyle(RequestListType.DRAFTS.getType());
 
 			if (ClientSessionUtil.checkSession()) {
-				serviceInjector.getRequestService().getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
+				requestService.getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						History.newItem(AppPlace.HOME.getToken());
+						placeManager.revealDefaultPlace();
+
 					}
 
 					@Override
 					public void onSuccess(List<Request> results) {
 						requestData = new ListDataProvider<Request>(results);
-						display.setRequests(requestData);
+						getView().setRequests(requestData);
 					}
 				});
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				History.newItem(AppPlace.HOME.getToken());
+				placeManager.revealDefaultPlace();
+
 			}
 
 		} else if (type.equals(RequestListType.GENERAL.getType())) {
-			display.setListTitle("Listado de solicitudes");
-			display.setListTitleStyle(RequestListType.GENERAL.getType());
+			getView().setListTitle("Listado de solicitudes");
+			getView().setListTitleStyle(RequestListType.GENERAL.getType());
 
-			serviceInjector.getRequestService().getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
+			requestService.getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
 					showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-					History.newItem(AppPlace.HOME.getToken());
+					placeManager.revealDefaultPlace();
+
 				}
 
 				@Override
 				public void onSuccess(List<Request> results) {
 					// TODO: implement style for tooltip
 					if (results.size() < 1) {
-						display.setSearchToolTipVisible(true);
+						getView().setSearchToolTipVisible(true);
 					}
 					requestData = new ListDataProvider<Request>(results);
-					display.setRequests(requestData);
+					getView().setRequests(requestData);
 				}
 			});
 		} else {
 			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
-			History.newItem(AppPlace.HOME.getToken());
+			placeManager.revealDefaultPlace();
 		}
 	}
 
 	@Override
 	public void requestToggleFavorite(final Request request) {
 		final User user = ClientSessionUtil.getUser();
-		serviceInjector.getRequestService().getFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
+		requestService.getFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -339,7 +379,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 			@Override
 			public void onSuccess(UserFavoriteRequest result) {
 				if (result == null) {
-					serviceInjector.getRequestService().createFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
+					requestService.createFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
@@ -348,8 +388,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 						@Override
 						public void onSuccess(UserFavoriteRequest result) {
-							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
-							loadRequests(0, 300, parameters.get("type"));
+							loadRequests(0, 300, listType);
 							showNotification("Se ha agregado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
@@ -358,7 +397,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 					favorite.setRequest(request);
 					favorite.setUser(user);
 
-					serviceInjector.getRequestService().deleteFavoriteRequest(favorite, new AsyncCallback<Void>() {
+					requestService.deleteFavoriteRequest(favorite, new AsyncCallback<Void>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
@@ -367,8 +406,7 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 
 						@Override
 						public void onSuccess(Void result) {
-							Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
-							loadRequests(0, 300, parameters.get("type"));
+							loadRequests(0, 300, listType);
 							showNotification("Se ha eliminado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
@@ -383,35 +421,39 @@ public class RequestListPresenter extends CustomWidgetPresenter<RequestListPrese
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
 	}
 
 	@Override
 	public void showRequest(Integer requestId) {
 		if (listType.equals(RequestListType.DRAFTS.getType())) {
-			History.newItem(AppPlace.REQUESTSTATUS.getToken() + "?requestId=" + requestId.toString());
+			placeManager.revealPlace(new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", requestId.toString()));
 		} else {
-			History.newItem(AppPlace.RESPONSE.getToken() + "?requestId=" + requestId.toString());
+			placeManager.revealPlace(new PlaceRequest(AppPlace.RESPONSE).with("requestId", requestId.toString()));
 		}
 	}
 
 	@Override
 	public void onSearch(RequestSearchEvent event) {
-		Map<String, String> parameters = AppController.getHistoryTokenParameters(AppController.getCurrentHistoryToken());
-		String type = parameters.get("type");
-		loadRequests(0, 100, type, event.getParams());
+		loadRequests(0, 100, listType, event.getParams());
 	}
 
+	// FIXME: use PlaceRequest instead lf URL redirections
 	@Override
 	public String getRequestBaseUrlPlace() {
 		String baseUrl;
 
 		if (listType.equals(RequestListType.DRAFTS.getType())) {
-			baseUrl = "#" + AppPlace.REQUESTSTATUS.getToken() + "?requestId=";
+			baseUrl = "#" + AppPlace.REQUESTSTATUS + ";requestId=";
 		} else {
-			baseUrl = "#" + AppPlace.RESPONSE.getToken() + "?requestId=";
+			baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
 		}
 
 		return baseUrl;
+	}
+
+	@Override
+	public void gotoRequest() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.REQUEST));
 	}
 }

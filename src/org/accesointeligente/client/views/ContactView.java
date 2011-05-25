@@ -19,9 +19,11 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.ContactPresenter;
-import org.accesointeligente.client.presenters.ContactPresenterIface;
+import org.accesointeligente.client.uihandlers.ContactUiHandlers;
 import org.accesointeligente.shared.NotificationEventType;
 import org.accesointeligente.shared.Validator;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -30,31 +32,25 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 
-public class ContactView extends Composite implements ContactPresenter.Display{
+public class ContactView extends ViewWithUiHandlers<ContactUiHandlers> implements ContactPresenter.MyView {
 	private static ContactViewUiBinder uiBinder = GWT.create(ContactViewUiBinder.class);
 	interface ContactViewUiBinder extends UiBinder<Widget, ContactView> {}
+	private final Widget widget;
 
 	@UiField FormPanel contactFormPanel;
 	@UiField TextBox contactName;
 	@UiField TextBox contactEmail;
-	@UiField TextBox contactSubject;
+	@UiField ListBox contactSubject;
 	@UiField TextArea contactMessage;
 	@UiField Button send;
 
-	private ContactPresenterIface presenter;
-
 	public ContactView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
-	}
-
-	@Override
-	public void setPresenter(ContactPresenterIface presenter) {
-		this.presenter = presenter;
+		return widget;
 	}
 
 	@Override
@@ -79,12 +75,16 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 
 	@Override
 	public String getSubject() {
-		return contactSubject.getText();
+		return contactSubject.getItemText(contactSubject.getSelectedIndex());
 	}
 
 	@Override
-	public void setSubject(String subject) {
-		contactSubject.setText(subject);
+	public void subjectAddOptions() {
+		contactSubject.addItem("Selecciona tu asunto", "0");
+		contactSubject.addItem("Reclamo", "1");
+		contactSubject.addItem("Sugerencia", "2");
+		contactSubject.addItem("Consulta sobre uso del sitio", "3");
+		contactSubject.addItem("Consulta sobre el funcionamiento de la ley de transparencia", "4");
 	}
 
 	@Override
@@ -105,9 +105,7 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 	@Override
 	public Boolean checkEmail() {
 		if (!Validator.validateEmail(getEmail())) {
-			if (presenter != null) {
-				presenter.showNotification("Dirección de correo no valida", NotificationEventType.ERROR);
-			}
+			getUiHandlers().showNotification("Dirección de correo no valida", NotificationEventType.ERROR);
 			return false;
 		}
 		return true;
@@ -115,7 +113,16 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 
 	@Override
 	public Boolean checkContactForm() {
-		if (getName() == null || getEmail() == null || !checkEmail() || getSubject() == null || getMessage() == null) {
+		if (getName() == null || getEmail() == null || checkEmail() || !checkSubject() || getMessage() == null) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean checkSubject() {
+		if (contactSubject.getSelectedIndex() < 1) {
+			getUiHandlers().showNotification("Asunto no válido, seleccione uno según el contexto de su mensaje", NotificationEventType.ERROR);
 			return false;
 		}
 		return true;
@@ -128,15 +135,20 @@ public class ContactView extends Composite implements ContactPresenter.Display{
 
 	@UiHandler("send")
 	public void onSendClick(ClickEvent event) {
-		if(presenter != null || checkContactForm()) {
-			presenter.saveContactForm();
+		if (checkContactForm()) {
+			getUiHandlers().saveContactForm();
 		}
 	}
 
 	@UiHandler("send")
 	public void onKeyDown(KeyDownEvent event) {
-		if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER || presenter != null || checkContactForm()) {
-			presenter.saveContactForm();
+		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER || checkContactForm()) {
+			getUiHandlers().saveContactForm();
 		}
+	}
+
+	@UiHandler("contactSubject")
+	public void onSubjectBlur(BlurEvent event) {
+		checkSubject();
 	}
 }

@@ -19,79 +19,86 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.services.ContactServiceAsync;
+import org.accesointeligente.client.uihandlers.ContactUiHandlers;
 import org.accesointeligente.model.Contact;
 import org.accesointeligente.model.User;
-import org.accesointeligente.shared.NotificationEvent;
-import org.accesointeligente.shared.NotificationEventParams;
-import org.accesointeligente.shared.NotificationEventType;
+import org.accesointeligente.shared.*;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
 import java.util.Date;
 
-public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Display> implements ContactPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(ContactPresenterIface presenter);
+public class ContactPresenter extends Presenter<ContactPresenter.MyView, ContactPresenter.MyProxy> implements ContactUiHandlers {
+	public interface MyView extends View, HasUiHandlers<ContactUiHandlers> {
 		String getName();
 		void setName(String name);
 		String getEmail();
 		void setEmail(String email);
 		String getSubject();
-		void setSubject(String subject);
 		String getMessage();
 		void setMessage(String message);
 		void cleanContactForm();
 		Boolean checkEmail();
 		Boolean checkContactForm();
+		Boolean checkSubject();
+		void subjectAddOptions();
+	}
+
+	@ProxyCodeSplit
+	@NameToken(AppPlace.CONTACT)
+	public interface MyProxy extends ProxyPlace<ContactPresenter> {
 	}
 
 	@Inject
-	public ContactPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private ContactServiceAsync contactService;
+
+	@Inject
+	public ContactPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
+	public void onReset() {
 		checkUserSession();
+		getView().subjectAddOptions();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 
 	@Override
 	public void checkUserSession() {
 		if (ClientSessionUtil.checkSession()) {
 			User user = (User) ClientSessionUtil.getUser();
-			display.setName(user.getFirstName() + " " + user.getLastName());
-			display.setEmail(user.getEmail());
+			getView().setName(user.getFirstName() + " " + user.getLastName());
+			getView().setEmail(user.getEmail());
 		}
 	}
 
 	@Override
 	public void saveContactForm() {
 		Contact contact = new Contact();
-		contact.setName(display.getName());
-		contact.setEmail(display.getEmail());
-		contact.setSubject(display.getSubject());
-		contact.setMessage(display.getMessage());
+		contact.setName(getView().getName());
+		contact.setEmail(getView().getEmail());
+		contact.setSubject(getView().getSubject());
+		contact.setMessage(getView().getMessage());
 		contact.setDate(new Date());
 
-		serviceInjector.getContactService().saveContact(contact, new AsyncCallback<Contact>() {
+		contactService.saveContact(contact, new AsyncCallback<Contact>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -101,7 +108,7 @@ public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Dis
 			@Override
 			public void onSuccess(Contact result) {
 				showNotification("Se ha enviado su mensaje, muchas gracias por comunicarse con nosotros", NotificationEventType.SUCCESS);
-				display.cleanContactForm();
+				getView().cleanContactForm();
 				checkUserSession();
 			}
 		});
@@ -113,6 +120,11 @@ public class ContactPresenter extends CustomWidgetPresenter<ContactPresenter.Dis
 		params.setMessage(message);
 		params.setType(type);
 		params.setDuration(NotificationEventParams.DURATION_NORMAL);
-		eventBus.fireEvent(new NotificationEvent(params));
+		fireEvent(new NotificationEvent(params));
+	}
+
+	@Override
+	public void subjectAddOptions() {
+		getView().subjectAddOptions();
 	}
 }

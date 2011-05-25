@@ -9,7 +9,7 @@
 			<g:HTMLPanel ui:field="navigationPanel" addStyleNames="headSolicitud noMargin">
 				<g:Anchor ui:field="requestListLink" addStyleNames="titleH1">
 					&lt;&lt; Volver a la lista
-			</g:Anchor>
+				</g:Anchor>
 			</g:HTMLPanel>
 			<g:HTMLPanel addStyleNames="{style.wBlockDark}">
 				<table>

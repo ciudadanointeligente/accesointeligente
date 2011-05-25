@@ -21,11 +21,12 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.*;
 import org.accesointeligente.client.CustomActionImageCell.Delegate;
 import org.accesointeligente.client.presenters.RequestListPresenter;
-import org.accesointeligente.client.presenters.RequestListPresenterIface;
+import org.accesointeligente.client.uihandlers.RequestListUiHandlers;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.model.UserFavoriteRequest;
-import org.accesointeligente.shared.AppPlace;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,7 +35,6 @@ import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.AbstractDataProvider;
@@ -42,11 +42,10 @@ import com.google.gwt.view.client.AbstractDataProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestListView extends Composite implements RequestListPresenter.Display {
+public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> implements RequestListPresenter.MyView {
 	private static RequestListViewUiBinder uiBinder = GWT.create(RequestListViewUiBinder.class);
-
-	interface RequestListViewUiBinder extends UiBinder<Widget, RequestListView> {
-	}
+	interface RequestListViewUiBinder extends UiBinder<Widget, RequestListView> {}
+	private final Widget widget;
 
 	@UiField Anchor requestLink;
 	@UiField HTMLPanel searchToolTip;
@@ -56,21 +55,27 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	@UiField CellTable<Request> requestTable;
 	@UiField CustomSimplePager requestPager;
 
-	private RequestListPresenterIface presenter;
-
 	public RequestListView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 		ResourceBundle.INSTANCE.RequestListView().ensureInjected();
 	}
 
 	@Override
 	public Widget asWidget() {
-		return this;
+		return widget;
 	}
 
 	@Override
-	public void setPresenter(RequestListPresenterIface presenter) {
-		this.presenter = presenter;
+	public void setInSlot(Object slot, Widget content) {
+		if (RequestListPresenter.SLOT_SEARCH_WIDGET.equals(slot)) {
+			searchPanel.clear();
+
+			if (content != null) {
+				searchPanel.add(content);
+			}
+		} else {
+			super.setInSlot(slot, content);
+		}
 	}
 
 	@Override
@@ -84,21 +89,10 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
-	public void setSearchWidget(Widget widget) {
-		searchPanel.clear();
-		searchPanel.add(widget);
-	}
-
-	@Override
-	public void removeSearchWidget() {
-		searchPanel.setVisible(false);
-		searchPanelHandle.setVisible(false);
-	}
-
-	@Override
 	public void initTable(AbstractDataProvider<Request> data) {
 		initTableColumns();
 		setRequests(data);
+		requestPager.firstPage();
 		requestPager.setDisplay(requestTable);
 	}
 
@@ -123,7 +117,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 			public AnchorCellParams getValue(Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				params.setUrl(presenter.getRequestBaseUrlPlace() + request.getId());
+				params.setUrl(getUiHandlers().getRequestBaseUrlPlace() + request.getId());
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}
@@ -203,7 +197,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
 			public void execute(CustomActionImageCellParams params) {
-				presenter.showRequest(((Request) params.getValue()).getId());
+				getUiHandlers().showRequest(((Request) params.getValue()).getId());
 			}
 		})) {
 			@Override
@@ -225,7 +219,7 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
 			public void execute(CustomActionImageCellParams params) {
-				presenter.requestToggleFavorite((Request) params.getValue());
+				getUiHandlers().requestToggleFavorite((Request) params.getValue());
 			}
 		})) {
 			@Override
@@ -285,8 +279,13 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 	}
 
 	@Override
-	public void setSearchPanelVisible(Boolean visible) {
+	public void setSearchHandleVisible(Boolean visible) {
 		searchPanel.setVisible(visible);
+	}
+
+	@Override
+	public void setSearchButtonVisible(Boolean visible) {
+		searchPanelHandle.setVisible(visible);
 	}
 
 	@Override
@@ -303,11 +302,11 @@ public class RequestListView extends Composite implements RequestListPresenter.D
 
 	@UiHandler("requestLink")
 	public void onRequestListLinkClick(ClickEvent event) {
-		History.newItem(AppPlace.REQUEST.getToken());
+		getUiHandlers().gotoRequest();
 	}
 
 	@UiHandler("searchPanelHandle")
 	public void onSearchPanelHandleClick(ClickEvent event) {
-		setSearchPanelVisible(!searchPanel.isVisible());
+		setSearchHandleVisible(!searchPanel.isVisible());
 	}
 }

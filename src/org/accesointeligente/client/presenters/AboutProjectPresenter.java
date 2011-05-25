@@ -18,36 +18,35 @@
  */
 package org.accesointeligente.client.presenters;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import org.accesointeligente.shared.AppPlace;
 
-import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
-public class AboutProjectPresenter extends CustomWidgetPresenter<AboutProjectPresenter.Display> implements AboutProjectPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(AboutProjectPresenterIface presenter);
+import com.google.gwt.event.shared.EventBus;
+
+import javax.inject.Inject;
+
+public class AboutProjectPresenter extends Presenter<AboutProjectPresenter.MyView, AboutProjectPresenter.MyProxy> {
+	public interface MyView extends View {
+	}
+
+	@ProxyCodeSplit
+	@NameToken(AppPlace.ABOUTPROJECT)
+	public interface MyProxy extends ProxyPlace<AboutProjectPresenter> {
 	}
 
 	@Inject
-	public AboutProjectPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	public AboutProjectPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
 	}
 
 	@Override
-	public void setup() {
-	}
-
-	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
 	}
 }

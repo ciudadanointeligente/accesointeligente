@@ -16,21 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client;
+package org.accesointeligente.client.uihandlers;
 
-import org.accesointeligente.client.inject.AppInjector;
+import com.gwtplatform.mvp.client.UiHandlers;
 
-import com.gwtplatform.mvp.client.DelayedBindRegistry;
-
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-
-public class AccesoInteligente implements EntryPoint {
-	public final AppInjector appInjector = GWT.create(AppInjector.class);
-
-	@Override
-	public void onModuleLoad() {
-		DelayedBindRegistry.bind(appInjector);
-		appInjector.getPlaceManager().revealCurrentPlace();
-	}
+public interface RequestSearchUiHandlers extends UiHandlers {
+	void getInstitutions();
+	void requestSearch();
 }

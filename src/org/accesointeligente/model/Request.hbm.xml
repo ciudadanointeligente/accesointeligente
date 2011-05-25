@@ -21,7 +21,6 @@
 			<key column="requestId"/>
 			<many-to-many column="categoryId" class="RequestCategory"/>
 		</set>
-		<property name="anotherInstitution"/>
 		<property name="status">
 			<type name="org.accesointeligente.server.EnumUserType">
 				<param name="enumClassName">org.accesointeligente.shared.RequestStatus</param>

@@ -1,34 +1,65 @@
+/**
+ * Acceso Inteligente
+ *
+ * Copyright (C) 2010-2011 Fundación Ciudadano Inteligente
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.accesointeligente.client.inject;
 
+import org.accesointeligente.client.AnonymousGatekeeper;
+import org.accesointeligente.client.MyPlaceManager;
+import org.accesointeligente.client.UserGatekeeper;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.views.*;
 
-import net.customware.gwt.presenter.client.DefaultEventBus;
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.gin.AbstractPresenterModule;
+import com.gwtplatform.mvp.client.DefaultProxyFailureHandler;
+import com.gwtplatform.mvp.client.RootPresenter;
+import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+import com.gwtplatform.mvp.client.proxy.*;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.inject.Singleton;
 
 public class PresenterModule extends AbstractPresenterModule {
 	@Override
 	protected void configure() {
-		bind(EventBus.class).to(DefaultEventBus.class).in(Singleton.class);
-		bindPresenter(MainPresenter.class, MainPresenter.Display.class, MainView.class);
-		bindPresenter(HomePresenter.class, HomePresenter.Display.class, HomeView.class);
-		bindPresenter(RequestPresenter.class, RequestPresenter.Display.class, RequestView.class);
-		bindPresenter(RequestStatusPresenter.class, RequestStatusPresenter.Display.class, RequestStatusView.class);
-		bindPresenter(RequestEditPresenter.class, RequestEditPresenter.Display.class, RequestEditView.class);
-		bindPresenter(RequestResponsePresenter.class, RequestResponsePresenter.Display.class, RequestResponseView.class);
-		bindPresenter(RequestListPresenter.class, RequestListPresenter.Display.class, RequestListView.class);
-		bindPresenter(RequestSearchPresenter.class, RequestSearchPresenter.Display.class, RequestSearchView.class);
-		bindPresenter(StatisticsPresenter.class, StatisticsPresenter.Display.class, StatisticsView.class);
-		bindPresenter(AboutProjectPresenter.class, AboutProjectPresenter.Display.class, AboutProjectView.class);
-		bindPresenter(UserProfileEditPresenter.class, UserProfileEditPresenter.Display.class, UserProfileEditView.class);
-		bindPresenter(ContactPresenter.class, ContactPresenter.Display.class, ContactView.class);
-		bindPresenter(LoginPresenter.class, LoginPresenter.Display.class, LoginView.class);
-		bindPresenter(RegisterPresenter.class, RegisterPresenter.Display.class, RegisterView.class);
-		bindPresenter(PasswordRecoveryPresenter.class, PasswordRecoveryPresenter.Display.class, PasswordRecoveryView.class);
-		bindPresenter(UserGuideVideoPresenter.class, UserGuideVideoPresenter.Display.class, UserGuideVideoView.class);
-		bindPresenter(TermsAndConditionsPresenter.class, TermsAndConditionsPresenter.Display.class, TermsAndConditionsView.class);
+		bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
+		bind(PlaceManager.class).to(MyPlaceManager.class).in(Singleton.class);
+		bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
+		bind(UserGatekeeper.class).in(Singleton.class);
+		bind(AnonymousGatekeeper.class).in(Singleton.class);
+		bind(RootPresenter.class).asEagerSingleton();
+		bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
+		bindPresenter(MainPresenter.class, MainPresenter.MyView.class, MainView.class, MainPresenter.MyProxy.class);
+		bindPresenter(HomePresenter.class, HomePresenter.MyView.class, HomeView.class, HomePresenter.MyProxy.class);
+		bindPresenter(RequestPresenter.class, RequestPresenter.MyView.class, RequestView.class, RequestPresenter.MyProxy.class);
+		bindPresenter(RequestStatusPresenter.class, RequestStatusPresenter.MyView.class, RequestStatusView.class, RequestStatusPresenter.MyProxy.class);
+		bindPresenter(RequestEditPresenter.class, RequestEditPresenter.MyView.class, RequestEditView.class, RequestEditPresenter.MyProxy.class);
+		bindPresenter(RequestResponsePresenter.class, RequestResponsePresenter.MyView.class, RequestResponseView.class, RequestResponsePresenter.MyProxy.class);
+		bindPresenter(RequestListPresenter.class, RequestListPresenter.MyView.class, RequestListView.class, RequestListPresenter.MyProxy.class);
+		bindPresenter(StatisticsPresenter.class, StatisticsPresenter.MyView.class, StatisticsView.class, StatisticsPresenter.MyProxy.class);
+		bindPresenter(AboutProjectPresenter.class, AboutProjectPresenter.MyView.class, AboutProjectView.class, AboutProjectPresenter.MyProxy.class);
+		bindPresenter(UserProfileEditPresenter.class, UserProfileEditPresenter.MyView.class, UserProfileEditView.class, UserProfileEditPresenter.MyProxy.class);
+		bindPresenter(ContactPresenter.class, ContactPresenter.MyView.class, ContactView.class, ContactPresenter.MyProxy.class);
+		bindPresenter(LoginPresenter.class, LoginPresenter.MyView.class, LoginView.class, LoginPresenter.MyProxy.class);
+		bindPresenter(RegisterPresenter.class, RegisterPresenter.MyView.class, RegisterView.class, RegisterPresenter.MyProxy.class);
+		bindPresenter(PasswordRecoveryPresenter.class, PasswordRecoveryPresenter.MyView.class, PasswordRecoveryView.class, PasswordRecoveryPresenter.MyProxy.class);
+		bindPresenter(UserGuideVideoPresenter.class, UserGuideVideoPresenter.MyView.class, UserGuideVideoView.class, UserGuideVideoPresenter.MyProxy.class);
+		bindPresenter(UserGuidePresenter.class, UserGuidePresenter.MyView.class, UserGuideView.class, UserGuidePresenter.MyProxy.class);
+		bindPresenter(TermsAndConditionsPresenter.class, TermsAndConditionsPresenter.MyView.class, TermsAndConditionsView.class, TermsAndConditionsPresenter.MyProxy.class);
+		bindPresenterWidget(RequestSearchPresenter.class, RequestSearchPresenter.MyView.class, RequestSearchView.class);
 	}
 }

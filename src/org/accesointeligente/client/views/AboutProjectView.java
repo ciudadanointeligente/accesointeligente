@@ -19,25 +19,24 @@
 package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.AboutProjectPresenter;
-import org.accesointeligente.client.presenters.AboutProjectPresenterIface;
+
+import com.gwtplatform.mvp.client.ViewImpl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AboutProjectView extends Composite implements AboutProjectPresenter.Display {
+public class AboutProjectView extends ViewImpl implements AboutProjectPresenter.MyView {
 	private static AboutProjectViewUiBinder uiBinder = GWT.create(AboutProjectViewUiBinder.class);
 	interface AboutProjectViewUiBinder extends UiBinder<Widget, AboutProjectView> {}
-
-	AboutProjectPresenterIface presenter;
+	private final Widget widget;
 
 	public AboutProjectView() {
-		initWidget(uiBinder.createAndBindUi(this));
+		widget = uiBinder.createAndBindUi(this);
 	}
 
 	@Override
-	public void setPresenter(AboutProjectPresenterIface presenter) {
-		this.presenter = presenter;
+	public Widget asWidget() {
+		return widget;
 	}
 }

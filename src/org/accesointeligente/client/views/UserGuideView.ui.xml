@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+
+	</ui:style>
+	<g:HTMLPanel>
+		<iframe src="LeyAcceso.html" class="gwtIframe" height="600" scrolling="no" frameBorder="0"></iframe>
+	</g:HTMLPanel>
+</ui:UiBinder>

@@ -18,44 +18,44 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.AppController;
+import org.accesointeligente.client.uihandlers.TermsAndConditionsUiHandlers;
+import org.accesointeligente.shared.AppPlace;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
-import com.google.inject.Inject;
 
-public class TermsAndConditionsPresenter extends CustomWidgetPresenter<TermsAndConditionsPresenter.Display> implements TermsAndConditionsPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(TermsAndConditionsPresenterIface presenter);
+import javax.inject.Inject;
+
+public class TermsAndConditionsPresenter extends Presenter<TermsAndConditionsPresenter.MyView, TermsAndConditionsPresenter.MyProxy> implements TermsAndConditionsUiHandlers {
+	public interface MyView extends View, HasUiHandlers<TermsAndConditionsUiHandlers> {
+	}
+
+	@ProxyCodeSplit
+	@NameToken(AppPlace.TERMSANDCONDITIONS)
+	public interface MyProxy extends ProxyPlace<TermsAndConditionsPresenter> {
 	}
 
 	@Inject
-	public TermsAndConditionsPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	public TermsAndConditionsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
-	}
-
-	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
+	protected void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_POPUP_CONTENT, this));
 	}
 
 	@Override
 	public void close() {
-		History.newItem(AppController.getPreviousHistoryToken());
+		History.back();
 	}
 }

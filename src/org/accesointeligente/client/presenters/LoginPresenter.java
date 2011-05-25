@@ -18,24 +18,31 @@
  */
 package org.accesointeligente.client.presenters;
 
-import org.accesointeligente.client.AppController;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
+import org.accesointeligente.client.services.SessionServiceAsync;
+import org.accesointeligente.client.services.UserServiceAsync;
+import org.accesointeligente.client.uihandlers.LoginUiHandlers;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
 
-import net.customware.gwt.presenter.client.EventBus;
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.*;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Inject;
 
-public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display> implements LoginPresenterIface {
-	public interface Display extends WidgetDisplay {
-		void setPresenter(LoginPresenterIface presenter);
+import javax.inject.Inject;
+
+public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresenter.MyProxy> implements LoginUiHandlers {
+	public interface MyView extends View, HasUiHandlers<LoginUiHandlers> {
 		void clearForm();
 		void showNotice(String message);
 		String getEmail();
@@ -43,68 +50,74 @@ public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display
 		void setEmailFocus();
 	}
 
+	@ProxyCodeSplit
+	@NameToken(AppPlace.LOGIN)
+	public interface MyProxy extends ProxyPlace<LoginPresenter> {
+	}
+
 	@Inject
-	public LoginPresenter(Display display, EventBus eventBus) {
-		super(display, eventBus);
-		bind();
+	private PlaceManager placeManager;
+
+	@Inject
+	private SessionServiceAsync sessionService;
+
+	@Inject
+	private UserServiceAsync userService;
+
+	@Inject
+	public LoginPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+		super(eventBus, view, proxy);
+		view.setUiHandlers(this);
 	}
 
 	@Override
-	public void setup() {
-		display.clearForm();
+	public void onReveal() {
+		getView().clearForm();
+		getView().setEmailFocus();
 	}
 
 	@Override
-	protected void onBind() {
-		display.setPresenter(this);
-	}
-
-	@Override
-	protected void onUnbind() {
-	}
-
-	@Override
-	protected void onRevealDisplay() {
-		display.setEmailFocus();
+	public void revealInParent() {
+		fireEvent(new RevealContentEvent(MainPresenter.SLOT_POPUP_CONTENT, this));
 	}
 
 	@Override
 	public void login() {
-		String email = display.getEmail();
-		String password = display.getPassword();
+		String email = getView().getEmail();
+		String password = getView().getPassword();
 
 		if (email.length() == 0) {
-			display.showNotice("Debe ingresar email");
+			getView().showNotice("Debe ingresar email");
 			return;
 		}
 
 		if (password.length() == 0) {
-			display.showNotice("Debe ingresar contraseña");
+			getView().showNotice("Debe ingresar contraseña");
 			return;
 		}
 
-		serviceInjector.getUserService().login(email, password, new AsyncCallback<Void>() {
+		userService.login(email, password, new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				if (caught instanceof ServiceException) {
-					display.showNotice("Fallo la conexion");
+					getView().showNotice("Fallo la conexion");
 				} else if (caught instanceof LoginException) {
-					display.showNotice("Email y/o contraseña incorrecta");
+					getView().showNotice("Email y/o contraseña incorrecta");
 				}
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				serviceInjector.getSessionService ().getSessionData (new AsyncCallback<SessionData> () {
+				sessionService.getSessionData (new AsyncCallback<SessionData> () {
 					@Override
 					public void onFailure (Throwable caught) {
-						display.showNotice ("Error creando sesión");
+						getView().showNotice ("Error creando sesión");
 					}
 
 					@Override
 					public void onSuccess (SessionData result) {
 						ClientSessionUtil.createSession (result);
-						eventBus.fireEvent (new LoginSuccessfulEvent ());
+						fireEvent (new LoginSuccessfulEvent ());
 					}
 				});
 			}
@@ -113,11 +126,16 @@ public class LoginPresenter extends CustomWidgetPresenter<LoginPresenter.Display
 
 	@Override
 	public void register() {
-		History.newItem(AppPlace.REGISTER.getToken());
+		placeManager.revealPlace(new PlaceRequest(AppPlace.REGISTER));
 	}
 
 	@Override
 	public void close() {
-		History.newItem(AppController.getPreviousHistoryToken());
+		History.back();
+	}
+
+	@Override
+	public void gotoPasswordRecovery() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.PASSWORDRECOVERY));
 	}
 }
