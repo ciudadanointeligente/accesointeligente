@@ -49,7 +49,11 @@ public class ClientSessionUtil {
 	}
 
 	public static User getUser() {
-		return (User) sessionData.getData().get("user");
+		try {
+			return (User) sessionData.getData().get("user");
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 	public static void setUser(User user) {
