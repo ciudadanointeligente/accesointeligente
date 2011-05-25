@@ -18,6 +18,7 @@
  */
 package org.accesointeligente.client.inject;
 
+import org.accesointeligente.client.AnonymousGatekeeper;
 import org.accesointeligente.client.MyPlaceManager;
 import org.accesointeligente.client.UserGatekeeper;
 import org.accesointeligente.client.presenters.*;
@@ -39,6 +40,7 @@ public class PresenterModule extends AbstractPresenterModule {
 		bind(PlaceManager.class).to(MyPlaceManager.class).in(Singleton.class);
 		bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
 		bind(UserGatekeeper.class).in(Singleton.class);
+		bind(AnonymousGatekeeper.class).in(Singleton.class);
 		bind(RootPresenter.class).asEagerSingleton();
 		bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
 		bindPresenter(MainPresenter.class, MainPresenter.MyView.class, MainView.class, MainPresenter.MyProxy.class);
