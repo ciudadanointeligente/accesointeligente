@@ -18,15 +18,12 @@
  */
 package org.accesointeligente.client;
 
-import org.accesointeligente.client.events.LoginRequiredEvent;
-import org.accesointeligente.client.events.LoginSuccessfulEvent;
 import org.accesointeligente.client.inject.AppInjector;
 
 import com.gwtplatform.mvp.client.DelayedBindRegistry;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 
 public class AccesoInteligente implements EntryPoint {
 	public final AppInjector appInjector = GWT.create(AppInjector.class);
@@ -34,10 +31,6 @@ public class AccesoInteligente implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		DelayedBindRegistry.bind(appInjector);
-		EventBus eventBus = appInjector.getEventBus();
-		UserGatekeeper userGatekeeper = appInjector.getUserGatekeeper();
-		eventBus.addHandler(LoginSuccessfulEvent.TYPE, userGatekeeper);
-		eventBus.addHandler(LoginRequiredEvent.TYPE, userGatekeeper);
 		appInjector.getPlaceManager().revealCurrentPlace();
 	}
 }

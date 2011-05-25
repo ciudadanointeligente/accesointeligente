@@ -18,25 +18,11 @@
  */
 package org.accesointeligente.client;
 
-import org.accesointeligente.client.events.*;
-
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 
-public class UserGatekeeper implements Gatekeeper, LoginSuccessfulEventHandler, LoginRequiredEventHandler {
-	private Boolean loggedIn = false;
-
+public class UserGatekeeper implements Gatekeeper {
 	@Override
 	public boolean canReveal() {
-		return loggedIn;
-	}
-
-	@Override
-	public void loginSuccessful(LoginSuccessfulEvent event) {
-		loggedIn = true;
-	}
-
-	@Override
-	public void loginRequired(LoginRequiredEvent event) {
-		loggedIn = false;
+		return ClientSessionUtil.getUser() != null;
 	}
 }
