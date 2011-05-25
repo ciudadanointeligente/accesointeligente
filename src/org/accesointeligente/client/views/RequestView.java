@@ -45,6 +45,7 @@ public class RequestView extends ViewWithUiHandlers<RequestUiHandlers> implement
 	interface RequestViewUiBinder extends UiBinder<Widget, RequestView> {}
 	private final Widget widget;
 
+	@UiField FormPanel requestForm;
 	@UiField HTMLPanel institutionSearchPanel;
 	@UiField FocusSuggestBox institutionSearch;
 
@@ -67,6 +68,11 @@ public class RequestView extends ViewWithUiHandlers<RequestUiHandlers> implement
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+
+	@Override
+	public void resetForm() {
+		requestForm.reset();
 	}
 
 	@Override

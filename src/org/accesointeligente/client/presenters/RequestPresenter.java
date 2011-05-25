@@ -45,6 +45,7 @@ import javax.inject.Inject;
 
 public class RequestPresenter extends Presenter<RequestPresenter.MyView, RequestPresenter.MyProxy> implements RequestUiHandlers {
 	public interface MyView extends View, HasUiHandlers<RequestUiHandlers> {
+		void resetForm();
 		void setInstitutions(Map<String, Institution> institutions);
 		void cleanRequestCategories();
 		void addRequestCategories(RequestCategory category);
@@ -80,6 +81,7 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 
 	@Override
 	public void onReset() {
+		getView().resetForm();
 		getRequestCategories();
 		getInstitutions();
 	}
