@@ -66,11 +66,11 @@
 					</div>
 				</div>
 			</g:HTMLPanel>
-			<div class="{style.footerPanelContent}" style="text-align:center;">
+			<g:HTMLPanel ui:field="creditsPanel" addStyleNames="{style.creditsPanelContent}">
 				Ciudadano Inteligente 2010 - 2011.
 				Disponible bajo licencia <a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License</a>.
 				Código fuente disponible en <a href="https://github.com/ciudadanointeligente/">github</a>.
-			</div>
+			</g:HTMLPanel>
 			<g:Label ui:field="loginPending" visible="false">Ingresando...</g:Label>
 		</div>
 	</g:HTMLPanel>

@@ -63,6 +63,7 @@ public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements Main
 	@UiField MenuItem aboutProject;
 	@UiField MenuItem contact;
 	@UiField HTMLPanel footerPanel;
+	@UiField HTMLPanel creditsPanel;
 	@UiField Label loginPending;
 	private PopupPanel popup;
 
@@ -174,6 +175,7 @@ public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements Main
 		userProfile.setVisible(DisplayMode.LoggedIn.equals(mode));
 		logout.setVisible(DisplayMode.LoggedIn.equals(mode));
 		footerPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
+		creditsPanel.setVisible(DisplayMode.LoggedIn.equals(mode) || DisplayMode.LoggedOut.equals(mode));
 		loginPending.setVisible(DisplayMode.LoginPending.equals(mode));
 
 		if (DisplayMode.LoggedIn.equals(mode)) {
