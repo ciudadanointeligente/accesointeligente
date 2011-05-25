@@ -22,7 +22,6 @@ public class AppPlace {
 	public static final String HOME = "home";
 	public static final String REGISTER = "register";
 	public static final String LOGIN = "login";
-	public static final String LOGOUT = "logout";
 	public static final String PASSWORDRECOVERY = "passwordrecovery";
 	public static final String REQUEST = "request";
 	public static final String EDITREQUEST = "editrequest";

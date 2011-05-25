@@ -123,7 +123,7 @@ public class MainPresenter extends Presenter<MainPresenter.MyView, MainPresenter
 				}
 			});
 		} else {
-			fireEvent(new LoginRequiredEvent());
+			getView().setDisplayMode(MainView.DisplayMode.LoggedOut);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class MainPresenter extends Presenter<MainPresenter.MyView, MainPresenter
 
 	@Override
 	public void gotoLogout() {
-		placeManager.revealPlace(new PlaceRequest(AppPlace.LOGOUT));
+		fireEvent(new LoginRequiredEvent());
 	}
 
 	@Override

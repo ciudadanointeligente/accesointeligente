@@ -24,7 +24,6 @@ import org.accesointeligente.shared.AppPlace;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 
 import javax.inject.Inject;
 
@@ -45,27 +44,28 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 	}
 
 	@Override
-	public void revealErrorPlace(String invalidHistoryToken) {
-		if (AppPlace.LOGOUT.equals(invalidHistoryToken)) {
-			fireEvent(new LoginRequiredEvent());
+	public void revealUnauthorizedPlace(String unauthorizedHistoryToken) {
+		if (AppPlace.REQUEST.equals(unauthorizedHistoryToken)) {
+			revealPlace(new PlaceRequest(AppPlace.LOGIN));
 		} else {
 			revealDefaultPlace();
 		}
 	}
 
 	@Override
-	public void revealUnauthorizedPlace(String unauthorizedHistoryToken) {
-		revealDefaultPlace();
-	}
-
-	@Override
 	public void loginSuccessful(LoginSuccessfulEvent event) {
-		History.back();
+		navigateBack();
 	}
 
 	@Override
 	public void loginRequired(LoginRequiredEvent event) {
 		ClientSessionUtil.destroySession();
+
+		if (AppPlace.REQUEST.equals(getCurrentPlaceRequest().getNameToken())) {
+			revealDefaultPlace();
+		} else {
+			revealCurrentPlace();
+		}
 	}
 
 	@Override
