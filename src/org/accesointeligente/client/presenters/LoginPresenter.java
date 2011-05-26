@@ -18,6 +18,7 @@
  */
 package org.accesointeligente.client.presenters;
 
+import org.accesointeligente.client.AnonymousGatekeeper;
 import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.SessionData;
 import org.accesointeligente.client.events.LoginSuccessfulEvent;
@@ -33,6 +34,7 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
@@ -51,6 +53,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 	}
 
 	@ProxyCodeSplit
+	@UseGatekeeper(AnonymousGatekeeper.class)
 	@NameToken(AppPlace.LOGIN)
 	public interface MyProxy extends ProxyPlace<LoginPresenter> {
 	}

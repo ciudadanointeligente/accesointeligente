@@ -24,6 +24,7 @@ import org.accesointeligente.shared.AppPlace;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 
 import javax.inject.Inject;
 
@@ -54,7 +55,7 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 
 	@Override
 	public void loginSuccessful(LoginSuccessfulEvent event) {
-		navigateBack();
+		History.back();
 	}
 
 	@Override
