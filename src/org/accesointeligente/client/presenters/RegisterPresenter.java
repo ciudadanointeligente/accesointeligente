@@ -104,7 +104,7 @@ public class RegisterPresenter extends Presenter<RegisterPresenter.MyView, Regis
 	}
 
 	@Override
-	public void onReset() {
+	public void onReveal() {
 		getPersonActivities();
 		getInstitutionActivities();
 		getInstitutionTypes();
