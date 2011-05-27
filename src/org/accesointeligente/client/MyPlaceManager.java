@@ -21,14 +21,16 @@ package org.accesointeligente.client;
 import org.accesointeligente.client.events.*;
 import org.accesointeligente.shared.AppPlace;
 
-import com.gwtplatform.mvp.client.proxy.*;
+import com.gwtplatform.mvp.client.proxy.PlaceManagerImpl;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 
 import javax.inject.Inject;
 
-public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulEventHandler, LoginRequiredEventHandler, NavigationHandler {
+public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulEventHandler, LoginRequiredEventHandler {
 	private final String DEFAULT_PLACE = AppPlace.HOME;
 
 	@Inject
@@ -36,7 +38,6 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 		super(eventBus, tokenFormatter);
 		eventBus.addHandler(LoginSuccessfulEvent.TYPE, this);
 		eventBus.addHandler(LoginRequiredEvent.TYPE, this);
-		eventBus.addHandler(NavigationEvent.getType(), this);
 	}
 
 	@Override
@@ -69,16 +70,4 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 		}
 	}
 
-	@Override
-	public void onNavigation(NavigationEvent navigationEvent) {
-		String token = buildHistoryToken(navigationEvent.getRequest());
-
-		if (token != null && token.length() > 0) {
-			trackHit(token);
-		}
-	}
-
-	public native void trackHit(String pageName) /*-{
-		$wnd._gaq.push(['_trackPageview', pageName]);
-	}-*/;
 }

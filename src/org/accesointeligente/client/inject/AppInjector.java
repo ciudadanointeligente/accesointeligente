@@ -19,6 +19,7 @@
 package org.accesointeligente.client.inject;
 
 import org.accesointeligente.client.AnonymousGatekeeper;
+import org.accesointeligente.client.PlaceHistory;
 import org.accesointeligente.client.UserGatekeeper;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.services.*;
@@ -38,6 +39,7 @@ public interface AppInjector extends Ginjector {
 	PlaceManager getPlaceManager();
 	UserGatekeeper getUserGatekeeper();
 	AnonymousGatekeeper getAnonymousGatekeeper();
+	PlaceHistory getPlaceHistory();
 	ProxyFailureHandler getProxyFailureHandler();
 	Provider<MainPresenter> getMainPresenter();
 	AsyncProvider<HomePresenter> getHomePresenter();
