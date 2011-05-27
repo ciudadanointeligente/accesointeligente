@@ -33,6 +33,12 @@ public class SearchParamParseUtil {
 			String[] keyWords = params.getKeyWord().split("[ ]");
 
 			for (int i = 0; i < keyWords.length; i++) {
+				keyWords[i]  = keyWords[i].replaceAll("[ÁÀáà]","a");
+				keyWords[i]  = keyWords[i].replaceAll("[ÉÈéè]","e");
+				keyWords[i]  = keyWords[i].replaceAll("[ÍÌíì]","i");
+				keyWords[i]  = keyWords[i].replaceAll("[ÓÒóò]","o");
+				keyWords[i]  = keyWords[i].replaceAll("[ÚÙúù]","u");
+				keyWords[i]  = keyWords[i].replaceAll("[Ññ]", "n");
 				keyWords[i]  = keyWords[i].replaceAll("\\W", "");
 				keyWordDisjunction = Restrictions.disjunction();
 				keyWordDisjunction.add(Restrictions.ilike("information", keyWords[i], MatchMode.ANYWHERE));
@@ -94,9 +100,9 @@ public class SearchParamParseUtil {
 					filters += " OR ";
 				}
 				keyWords[i]  = keyWords[i].replaceAll("\\W", "");
-				filters += " lower(information) like lower('%" + keyWords[i] + "%') OR ";
-				filters += " lower(context) like lower('%" + keyWords[i] + "%') OR ";
-				filters += " lower(title) like lower('%" + keyWords[i] + "%') ";
+				filters += " lower(TRANSLATE(information,'ÁáÉéÍíÓóÚúÑñ','AaEeIiOoUuNn')) like lower('%" + keyWords[i] + "%') OR ";
+				filters += " lower(TRANSLATE(context,'ÁáÉéÍíÓóÚúÑñ','AaEeIiOoUuNn')) like lower('%" + keyWords[i] + "%') OR ";
+				filters += " lower(TRANSLATE(title,'ÁáÉéÍíÓóÚúÑñ','AaEeIiOoUuNn')) like lower('%" + keyWords[i] + "%') ";
 			}
 			filters += ") ";
 		}
