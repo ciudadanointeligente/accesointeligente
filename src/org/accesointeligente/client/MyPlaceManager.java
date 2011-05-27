@@ -71,10 +71,10 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 
 	@Override
 	public void onNavigation(NavigationEvent navigationEvent) {
-		String nameToken = navigationEvent.getRequest().getNameToken();
+		String token = buildHistoryToken(navigationEvent.getRequest());
 
-		if (nameToken != null && nameToken.length() > 0) {
-			trackHit(nameToken);
+		if (token != null && token.length() > 0) {
+			trackHit(token);
 		}
 	}
 
