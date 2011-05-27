@@ -19,6 +19,7 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.PlaceHistory;
 import org.accesointeligente.client.services.RequestServiceAsync;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.ResponseWidget;
@@ -74,6 +75,9 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 	@Inject
 	private PlaceManager placeManager;
+
+	@Inject
+	private PlaceHistory placeHistory;
 
 	@Inject
 	private RequestServiceAsync requestService;
@@ -309,7 +313,14 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 	@Override
 	public void goBack() {
-		History.back();
+		for (PlaceRequest placeRequest : placeHistory.getHistory()) {
+			if (AppPlace.LIST.equals(placeRequest.getNameToken())) {
+				placeManager.revealPlace(placeRequest);
+				return;
+			}
+		}
+
+		placeManager.revealPlace(new PlaceRequest(AppPlace.LIST).with("type", RequestListType.GENERAL.getType()));
 	}
 
 	@Override
