@@ -25,6 +25,7 @@ import org.accesointeligente.client.uihandlers.RequestListUiHandlers;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.model.UserFavoriteRequest;
+import org.accesointeligente.shared.RequestStatus;
 
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -103,8 +104,15 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 			@Override
 			public CustomImageCellParams getValue(Request request) {
 				CustomImageCellParams params = new CustomImageCellParams();
-				params.setUrl(request.getStatus().getUrl());
-				params.setTitle(request.getStatus().getName());
+
+				if (RequestStatus.CLOSED.equals(request.getStatus()) && (request.getResponses() == null || request.getResponses().size() == 0)) {
+					params.setUrl(RequestStatus.PENDING.getUrl());
+					params.setTitle(RequestStatus.PENDING.getName());
+				} else {
+					params.setUrl(request.getStatus().getUrl());
+					params.setTitle(request.getStatus().getName());
+				}
+
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableStatus());
 				return params;
 			}
