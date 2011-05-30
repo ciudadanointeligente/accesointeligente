@@ -19,6 +19,7 @@
 package org.accesointeligente.client.presenters;
 
 import org.accesointeligente.client.ClientSessionUtil;
+import org.accesointeligente.client.events.*;
 import org.accesointeligente.client.services.RequestServiceAsync;
 import org.accesointeligente.client.uihandlers.RequestListUiHandlers;
 import org.accesointeligente.model.Request;
@@ -44,7 +45,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class RequestListPresenter extends Presenter<RequestListPresenter.MyView, RequestListPresenter.MyProxy> implements RequestListUiHandlers, RequestSearchEventHandler {
+public class RequestListPresenter extends Presenter<RequestListPresenter.MyView, RequestListPresenter.MyProxy> implements RequestListUiHandlers, RequestSearchEventHandler, LoginSuccessfulEventHandler, LoginRequiredEventHandler {
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> SLOT_SEARCH_WIDGET = new Type<RevealContentHandler<?>>();
 
@@ -77,6 +78,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	private RequestServiceAsync requestService;
 
 	private String listType;
+	private String oldListType;
 	private AbstractDataProvider<Request> requestData;
 
 	@Inject
@@ -88,22 +90,24 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	@Override
 	protected void onBind() {
 		addHandler(RequestSearchEvent.TYPE, this);
+		addHandler(LoginSuccessfulEvent.TYPE, this);
+		addHandler(LoginRequiredEvent.TYPE, this);
 	}
 
 	@Override
 	public void onReset() {
-		clearSlot(SLOT_SEARCH_WIDGET);
-		getView().setSearchButtonVisible(false);
-		getView().setSearchHandleVisible(false);
-		getView().setSearchToolTipVisible(false);
-		getView().removeColumns();
-		requestData = new ListDataProvider<Request>();
-		getView().initTable(requestData);
-
-		if (listType != null) {
+		if (listType != null && !listType.equals(oldListType)) {
+			clearSlot(SLOT_SEARCH_WIDGET);
+			getView().setSearchButtonVisible(false);
+			getView().setSearchHandleVisible(false);
+			getView().setSearchToolTipVisible(false);
+			getView().removeColumns();
+			requestData = new ListDataProvider<Request>();
+			getView().initTable(requestData);
 			loadColumns(listType);
 			// FIXME: this only loads a maximum of 300 request
 			loadRequests(0, 300, listType);
+			oldListType = listType;
 		}
 	}
 
@@ -455,5 +459,15 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	@Override
 	public void gotoRequest() {
 		placeManager.revealPlace(new PlaceRequest(AppPlace.REQUEST));
+	}
+
+	@Override
+	public void loginSuccessful(LoginSuccessfulEvent event) {
+		oldListType = null;
+	}
+
+	@Override
+	public void loginRequired(LoginRequiredEvent event) {
+		oldListType = null;
 	}
 }
