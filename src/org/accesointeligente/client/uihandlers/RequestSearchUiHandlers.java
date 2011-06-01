@@ -23,4 +23,5 @@ import com.gwtplatform.mvp.client.UiHandlers;
 public interface RequestSearchUiHandlers extends UiHandlers {
 	void getInstitutions();
 	void requestSearch();
+	void resetSearch();
 }
