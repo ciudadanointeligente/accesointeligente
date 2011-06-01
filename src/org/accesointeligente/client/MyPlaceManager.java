@@ -56,7 +56,9 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 
 	@Override
 	public void loginSuccessful(LoginSuccessfulEvent event) {
-		History.back();
+		if (getCurrentPlaceRequest().getNameToken().equals(AppPlace.LOGIN)) {
+			History.back();
+		}
 	}
 
 	@Override
