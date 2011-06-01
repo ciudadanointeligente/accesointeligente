@@ -37,11 +37,9 @@ import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.view.client.AbstractDataProvider;
-import com.google.gwt.view.client.ListDataProvider;
-
-import java.util.List;
+import com.google.gwt.view.client.*;
 
 import javax.inject.Inject;
 
@@ -52,15 +50,14 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	public interface MyView extends View, HasUiHandlers<RequestListUiHandlers> {
 		void setListTitle(String title);
 		void setListTitleStyle(String style);
-		void initTable(AbstractDataProvider<Request> data);
 		void initTableColumns();
 		void initTableFavColumn();
 		void initTableReceiptColumn();
 		void removeColumns();
-		void setRequests(AbstractDataProvider<Request> data);
 		void setSearchButtonVisible(Boolean visible);
 		void setSearchHandleVisible(Boolean visible);
 		void setSearchToolTipVisible(Boolean visible);
+		CellTable<Request> getRequestTable();
 	}
 
 	@ProxyCodeSplit
@@ -77,9 +74,10 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	@Inject
 	private RequestServiceAsync requestService;
 
-	private String listType;
-	private String oldListType;
-	private AbstractDataProvider<Request> requestData;
+	private RequestListType listType;
+	private RequestListType oldListType;
+	private AsyncDataProvider<Request> requestData;
+	private RequestSearchParams searchParams;
 
 	@Inject
 	public RequestListPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
@@ -92,22 +90,21 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 		addHandler(RequestSearchEvent.TYPE, this);
 		addHandler(LoginSuccessfulEvent.TYPE, this);
 		addHandler(LoginRequiredEvent.TYPE, this);
+		prepareDataProvider();
 	}
 
 	@Override
 	public void onReset() {
 		if (listType != null && !listType.equals(oldListType)) {
-			clearSlot(SLOT_SEARCH_WIDGET);
-			getView().setSearchButtonVisible(false);
-			getView().setSearchHandleVisible(false);
-			getView().setSearchToolTipVisible(false);
-			getView().removeColumns();
-			requestData = new ListDataProvider<Request>();
-			getView().initTable(requestData);
-			loadColumns(listType);
-			// FIXME: this only loads a maximum of 300 request
-			loadRequests(0, 300, listType);
-			oldListType = listType;
+			if (checkPrivileges()) {
+				searchParams = null;
+				prepareViewStyle();
+				resetData(0);
+				oldListType = listType;
+			} else {
+				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
+				placeManager.revealDefaultPlace();
+			}
 		}
 	}
 
@@ -118,256 +115,121 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	@Override
 	public void prepareFromRequest(PlaceRequest request) {
-		listType = request.getParameter("type", null);
+		String type = request.getParameter("type", "");
+
+		try {
+			listType = Enum.valueOf(RequestListType.class, type.toUpperCase());
+		} catch (IllegalArgumentException iaex) {
+			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
+			placeManager.revealDefaultPlace();
+		}
 	}
 
-	public AbstractDataProvider<Request> getRequestData() {
-		return requestData;
+	private void prepareDataProvider() {
+		requestData = new AsyncDataProvider<Request>() {
+			@Override
+			protected void onRangeChanged(HasData<Request> display) {
+				if (listType == null) {
+					return;
+				}
+
+				AsyncCallback<Page<Request>> callback = new AsyncCallback<Page<Request>>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
+						placeManager.revealDefaultPlace();
+					}
+
+					@Override
+					public void onSuccess(Page<Request> result) {
+						updateRowData(result.getStart().intValue(), result.getData());
+						updateRowCount(result.getDataCount().intValue(), true);
+					}
+				};
+
+				switch (listType) {
+					case MYREQUESTS:
+						if (searchParams != null) {
+							requestService.getUserRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), searchParams, callback);
+						} else {
+							requestService.getUserRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
+						}
+						break;
+					case FAVORITES:
+						if (searchParams != null) {
+							requestService.getUserFavoriteRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), searchParams, callback);
+						} else {
+							requestService.getUserFavoriteRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
+						}
+						break;
+					case DRAFTS:
+						requestService.getUserDraftList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
+						break;
+					case GENERAL:
+						if (searchParams != null) {
+							requestService.getRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), searchParams, callback);
+						} else {
+							requestService.getRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
+						}
+						break;
+				}
+			}
+		};
+
+		requestData.addDataDisplay(getView().getRequestTable());
 	}
 
-	public void setRequestData(AbstractDataProvider<Request> requestData) {
-		this.requestData = requestData;
+	private boolean checkPrivileges() {
+		switch (listType) {
+			case MYREQUESTS:
+			case FAVORITES:
+			case DRAFTS:
+				return ClientSessionUtil.checkSession();
+			default:
+				return true;
+		}
 	}
 
-	@Override
-	public void loadColumns(String type) {
-		if (type.equals(RequestListType.MYREQUESTS.getType())) {
-			if (ClientSessionUtil.checkSession() == true) {
+	private void prepareViewStyle() {
+		clearSlot(SLOT_SEARCH_WIDGET);
+		getView().setSearchButtonVisible(false);
+		getView().setSearchHandleVisible(false);
+		getView().setSearchToolTipVisible(false);
+		getView().removeColumns();
+		getView().initTableColumns();
+
+		switch (listType) {
+			case MYREQUESTS:
+				getView().setListTitle("Mis solicitudes");
+				getView().setListTitleStyle(RequestListType.MYREQUESTS.getType());
 				getView().initTableReceiptColumn();
-			}
-		} else if (type.equals(RequestListType.FAVORITES.getType())) {
-			if (ClientSessionUtil.checkSession() == true) {
+				break;
+			case FAVORITES:
+				getView().setListTitle("Mis favoritas");
+				getView().setListTitleStyle(RequestListType.FAVORITES.getType());
 				getView().initTableFavColumn();
-			}
-		} else if (type.equals(RequestListType.GENERAL.getType())) {
-			if (ClientSessionUtil.checkSession() == true) {
-				getView().initTableFavColumn();
-			}
+				break;
+			case DRAFTS:
+				getView().setListTitle("Mis borradores");
+				getView().setListTitleStyle(RequestListType.DRAFTS.getType());
+				break;
+			case GENERAL:
+				getView().setListTitle("Listado de solicitudes");
+				getView().setListTitleStyle(RequestListType.GENERAL.getType());
+				setInSlot(SLOT_SEARCH_WIDGET, requestSearchPresenter);
+				getView().setSearchButtonVisible(true);
+				getView().setSearchHandleVisible(true);
+				if (ClientSessionUtil.checkSession()) {
+					getView().initTableFavColumn();
+				}
+				break;
 		}
 	}
 
-	@Override
-	public void loadRequests(Integer offset, Integer limit, String type) {
-		listType = type;
-		requestData = new ListDataProvider<Request>();
-		getView().setRequests(requestData);
-
-		if (type.equals(RequestListType.MYREQUESTS.getType())) {
-			getView().setListTitle("Mis solicitudes");
-			getView().setListTitleStyle(RequestListType.MYREQUESTS.getType());
-
-			if (ClientSessionUtil.checkSession()) {
-				requestService.getUserRequestList(offset, limit, new AsyncCallback<List<Request>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						placeManager.revealDefaultPlace();
-					}
-
-					@Override
-					public void onSuccess(List<Request> results) {
-						requestData = new ListDataProvider<Request>(results);
-						getView().setRequests(requestData);
-					}
-				});
-			} else {
-				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				placeManager.revealDefaultPlace();
-			}
-
-		} else if (type.equals(RequestListType.FAVORITES.getType())) {
-			getView().setListTitle("Mis favoritas");
-			getView().setListTitleStyle(RequestListType.FAVORITES.getType());
-
-			if (ClientSessionUtil.checkSession()) {
-				requestService.getUserFavoriteRequestList(offset, limit, new AsyncCallback<List<Request>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						placeManager.revealDefaultPlace();
-
-					}
-
-					@Override
-					public void onSuccess(List<Request> results) {
-						requestData = new ListDataProvider<Request>(results);
-						getView().setRequests(requestData);
-					}
-				});
-			} else {
-				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				placeManager.revealDefaultPlace();
-
-			}
-
-		} else if (type.equals(RequestListType.DRAFTS.getType())) {
-			getView().setListTitle("Mis borradores");
-			getView().setListTitleStyle(RequestListType.DRAFTS.getType());
-
-			if (ClientSessionUtil.checkSession()) {
-				requestService.getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						placeManager.revealDefaultPlace();
-
-					}
-
-					@Override
-					public void onSuccess(List<Request> results) {
-						requestData = new ListDataProvider<Request>(results);
-						getView().setRequests(requestData);
-					}
-				});
-			} else {
-				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				placeManager.revealDefaultPlace();
-
-			}
-
-		} else if (type.equals(RequestListType.GENERAL.getType())) {
-			getView().setListTitle("Listado de solicitudes");
-			getView().setListTitleStyle(RequestListType.GENERAL.getType());
-			setInSlot(SLOT_SEARCH_WIDGET, requestSearchPresenter);
-			getView().setSearchButtonVisible(true);
-			getView().setSearchHandleVisible(true);
-
-			requestService.getRequestList(offset, limit, new AsyncCallback<List<Request>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-					placeManager.revealDefaultPlace();
-
-				}
-
-				@Override
-				public void onSuccess(List<Request> results) {
-					// TODO: implement style for tooltip
-					if (results.size() < 1) {
-						getView().setSearchToolTipVisible(true);
-					}
-					requestData = new ListDataProvider<Request>(results);
-					getView().setRequests(requestData);
-				}
-			});
-		} else {
-			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
-			placeManager.revealDefaultPlace();
-		}
-	}
-
-	@Override
-	public void loadRequests(Integer offset, Integer limit, String type, RequestSearchParams params) {
-
-		if (type.equals(RequestListType.MYREQUESTS.getType())) {
-			getView().setListTitle("Mis solicitudes");
-			getView().setListTitleStyle(RequestListType.MYREQUESTS.getType());
-
-			if (ClientSessionUtil.checkSession()) {
-				requestService.getUserRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						placeManager.revealDefaultPlace();
-
-					}
-
-					@Override
-					public void onSuccess(List<Request> results) {
-						requestData = new ListDataProvider<Request>(results);
-						getView().setRequests(requestData);
-					}
-				});
-			} else {
-				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				placeManager.revealDefaultPlace();
-
-			}
-
-		} else if (type.equals(RequestListType.FAVORITES.getType())) {
-			getView().setListTitle("Mis favoritas");
-			getView().setListTitleStyle(RequestListType.FAVORITES.getType());
-
-			if (ClientSessionUtil.checkSession()) {
-				requestService.getUserFavoriteRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						placeManager.revealDefaultPlace();
-
-					}
-
-					@Override
-					public void onSuccess(List<Request> results) {
-						requestData = new ListDataProvider<Request>(results);
-						getView().setRequests(requestData);
-					}
-				});
-			} else {
-				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				placeManager.revealDefaultPlace();
-
-			}
-
-		} else if (type.equals(RequestListType.DRAFTS.getType())) {
-			getView().setListTitle("Mis borradores");
-			getView().setListTitleStyle(RequestListType.DRAFTS.getType());
-
-			if (ClientSessionUtil.checkSession()) {
-				requestService.getUserDraftList(offset, limit, new AsyncCallback<List<Request>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-						placeManager.revealDefaultPlace();
-
-					}
-
-					@Override
-					public void onSuccess(List<Request> results) {
-						requestData = new ListDataProvider<Request>(results);
-						getView().setRequests(requestData);
-					}
-				});
-			} else {
-				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
-				placeManager.revealDefaultPlace();
-
-			}
-
-		} else if (type.equals(RequestListType.GENERAL.getType())) {
-			getView().setListTitle("Listado de solicitudes");
-			getView().setListTitleStyle(RequestListType.GENERAL.getType());
-
-			requestService.getRequestList(offset, limit, params, new AsyncCallback<List<Request>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					showNotification("No es posible recuperar el listado solicitado", NotificationEventType.ERROR);
-					placeManager.revealDefaultPlace();
-
-				}
-
-				@Override
-				public void onSuccess(List<Request> results) {
-					// TODO: implement style for tooltip
-					if (results.size() < 1) {
-						getView().setSearchToolTipVisible(true);
-					}
-					requestData = new ListDataProvider<Request>(results);
-					getView().setRequests(requestData);
-				}
-			});
-		} else {
-			showNotification("No existe el tipo de lista solicitado: " + type, NotificationEventType.ERROR);
-			placeManager.revealDefaultPlace();
-		}
+	private void resetData(int start) {
+		CellTable<Request> requestTable = getView().getRequestTable();
+		requestTable.setPageStart(start);
+		RangeChangeEvent.fire(requestTable, new Range(start, requestTable.getPageSize()));
 	}
 
 	@Override
@@ -384,7 +246,6 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 			public void onSuccess(UserFavoriteRequest result) {
 				if (result == null) {
 					requestService.createFavoriteRequest(request, user, new AsyncCallback<UserFavoriteRequest>() {
-
 						@Override
 						public void onFailure(Throwable caught) {
 							showNotification("No es posible almacenar el favorito", NotificationEventType.ERROR);
@@ -392,7 +253,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 						@Override
 						public void onSuccess(UserFavoriteRequest result) {
-							loadRequests(0, 300, listType);
+							resetData(getView().getRequestTable().getPageStart());
 							showNotification("Se ha agregado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
@@ -402,7 +263,6 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 					favorite.setUser(user);
 
 					requestService.deleteFavoriteRequest(favorite, new AsyncCallback<Void>() {
-
 						@Override
 						public void onFailure(Throwable caught) {
 							showNotification("No es posible eliminar el favorito", NotificationEventType.ERROR);
@@ -410,7 +270,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 						@Override
 						public void onSuccess(Void result) {
-							loadRequests(0, 300, listType);
+							resetData(getView().getRequestTable().getPageStart());
 							showNotification("Se ha eliminado el favorito", NotificationEventType.SUCCESS);
 						}
 					});
@@ -439,7 +299,11 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	@Override
 	public void onSearch(RequestSearchEvent event) {
-		loadRequests(0, 100, listType, event.getParams());
+		searchParams = event.getParams();
+
+		if (isVisible()) {
+			resetData(0);
+		}
 	}
 
 	// FIXME: use PlaceRequest instead lf URL redirections

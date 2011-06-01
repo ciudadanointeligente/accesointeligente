@@ -38,7 +38,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.AbstractDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +58,7 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	public RequestListView() {
 		widget = uiBinder.createAndBindUi(this);
 		ResourceBundle.INSTANCE.RequestListView().ensureInjected();
+		requestPager.setDisplay(requestTable);
 	}
 
 	@Override
@@ -87,14 +87,6 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	@Override
 	public void setListTitleStyle(String style)  {
 		listTitle.setStyleName(listTitle.getStyleName() + " " + style);
-	}
-
-	@Override
-	public void initTable(AbstractDataProvider<Request> data) {
-		initTableColumns();
-		setRequests(data);
-		requestPager.firstPage();
-		requestPager.setDisplay(requestTable);
 	}
 
 	@Override
@@ -282,11 +274,6 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	}
 
 	@Override
-	public void setRequests(AbstractDataProvider<Request> data) {
-		data.addDataDisplay(requestTable);
-	}
-
-	@Override
 	public void setSearchHandleVisible(Boolean visible) {
 		searchPanel.setVisible(visible);
 	}
@@ -316,5 +303,10 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	@UiHandler("searchPanelHandle")
 	public void onSearchPanelHandleClick(ClickEvent event) {
 		setSearchHandleVisible(!searchPanel.isVisible());
+	}
+
+	@Override
+	public CellTable<Request> getRequestTable() {
+		return requestTable;
 	}
 }

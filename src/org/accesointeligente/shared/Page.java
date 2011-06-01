@@ -16,17 +16,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.uihandlers;
+package org.accesointeligente.shared;
 
-import org.accesointeligente.model.Request;
-import org.accesointeligente.shared.NotificationEventType;
+import java.io.Serializable;
+import java.util.List;
 
-import com.gwtplatform.mvp.client.UiHandlers;
+public class Page<T> implements Serializable {
+	private Long start;
+	private Long dataCount;
+	private List<T> data;
 
-public interface RequestListUiHandlers extends UiHandlers {
-	void requestToggleFavorite(Request request);
-	void showNotification(String message, NotificationEventType type);
-	void showRequest(Integer requestId);
-	String getRequestBaseUrlPlace();
-	void gotoRequest();
+	public Long getStart() {
+		return start;
+	}
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+	public Long getDataCount() {
+		return dataCount;
+	}
+
+	public void setDataCount(Long dataCount) {
+		this.dataCount = dataCount;
+	}
+
+	public List<T> getData() {
+		return data;
+	}
+
+	public void setData(List<T> data) {
+		this.data = data;
+	}
 }

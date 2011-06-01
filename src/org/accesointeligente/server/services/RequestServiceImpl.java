@@ -26,15 +26,18 @@ import org.accesointeligente.shared.*;
 import net.sf.gilead.core.PersistentBeanManager;
 import net.sf.gilead.gwt.PersistentRemoteService;
 
-import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class RequestServiceImpl extends PersistentRemoteService implements RequestService {
-	private static final long serialVersionUID = -8965250779021980788L;
 	private PersistentBeanManager persistentBeanManager;
 
 	public RequestServiceImpl() {
@@ -75,7 +78,6 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<RequestCategory> getCategories() throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
@@ -133,203 +135,374 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException {
+	public Page<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
 		try {
 			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
+
 			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFirstResult(offset);
-			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("confirmationDate"));
-			criteria.addOrder(Order.asc("institution"));
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			criteria.setFetchMode("favorites", FetchMode.JOIN);
-			criteria.setFetchMode("responses", FetchMode.JOIN);
-			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			criteria.setProjection(Projections.rowCount());
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(Request.class);
+				criteria.add(Restrictions.eq("user", user));
+				criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+				criteria.addOrder(Order.asc("confirmationDate"));
+				criteria.addOrder(Order.asc("institution"));
+				criteria.setProjection(Projections.distinct(Projections.id()));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.addOrder(Order.asc("confirmationDate"));
+					criteria.addOrder(Order.asc("institution"));
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+				}
+			}
+
 			hibernate.getTransaction().commit();
-			return requests;
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Request> getUserRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+	public Page<Request> getUserRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
 		try {
 			params = (RequestSearchParams) persistentBeanManager.merge(params);
 			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
+
 			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFirstResult(offset);
-			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("confirmationDate"));
-			criteria.addOrder(Order.asc("institution"));
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			criteria.setFetchMode("favorites", FetchMode.JOIN);
-			criteria.setFetchMode("responses", FetchMode.JOIN);
-			if(params != null) {
+
+			if (params != null) {
 				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
 			}
-			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
-			hibernate.getTransaction().commit();
-			return requests;
-		} catch (Throwable ex) {
-			hibernate.getTransaction().rollback();
-			throw new ServiceException();
-		}
-	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException {
-		Session hibernate = HibernateUtil.getSession();
-		hibernate.beginTransaction();
+			criteria.setProjection(Projections.rowCount());
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
 
-		try {
-			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
-			String query = "select distinct f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites left join fetch f.request.responses where f.user = :user";
-			Query hQuery = hibernate.createQuery(query);
-			hQuery.setParameter("user", user);
-			List<Request> requests = hQuery.list();
-			hibernate.getTransaction().commit();
-			return (List<Request>) persistentBeanManager.clone(requests);
-		} catch (Throwable ex) {
-			hibernate.getTransaction().rollback();
-			throw new ServiceException();
-		}
-	}
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(Request.class);
+				criteria.add(Restrictions.eq("user", user));
+				criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Request> getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
-		Session hibernate = HibernateUtil.getSession();
-		hibernate.beginTransaction();
-
-		try {
-			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
-			String query = "select distinct f.request from UserFavoriteRequest f join fetch f.request.institution join fetch f.request.favorites left join fetch f.request.responses where f.user = :user";
-			Query hQuery;
-			if(params != null) {
-				query += SearchParamParseUtil.queryAddSearchParams(params);
-				hQuery = hibernate.createQuery(query);
-				hQuery.setParameter("user", user);
-				if (query.contains("minDate")) {
-					hQuery.setParameter("minDate", params.getMinDate());
+				if (params != null) {
+					SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
 				}
-				if (query.contains("maxDate")) {
-					hQuery.setParameter("maxDate", params.getMaxDate());
+
+				criteria.addOrder(Order.asc("confirmationDate"));
+				criteria.addOrder(Order.asc("institution"));
+				criteria.setProjection(Projections.distinct(Projections.id()));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.addOrder(Order.asc("confirmationDate"));
+					criteria.addOrder(Order.asc("institution"));
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 				}
-			} else {
-				hQuery = hibernate.createQuery(query);
-				hQuery.setParameter("user", user);
 			}
-			List<Request> requests = hQuery.list();
+
 			hibernate.getTransaction().commit();
-			return (List<Request>) persistentBeanManager.clone(requests);
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException {
+	public Page<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
 		try {
 			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
+
+			Criteria criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+			criteria.add(Restrictions.eq("user", user));
+			criteria.setProjection(Projections.countDistinct("request"));
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+				criteria.add(Restrictions.eq("user", user));
+				criteria.setProjection(Projections.distinct(Projections.property("request.id")));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+				}
+			}
+
+			hibernate.getTransaction().commit();
+
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Page<Request> getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
+
+			Criteria criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+			criteria.add(Restrictions.eq("user", user));
+
+			if (params != null) {
+				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
+			}
+
+			criteria.setProjection(Projections.countDistinct("request"));
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+				criteria.add(Restrictions.eq("user", user));
+
+				if (params != null) {
+					SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
+				}
+
+				criteria.setProjection(Projections.distinct(Projections.property("request.id")));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+				}
+			}
+
+			hibernate.getTransaction().commit();
+
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Page<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			User user = SessionUtil.getUser(getThreadLocalRequest().getSession());
+
 			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFirstResult(offset);
-			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.eq("user", user));
 			criteria.add(Restrictions.eq("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("creationDate"));
-			criteria.addOrder(Order.asc("institution"));
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			criteria.setFetchMode("favorites", FetchMode.JOIN);
-			criteria.setFetchMode("responses", FetchMode.JOIN);
-			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			criteria.setProjection(Projections.rowCount());
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(Request.class);
+				criteria.add(Restrictions.eq("user", user));
+				criteria.add(Restrictions.eq("status", RequestStatus.DRAFT));
+				criteria.addOrder(Order.asc("confirmationDate"));
+				criteria.addOrder(Order.asc("institution"));
+				criteria.setProjection(Projections.distinct(Projections.id()));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.addOrder(Order.asc("confirmationDate"));
+					criteria.addOrder(Order.asc("institution"));
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+				}
+			}
+
 			hibernate.getTransaction().commit();
-			return requests;
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException {
+	public Page<Request> getRequestList(Integer offset, Integer limit) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
 		try {
 			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFirstResult(offset);
-			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("confirmationDate"));
-			criteria.addOrder(Order.asc("institution"));
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			criteria.setFetchMode("favorites", FetchMode.JOIN);
-			criteria.setFetchMode("responses", FetchMode.JOIN);
-			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			criteria.setProjection(Projections.rowCount());
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(Request.class);
+				criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+				criteria.setProjection(Projections.distinct(Projections.id()));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.addOrder(Order.asc("confirmationDate"));
+					criteria.addOrder(Order.asc("institution"));
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+				}
+			}
+
 			hibernate.getTransaction().commit();
-			return requests;
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+	public Page<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
 		try {
 			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFirstResult(offset);
-			criteria.setMaxResults(limit);
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
-			criteria.addOrder(Order.asc("confirmationDate"));
-			criteria.addOrder(Order.asc("institution"));
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			criteria.setFetchMode("favorites", FetchMode.JOIN);
-			criteria.setFetchMode("responses", FetchMode.JOIN);
-			if(params != null) {
+
+			if (params != null) {
 				SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
 			}
-			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+
+			criteria.setProjection(Projections.rowCount());
+			Long totalResults = (Long) criteria.uniqueResult();
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria = hibernate.createCriteria(Request.class);
+				criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+
+				if (params != null) {
+					SearchParamParseUtil.criteriaAddSearchParams(criteria, params);
+				}
+
+				criteria.addOrder(Order.asc("confirmationDate"));
+				criteria.addOrder(Order.asc("institution"));
+				criteria.setProjection(Projections.distinct(Projections.id()));
+				criteria.setFirstResult(offset);
+				criteria.setMaxResults(limit);
+				List<Long> ids = criteria.list();
+
+				if (!ids.isEmpty()) {
+					criteria = hibernate.createCriteria(Request.class);
+					criteria.add(Restrictions.in("id", ids));
+					criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+					criteria.addOrder(Order.asc("confirmationDate"));
+					criteria.addOrder(Order.asc("institution"));
+					criteria.setFetchMode("institution", FetchMode.JOIN);
+					criteria.setFetchMode("favorites", FetchMode.JOIN);
+					criteria.setFetchMode("responses", FetchMode.JOIN);
+					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+				}
+			}
+
 			hibernate.getTransaction().commit();
-			return requests;
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Attachment> getResponseAttachmentList(Response response) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
@@ -407,7 +580,6 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<RequestComment> getRequestComments(Request request) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
@@ -602,7 +774,6 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Request> getBestVotedRequests() throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();

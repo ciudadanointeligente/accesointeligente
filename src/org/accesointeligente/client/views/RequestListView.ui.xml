@@ -13,7 +13,7 @@
 			</div>
 			<div><g:FlowPanel ui:field="searchPanel" visible="false"/></div>
 			<c:CellTable ui:field="requestTable" pageSize="10" addStyleNames="{style.requestTable}" />
-			<ai:CustomSimplePager ui:field="requestPager" rangeLimited="false" addStyleNames="{style.requestPager}" />
+			<ai:CustomSimplePager ui:field="requestPager" rangeLimited="true" addStyleNames="{style.requestPager}" />
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
