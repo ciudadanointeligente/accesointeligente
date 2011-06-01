@@ -165,25 +165,13 @@ public class RequestSearchView extends ViewWithUiHandlers<RequestSearchUiHandler
 
 	@UiHandler("clear")
 	protected void onClearClick(ClickEvent event) {
-		keyWord.setText("");
-		institution.setText("");
-		minDate.setValue(null);
-		maxDate.setValue(null);
-		statusPending.setValue(false);
-		statusClosed.setValue(false);
-		statusExpired.setValue(false);
-		statusDerived.setValue(false);
+		resetFilters();
+		getUiHandlers().resetSearch();
 	}
 
 	@UiHandler("clear")
 	protected void onClearKeyDown(KeyDownEvent event) {
-		keyWord.setText("");
-		institution.setText("");
-		minDate.setValue(null);
-		maxDate.setValue(null);
-		statusPending.setValue(false);
-		statusClosed.setValue(false);
-		statusExpired.setValue(false);
-		statusDerived.setValue(false);
+		resetFilters();
+		getUiHandlers().resetSearch();
 	}
 }
