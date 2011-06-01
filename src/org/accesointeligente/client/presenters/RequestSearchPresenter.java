@@ -99,4 +99,9 @@ public class RequestSearchPresenter extends PresenterWidget<RequestSearchPresent
 		params.setStatusDerived(getView().getStatusDerived());
 		fireEvent(new RequestSearchEvent(params));
 	}
+
+	@Override
+	public void resetSearch() {
+		fireEvent(new RequestSearchEvent(null));
+	}
 }

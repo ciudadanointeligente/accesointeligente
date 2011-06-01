@@ -19,6 +19,7 @@
 package org.accesointeligente.client.services;
 
 import org.accesointeligente.model.*;
+import org.accesointeligente.shared.Page;
 import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.ServiceException;
 
@@ -34,13 +35,13 @@ public interface RequestService extends RemoteService {
 	List<RequestCategory> getCategories() throws ServiceException;
 	Request getRequest(Integer requestId) throws ServiceException;
 	Request getRequest(String remoteIdentifier) throws ServiceException;
-	List<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException;
-	List<Request> getUserRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
-	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException;
-	List<Request> getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
-	List<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException;
-	List<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
-	List<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
+	Page<Request> getUserRequestList(Integer offset, Integer limit) throws ServiceException;
+	Page<Request> getUserRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
+	Page<Request> getUserFavoriteRequestList(Integer offset, Integer limit) throws ServiceException;
+	Page<Request> getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
+	Page<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException;
+	Page<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
+	Page<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
 	List<Attachment> getResponseAttachmentList(Response response) throws ServiceException;
 	UserFavoriteRequest getFavoriteRequest(Request request, User user) throws ServiceException;
 	UserFavoriteRequest createFavoriteRequest(Request request, User user) throws ServiceException;

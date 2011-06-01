@@ -19,6 +19,7 @@
 package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Request;
+import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.apache.http.*;
@@ -138,7 +139,7 @@ public class SGS extends Robot {
 			EntityUtils.consume(client.execute(new HttpGet(baseUrl + requestFormAction)).getEntity());
 			formParams = new ArrayList<NameValuePair>();
 			formParams.add(new BasicNameValuePair("id_entidad", idEntidad));
-			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getInformation() + "\n\n" + request.getContext()));
+			formParams.add(new BasicNameValuePair("identificacion_documentos", request.getInformation() + "\n\n" + request.getContext() + "\n\n" + ApplicationProperties.getProperty("request.signature")));
 			formParams.add(new BasicNameValuePair("notificacion", "1"));
 			formParams.add(new BasicNameValuePair("id_forma_recepcion", "1")); // Email
 			formParams.add(new BasicNameValuePair("oficina", ""));

@@ -19,6 +19,7 @@
 package org.accesointeligente.client.services;
 
 import org.accesointeligente.model.*;
+import org.accesointeligente.shared.Page;
 import org.accesointeligente.shared.RequestSearchParams;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,13 +32,13 @@ public interface RequestServiceAsync {
 	void getCategories(AsyncCallback<List<RequestCategory>> callback);
 	void getRequest(Integer requestId, AsyncCallback<Request> callback);
 	void getRequest(String remoteIdentifier, AsyncCallback<Request> callback);
-	void getUserRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
-	void getUserRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<List<Request>> callback);
-	void getUserFavoriteRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
-	void getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<List<Request>> callback);
-	void getUserDraftList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
-	void getRequestList(Integer offset, Integer limit, AsyncCallback<List<Request>> callback);
-	void getRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<List<Request>> callback);
+	void getUserRequestList(Integer offset, Integer limit, AsyncCallback<Page<Request>> callback);
+	void getUserRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<Page<Request>> callback);
+	void getUserFavoriteRequestList(Integer offset, Integer limit, AsyncCallback<Page<Request>> callback);
+	void getUserFavoriteRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<Page<Request>> callback);
+	void getUserDraftList(Integer offset, Integer limit, AsyncCallback<Page<Request>> callback);
+	void getRequestList(Integer offset, Integer limit, AsyncCallback<Page<Request>> callback);
+	void getRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<Page<Request>> callback);
 	void getResponseAttachmentList(Response response, AsyncCallback<List<Attachment>> callback);
 	void getFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);
 	void createFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);

@@ -39,7 +39,7 @@ public class PresenterModule extends AbstractPresenterModule {
 		bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
 		bind(UserGatekeeper.class).in(Singleton.class);
 		bind(AnonymousGatekeeper.class).in(Singleton.class);
-		bind(PlaceHistory.class).in(Singleton.class);
+		bind(PlaceHistory.class).asEagerSingleton();
 		bind(RootPresenter.class).asEagerSingleton();
 		bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
 		bindPresenter(MainPresenter.class, MainPresenter.MyView.class, MainView.class, MainPresenter.MyProxy.class);

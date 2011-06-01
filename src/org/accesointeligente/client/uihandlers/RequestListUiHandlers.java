@@ -20,14 +20,10 @@ package org.accesointeligente.client.uihandlers;
 
 import org.accesointeligente.model.Request;
 import org.accesointeligente.shared.NotificationEventType;
-import org.accesointeligente.shared.RequestSearchParams;
 
 import com.gwtplatform.mvp.client.UiHandlers;
 
 public interface RequestListUiHandlers extends UiHandlers {
-	void loadColumns(String type);
-	void loadRequests(Integer offset, Integer limit, String type);
-	void loadRequests(Integer offset, Integer limit, String type, RequestSearchParams params);
 	void requestToggleFavorite(Request request);
 	void showNotification(String message, NotificationEventType type);
 	void showRequest(Integer requestId);

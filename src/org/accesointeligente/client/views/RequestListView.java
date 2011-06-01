@@ -25,6 +25,7 @@ import org.accesointeligente.client.uihandlers.RequestListUiHandlers;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.model.UserFavoriteRequest;
+import org.accesointeligente.shared.RequestStatus;
 
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -37,7 +38,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.AbstractDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,7 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	public RequestListView() {
 		widget = uiBinder.createAndBindUi(this);
 		ResourceBundle.INSTANCE.RequestListView().ensureInjected();
+		requestPager.setDisplay(requestTable);
 	}
 
 	@Override
@@ -89,22 +90,21 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	}
 
 	@Override
-	public void initTable(AbstractDataProvider<Request> data) {
-		initTableColumns();
-		setRequests(data);
-		requestPager.firstPage();
-		requestPager.setDisplay(requestTable);
-	}
-
-	@Override
 	public void initTableColumns() {
 		// Status
 		Column<Request, CustomImageCellParams> statusColumn = new Column<Request, CustomImageCellParams>(new CustomImageCell()) {
 			@Override
 			public CustomImageCellParams getValue(Request request) {
 				CustomImageCellParams params = new CustomImageCellParams();
-				params.setUrl(request.getStatus().getUrl());
-				params.setTitle(request.getStatus().getName());
+
+				if (RequestStatus.CLOSED.equals(request.getStatus()) && (request.getResponses() == null || request.getResponses().size() == 0)) {
+					params.setUrl(RequestStatus.PENDING.getUrl());
+					params.setTitle(RequestStatus.PENDING.getName());
+				} else {
+					params.setUrl(request.getStatus().getUrl());
+					params.setTitle(request.getStatus().getName());
+				}
+
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableStatus());
 				return params;
 			}
@@ -274,11 +274,6 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	}
 
 	@Override
-	public void setRequests(AbstractDataProvider<Request> data) {
-		data.addDataDisplay(requestTable);
-	}
-
-	@Override
 	public void setSearchHandleVisible(Boolean visible) {
 		searchPanel.setVisible(visible);
 	}
@@ -308,5 +303,10 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 	@UiHandler("searchPanelHandle")
 	public void onSearchPanelHandleClick(ClickEvent event) {
 		setSearchHandleVisible(!searchPanel.isVisible());
+	}
+
+	@Override
+	public CellTable<Request> getRequestTable() {
+		return requestTable;
 	}
 }

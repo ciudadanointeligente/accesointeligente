@@ -19,6 +19,7 @@
 package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Request;
+import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.apache.http.*;
@@ -118,7 +119,7 @@ public class SIAC extends Robot {
 			formParams.add(new BasicNameValuePair("tipo", "7"));
 			formParams.add(new BasicNameValuePair("dirigido", idEntidad));
 			formParams.add(new BasicNameValuePair("ley_email", "S"));
-			formParams.add(new BasicNameValuePair("detalle", request.getInformation() + "\n\n" + request.getContext()));
+			formParams.add(new BasicNameValuePair("detalle", request.getInformation() + "\n\n" + request.getContext() + "\n\n" + ApplicationProperties.getProperty("request.signature")));
 			formParams.add(new BasicNameValuePair("remLen1", "" + (1998 - request.getInformation().length() - request.getContext().length())));
 			formParams.add(new BasicNameValuePair("nombre", "Fundación Ciudadano Inteligente"));
 			formParams.add(new BasicNameValuePair("ap_paterno", "N/A"));

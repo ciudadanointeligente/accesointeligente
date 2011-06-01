@@ -16,12 +16,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.uihandlers;
+package org.accesointeligente.shared;
 
-import com.gwtplatform.mvp.client.UiHandlers;
+import java.io.Serializable;
+import java.util.List;
 
-public interface RequestSearchUiHandlers extends UiHandlers {
-	void getInstitutions();
-	void requestSearch();
-	void resetSearch();
+public class Page<T> implements Serializable {
+	private Long start;
+	private Long dataCount;
+	private List<T> data;
+
+	public Long getStart() {
+		return start;
+	}
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+	public Long getDataCount() {
+		return dataCount;
+	}
+
+	public void setDataCount(Long dataCount) {
+		this.dataCount = dataCount;
+	}
+
+	public List<T> getData() {
+		return data;
+	}
+
+	public void setData(List<T> data) {
+		this.data = data;
+	}
 }

@@ -21,9 +21,8 @@ package org.accesointeligente.model;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class UserFavoriteRequest extends LightEntity {
-
-	User user;
-	Request request;
+	private User user;
+	private Request request;
 
 	public User getUser() {
 		return user;
