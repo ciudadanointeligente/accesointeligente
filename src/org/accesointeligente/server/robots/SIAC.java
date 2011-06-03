@@ -120,10 +120,10 @@ public class SIAC extends Robot {
 			formParams.add(new BasicNameValuePair("dirigido", idEntidad));
 			formParams.add(new BasicNameValuePair("ley_email", "S"));
 			formParams.add(new BasicNameValuePair("detalle", request.getInformation() + "\n\n" + request.getContext() + "\n\n" + ApplicationProperties.getProperty("request.signature")));
-			formParams.add(new BasicNameValuePair("remLen1", "" + (1998 - request.getInformation().length() - request.getContext().length())));
-			formParams.add(new BasicNameValuePair("nombre", "Fundación Ciudadano Inteligente"));
-			formParams.add(new BasicNameValuePair("ap_paterno", "N/A"));
-			formParams.add(new BasicNameValuePair("ap_materno", "N/A"));
+			formParams.add(new BasicNameValuePair("remLen1", "" + (1996 - request.getInformation().length() - request.getContext().length() - ApplicationProperties.getProperty("request.signature").length())));
+			formParams.add(new BasicNameValuePair("nombre", "Felipe"));
+			formParams.add(new BasicNameValuePair("ap_paterno", "Heusser"));
+			formParams.add(new BasicNameValuePair("ap_materno", "Ferres"));
 			formParams.add(new BasicNameValuePair("rut", ""));
 			formParams.add(new BasicNameValuePair("rut_dv", ""));
 			formParams.add(new BasicNameValuePair("pasaporte", ""));
@@ -132,9 +132,9 @@ public class SIAC extends Robot {
 			formParams.add(new BasicNameValuePair("educacion", "0"));
 			formParams.add(new BasicNameValuePair("edad", "0"));
 			formParams.add(new BasicNameValuePair("ocupacion", "0"));
-			formParams.add(new BasicNameValuePair("sexo", ""));
-			formParams.add(new BasicNameValuePair("rb_organizacion", "N"));
-			formParams.add(new BasicNameValuePair("razon_social", ""));
+			formParams.add(new BasicNameValuePair("sexo", "M"));
+			formParams.add(new BasicNameValuePair("rb_organizacion", "S"));
+			formParams.add(new BasicNameValuePair("razon_social", "Fundación Ciudadano Inteligente"));
 			formParams.add(new BasicNameValuePair("rb_apoderado", "N"));
 			formParams.add(new BasicNameValuePair("nombre_apoderado", ""));
 			formParams.add(new BasicNameValuePair("residencia", "CHI"));
