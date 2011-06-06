@@ -52,7 +52,7 @@ public class ResponseChecker {
 	private Store store;
 	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,7}).*");
 	private List<Attachment> attachments;
-	private String remoteIdentifier;
+	private Set<String> remoteIdentifiers;
 	private String messageBody;
 
 	public ResponseChecker() {
@@ -83,15 +83,16 @@ public class ResponseChecker {
 			for (Message message : inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))) {
 				try {
 					System.out.println(message.getFrom()[0] + "\t" + message.getSubject());
-					remoteIdentifier = null;
+					remoteIdentifiers = null;
 					messageBody = null;
 					attachments = new ArrayList<Attachment>();
+					remoteIdentifiers = new HashSet<String>();
 
 					if (message.getSubject() != null) {
 						Matcher matcher = pattern.matcher(message.getSubject());
 
 						if (matcher.matches()) {
-							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
+							remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 						}
 					}
 
@@ -106,19 +107,15 @@ public class ResponseChecker {
 						}
 					} else if (content instanceof String) {
 						messageBody = (String) content;
+						Matcher matcher;
+						StringTokenizer tokenizer = new StringTokenizer(messageBody);
 
-						if (remoteIdentifier == null) {
-							Matcher matcher;
-							StringTokenizer tokenizer = new StringTokenizer(messageBody);
+						while (tokenizer.hasMoreTokens()) {
+							String token = tokenizer.nextToken();
+							matcher = pattern.matcher(token);
 
-							while (tokenizer.hasMoreTokens()) {
-								String token = tokenizer.nextToken();
-								matcher = pattern.matcher(token);
-
-								if (matcher.matches()) {
-									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-									break;
-								}
+							if (matcher.matches()) {
+								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 							}
 						}
 					} else {
@@ -129,62 +126,55 @@ public class ResponseChecker {
 						continue;
 					}
 
-					hibernate = HibernateUtil.getSession();
-					hibernate.beginTransaction();
-					Response response = new Response();
-					response.setSender(message.getFrom()[0].toString());
-					response.setDate(message.getSentDate());
-					response.setSubject(message.getSubject());
-					response.setInformation(messageBody);
-					hibernate.save(response);
-					hibernate.getTransaction().commit();
+					Boolean requestFound = false;
 
-					hibernate = HibernateUtil.getSession();
-					hibernate.beginTransaction();
-
-					for (Attachment attachment : attachments) {
-						attachment.setResponse(response);
-						hibernate.update(attachment);
-					}
-
-					hibernate.getTransaction().commit();
-
-					Request request = null;
-
-					if (remoteIdentifier != null) {
+					for (String remoteIdentifier : remoteIdentifiers) {
 						hibernate = HibernateUtil.getSession();
 						hibernate.beginTransaction();
 
 						Criteria criteria = hibernate.createCriteria(Request.class);
 						criteria.add(Restrictions.eq("remoteIdentifier", remoteIdentifier));
 						criteria.setFetchMode("user", FetchMode.JOIN);
-						request = (Request) criteria.uniqueResult();
+						Request request = (Request) criteria.uniqueResult();
 						hibernate.getTransaction().commit();
+
+						if (request != null) {
+							Response response;
+
+							// If the attachments haven't been used, use them. Otherwise, copy them.
+							if (!requestFound) {
+								response = createResponse(message.getFrom()[0].toString(), message.getSentDate(), message.getSubject(), messageBody, attachments);
+							} else {
+								response = createResponse(message.getFrom()[0].toString(), message.getSentDate(), message.getSubject(), messageBody, cloneAttachments(attachments));
+							}
+
+							hibernate = HibernateUtil.getSession();
+							hibernate.beginTransaction();
+
+							response.setRequest(request);
+							request.setStatus(RequestStatus.CLOSED);
+							request.setResponseDate(new Date());
+							hibernate.update(request);
+							hibernate.update(response);
+							requestFound = true;
+
+							// TODO: send permalink to request
+							User user = request.getUser();
+
+							Emailer emailer = new Emailer();
+							emailer.setRecipient(user.getEmail());
+							emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
+							emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+							emailer.connectAndSend();
+						}
 					}
 
-					if (request == null) {
+					if (!requestFound) {
+						createResponse(message.getFrom()[0].toString(), message.getSentDate(), message.getSubject(), messageBody, attachments);
 						message.setFlag(Flag.SEEN, false);
 						inbox.copyMessages(new Message[] {message}, failbox);
 						message.setFlag(Flag.DELETED, true);
 						inbox.expunge();
-					} else {
-						hibernate = HibernateUtil.getSession();
-						hibernate.beginTransaction();
-
-						response.setRequest(request);
-						request.setStatus(RequestStatus.CLOSED);
-						request.setResponseDate(new Date());
-						hibernate.update(request);
-						hibernate.update(response);
-
-						// TODO: send permalink to request
-						User user = request.getUser();
-
-						Emailer emailer = new Emailer();
-						emailer.setRecipient(user.getEmail());
-						emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
-						emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
-						emailer.connectAndSend();
 					}
 				} catch (Exception e) {
 					if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
@@ -207,6 +197,7 @@ public class ResponseChecker {
 		String disposition = part.getDisposition();
 		Matcher matcher;
 		org.hibernate.Session hibernate;
+		StringTokenizer tokenizer;
 
 		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
 			FileType filetype = null;
@@ -214,17 +205,13 @@ public class ResponseChecker {
 			// TODO: other formats
 			if (part.isMimeType("text/plain")) {
 				String text = (String) part.getContent();
+				tokenizer = new StringTokenizer(text);
 
-				if (remoteIdentifier == null) {
-					StringTokenizer tokenizer = new StringTokenizer(text);
+				while (tokenizer.hasMoreTokens()) {
+					matcher = pattern.matcher(tokenizer.nextToken());
 
-					while (tokenizer.hasMoreTokens()) {
-						matcher = pattern.matcher(tokenizer.nextToken());
-
-						if (matcher.matches()) {
-							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-							break;
-						}
+					if (matcher.matches()) {
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -232,17 +219,13 @@ public class ResponseChecker {
 				return;
 			} else if (part.isMimeType("text/html")) {
 				String text = (String) part.getContent();
+				tokenizer = new StringTokenizer(text);
 
-				if (remoteIdentifier == null) {
-					StringTokenizer tokenizer = new StringTokenizer(text);
+				while (tokenizer.hasMoreTokens()) {
+					matcher = pattern.matcher(tokenizer.nextToken());
 
-					while (tokenizer.hasMoreTokens()) {
-						matcher = pattern.matcher(tokenizer.nextToken());
-
-						if (matcher.matches()) {
-							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-							break;
-						}
+					if (matcher.matches()) {
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -274,56 +257,48 @@ public class ResponseChecker {
 			try {
 				switch (filetype) {
 					case DOC:
-						if (remoteIdentifier == null) {
-							WordExtractor extractor = new WordExtractor(part.getInputStream());
-							StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
+						WordExtractor docExtractor = new WordExtractor(part.getInputStream());
+						tokenizer = new StringTokenizer(docExtractor.getText());
 
-							while (tokenizer.hasMoreTokens()) {
-								matcher = pattern.matcher(tokenizer.nextToken());
+						while (tokenizer.hasMoreTokens()) {
+							matcher = pattern.matcher(tokenizer.nextToken());
 
-								if (matcher.matches()) {
-									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-									break;
-								}
+							if (matcher.matches()) {
+								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 							}
 						}
 						break;
 					case DOCX:
-						if (remoteIdentifier == null) {
-							XWPFWordExtractor extractor = new XWPFWordExtractor(new XWPFDocument(part.getInputStream()));
-							StringTokenizer tokenizer = new StringTokenizer(extractor.getText());
+						XWPFWordExtractor docxExtractor = new XWPFWordExtractor(new XWPFDocument(part.getInputStream()));
+						tokenizer = new StringTokenizer(docxExtractor.getText());
+
+						while (tokenizer.hasMoreTokens()) {
+							matcher = pattern.matcher(tokenizer.nextToken());
+
+							if (matcher.matches()) {
+								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+							}
+						}
+						break;
+					case PDF:
+						PdfReader reader = new PdfReader(part.getInputStream());
+
+						for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+							if (remoteIdentifiers != null) {
+								break;
+							}
+
+							tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
 
 							while (tokenizer.hasMoreTokens()) {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-									break;
+									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 								}
 							}
-						}
-						break;
-					case PDF:
-						if (remoteIdentifier == null) {
-							PdfReader reader = new PdfReader(part.getInputStream());
 
-							for (int page = 1; page <= reader.getNumberOfPages(); page++) {
-								if (remoteIdentifier != null) {
-									break;
-								}
-
-								StringTokenizer tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
-
-								while (tokenizer.hasMoreTokens()) {
-									matcher = pattern.matcher(tokenizer.nextToken());
-
-									if (matcher.matches()) {
-										remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-										reader.close();
-										break;
-									}
-								}
-							}
+							reader.close();
 						}
 						break;
 					default:
@@ -373,18 +348,14 @@ public class ResponseChecker {
 		} else {
 			if (part.isMimeType("text/plain")) {
 				String text = (String) part.getContent();
+				tokenizer = new StringTokenizer(text);
 
-				if (remoteIdentifier == null) {
-					StringTokenizer tokenizer = new StringTokenizer(text);
+				while (tokenizer.hasMoreTokens()) {
+					String token = tokenizer.nextToken();
+					matcher = pattern.matcher(token);
 
-					while (tokenizer.hasMoreTokens()) {
-						String token = tokenizer.nextToken();
-						matcher = pattern.matcher(token);
-
-						if (matcher.matches()) {
-							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-							break;
-						}
+					if (matcher.matches()) {
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -392,17 +363,13 @@ public class ResponseChecker {
 				return;
 			} else if (part.isMimeType("text/html")) {
 				String text = (String) part.getContent();
+				tokenizer = new StringTokenizer(text);
 
-				if (remoteIdentifier == null) {
-					StringTokenizer tokenizer = new StringTokenizer(text);
+				while (tokenizer.hasMoreTokens()) {
+					matcher = pattern.matcher(tokenizer.nextToken());
 
-					while (tokenizer.hasMoreTokens()) {
-						matcher = pattern.matcher(tokenizer.nextToken());
-
-						if (matcher.matches()) {
-							remoteIdentifier = formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2)));
-							break;
-						}
+					if (matcher.matches()) {
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -423,5 +390,78 @@ public class ResponseChecker {
 
 	private String formatIdentifier(String prefix, Integer number) {
 		return String.format("%s-%07d", prefix, number);
+	}
+
+	private Response createResponse(String sender, Date date, String subject, String information, List<Attachment> attachments) {
+		org.hibernate.Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+		Response response = new Response();
+		response.setSender(sender);
+		response.setDate(date);
+		response.setSubject(subject);
+		response.setInformation(information);
+		hibernate.save(response);
+		hibernate.getTransaction().commit();
+
+		hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		for (Attachment attachment : attachments) {
+			attachment.setResponse(response);
+			hibernate.update(attachment);
+		}
+
+		hibernate.getTransaction().commit();
+		return response;
+	}
+
+	private List<Attachment> cloneAttachments(List<Attachment> attachments) {
+		List<Attachment> newAttachments = new ArrayList<Attachment>(attachments.size());
+
+		for (Attachment oldAttachment : attachments) {
+			Attachment newAttachment = cloneAttachment(oldAttachment);
+
+			if (newAttachment != null) {
+				newAttachments.add(newAttachment);
+			}
+		}
+
+		return newAttachments;
+	}
+
+	private Attachment cloneAttachment(Attachment attachment) {
+		org.hibernate.Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+		Attachment newAttachment = new Attachment();
+		hibernate.save(newAttachment);
+		hibernate.getTransaction().commit();
+
+		File oldFile = new File(ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString() + "/" + attachment.getName());
+		File newDirectory = new File(ApplicationProperties.getProperty("attachment.directory") + newAttachment.getId().toString());
+
+		try {
+			newDirectory.mkdir();
+			FileUtils.copyFileToDirectory(oldFile, newDirectory);
+		} catch (Exception e) {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			hibernate.delete(attachment);
+			hibernate.getTransaction().commit();
+			System.err.println("Error saving " + newDirectory.getAbsolutePath() + "/" + attachment.getName());
+			e.printStackTrace();
+			return null;
+		}
+
+		String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + newAttachment.getId().toString();
+
+		newAttachment.setName(attachment.getName());
+		newAttachment.setType(attachment.getType());
+		newAttachment.setUrl(baseUrl + "/" + newAttachment.getName());
+
+		hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+		hibernate.update(newAttachment);
+		hibernate.getTransaction().commit();
+		return newAttachment;
 	}
 }
