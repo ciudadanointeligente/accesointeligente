@@ -29,6 +29,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -47,6 +48,7 @@ import javax.mail.internet.MimeUtility;
 import javax.mail.search.FlagTerm;
 
 public class ResponseChecker {
+	private static final Logger logger = Logger.getLogger(ResponseChecker.class);
 	private Properties props;
 	private Session session;
 	private Store store;
@@ -65,7 +67,7 @@ public class ResponseChecker {
 				ApplicationProperties.getProperty("email.password") == null || ApplicationProperties.getProperty("email.folder") == null ||
 				ApplicationProperties.getProperty("email.failfolder") == null || ApplicationProperties.getProperty("attachment.directory") == null ||
 				ApplicationProperties.getProperty("attachment.baseurl") == null) {
-			System.err.println("ResponseChecker: No estan definidas las propiedades!");
+			logger.error("Properties are not defined!");
 			return;
 		}
 
@@ -82,7 +84,7 @@ public class ResponseChecker {
 
 			for (Message message : inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false))) {
 				try {
-					System.out.println(message.getFrom()[0] + "\t" + message.getSubject());
+					logger.info("Sender: " + message.getFrom()[0] + "\tSubject: " + message.getSubject());
 					remoteIdentifiers = null;
 					messageBody = null;
 					attachments = new ArrayList<Attachment>();
@@ -181,7 +183,7 @@ public class ResponseChecker {
 						hibernate.getTransaction().rollback();
 					}
 
-					e.printStackTrace(System.err);
+					logger.error(e.getMessage(), e);
 				}
 			}
 		} catch (Exception e) {
@@ -189,7 +191,7 @@ public class ResponseChecker {
 				hibernate.getTransaction().rollback();
 			}
 
-			e.printStackTrace(System.err);
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -304,8 +306,7 @@ public class ResponseChecker {
 					default:
 				}
 			} catch (Exception e) {
-				System.err.println("Error procesando " + MimeUtility.decodeText(part.getFileName()));
-				e.printStackTrace();
+				logger.error("Error processing " + MimeUtility.decodeText(part.getFileName()), e);
 				throw e;
 			}
 
@@ -335,8 +336,7 @@ public class ResponseChecker {
 				hibernate.beginTransaction();
 				hibernate.delete(attachment);
 				hibernate.getTransaction().commit();
-				System.err.println("Error saving " + directory + filename);
-				e.printStackTrace();
+				logger.error("Error saving " + directory + filename, e);
 				throw e;
 			}
 
@@ -447,8 +447,7 @@ public class ResponseChecker {
 			hibernate.beginTransaction();
 			hibernate.delete(attachment);
 			hibernate.getTransaction().commit();
-			System.err.println("Error saving " + newDirectory.getAbsolutePath() + "/" + attachment.getName());
-			e.printStackTrace();
+			logger.error("Error saving " + newDirectory.getAbsolutePath() + "/" + attachment.getName(), e);
 			return null;
 		}
 
