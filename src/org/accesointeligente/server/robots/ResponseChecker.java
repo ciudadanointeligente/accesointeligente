@@ -323,6 +323,12 @@ public class ResponseChecker {
 
 			String filename = MimeUtility.decodeText(part.getFileName());
 
+			matcher = pattern.matcher(filename);
+
+			if (matcher.matches()) {
+				remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+			}
+
 			attachment.setName(filename);
 			attachment.setType(filetype);
 			attachment.setUrl(baseUrl + "/" + filename);
