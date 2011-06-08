@@ -31,6 +31,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window.Navigator;
 
 import javax.inject.Inject;
 
@@ -44,7 +45,8 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 	public interface MyProxy extends ProxyPlace<UserGuideVideoPresenter> {
 	}
 
-	private static final String USERGUIDEVIDEO = "video/userguide.mp4";
+	private static final String USERGUIDEVIDEO_MP4 = "video/userguide.mp4";
+	private static final String USERGUIDEVIDEO_WEBM = "video/userguide.webm";
 
 	@Inject
 	public UserGuideVideoPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
@@ -54,7 +56,23 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 
 	@Override
 	public void onReset() {
-		getView().setVideo(USERGUIDEVIDEO);
+		String userAgent = Navigator.getUserAgent().toLowerCase();
+
+		if (userAgent.contains("msie")) {
+			getView().setVideo(USERGUIDEVIDEO_MP4);
+		} else if (userAgent.contains("chrome")) {
+			getView().setVideo(USERGUIDEVIDEO_WEBM);
+		} else if (userAgent.contains("chromium")) {
+			getView().setVideo(USERGUIDEVIDEO_WEBM);
+		} else if (userAgent.contains("safari")) {
+			getView().setVideo(USERGUIDEVIDEO_MP4);
+		} else if (userAgent.contains("opera")) {
+			getView().setVideo(USERGUIDEVIDEO_WEBM);
+		} else if (userAgent.contains("gecko")) {
+			getView().setVideo(USERGUIDEVIDEO_WEBM);
+		} else {
+			getView().setVideo(USERGUIDEVIDEO_WEBM);
+		}
 	}
 
 	@Override
