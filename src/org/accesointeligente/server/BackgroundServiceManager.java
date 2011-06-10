@@ -18,6 +18,8 @@
  */
 package org.accesointeligente.server;
 
+import org.apache.log4j.Logger;
+
 import java.util.Calendar;
 import java.util.Timer;
 
@@ -25,15 +27,18 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class BackgroundServiceManager implements ServletContextListener {
+	private static final Logger logger = Logger.getLogger(BackgroundServiceManager.class);
 	private Timer timer;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
+		logger.info("Context destroyed");
 		timer = null;
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
+		logger.info("Context initialized");
 		timer = new Timer();
 		timer.schedule(new ResponseCheckerTask(), 60000, 3600000);
 
