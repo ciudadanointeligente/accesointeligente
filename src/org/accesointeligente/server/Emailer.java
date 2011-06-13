@@ -18,6 +18,8 @@
  */
 package org.accesointeligente.server;
 
+import org.apache.log4j.Logger;
+
 import java.util.Date;
 import java.util.Properties;
 
@@ -26,6 +28,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Emailer {
+	private static final Logger logger = Logger.getLogger(Emailer.class);
 	private Properties props;
 	private String recipient;
 	private String subject;
@@ -68,7 +71,7 @@ public class Emailer {
 
 	public Boolean connectAndSend() {
 		if (ApplicationProperties.getProperty("email.smtp") == null || ApplicationProperties.getProperty("email.user") == null || ApplicationProperties.getProperty("email.password") == null) {
-			System.err.println("Emailer: No estan definidas las propiedades!");
+			logger.error("No estan definidas las propiedades!");
 			return false;
 		}
 
@@ -80,7 +83,7 @@ public class Emailer {
 		props.put("mail.smtp.socketFactory.fallback", "false");
 
 		if (getRecipient() == null || getSubject() == null || getBody() == null) {
-			System.err.println("Emailer: No estan definidas las partes del correo");
+			logger.error("No estan definidas las partes del correo");
 			return false;
 		}
 
@@ -101,7 +104,7 @@ public class Emailer {
 			Transport.send(message);
 			return true;
 		} catch (MessagingException ex) {
-			System.err.println("No se ha podido enviar el correo: " + ex);
+			logger.error("No se ha podido enviar el correo", ex);
 		}
 
 		return false;
