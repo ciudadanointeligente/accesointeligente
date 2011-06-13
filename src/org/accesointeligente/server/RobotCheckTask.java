@@ -34,9 +34,10 @@ public class RobotCheckTask extends TimerTask {
 	@Override
 	public void run() {
 		logger.info("Running");
-		Session hibernate = HibernateUtil.getSession();
+		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Institution.class);
 			List<Institution> institutions = criteria.list();
@@ -74,7 +75,7 @@ public class RobotCheckTask extends TimerTask {
 				hibernate.getTransaction().commit();
 			}
 		} catch (Exception ex) {
-			if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 				hibernate.getTransaction().rollback();
 				logger.error("Failure", ex);
 			}

@@ -37,9 +37,10 @@ public class RequestUpdateTask extends TimerTask {
 	@Override
 	public void run() {
 		logger.info("Running");
-		Session hibernate = HibernateUtil.getSession();
+		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -75,7 +76,7 @@ public class RequestUpdateTask extends TimerTask {
 				}
 			}
 		} catch (Exception ex) {
-			if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 				hibernate.getTransaction().rollback();
 				logger.error("Failure", ex);
 			}
