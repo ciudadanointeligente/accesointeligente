@@ -166,7 +166,7 @@ public class ResponseChecker {
 							Emailer emailer = new Emailer();
 							emailer.setRecipient(user.getEmail());
 							emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
-							emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+							emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), request.getId(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
 							emailer.connectAndSend();
 						}
 					}
