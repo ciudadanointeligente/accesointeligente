@@ -21,6 +21,7 @@ package org.accesointeligente.server;
 import org.accesointeligente.server.robots.Robot;
 import org.accesointeligente.shared.InstitutionClass;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -28,22 +29,22 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class RobotContext implements ServletContextListener {
+	private static final Logger logger = Logger.getLogger(RobotContext.class);
 	private static ApplicationContext context;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
+		logger.info("Context destroyed");
 		context = null;
-		System.err.println("Robot context destroyed");
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		try {
 			context = new FileSystemXmlApplicationContext(event.getServletContext().getResource("/WEB-INF/robots.xml").toString());
-			System.err.println("Robot context initialized");
-		} catch (Exception e) {
-			System.err.println("Can't load robot context: " + e.getMessage());
-			e.printStackTrace();
+			logger.info("Context initialized");
+		} catch (Exception ex) {
+			logger.error("Failed to initialize context", ex);
 		}
 	}
 

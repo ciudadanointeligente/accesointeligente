@@ -18,14 +18,18 @@
  */
 package org.accesointeligente.server;
 
-import java.util.TimerTask;
-
 import org.accesointeligente.server.robots.ResponseChecker;
 
+import org.apache.log4j.Logger;
+
+import java.util.TimerTask;
+
 public class ResponseCheckerTask extends TimerTask {
+	private static final Logger logger = Logger.getLogger(ResponseChecker.class);
+
 	@Override
 	public void run() {
-		System.err.println("Iniciando ResponseCheckerTask");
+		logger.info("Running");
 		ResponseChecker responseChecker = new ResponseChecker();
 		responseChecker.connectAndCheck();
 	}

@@ -31,6 +31,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 
@@ -43,6 +44,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SGS extends Robot {
+	private static final Logger logger = Logger.getLogger(SGS.class);
 	private HttpClient client;
 	private HtmlCleaner cleaner;
 	private Boolean loggedIn = false;
@@ -114,7 +116,7 @@ public class SGS extends Robot {
 
 			loggedIn = true;
 		} catch (Throwable ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 			throw new RobotException();
 		}
 	}
@@ -236,7 +238,7 @@ public class SGS extends Robot {
 
 			return request;
 		} catch (Throwable ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 			throw new RobotException();
 		}
 	}
@@ -280,7 +282,7 @@ public class SGS extends Robot {
 				return null;
 			}
 		} catch (Throwable ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 			throw new RobotException();
 		}
 	}
@@ -313,7 +315,7 @@ public class SGS extends Robot {
 
 			return false;
 		} catch (Throwable ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 			throw new RobotException();
 		}
 	}

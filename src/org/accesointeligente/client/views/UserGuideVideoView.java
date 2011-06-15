@@ -54,9 +54,10 @@ public class UserGuideVideoView extends ViewWithUiHandlers<UserGuideVideoUiHandl
 	@Override
 	public void setVideo(String url) {
 		videoPanel.clear();
-		userGuideVideo = new Video(url);
-		userGuideVideo.getElement().setAttribute("autoplay", "autoplay");
-		userGuideVideo.getElement().setAttribute("controls", "controls");
+		userGuideVideo = Video.createIfSupported();
+		userGuideVideo.setAutoplay(true);
+		userGuideVideo.setControls(true);
+		userGuideVideo.setSrc(url);
 		userGuideVideo.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override

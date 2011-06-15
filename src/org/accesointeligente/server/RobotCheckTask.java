@@ -20,6 +20,8 @@ package org.accesointeligente.server;
 
 import org.accesointeligente.model.Institution;
 import org.accesointeligente.server.robots.Robot;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
@@ -27,13 +29,15 @@ import java.util.List;
 import java.util.TimerTask;
 
 public class RobotCheckTask extends TimerTask {
+	private static final Logger logger = Logger.getLogger(RobotCheckTask.class);
 
 	@Override
 	public void run() {
-		System.err.println("Iniciando RobotCheckTask");
-		Session hibernate = HibernateUtil.getSession();
+		logger.info("Running");
+		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Institution.class);
 			List<Institution> institutions = criteria.list();
@@ -71,9 +75,9 @@ public class RobotCheckTask extends TimerTask {
 				hibernate.getTransaction().commit();
 			}
 		} catch (Exception ex) {
-			if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 				hibernate.getTransaction().rollback();
-				ex.printStackTrace(System.err);
+				logger.error("Failure", ex);
 			}
 		}
 	}

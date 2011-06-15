@@ -22,6 +22,7 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.server.robots.Robot;
 import org.accesointeligente.shared.RequestStatus;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -31,12 +32,15 @@ import java.util.List;
 import java.util.TimerTask;
 
 public class RequestUpdateTask extends TimerTask {
+	private static final Logger logger = Logger.getLogger(RequestUpdateTask.class);
+
 	@Override
 	public void run() {
-		System.err.println("Iniciando RequestUpdateTask");
-		Session hibernate = HibernateUtil.getSession();
+		logger.info("Running");
+		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -50,7 +54,7 @@ public class RequestUpdateTask extends TimerTask {
 					continue;
 				}
 
-				System.err.println("[INFO] RequestUpdateTask: requestId = " + request.getId());
+				logger.info("requestId = " + request.getId());
 
 				try {
 					Robot robot = RobotContext.getRobot(request.getInstitution().getInstitutionClass());
@@ -68,14 +72,13 @@ public class RequestUpdateTask extends TimerTask {
 						hibernate.getTransaction().commit();
 					}
 				} catch (Exception ex) {
-					System.err.println("[ERROR] RequestUpdateTask: requestId = " + request.getId());
-					ex.printStackTrace();
+					logger.error("requestId = " + request.getId(), ex);
 				}
 			}
 		} catch (Exception ex) {
-			if (hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 				hibernate.getTransaction().rollback();
-				ex.printStackTrace(System.err);
+				logger.error("Failure", ex);
 			}
 		}
 	}

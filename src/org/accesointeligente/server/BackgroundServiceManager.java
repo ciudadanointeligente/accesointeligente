@@ -18,6 +18,8 @@
  */
 package org.accesointeligente.server;
 
+import org.apache.log4j.Logger;
+
 import java.util.Calendar;
 import java.util.Timer;
 
@@ -25,17 +27,20 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class BackgroundServiceManager implements ServletContextListener {
+	private static final Logger logger = Logger.getLogger(BackgroundServiceManager.class);
 	private Timer timer;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
+		logger.info("Context destroyed");
 		timer = null;
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
+		logger.info("Context initialized");
 		timer = new Timer();
-		timer.schedule(new ResponseCheckerTask(), 60000, 3600000);
+		timer.scheduleAtFixedRate(new ResponseCheckerTask(), 60000, 3600000);
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -44,11 +49,11 @@ public class BackgroundServiceManager implements ServletContextListener {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 
-		timer.schedule(new RequestCreationTask(), cal.getTime(), 86400000);
-		timer.schedule(new RequestUpdateTask(), 60000, 3600000);
+		timer.scheduleAtFixedRate(new RequestCreationTask(), cal.getTime(), 86400000);
+		timer.scheduleAtFixedRate(new RequestUpdateTask(), 60000, 3600000);
 
 		cal.add(Calendar.HOUR_OF_DAY, 3);
 
-		timer.schedule(new RobotCheckTask(), cal.getTime(), 86400000);
+		timer.scheduleAtFixedRate(new RobotCheckTask(), cal.getTime(), 86400000);
 	}
 }

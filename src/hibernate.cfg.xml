@@ -14,8 +14,11 @@
 
 		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 
-		<!-- JDBC connection pool (use the built-in) -->
-		<property name="connection.pool_size">1</property>
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.timeout">1800</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.idle_test_period">900</property>
 
 		<!-- SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
