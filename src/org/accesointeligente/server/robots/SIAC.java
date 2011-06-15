@@ -82,8 +82,8 @@ public class SIAC extends Robot {
 			formParams.add(new BasicNameValuePair("clave", password));
 			formParams.add(new BasicNameValuePair("accion", "login"));
 
-			post = new HttpPost(baseUrl);
-			post.addHeader("Referer", baseUrl + "?accion=ingresa");
+			post = new HttpPost(baseUrl + "/formulario.gov");
+			post.addHeader("Referer", baseUrl + "/formulario.gov?accion=ingresa");
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
@@ -149,8 +149,8 @@ public class SIAC extends Robot {
 			formParams.add(new BasicNameValuePair("email_verif", "info@accesointeligente.org"));
 			formParams.add(new BasicNameValuePair("bt_modificar", "Enviar Datos"));
 
-			post = new HttpPost(baseUrl);
-			post.addHeader("Referer", baseUrl);
+			post = new HttpPost(baseUrl + "/formulario.gov");
+			post.addHeader("Referer", baseUrl + "/formulario.gov?accion=ingresa");
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
@@ -194,9 +194,9 @@ public class SIAC extends Robot {
 			}
 
 			formParams = new ArrayList<NameValuePair>();
-			formParams.add(new BasicNameValuePair("nsolicitud", request.getRemoteIdentifier()));
-			post = new HttpPost(baseUrl);
-			post.addHeader("Referer", baseUrl + "?accion=consulta");
+			formParams.add(new BasicNameValuePair("nsolicitud", request.getRemoteIdentifier().replaceFirst("[-]", "")));
+			post = new HttpPost(baseUrl + "/consulta.gov");
+			post.addHeader("Referer", baseUrl + "/formulario.gov?accion=consulta");
 			post.addHeader("X-Requested-With", "XMLHttpRequest");
 			post.setEntity(new UrlEncodedFormEntity(formParams, characterEncoding));
 			response = client.execute(post);
@@ -209,9 +209,12 @@ public class SIAC extends Robot {
 
 			statusLabel = statusCell.getText().toString().trim();
 
-			// TODO: we don't know the rest of the status strings
 			if (statusLabel.equals("Ingreso de Solicitud")) {
 				return RequestStatus.PENDING;
+			} else if (statusLabel.equals("Respuesta Solucionada")) {
+				return RequestStatus.CLOSED;
+			} else if (statusLabel.equals("DerivaciÃ³n a Externos")) {
+				return RequestStatus.DERIVED;
 			} else {
 				return null;
 			}
@@ -231,7 +234,7 @@ public class SIAC extends Robot {
 		TagNode document, selector;
 
 		try {
-			get = new HttpGet(baseUrl + "?accion=ingresa");
+			get = new HttpGet(baseUrl + "/formulario.gov?accion=ingresa");
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 			selector = document.findElementByAttValue("name", "dirigido", true, true);
@@ -260,7 +263,7 @@ public class SIAC extends Robot {
 		Matcher matcher;
 
 		try {
-			get = new HttpGet(baseUrl + "?accion=ingresa");
+			get = new HttpGet(baseUrl + "/formulario.gov?accion=ingresa");
 			response = client.execute(get);
 			contentType = response.getFirstHeader("Content-Type");
 			EntityUtils.consume(response.getEntity());
