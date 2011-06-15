@@ -110,7 +110,7 @@ public class SIAC extends Robot {
 		HttpPost post;
 		HttpResponse response;
 		TagNode document;
-		Pattern pattern = Pattern.compile("^Solicitud ingresada exitosamente, el número de su solicitud es: ([A-Z]{2}[0-9]{3}[A-Z][0-9]{7})$");
+		Pattern pattern = Pattern.compile("^Solicitud ingresada exitosamente, el número de su solicitud es: ([A-Z]{2}[0-9]{3}[A-Z])([0-9]{7})$");
 		Matcher matcher;
 
 		try {
@@ -155,14 +155,12 @@ public class SIAC extends Robot {
 			response = client.execute(post);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 
-			for (TagNode node : document.getElementsByAttValue("class", "mark", true, true)) {
-				if (node.getChildTags()[0].toString().equalsIgnoreCase("ul")) {
-					matcher = pattern.matcher(node.getChildTags()[0].getText().toString().trim());
+			for (TagNode node : document.getElementsByName("li", true)) {
+				matcher = pattern.matcher(node.getText().toString().trim());
 
-					if (matcher.matches()) {
-						request.setRemoteIdentifier(matcher.group(1));
-						break;
-					}
+				if (matcher.matches()) {
+					request.setRemoteIdentifier(matcher.group(1) + "-" + matcher.group(2));
+					break;
 				}
 			}
 
