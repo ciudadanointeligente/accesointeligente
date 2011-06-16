@@ -26,7 +26,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 
 import javax.inject.Inject;
 
@@ -57,7 +56,7 @@ public class MyPlaceManager extends PlaceManagerImpl implements LoginSuccessfulE
 	@Override
 	public void loginSuccessful(LoginSuccessfulEvent event) {
 		if (getCurrentPlaceRequest().getNameToken().equals(AppPlace.LOGIN)) {
-			History.back();
+			navigateBack();
 		}
 	}
 

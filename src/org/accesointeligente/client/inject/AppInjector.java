@@ -25,7 +25,6 @@ import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.services.*;
 
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.ProxyFailureHandler;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
@@ -40,7 +39,6 @@ public interface AppInjector extends Ginjector {
 	UserGatekeeper getUserGatekeeper();
 	AnonymousGatekeeper getAnonymousGatekeeper();
 	PlaceHistory getPlaceHistory();
-	ProxyFailureHandler getProxyFailureHandler();
 	Provider<MainPresenter> getMainPresenter();
 	AsyncProvider<HomePresenter> getHomePresenter();
 	AsyncProvider<RequestPresenter> getRequestPresenter();

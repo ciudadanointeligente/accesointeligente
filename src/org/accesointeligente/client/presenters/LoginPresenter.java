@@ -38,7 +38,6 @@ import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import javax.inject.Inject;
@@ -70,7 +69,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 	@Inject
 	public LoginPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
-		view.setUiHandlers(this);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
@@ -134,7 +133,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 
 	@Override
 	public void close() {
-		History.back();
+		placeManager.navigateBack();
 	}
 
 	@Override
