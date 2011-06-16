@@ -44,15 +44,11 @@ public class MainPresenter extends Presenter<MainPresenter.MyView, MainPresenter
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> SLOT_MAIN_CONTENT = new Type<RevealContentHandler<?>>();
 
-	@ContentSlot
-	public static final Type<RevealContentHandler<?>> SLOT_POPUP_CONTENT = new Type<RevealContentHandler<?>>();
-
 	public interface MyView extends View, HasUiHandlers<MainUiHandlers> {
 		void setDisplayMode(MainView.DisplayMode mode);
 		void setWelcomeMessage(String message);
 		void setNotificationMessage(NotificationEventParams params);
 		void clearNotifications();
-		void hidePopup();
 	}
 
 	@ProxyStandard
@@ -187,10 +183,5 @@ public class MainPresenter extends Presenter<MainPresenter.MyView, MainPresenter
 	@Override
 	public void gotoHome() {
 		placeManager.revealDefaultPlace();
-	}
-
-	@Override
-	public void clearPopupSlot() {
-		clearSlot(SLOT_POPUP_CONTENT);
 	}
 }

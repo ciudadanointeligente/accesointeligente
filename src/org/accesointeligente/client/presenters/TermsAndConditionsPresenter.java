@@ -22,20 +22,20 @@ import org.accesointeligente.client.uihandlers.TermsAndConditionsUiHandlers;
 import org.accesointeligente.shared.AppPlace;
 
 import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.Presenter;
-import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+import com.gwtplatform.mvp.client.proxy.RevealRootPopupContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
 
 import javax.inject.Inject;
 
 public class TermsAndConditionsPresenter extends Presenter<TermsAndConditionsPresenter.MyView, TermsAndConditionsPresenter.MyProxy> implements TermsAndConditionsUiHandlers {
-	public interface MyView extends View, HasUiHandlers<TermsAndConditionsUiHandlers> {
+	public interface MyView extends PopupView, HasUiHandlers<TermsAndConditionsUiHandlers> {
 	}
 
 	@ProxyCodeSplit
@@ -54,7 +54,7 @@ public class TermsAndConditionsPresenter extends Presenter<TermsAndConditionsPre
 
 	@Override
 	protected void revealInParent() {
-		fireEvent(new RevealContentEvent(MainPresenter.SLOT_POPUP_CONTENT, this));
+		fireEvent(new RevealRootPopupContentEvent(this));
 	}
 
 	@Override

@@ -21,12 +21,13 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.presenters.TermsAndConditionsPresenter;
 import org.accesointeligente.client.uihandlers.TermsAndConditionsUiHandlers;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -34,7 +35,9 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TermsAndConditionsView extends ViewWithUiHandlers<TermsAndConditionsUiHandlers> implements TermsAndConditionsPresenter.MyView {
+import javax.inject.Inject;
+
+public class TermsAndConditionsView extends PopupViewWithUiHandlers<TermsAndConditionsUiHandlers> implements TermsAndConditionsPresenter.MyView {
 	private static TermsAndConditionsViewUiBinder uiBinder = GWT.create(TermsAndConditionsViewUiBinder.class);
 	interface TermsAndConditionsViewUiBinder extends UiBinder<Widget, TermsAndConditionsView> {}
 	private final Widget widget;
@@ -42,8 +45,11 @@ public class TermsAndConditionsView extends ViewWithUiHandlers<TermsAndCondition
 	@UiField FocusPanel mainPanel;
 	@UiField Label close;
 
-	public TermsAndConditionsView() {
+	@Inject
+	protected TermsAndConditionsView(EventBus eventBus) {
+		super(eventBus);
 		widget = uiBinder.createAndBindUi(this);
+		setAutoHideOnNavigationEventEnabled(true);
 	}
 
 	@Override

@@ -21,17 +21,20 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.presenters.UserGuideVideoPresenter;
 import org.accesointeligente.client.uihandlers.UserGuideVideoUiHandlers;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.media.client.Video;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 
-public class UserGuideVideoView extends ViewWithUiHandlers<UserGuideVideoUiHandlers> implements UserGuideVideoPresenter.MyView {
+import javax.inject.Inject;
+
+public class UserGuideVideoView extends PopupViewWithUiHandlers<UserGuideVideoUiHandlers> implements UserGuideVideoPresenter.MyView {
 	private static UserGuideVideoViewUiBinder uiBinder = GWT.create(UserGuideVideoViewUiBinder.class);
 	interface UserGuideVideoViewUiBinder extends UiBinder<Widget, UserGuideVideoView> {}
 	private final Widget widget;
@@ -42,8 +45,11 @@ public class UserGuideVideoView extends ViewWithUiHandlers<UserGuideVideoUiHandl
 
 	private Video userGuideVideo;
 
-	public UserGuideVideoView() {
+	@Inject
+	protected UserGuideVideoView(EventBus eventBus) {
+		super(eventBus);
 		widget = uiBinder.createAndBindUi(this);
+		setAutoHideOnNavigationEventEnabled(true);
 	}
 
 	@Override
@@ -59,7 +65,6 @@ public class UserGuideVideoView extends ViewWithUiHandlers<UserGuideVideoUiHandl
 		userGuideVideo.setControls(true);
 		userGuideVideo.setSrc(url);
 		userGuideVideo.addKeyDownHandler(new KeyDownHandler() {
-
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
