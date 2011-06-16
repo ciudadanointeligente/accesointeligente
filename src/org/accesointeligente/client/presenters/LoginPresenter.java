@@ -30,8 +30,8 @@ import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
 
 import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.Presenter;
-import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
@@ -43,7 +43,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import javax.inject.Inject;
 
 public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresenter.MyProxy> implements LoginUiHandlers {
-	public interface MyView extends View, HasUiHandlers<LoginUiHandlers> {
+	public interface MyView extends PopupView, HasUiHandlers<LoginUiHandlers> {
 		void clearForm();
 		void showNotice(String message);
 		String getEmail();
@@ -80,7 +80,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 
 	@Override
 	public void revealInParent() {
-		fireEvent(new RevealContentEvent(MainPresenter.SLOT_POPUP_CONTENT, this));
+		fireEvent(new RevealRootPopupContentEvent(this));
 	}
 
 	@Override

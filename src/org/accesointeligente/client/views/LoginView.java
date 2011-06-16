@@ -21,19 +21,22 @@ package org.accesointeligente.client.views;
 import org.accesointeligente.client.presenters.LoginPresenter;
 import org.accesointeligente.client.uihandlers.LoginUiHandlers;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 
-public class LoginView extends ViewWithUiHandlers<LoginUiHandlers> implements LoginPresenter.MyView {
+import javax.inject.Inject;
+
+public class LoginView extends PopupViewWithUiHandlers<LoginUiHandlers> implements LoginPresenter.MyView {
 	private static LoginViewUiBinder uiBinder = GWT.create(LoginViewUiBinder.class);
 	interface LoginViewUiBinder extends UiBinder<Widget, LoginView> {}
 	private final Widget widget;
@@ -52,8 +55,11 @@ public class LoginView extends ViewWithUiHandlers<LoginUiHandlers> implements Lo
 
 	private Timer notificationTimer;
 
-	public LoginView() {
+	@Inject
+	protected LoginView(EventBus eventBus) {
+		super(eventBus);
 		widget = uiBinder.createAndBindUi(this);
+		setAutoHideOnNavigationEventEnabled(true);
 	}
 
 	@Override
