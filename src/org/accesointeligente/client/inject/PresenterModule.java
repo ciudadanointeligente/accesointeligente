@@ -22,10 +22,11 @@ import org.accesointeligente.client.*;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.views.*;
 
-import com.gwtplatform.mvp.client.DefaultProxyFailureHandler;
 import com.gwtplatform.mvp.client.RootPresenter;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import com.gwtplatform.mvp.client.proxy.*;
+import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -41,7 +42,6 @@ public class PresenterModule extends AbstractPresenterModule {
 		bind(AnonymousGatekeeper.class).in(Singleton.class);
 		bind(PlaceHistory.class).asEagerSingleton();
 		bind(RootPresenter.class).asEagerSingleton();
-		bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
 		bindPresenter(MainPresenter.class, MainPresenter.MyView.class, MainView.class, MainPresenter.MyProxy.class);
 		bindPresenter(HomePresenter.class, HomePresenter.MyView.class, HomeView.class, HomePresenter.MyProxy.class);
 		bindPresenter(RequestPresenter.class, RequestPresenter.MyView.class, RequestView.class, RequestPresenter.MyProxy.class);

@@ -26,11 +26,11 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window.Navigator;
 
 import javax.inject.Inject;
@@ -47,6 +47,9 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 
 	private static final String USERGUIDEVIDEO_MP4 = "video/userguide.mp4";
 	private static final String USERGUIDEVIDEO_WEBM = "video/userguide.webm";
+
+	@Inject
+	private PlaceManager placeManager;
 
 	@Inject
 	public UserGuideVideoPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
@@ -82,6 +85,6 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 
 	@Override
 	public void close() {
-		History.back();
+		placeManager.navigateBack();
 	}
 }

@@ -34,7 +34,6 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -171,7 +170,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar los archivos adjuntos", NotificationEventType.ERROR);
-				History.back();
+				placeManager.navigateBack();
 			}
 
 			@Override
@@ -213,7 +212,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No es posible recuperar los archivos adjuntos", NotificationEventType.ERROR);
-				History.back();
+				placeManager.navigateBack();
 			}
 
 			@Override
