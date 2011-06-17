@@ -20,23 +20,26 @@ package org.accesointeligente.server;
 
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import java.util.Calendar;
+import java.util.Timer;
 
-public class BackgroundServiceManager implements ServletContextListener {
-	private static final Logger logger = Logger.getLogger(BackgroundServiceManager.class);
-	private Scheduler scheduler;
-
-	@Override
-	public void contextDestroyed(ServletContextEvent event) {
-		logger.info("Context destroyed");
-		scheduler = null;
-	}
+public class Scheduler extends Thread {
+	private static final Logger logger = Logger.getLogger(Scheduler.class);
 
 	@Override
-	public void contextInitialized(ServletContextEvent event) {
-		logger.info("Context initialized");
-		scheduler = new Scheduler();
-		scheduler.start();
+	public void run() {
+		logger.info("Running");
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new RequestCreationTask(), 60000, 3600000);
+		timer.scheduleAtFixedRate(new RequestUpdateTask(), 60000, 3600000);
+		timer.scheduleAtFixedRate(new ResponseCheckerTask(), 60000, 7200000);
+
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		timer.scheduleAtFixedRate(new RobotCheckTask(), cal.getTime(), 43200000);
 	}
 }
