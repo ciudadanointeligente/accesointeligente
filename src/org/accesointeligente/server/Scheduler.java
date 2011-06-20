@@ -23,16 +23,25 @@ import org.apache.log4j.Logger;
 import java.util.Calendar;
 import java.util.Timer;
 
-public class Scheduler extends Thread {
+public class Scheduler implements Runnable {
 	private static final Logger logger = Logger.getLogger(Scheduler.class);
+	private static Scheduler instance = new Scheduler();
+	private Timer timer;
+
+	private Scheduler() {
+		timer = new Timer();
+	}
+
+	public static Scheduler getInstance() {
+		return instance;
+	}
 
 	@Override
 	public void run() {
 		logger.info("Running");
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new RequestCreationTask(), 60000, 3600000);
-		timer.scheduleAtFixedRate(new RequestUpdateTask(), 60000, 3600000);
-		timer.scheduleAtFixedRate(new ResponseCheckerTask(), 60000, 7200000);
+		timer.schedule(new RequestCreationTask(), 0, 3600000);
+		timer.schedule(new RequestUpdateTask(), 0, 3600000);
+		timer.schedule(new ResponseCheckerTask(), 0, 7200000);
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, 1);

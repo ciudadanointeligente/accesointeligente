@@ -29,7 +29,7 @@ public class RequestCreationTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Running");
+		logger.info("Begin");
 
 		try {
 			RequestCreator requestCreator = new RequestCreator();
@@ -37,5 +37,7 @@ public class RequestCreationTask extends TimerTask {
 		} catch (Throwable t) {
 			logger.error("RequestCreator failed", t);
 		}
+
+		logger.info("Finish");
 	}
 }

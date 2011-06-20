@@ -29,7 +29,7 @@ public class RequestUpdateTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Running");
+		logger.info("Begin");
 
 		try {
 			RequestUpdater requestUpdater = new RequestUpdater();
@@ -37,5 +37,7 @@ public class RequestUpdateTask extends TimerTask {
 		} catch (Throwable t) {
 			logger.error("RequestUpdater failed", t);
 		}
+
+		logger.info("Finish");
 	}
 }

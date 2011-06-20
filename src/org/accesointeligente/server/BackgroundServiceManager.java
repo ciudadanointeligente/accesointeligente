@@ -36,7 +36,7 @@ public class BackgroundServiceManager implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		logger.info("Context initialized");
-		scheduler = new Scheduler();
-		scheduler.start();
+		scheduler = Scheduler.getInstance();
+		scheduler.run();
 	}
 }

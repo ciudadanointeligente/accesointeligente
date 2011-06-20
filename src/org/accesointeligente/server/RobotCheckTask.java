@@ -29,7 +29,7 @@ public class RobotCheckTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Running");
+		logger.info("Begin");
 
 		try {
 			RobotChecker robotChecker = new RobotChecker();
@@ -37,5 +37,7 @@ public class RobotCheckTask extends TimerTask {
 		} catch (Throwable t) {
 			logger.error("RobotChecker failed", t);
 		}
+
+		logger.info("Finish");
 	}
 }

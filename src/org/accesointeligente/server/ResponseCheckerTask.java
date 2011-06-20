@@ -29,7 +29,7 @@ public class ResponseCheckerTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Running");
+		logger.info("Begin");
 
 		try {
 			ResponseChecker responseChecker = new ResponseChecker();
@@ -37,5 +37,7 @@ public class ResponseCheckerTask extends TimerTask {
 		} catch (Throwable t) {
 			logger.error("ResponseChecker failed", t);
 		}
+
+		logger.info("Finish");
 	}
 }
