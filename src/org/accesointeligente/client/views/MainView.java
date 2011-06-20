@@ -28,8 +28,6 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -65,21 +63,9 @@ public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements Main
 	@UiField HTMLPanel footerPanel;
 	@UiField HTMLPanel creditsPanel;
 	@UiField Label loginPending;
-	private PopupPanel popup;
 
 	public MainView() {
 		widget = uiBinder.createAndBindUi(this);
-		popup = new PopupPanel();
-		popup.setGlassEnabled(true);
-		popup.setModal(true);
-		popup.setAutoHideOnHistoryEventsEnabled(true);
-
-		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
-			@Override
-			public void onClose(CloseEvent<PopupPanel> event) {
-				getUiHandlers().clearPopupSlot();
-			}
-		});
 
 		myrequests.setCommand(new Command() {
 			@Override
@@ -146,18 +132,10 @@ public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements Main
 	@Override
 	public void setInSlot(Object slot, Widget content) {
 		if (MainPresenter.SLOT_MAIN_CONTENT.equals(slot)) {
-			popup.hide();
 			mainPanel.clear();
 
 			if (content != null) {
 				mainPanel.add(content);
-			}
-		} else if (MainPresenter.SLOT_POPUP_CONTENT.equals(slot)) {
-			popup.clear();
-
-			if (content != null) {
-				popup.add(content);
-				popup.center();
 			}
 		} else {
 			super.addToSlot(slot, content);
@@ -249,10 +227,5 @@ public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements Main
 	@UiHandler("logo")
 	public void onLogoClick(ClickEvent event) {
 		getUiHandlers().gotoHome();
-	}
-
-	@Override
-	public void hidePopup() {
-		popup.hide();
 	}
 }

@@ -18,31 +18,25 @@
  */
 package org.accesointeligente.server;
 
-import org.accesointeligente.server.robots.RobotChecker;
-
 import org.apache.log4j.Logger;
 
-import java.util.TimerTask;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-public class RobotCheckTask extends TimerTask {
-	private static final Logger logger = Logger.getLogger(RobotCheckTask.class);
+public class BackgroundServicesManager implements ServletContextListener {
+	private static final Logger logger = Logger.getLogger(BackgroundServicesManager.class);
+	private Scheduler scheduler;
 
 	@Override
-	public void run() {
-		new Thread() {
-			@Override
-			public void run() {
-				logger.info("Begin");
+	public void contextDestroyed(ServletContextEvent event) {
+		logger.info("Context destroyed");
+		scheduler = null;
+	}
 
-				try {
-					RobotChecker robotChecker = new RobotChecker();
-					robotChecker.checkRobots();
-				} catch (Throwable t) {
-					logger.error("RobotChecker failed", t);
-				}
-
-				logger.info("Finish");
-			}
-		}.start();
+	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		logger.info("Context initialized");
+		scheduler = Scheduler.getInstance();
+		scheduler.run();
 	}
 }

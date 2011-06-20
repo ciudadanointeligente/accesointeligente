@@ -30,21 +30,20 @@ import org.accesointeligente.shared.LoginException;
 import org.accesointeligente.shared.ServiceException;
 
 import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.Presenter;
-import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import javax.inject.Inject;
 
 public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresenter.MyProxy> implements LoginUiHandlers {
-	public interface MyView extends View, HasUiHandlers<LoginUiHandlers> {
+	public interface MyView extends PopupView, HasUiHandlers<LoginUiHandlers> {
 		void clearForm();
 		void showNotice(String message);
 		String getEmail();
@@ -70,7 +69,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 	@Inject
 	public LoginPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
-		view.setUiHandlers(this);
+		getView().setUiHandlers(this);
 	}
 
 	@Override
@@ -81,7 +80,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 
 	@Override
 	public void revealInParent() {
-		fireEvent(new RevealContentEvent(MainPresenter.SLOT_POPUP_CONTENT, this));
+		fireEvent(new RevealRootPopupContentEvent(this));
 	}
 
 	@Override
@@ -134,7 +133,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 
 	@Override
 	public void close() {
-		History.back();
+		placeManager.navigateBack();
 	}
 
 	@Override

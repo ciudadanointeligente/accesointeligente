@@ -75,7 +75,7 @@ public class SGS extends Robot {
 	}
 
 	@Override
-	public void login() throws RobotException {
+	public void login() throws Exception {
 		if (characterEncoding == null) {
 			detectCharacterEncoding();
 		}
@@ -99,8 +99,10 @@ public class SGS extends Robot {
 			response = client.execute(post);
 			location = response.getFirstHeader("Location");
 
-			if (location == null || !"index.php".equals(location.getValue())) {
-				throw new Exception();
+			if (location == null) {
+				throw new RobotException("No redirect after login");
+			} else if (!"index.php".equals(location.getValue())) {
+				throw new RobotException("Invalid location after login");
 			}
 
 			EntityUtils.consume(response.getEntity());
@@ -111,18 +113,18 @@ public class SGS extends Robot {
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
 
 			if (document.getElementListByAttValue("href", "index.php" + exitAction, true, false).isEmpty()) {
-				throw new Exception();
+				throw new RobotException("Exit item not found in menu");
 			}
 
 			loggedIn = true;
-		} catch (Throwable ex) {
+		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			throw new RobotException();
+			throw ex;
 		}
 	}
 
 	@Override
-	public Request makeRequest(Request request) throws RobotException {
+	public Request makeRequest(Request request) throws Exception {
 		if (!loggedIn) {
 			login();
 		}
@@ -156,14 +158,16 @@ public class SGS extends Robot {
 
 			hidden = document.findElementByAttValue("name", "folio_hidden", true, true);
 
-			if (hidden == null || !"input".equals(hidden.getName())) {
-				throw new Exception();
+			if (hidden == null) {
+				throw new RobotException("No hidden field for temporary id found");
+			} else if (!"input".equals(hidden.getName())) {
+				throw new RobotException("Expecting \"hidden\" for temporary id field but found \"" + hidden.getName() + "\"");
 			}
 
 			folio = Integer.parseInt(hidden.getAttributeByName("value"));
 
 			if (folio == null) {
-				throw new Exception();
+				throw new RobotException("Invalid value for temporary id");
 			}
 
 			formParams = new ArrayList<NameValuePair>();
@@ -181,14 +185,14 @@ public class SGS extends Robot {
 				location = response.getFirstHeader("Location");
 
 				if (location == null) {
-					throw new Exception();
+					throw new RobotException("Invalid redirection after confirmation");
 				}
 
 				pattern = Pattern.compile("^index.php\\" + requestCreatedAction + "&folio=(.+)$");
 				matcher = pattern.matcher(location.getValue());
 
 				if (!matcher.matches()) {
-					throw new Exception();
+					throw new RobotException("External id not found");
 				}
 
 				remoteIdentifier = matcher.group(1);
@@ -230,6 +234,7 @@ public class SGS extends Robot {
 				TagNode[] tableRows = tableContainer.getChildTags()[0].getChildTags()[0].getChildTags();
 				TagNode lastRow = tableRows[tableRows.length - 1];
 
+				// FIXME: verify that the identifier found isn't already used
 				if (lastRow.getChildTags().length == 6) {
 					remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
 					request.setRemoteIdentifier(remoteIdentifier);
@@ -237,14 +242,14 @@ public class SGS extends Robot {
 			}
 
 			return request;
-		} catch (Throwable ex) {
+		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			throw new RobotException();
+			throw ex;
 		}
 	}
 
 	@Override
-	public RequestStatus checkRequestStatus(Request request) throws RobotException {
+	public RequestStatus checkRequestStatus(Request request) throws Exception {
 		if (!loggedIn) {
 			login();
 		}
@@ -256,7 +261,7 @@ public class SGS extends Robot {
 
 		try {
 			if (request.getRemoteIdentifier() == null || request.getRemoteIdentifier().length() == 0) {
-				throw new Exception();
+				throw new RobotException("Invalid remote identifier");
 			}
 
 			get = new HttpGet(baseUrl + requestViewAction + "&folio=" + request.getRemoteIdentifier());
@@ -266,7 +271,7 @@ public class SGS extends Robot {
 			statusCell = document.findElementByAttValue("width", "36%", true, true);
 
 			if (statusCell == null) {
-				throw new Exception();
+				throw new RobotException("Invalid status text cell");
 			}
 
 			statusLabel = statusCell.getText().toString().trim();
@@ -281,14 +286,14 @@ public class SGS extends Robot {
 			} else {
 				return null;
 			}
-		} catch (Throwable ex) {
+		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			throw new RobotException();
+			throw ex;
 		}
 	}
 
 	@Override
-	public Boolean checkInstitutionId() throws RobotException {
+	public Boolean checkInstitutionId() throws Exception {
 		if (!loggedIn) {
 			login();
 		}
@@ -304,7 +309,7 @@ public class SGS extends Robot {
 			selector = document.findElementByAttValue("name", "id_entidad", true, true);
 
 			if (selector == null) {
-				throw new Exception();
+				throw new RobotException("Institution selector not found");
 			}
 
 			for (TagNode option : selector.getChildTags()) {
@@ -314,9 +319,9 @@ public class SGS extends Robot {
 			}
 
 			return false;
-		} catch (Throwable ex) {
+		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			throw new RobotException();
+			throw ex;
 		}
 	}
 

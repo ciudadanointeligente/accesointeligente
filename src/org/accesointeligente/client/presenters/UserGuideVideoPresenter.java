@@ -22,21 +22,21 @@ import org.accesointeligente.client.uihandlers.UserGuideVideoUiHandlers;
 import org.accesointeligente.shared.AppPlace;
 
 import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.Presenter;
-import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+import com.gwtplatform.mvp.client.proxy.RevealRootPopupContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window.Navigator;
 
 import javax.inject.Inject;
 
 public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.MyView, UserGuideVideoPresenter.MyProxy> implements UserGuideVideoUiHandlers {
-	public interface MyView extends View, HasUiHandlers<UserGuideVideoUiHandlers> {
+	public interface MyView extends PopupView, HasUiHandlers<UserGuideVideoUiHandlers> {
 		void setVideo(String url);
 	}
 
@@ -49,13 +49,16 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 	private static final String USERGUIDEVIDEO_WEBM = "video/userguide.webm";
 
 	@Inject
+	private PlaceManager placeManager;
+
+	@Inject
 	public UserGuideVideoPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
 		getView().setUiHandlers(this);
 	}
 
 	@Override
-	public void onReset() {
+	public void onReveal() {
 		String userAgent = Navigator.getUserAgent().toLowerCase();
 
 		if (userAgent.contains("msie")) {
@@ -77,11 +80,11 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 
 	@Override
 	protected void revealInParent() {
-		fireEvent(new RevealContentEvent(MainPresenter.SLOT_POPUP_CONTENT, this));
+		fireEvent(new RevealRootPopupContentEvent(this));
 	}
 
 	@Override
 	public void close() {
-		History.back();
+		placeManager.navigateBack();
 	}
 }

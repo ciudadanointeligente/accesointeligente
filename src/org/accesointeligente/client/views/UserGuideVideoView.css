@@ -36,8 +36,7 @@ h1.greyBlock {
 }
 
 .closeButton {
-	background: url("images/search/cross.png") no-repeat scroll 2px 3px
-		#A4A4AF;
+	background: url("images/search/cross.png") no-repeat scroll 2px 3px #A4A4AF;
 	border: 2px solid white;
 	-moz-border-radius: 15px; /* FF1+ */
 	-webkit-border-radius: 15px; /* Saf3-4 */
@@ -45,7 +44,9 @@ h1.greyBlock {
 	height: 26px;
 	width: 26px;
 	overflow: hidden;
-	float: right;
+	position: absolute;
+	right: -17px;
+	top: -17px;
 	cursor: pointer;
 }
 

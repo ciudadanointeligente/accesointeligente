@@ -25,12 +25,24 @@ import org.apache.log4j.Logger;
 import java.util.TimerTask;
 
 public class ResponseCheckerTask extends TimerTask {
-	private static final Logger logger = Logger.getLogger(ResponseChecker.class);
+	private static final Logger logger = Logger.getLogger(ResponseCheckerTask.class);
 
 	@Override
 	public void run() {
-		logger.info("Running");
-		ResponseChecker responseChecker = new ResponseChecker();
-		responseChecker.connectAndCheck();
+		new Thread() {
+			@Override
+			public void run() {
+				logger.info("Begin");
+
+				try {
+					ResponseChecker responseChecker = new ResponseChecker();
+					responseChecker.connectAndCheck();
+				} catch (Throwable t) {
+					logger.error("ResponseChecker failed", t);
+				}
+
+				logger.info("Finish");
+			}
+		}.start();
 	}
 }

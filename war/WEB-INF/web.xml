@@ -130,6 +130,18 @@
     </auth-constraint>
   </security-constraint>
 
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>AccesoInteligente backend</realm-name>
+  </login-config>
+
+  <security-role>
+    <description>
+      The role that is required to log in to the backend
+    </description>
+    <role-name>manager</role-name>
+  </security-role>
+
   <listener>
     <listener-class>org.accesointeligente.server.ApplicationProperties</listener-class>
   </listener>
@@ -139,7 +151,7 @@
   </listener>
 
   <listener>
-    <listener-class>org.accesointeligente.server.BackgroundServiceManager</listener-class>
+    <listener-class>org.accesointeligente.server.BackgroundServicesManager</listener-class>
   </listener>
 
   <!-- Default page to serve -->

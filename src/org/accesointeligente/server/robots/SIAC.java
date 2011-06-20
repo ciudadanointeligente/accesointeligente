@@ -33,6 +33,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 
@@ -45,6 +46,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SIAC extends Robot {
+	private static final Logger logger = Logger.getLogger(SIAC.class);
 	private HttpClient client;
 	private HtmlCleaner cleaner;
 	private Boolean loggedIn = false;
@@ -66,7 +68,7 @@ public class SIAC extends Robot {
 	}
 
 	@Override
-	public void login() throws RobotException {
+	public void login() throws Exception {
 		if (characterEncoding == null) {
 			detectCharacterEncoding();
 		}
@@ -90,18 +92,19 @@ public class SIAC extends Robot {
 			hiddenUser = document.findElementByAttValue("id", "user", true, true);
 
 			if (hiddenUser == null || !hiddenUser.hasAttribute("value") || hiddenUser.getAttributeByName("value").equals("0")) {
-				throw new Exception();
+				throw new RobotException("Invalid user id field");
 			}
 
 			userId = hiddenUser.getAttributeByName("value");
 			loggedIn = true;
-		} catch (Throwable ex) {
-			throw new RobotException();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			throw ex;
 		}
 	}
 
 	@Override
-	public Request makeRequest(Request request) throws RobotException {
+	public Request makeRequest(Request request) throws Exception {
 		if (!loggedIn) {
 			login();
 		}
@@ -169,15 +172,16 @@ public class SIAC extends Robot {
 				request.setProcessDate(new Date());
 				return request;
 			} else {
-				throw new Exception();
+				throw new RobotException("Remote identifier not found after request");
 			}
-		} catch (Throwable ex) {
-			throw new RobotException();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			throw ex;
 		}
 	}
 
 	@Override
-	public RequestStatus checkRequestStatus(Request request) throws RobotException {
+	public RequestStatus checkRequestStatus(Request request) throws Exception {
 		if (characterEncoding == null) {
 			detectCharacterEncoding();
 		}
@@ -204,7 +208,7 @@ public class SIAC extends Robot {
 			statusCell = document.getElementsByName("td", true)[5];
 
 			if (statusCell == null) {
-				throw new Exception();
+				throw new RobotException("Invalid status text cell");
 			}
 
 			statusLabel = statusCell.getText().toString().trim();
@@ -218,13 +222,14 @@ public class SIAC extends Robot {
 			} else {
 				return null;
 			}
-		} catch (Throwable ex) {
-			throw new RobotException();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			throw ex;
 		}
 	}
 
 	@Override
-	public Boolean checkInstitutionId() throws RobotException {
+	public Boolean checkInstitutionId() throws Exception {
 		if (!loggedIn) {
 			login();
 		}
@@ -240,7 +245,7 @@ public class SIAC extends Robot {
 			selector = document.findElementByAttValue("name", "dirigido", true, true);
 
 			if (selector == null) {
-				throw new Exception();
+				throw new RobotException("Institution selector not found");
 			}
 
 			for (TagNode option : selector.getElementsByName("option", true)) {
@@ -250,8 +255,9 @@ public class SIAC extends Robot {
 			}
 
 			return false;
-		} catch (Throwable ex) {
-			throw new RobotException();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			throw ex;
 		}
 	}
 

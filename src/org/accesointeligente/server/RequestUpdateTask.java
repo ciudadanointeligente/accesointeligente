@@ -18,17 +18,10 @@
  */
 package org.accesointeligente.server;
 
-import org.accesointeligente.model.Request;
-import org.accesointeligente.server.robots.Robot;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.server.robots.RequestUpdater;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
-import java.util.List;
 import java.util.TimerTask;
 
 public class RequestUpdateTask extends TimerTask {
@@ -36,50 +29,20 @@ public class RequestUpdateTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Running");
-		Session hibernate = null;
-
-		try {
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
-			Criteria criteria = hibernate.createCriteria(Request.class);
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.setFetchMode("institution", FetchMode.JOIN);
-			criteria.add(Restrictions.eq("status", RequestStatus.PENDING));
-			List<Request> newRequests = criteria.list();
-			hibernate.getTransaction().commit();
-
-			for (Request request : newRequests) {
-				if (!request.getInstitution().getEnabled()) {
-					continue;
-				}
-
-				logger.info("requestId = " + request.getId());
+		new Thread() {
+			@Override
+			public void run() {
+				logger.info("Begin");
 
 				try {
-					Robot robot = RobotContext.getRobot(request.getInstitution().getInstitutionClass());
-
-					if (robot != null) {
-						RequestStatus status = robot.checkRequestStatus(request);
-
-						if (status != null) {
-							request.setStatus(status);
-						}
-
-						hibernate = HibernateUtil.getSession();
-						hibernate.beginTransaction();
-						hibernate.update(request);
-						hibernate.getTransaction().commit();
-					}
-				} catch (Exception ex) {
-					logger.error("requestId = " + request.getId(), ex);
+					RequestUpdater requestUpdater = new RequestUpdater();
+					requestUpdater.updateRequests();
+				} catch (Throwable t) {
+					logger.error("RequestUpdater failed", t);
 				}
+
+				logger.info("Finish");
 			}
-		} catch (Exception ex) {
-			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
-				hibernate.getTransaction().rollback();
-				logger.error("Failure", ex);
-			}
-		}
+		}.start();
 	}
 }

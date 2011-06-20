@@ -32,5 +32,4 @@ public interface MainUiHandlers extends UiHandlers {
 	void gotoContact();
 	void gotoLogin();
 	void gotoHome();
-	void clearPopupSlot();
 }

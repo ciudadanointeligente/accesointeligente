@@ -459,3 +459,11 @@ a.titleH1 {
 	border: none;
 	width: 950px;
 }
+
+.gwt-PopupPanel {
+	z-index: 101
+}
+
+.gwt-PopupPanelGlass {
+	z-index: 100;
+}
