@@ -29,15 +29,20 @@ public class RequestCreationTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Begin");
+		new Thread() {
+			@Override
+			public void run() {
+				logger.info("Begin");
 
-		try {
-			RequestCreator requestCreator = new RequestCreator();
-			requestCreator.createRequests();
-		} catch (Throwable t) {
-			logger.error("RequestCreator failed", t);
-		}
+				try {
+					RequestCreator requestCreator = new RequestCreator();
+					requestCreator.createRequests();
+				} catch (Throwable t) {
+					logger.error("RequestCreator failed", t);
+				}
 
-		logger.info("Finish");
+				logger.info("Finish");
+			}
+		}.start();
 	}
 }

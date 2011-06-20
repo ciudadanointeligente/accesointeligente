@@ -29,15 +29,20 @@ public class ResponseCheckerTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Begin");
+		new Thread() {
+			@Override
+			public void run() {
+				logger.info("Begin");
 
-		try {
-			ResponseChecker responseChecker = new ResponseChecker();
-			responseChecker.connectAndCheck();
-		} catch (Throwable t) {
-			logger.error("ResponseChecker failed", t);
-		}
+				try {
+					ResponseChecker responseChecker = new ResponseChecker();
+					responseChecker.connectAndCheck();
+				} catch (Throwable t) {
+					logger.error("ResponseChecker failed", t);
+				}
 
-		logger.info("Finish");
+				logger.info("Finish");
+			}
+		}.start();
 	}
 }

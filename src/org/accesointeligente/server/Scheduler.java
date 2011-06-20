@@ -40,8 +40,8 @@ public class Scheduler implements Runnable {
 	public void run() {
 		logger.info("Running");
 		timer.schedule(new RequestCreationTask(), 0, 3600000);
-		timer.schedule(new RequestUpdateTask(), 0, 3600000);
-		timer.schedule(new ResponseCheckerTask(), 0, 7200000);
+		timer.schedule(new RequestUpdateTask(), 1800000, 3600000);
+		timer.schedule(new ResponseCheckerTask(), 1800000, 3600000);
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -49,6 +49,6 @@ public class Scheduler implements Runnable {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		timer.scheduleAtFixedRate(new RobotCheckTask(), cal.getTime(), 43200000);
+		timer.schedule(new RobotCheckTask(), cal.getTime(), 43200000);
 	}
 }

@@ -23,8 +23,8 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-public class BackgroundServiceManager implements ServletContextListener {
-	private static final Logger logger = Logger.getLogger(BackgroundServiceManager.class);
+public class BackgroundServicesManager implements ServletContextListener {
+	private static final Logger logger = Logger.getLogger(BackgroundServicesManager.class);
 	private Scheduler scheduler;
 
 	@Override

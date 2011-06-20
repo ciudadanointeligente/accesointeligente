@@ -29,15 +29,20 @@ public class RequestUpdateTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Begin");
+		new Thread() {
+			@Override
+			public void run() {
+				logger.info("Begin");
 
-		try {
-			RequestUpdater requestUpdater = new RequestUpdater();
-			requestUpdater.updateRequests();
-		} catch (Throwable t) {
-			logger.error("RequestUpdater failed", t);
-		}
+				try {
+					RequestUpdater requestUpdater = new RequestUpdater();
+					requestUpdater.updateRequests();
+				} catch (Throwable t) {
+					logger.error("RequestUpdater failed", t);
+				}
 
-		logger.info("Finish");
+				logger.info("Finish");
+			}
+		}.start();
 	}
 }

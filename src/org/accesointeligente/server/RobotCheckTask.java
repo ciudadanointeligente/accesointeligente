@@ -29,15 +29,20 @@ public class RobotCheckTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Begin");
+		new Thread() {
+			@Override
+			public void run() {
+				logger.info("Begin");
 
-		try {
-			RobotChecker robotChecker = new RobotChecker();
-			robotChecker.checkRobots();
-		} catch (Throwable t) {
-			logger.error("RobotChecker failed", t);
-		}
+				try {
+					RobotChecker robotChecker = new RobotChecker();
+					robotChecker.checkRobots();
+				} catch (Throwable t) {
+					logger.error("RobotChecker failed", t);
+				}
 
-		logger.info("Finish");
+				logger.info("Finish");
+			}
+		}.start();
 	}
 }

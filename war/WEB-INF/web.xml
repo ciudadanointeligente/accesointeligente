@@ -139,7 +139,7 @@
   </listener>
 
   <listener>
-    <listener-class>org.accesointeligente.server.BackgroundServiceManager</listener-class>
+    <listener-class>org.accesointeligente.server.BackgroundServicesManager</listener-class>
   </listener>
 
   <!-- Default page to serve -->
