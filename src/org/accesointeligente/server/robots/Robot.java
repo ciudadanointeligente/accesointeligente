@@ -26,13 +26,13 @@ public abstract class Robot {
 	protected String password;
 	protected String idEntidad;
 
-	public abstract void login() throws RobotException;
+	public abstract void login() throws Exception;
 
-	public abstract Request makeRequest(Request request) throws RobotException;
+	public abstract Request makeRequest(Request request) throws Exception;
 
-	public abstract RequestStatus checkRequestStatus(Request request) throws RobotException;
+	public abstract RequestStatus checkRequestStatus(Request request) throws Exception;
 
-	public abstract Boolean checkInstitutionId() throws RobotException;
+	public abstract Boolean checkInstitutionId() throws Exception;
 
 	public String getUsername() {
 		return username;
