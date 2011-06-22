@@ -20,5 +20,6 @@
 			<one-to-many class="Attachment"/>
 		</set>
 		<one-to-one name="userResponse" class="UserResponse" property-ref="response"/>
+		<property name="notified"/>
 	</class>
 </hibernate-mapping>

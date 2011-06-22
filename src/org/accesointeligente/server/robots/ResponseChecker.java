@@ -18,9 +18,10 @@
  */
 package org.accesointeligente.server.robots;
 
-import org.accesointeligente.model.*;
+import org.accesointeligente.model.Attachment;
+import org.accesointeligente.model.Request;
+import org.accesointeligente.model.Response;
 import org.accesointeligente.server.ApplicationProperties;
-import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
@@ -34,7 +35,6 @@ import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 
 import java.io.File;
@@ -136,7 +136,6 @@ public class ResponseChecker {
 
 						Criteria criteria = hibernate.createCriteria(Request.class);
 						criteria.add(Restrictions.eq("remoteIdentifier", remoteIdentifier));
-						criteria.setFetchMode("user", FetchMode.JOIN);
 						Request request = (Request) criteria.uniqueResult();
 						hibernate.getTransaction().commit();
 
@@ -159,15 +158,6 @@ public class ResponseChecker {
 							hibernate.update(request);
 							hibernate.update(response);
 							requestFound = true;
-
-							// TODO: send permalink to request
-							User user = request.getUser();
-
-							Emailer emailer = new Emailer();
-							emailer.setRecipient(user.getEmail());
-							emailer.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
-							emailer.setBody(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), request.getId(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
-							emailer.connectAndSend();
 						}
 					}
 

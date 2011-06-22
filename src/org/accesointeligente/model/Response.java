@@ -33,6 +33,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private Date date;
 	private Set<Attachment> attachments;
 	private UserResponse userResponse;
+	private Boolean notified = false;
 
 	public Integer getId() {
 		return id;
@@ -96,6 +97,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setUserResponse(UserResponse userResponse) {
 		this.userResponse = userResponse;
+	}
+
+	public Boolean getNotified() {
+		return notified;
+	}
+
+	public void setNotified(Boolean notified) {
+		this.notified = notified;
 	}
 
 	@Override

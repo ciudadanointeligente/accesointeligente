@@ -39,6 +39,7 @@ public class Scheduler implements Runnable {
 	@Override
 	public void run() {
 		logger.info("Running");
+		timer.schedule(new ResponseNotificationTask(), 0, 3600000);
 		timer.schedule(new RequestCreationTask(), 0, 3600000);
 		timer.schedule(new RequestUpdateTask(), 1800000, 3600000);
 		timer.schedule(new ResponseCheckerTask(), 1800000, 3600000);
