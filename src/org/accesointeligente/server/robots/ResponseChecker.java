@@ -101,6 +101,7 @@ public class ResponseChecker {
 					Object content = message.getContent();
 
 					if (content instanceof Multipart) {
+						logger.info("Email content type is Multipart, each part will be processed");
 						Multipart mp = (Multipart) message.getContent();
 
 						for (int i = 0, n = mp.getCount(); i < n; i++) {
@@ -108,6 +109,7 @@ public class ResponseChecker {
 							processPart(part);
 						}
 					} else if (content instanceof String) {
+						logger.info("Email content type is String");
 						messageBody = (String) content;
 						Matcher matcher;
 						StringTokenizer tokenizer = new StringTokenizer(messageBody);
@@ -121,6 +123,7 @@ public class ResponseChecker {
 							}
 						}
 					} else {
+						logger.info("Email content type isn't String or Multipart");
 						message.setFlag(Flag.SEEN, false);
 						inbox.copyMessages(new Message[] {message}, failbox);
 						message.setFlag(Flag.DELETED, true);
@@ -130,6 +133,7 @@ public class ResponseChecker {
 
 					Boolean requestFound = false;
 
+					logger.info("Searching for Remote Identifier Requests");
 					for (String remoteIdentifier : remoteIdentifiers) {
 						hibernate = HibernateUtil.getSession();
 						hibernate.beginTransaction();
@@ -140,6 +144,7 @@ public class ResponseChecker {
 						hibernate.getTransaction().commit();
 
 						if (request != null) {
+							logger.info("Request found for Remote Identifier: " + remoteIdentifier);
 							Response response;
 
 							// If the attachments haven't been used, use them. Otherwise, copy them.
@@ -162,6 +167,7 @@ public class ResponseChecker {
 					}
 
 					if (!requestFound) {
+						logger.info("Request not found");
 						createResponse(message.getFrom()[0].toString(), message.getSentDate(), message.getSubject(), messageBody, attachments);
 						message.setFlag(Flag.SEEN, false);
 						inbox.copyMessages(new Message[] {message}, failbox);
@@ -190,12 +196,15 @@ public class ResponseChecker {
 		Matcher matcher;
 		org.hibernate.Session hibernate;
 		StringTokenizer tokenizer;
+		logger.info("Processing part: " + part.getFileName() + ".");
 
 		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+			logger.info("Part is attachment");
 			FileType filetype = null;
 
 			// TODO: other formats
 			if (part.isMimeType("text/plain")) {
+				logger.info("Part mime type is: text/plain.");
 				String text = (String) part.getContent();
 				tokenizer = new StringTokenizer(text);
 
@@ -210,6 +219,7 @@ public class ResponseChecker {
 				messageBody = text;
 				return;
 			} else if (part.isMimeType("text/html")) {
+				logger.info("Part mime type is: text/html.");
 				String text = (String) part.getContent();
 				tokenizer = new StringTokenizer(text);
 
@@ -227,12 +237,16 @@ public class ResponseChecker {
 
 				return;
 			} else if (part.isMimeType("application/msword")) {
+				logger.info("Part mime type is: application/msword.");
 				filetype = FileType.DOC;
 			} else if (part.isMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
+				logger.info("Part mime type is: application/vnd.openxmlformats-officedocument.wordprocessingml.document.");
 				filetype = FileType.DOCX;
 			} else if (part.isMimeType("application/pdf")) {
+				logger.info("Part mime type is: application/pdf.");
 				filetype = FileType.PDF;
 			} else {
+				logger.info("Part mime type is: unknown.");
 				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
 
 				if (fileMatcher.matches()) {
@@ -312,6 +326,7 @@ public class ResponseChecker {
 			String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
 
 			String filename = MimeUtility.decodeText(part.getFileName());
+			logger.info("Filename: " + filename);
 
 			matcher = pattern.matcher(filename);
 
@@ -324,8 +339,10 @@ public class ResponseChecker {
 			attachment.setUrl(baseUrl + "/" + filename);
 
 			try {
+				logger.info("Creating directory: " + directory);
 				File dir = new File(directory);
 				dir.mkdir();
+				logger.info("Saving " + directory + filename);
 				FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
 			} catch (Exception e) {
 				hibernate = HibernateUtil.getSession();
@@ -343,6 +360,7 @@ public class ResponseChecker {
 			attachments.add(attachment);
 		} else {
 			if (part.isMimeType("text/plain")) {
+				logger.info("Part is text/plain");
 				String text = (String) part.getContent();
 				tokenizer = new StringTokenizer(text);
 
@@ -358,6 +376,7 @@ public class ResponseChecker {
 				messageBody = text;
 				return;
 			} else if (part.isMimeType("text/html")) {
+				logger.info("Part is text/html");
 				String text = (String) part.getContent();
 				tokenizer = new StringTokenizer(text);
 
@@ -365,6 +384,7 @@ public class ResponseChecker {
 					matcher = pattern.matcher(tokenizer.nextToken());
 
 					if (matcher.matches()) {
+						logger.info("Remote Identifier found: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
@@ -375,6 +395,7 @@ public class ResponseChecker {
 
 				return;
 			} else if (part.isMimeType("multipart/*")) {
+				logger.info("Part is multipart/*");
 				Multipart mp = (Multipart) part.getContent();
 
 				for (int i = 0, n = mp.getCount(); i < n; i++) {
