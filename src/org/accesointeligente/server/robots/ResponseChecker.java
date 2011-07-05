@@ -246,9 +246,10 @@ public class ResponseChecker {
 				logger.info("Part mime type is: application/pdf.");
 				filetype = FileType.PDF;
 			} else {
-				logger.info("Part mime type is: unknown.");
+				logger.info("Part mime type is not handled: " + MimeUtility.decodeText(part.getContentType()) + ".");
 				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
 
+				logger.info("Checking file extension");
 				if (fileMatcher.matches()) {
 					try {
 						filetype = Enum.valueOf(FileType.class, fileMatcher.group(1).toUpperCase());
@@ -259,6 +260,7 @@ public class ResponseChecker {
 					filetype = FileType.BIN;
 				}
 			}
+			logger.info("File extension is: " + filetype.getExtension());
 
 			try {
 				switch (filetype) {
@@ -342,14 +344,14 @@ public class ResponseChecker {
 				logger.info("Creating directory: " + directory);
 				File dir = new File(directory);
 				dir.mkdir();
-				logger.info("Saving " + directory + filename);
+				logger.info("Saving " + directory + "/" + filename);
 				FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
 			} catch (Exception e) {
 				hibernate = HibernateUtil.getSession();
 				hibernate.beginTransaction();
 				hibernate.delete(attachment);
 				hibernate.getTransaction().commit();
-				logger.error("Error saving " + directory + filename, e);
+				logger.error("Error saving " + directory + "/" + filename, e);
 				throw e;
 			}
 
