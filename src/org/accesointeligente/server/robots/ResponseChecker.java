@@ -101,11 +101,12 @@ public class ResponseChecker {
 					Object content = message.getContent();
 
 					if (content instanceof Multipart) {
-						logger.info("Email content type is Multipart, each part will be processed");
 						Multipart mp = (Multipart) message.getContent();
+						logger.info("Email content type is Multipart, each part of " + mp.getCount() + " will be processed");
 
 						for (int i = 0, n = mp.getCount(); i < n; i++) {
 							Part part = mp.getBodyPart(i);
+							logger.info("Processing part: " + i + " of " + mp.getCount());
 							processPart(part);
 						}
 					} else if (content instanceof String) {
@@ -196,7 +197,6 @@ public class ResponseChecker {
 		Matcher matcher;
 		org.hibernate.Session hibernate;
 		StringTokenizer tokenizer;
-		logger.info("Processing part: " + part.getFileName() + ".");
 
 		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
 			logger.info("Part is attachment");
