@@ -106,7 +106,7 @@ public class ResponseChecker {
 
 						for (int i = 0, n = mp.getCount(); i < n; i++) {
 							Part part = mp.getBodyPart(i);
-							logger.info("Processing part: " + i + " of " + mp.getCount());
+							logger.info("Part: " + (i + 1) + " of " + mp.getCount());
 							processPart(part);
 						}
 					} else if (content instanceof String) {
@@ -134,7 +134,7 @@ public class ResponseChecker {
 
 					Boolean requestFound = false;
 
-					logger.info("Searching for Remote Identifier Requests");
+					logger.info("Searching for Request Remote Identifier");
 					for (String remoteIdentifier : remoteIdentifiers) {
 						hibernate = HibernateUtil.getSession();
 						hibernate.beginTransaction();
@@ -197,6 +197,7 @@ public class ResponseChecker {
 		Matcher matcher;
 		org.hibernate.Session hibernate;
 		StringTokenizer tokenizer;
+		logger.info("Processing Part - Start");
 
 		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
 			logger.info("Part is attachment");
@@ -217,6 +218,7 @@ public class ResponseChecker {
 				}
 
 				messageBody = text;
+				logger.info("Processing Part - End");
 				return;
 			} else if (part.isMimeType("text/html")) {
 				logger.info("Part mime type is: text/html.");
@@ -235,6 +237,7 @@ public class ResponseChecker {
 					messageBody = text;
 				}
 
+				logger.info("Processing Part - End");
 				return;
 			} else if (part.isMimeType("application/msword")) {
 				logger.info("Part mime type is: application/msword.");
@@ -376,6 +379,7 @@ public class ResponseChecker {
 				}
 
 				messageBody = text;
+				logger.info("Processing Part - End");
 				return;
 			} else if (part.isMimeType("text/html")) {
 				logger.info("Part is text/html");
@@ -395,6 +399,7 @@ public class ResponseChecker {
 					messageBody = text;
 				}
 
+				logger.info("Processing Part - End");
 				return;
 			} else if (part.isMimeType("multipart/*")) {
 				logger.info("Part is multipart/*");
@@ -405,6 +410,7 @@ public class ResponseChecker {
 				}
 			}
 		}
+		logger.info("Processing Part - End");
 	}
 
 	private String formatIdentifier(String prefix, Integer number) {
