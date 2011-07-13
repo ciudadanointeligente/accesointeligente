@@ -95,6 +95,7 @@ public class ResponseChecker {
 
 						if (matcher.matches()) {
 							remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+							logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 						}
 					}
 
@@ -121,6 +122,7 @@ public class ResponseChecker {
 
 							if (matcher.matches()) {
 								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 							}
 						}
 					} else {
@@ -213,6 +215,7 @@ public class ResponseChecker {
 
 					if (matcher.matches()) {
 						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -228,6 +231,7 @@ public class ResponseChecker {
 
 					if (matcher.matches()) {
 						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -272,6 +276,7 @@ public class ResponseChecker {
 
 							if (matcher.matches()) {
 								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 							}
 						}
 						break;
@@ -284,6 +289,7 @@ public class ResponseChecker {
 
 							if (matcher.matches()) {
 								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 							}
 						}
 						break;
@@ -333,6 +339,7 @@ public class ResponseChecker {
 
 			if (matcher.matches()) {
 				remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+				logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 			}
 
 			attachment.setName(filename);
@@ -371,6 +378,7 @@ public class ResponseChecker {
 
 					if (matcher.matches()) {
 						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 					}
 				}
 
@@ -430,6 +438,7 @@ public class ResponseChecker {
 
 								if (matcher.matches()) {
 									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+									logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 								}
 							}
 							break;
@@ -442,6 +451,7 @@ public class ResponseChecker {
 
 								if (matcher.matches()) {
 									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+									logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 								}
 							}
 							break;
@@ -460,6 +470,7 @@ public class ResponseChecker {
 
 									if (matcher.matches()) {
 										remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+										logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 									}
 								}
 
@@ -491,6 +502,7 @@ public class ResponseChecker {
 
 				if (matcher.matches()) {
 					remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+					logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
 				}
 
 				attachment.setName(filename);
