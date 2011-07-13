@@ -254,10 +254,9 @@ public class ResponseChecker {
 					try {
 						filetype = Enum.valueOf(FileType.class, fileMatcher.group(1).toUpperCase());
 					} catch (Exception e) {
-						filetype = FileType.BIN;
 					}
 				} else {
-					filetype = FileType.BIN;
+					return;
 				}
 			}
 			logger.info("File extension is: " + filetype.getExtension());
@@ -405,9 +404,119 @@ public class ResponseChecker {
 				}
 			} else {
 				logger.info("Part mime type is not handled: " + MimeUtility.decodeText(part.getContentType()) + ".");
-				logger.info("Part description: " + part.getDescription() + ".");
-				logger.info("Part file name: " + part.getFileName() + ".");
-				logger.info("Part disposition: " + part.getDisposition() + ".");
+				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
+
+				FileType filetype = null;
+				logger.info("Checking file extension");
+				if (fileMatcher.matches()) {
+					try {
+						filetype = Enum.valueOf(FileType.class, fileMatcher.group(1).toUpperCase());
+					} catch (Exception e) {
+						filetype = FileType.BIN;
+					}
+				} else {
+					filetype = FileType.BIN;
+				}
+				logger.info("File extension is: " + filetype.getExtension());
+
+				try {
+					switch (filetype) {
+						case DOC:
+							WordExtractor docExtractor = new WordExtractor(part.getInputStream());
+							tokenizer = new StringTokenizer(docExtractor.getText());
+
+							while (tokenizer.hasMoreTokens()) {
+								matcher = pattern.matcher(tokenizer.nextToken());
+
+								if (matcher.matches()) {
+									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								}
+							}
+							break;
+						case DOCX:
+							XWPFWordExtractor docxExtractor = new XWPFWordExtractor(new XWPFDocument(part.getInputStream()));
+							tokenizer = new StringTokenizer(docxExtractor.getText());
+
+							while (tokenizer.hasMoreTokens()) {
+								matcher = pattern.matcher(tokenizer.nextToken());
+
+								if (matcher.matches()) {
+									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								}
+							}
+							break;
+						case PDF:
+							PdfReader reader = new PdfReader(part.getInputStream());
+
+							for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+								if (remoteIdentifiers != null) {
+									break;
+								}
+
+								tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
+
+								while (tokenizer.hasMoreTokens()) {
+									matcher = pattern.matcher(tokenizer.nextToken());
+
+									if (matcher.matches()) {
+										remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+									}
+								}
+
+								reader.close();
+							}
+							break;
+						default:
+					}
+				} catch (Exception e) {
+					logger.error("Error processing " + MimeUtility.decodeText(part.getFileName()), e);
+					throw e;
+				}
+
+				hibernate = HibernateUtil.getSession();
+				hibernate.beginTransaction();
+
+				Attachment attachment = new Attachment();
+				hibernate.save(attachment);
+
+				hibernate.getTransaction().commit();
+
+				String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
+				String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
+
+				String filename = MimeUtility.decodeText(part.getFileName());
+				logger.info("Filename: " + filename);
+
+				matcher = pattern.matcher(filename);
+
+				if (matcher.matches()) {
+					remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+				}
+
+				attachment.setName(filename);
+				attachment.setType(filetype);
+				attachment.setUrl(baseUrl + "/" + filename);
+
+				try {
+					logger.info("Creating directory: " + directory);
+					File dir = new File(directory);
+					dir.mkdir();
+					logger.info("Saving " + directory + "/" + filename);
+					FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
+				} catch (Exception e) {
+					hibernate = HibernateUtil.getSession();
+					hibernate.beginTransaction();
+					hibernate.delete(attachment);
+					hibernate.getTransaction().commit();
+					logger.error("Error saving " + directory + "/" + filename, e);
+					throw e;
+				}
+
+				hibernate = HibernateUtil.getSession();
+				hibernate.beginTransaction();
+				hibernate.update(attachment);
+				hibernate.getTransaction().commit();
+				attachments.add(attachment);
 			}
 		}
 	}
