@@ -165,6 +165,7 @@ public class ResponseChecker {
 							request.setResponseDate(new Date());
 							hibernate.update(request);
 							hibernate.update(response);
+							hibernate.getTransaction().commit();
 							requestFound = true;
 						}
 					}
