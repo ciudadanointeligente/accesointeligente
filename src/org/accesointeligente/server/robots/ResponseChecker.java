@@ -259,9 +259,10 @@ public class ResponseChecker {
 					try {
 						filetype = Enum.valueOf(FileType.class, fileMatcher.group(1).toUpperCase());
 					} catch (Exception e) {
+						filetype = FileType.BIN;
 					}
 				} else {
-					return;
+					filetype = FileType.BIN;
 				}
 			}
 			logger.info("File extension is: " + filetype.getExtension());
