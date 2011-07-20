@@ -31,11 +31,20 @@ public enum FileType {
 	ODP("OpenDocument Presentacion", ".odp"),
 	PDF("Portable Document Format", ".pdf"),
 	TXT("Texto plano", ".txt"),
+	RTF("Texto con formato", ".rtf"),
 	HTML("Documento HTML", ".html"),
 	XML("Documento XML", ".xml"),
 	ZIP("Archivo Comprimido", ".zip"),
 	RAR("Archivo Comprimido", ".rar"),
-	BIN("Documento", ".bin");
+	BIN("Documento", ".bin"),
+	JPG("Imagen", ".jpg"),
+	JPEG("Imagen", ".jpeg"),
+	PNG("Imagen", ".png"),
+	TIFF("Imagen", ".tiff"),
+	TIF("Imagen", ".tif"),
+	GIF("Imagen", ".gif"),
+	BMP("Imagen", ".bmp"),
+	TGA("Imagen", ".tga");
 
 	private String name;
 	private String extension;
