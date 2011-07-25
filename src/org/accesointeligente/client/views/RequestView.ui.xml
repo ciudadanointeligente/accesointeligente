@@ -48,8 +48,8 @@
 					<div class="{style.whiteBlock} {style.borderBottomG}">
 						<img src="images/asterisco.png" class="{style.listIcon}" />
 						<i>
-							No te alargues! Mientras más claro y preciso seas será más fácil
-							identificar lo que buscas...
+							OJO: Si la información que quieres pedir es de caracter personalísimo (tu información privada), debes considerar las siguientes posibilidades: 
+							<br/>1) Rechazo de la solicitud, pues quien figura como emisor de la solicitud es la Fundación. 2) Las preguntas y respuestas quedan publicadas, otros podrán leerlas.
 						</i>
 					</div>
 				</div>
@@ -63,11 +63,12 @@
 					</div>
 					<div class="{style.sideNote}">
 						<p>
-							* Recuerda, este espacio no busca realizar sugerencias,
+							* Recuerda, este espacio NO busca realizar sugerencias,
 							reclamos,
 							ni tampoco que argumentes sobre las razones por la que
 							éstas haciendo la solicitud. Se respetuoso de otra forma no será posible
 							enviar tu solicitud.
+							<br/>No te alargues! Mientras más claro y preciso seas será más fácil identificar lo que buscas...
 						</p>
 					</div>
 				</div>
