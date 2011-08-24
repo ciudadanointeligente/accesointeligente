@@ -36,8 +36,11 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -135,6 +138,7 @@ public class ResponseChecker {
 					}
 
 					Boolean requestFound = false;
+					messageBody = htmlToString(messageBody);
 
 					logger.info("Searching for Request Remote Identifier");
 					for (String remoteIdentifier : remoteIdentifiers) {
@@ -609,5 +613,32 @@ public class ResponseChecker {
 		hibernate.update(newAttachment);
 		hibernate.getTransaction().commit();
 		return newAttachment;
+	}
+
+	private String htmlToString(String string) throws IOException {
+		TagNode body;
+		TagNode htmlDocument;
+		HtmlCleaner cleaner = new HtmlCleaner();
+		htmlDocument = cleaner.clean(string);
+		body = (TagNode) htmlDocument.getElementsByName("body", true)[0];
+		String messageBody = body.getText().toString();
+
+		messageBody = messageBody.replaceAll("&nbsp;", " ");
+		messageBody = messageBody.replaceAll("[\t ]+", " ");
+		messageBody = messageBody.trim();
+		messageBody = messageBody.replaceAll("(\n )", "\n");
+		messageBody = messageBody.replaceAll("&aacute;", "á");
+		messageBody = messageBody.replaceAll("&Aacute;", "Á");
+		messageBody = messageBody.replaceAll("&eacute;", "é");
+		messageBody = messageBody.replaceAll("&Eacute;", "É");
+		messageBody = messageBody.replaceAll("&iacute;", "í");
+		messageBody = messageBody.replaceAll("&Iacute;", "Í");
+		messageBody = messageBody.replaceAll("&oacute;", "ó");
+		messageBody = messageBody.replaceAll("&Oacute;", "Ó");
+		messageBody = messageBody.replaceAll("&uacute;", "ú");
+		messageBody = messageBody.replaceAll("&Uacute;", "Ú");
+		messageBody = messageBody.replaceAll("&ntilde;", "ñ");
+		messageBody = messageBody.replaceAll("&Ntilde;", "Ñ");
+		return messageBody;
 	}
 }
