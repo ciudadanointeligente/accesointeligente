@@ -22,8 +22,7 @@ import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 
@@ -45,8 +44,17 @@ public class PlaceHistory implements NavigationHandler {
 		PlaceRequest placeRequest = navigationEvent.getRequest();
 		history.add(0, placeRequest);
 		String token = placeManager.buildHistoryToken(placeRequest);
+		Set<String> parameterNames = new HashSet<String>();
+		String value = null;
 
 		if (token != null && token.length() > 0) {
+			parameterNames = placeRequest.getParameterNames();
+			for (String paramenterName : parameterNames) {
+				value = placeRequest.getParameter(paramenterName, null);
+				if (value != null) {
+					token += ";" + paramenterName + "=" + value;
+				}
+			}
 			trackHit(token);
 		}
 	}

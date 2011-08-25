@@ -744,6 +744,12 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			hibernate.getTransaction().commit();
 
 			Emailer emailer = new Emailer();
+			emailer.setRecipient(response.getSender());
+			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.user.response.subject"), request.getRemoteIdentifier()));
+			emailer.setBody(String.format(ApplicationProperties.getProperty("email.user.response.body"),  userResponse.getInformation()) + ApplicationProperties.getProperty("email.signature"));
+			emailer.connectAndSend();
+
+			emailer = new Emailer();
 			emailer.setRecipient(user.getEmail());
 			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.user.response.subject"), request.getRemoteIdentifier()));
 			emailer.setBody(String.format(ApplicationProperties.getProperty("email.user.response.body"),  userResponse.getInformation()) + ApplicationProperties.getProperty("email.signature"));
