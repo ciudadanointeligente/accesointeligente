@@ -34,6 +34,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -65,6 +66,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 		void initTable();
 		void removeColumns();
 		void setRequests(ListDataProvider<Request> data);
+		void setShare(String href);
 	}
 
 	@ProxyCodeSplit
@@ -156,6 +158,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 					Boolean loggedIn = ClientSessionUtil.checkSession();
 					getView().showNewCommentPanel(loggedIn);
 					getView().setRatingReadOnly(!loggedIn);
+					getView().setShare(Window.Location.getHref());
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
