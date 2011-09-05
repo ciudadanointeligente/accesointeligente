@@ -181,7 +181,7 @@ public class ShareThis extends Composite {
 
 	private void drawTwitterButton() {
 		String html = "<a ";
-		html += "href=\"http://twitter.com/share\" ";
+		html += "href=\"https://twitter.com/share\" ";
 		html += "class=\"twitter-share-button\" ";
 		html += "data-count=\"" + align.getTwitterPropertyName() + "\" ";
 		html += "data-text=\"" + message + "\" ";
@@ -199,7 +199,7 @@ public class ShareThis extends Composite {
 
 	private void drawGoogleBuzzButton() {
 		String html = "<a ";
-		html += "href=\"http://www.google.com/buzz/post\" ";
+		html += "href=\"https://www.google.com/buzz/post\" ";
 		html += "class=\"google-buzz-button\" ";
 		html += "title=\"" + title +  "\" ";
 		html += "data-message=\"" + message + "\" ";
@@ -237,7 +237,7 @@ public class ShareThis extends Composite {
 	private void setupTwitterScript() {
 		Document doc = Document.get();
 		ScriptElement script = doc.createScriptElement();
-		script.setSrc("http://platform.twitter.com/widgets.js");
+		script.setSrc("https://platform.twitter.com/widgets.js");
 		script.setType("text/javascript");
 		script.setLang("javascript");
 		doc.getBody().appendChild(script);
@@ -246,7 +246,7 @@ public class ShareThis extends Composite {
 	private void setupGoogleBuzzScript() {
 		Document doc = Document.get();
 		ScriptElement script = doc.createScriptElement();
-		script.setSrc("http://www.google.com/buzz/api/button.js");
+		script.setSrc("https://www.google.com/buzz/api/button.js");
 		script.setType("text/javascript");
 		script.setLang("javascript");
 		doc.getBody().appendChild(script);
@@ -264,7 +264,7 @@ public class ShareThis extends Composite {
 	private void setupFacebookScript() {
 		Document doc = Document.get();
 		ScriptElement script = doc.createScriptElement();
-		script.setSrc("http://connect.facebook.net/" + langLong + "/all.js#xfbml=1");
+		script.setSrc("https://connect.facebook.net/" + langLong + "/all.js#xfbml=1");
 		script.setType("text/javascript");
 		script.setLang("javascript");
 		doc.getBody().appendChild(script);
