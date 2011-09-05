@@ -13,27 +13,21 @@ public class ShareThis extends Composite {
 	interface ShareThisUiBinder extends UiBinder<Widget, ShareThis> {}
 
 	public enum Align {
-		VERTICAL("vertical", "normal-count", "tall", "box_count"),
-		HORIZONTAL("horizontal", "small-count", "medium", "button_count");
+		VERTICAL("vertical", "tall", "box_count"),
+		HORIZONTAL("horizontal", "medium", "button_count");
 
 		private String twitterPropertyName;
-		private String googleBuzzPropertyName;
 		private String googlePlusPropertyName;
 		private String facebookPropertyName;
 
-		private Align(String twitterPropertyName, String googleBuzzPropertyName, String googlePlusPropertyName, String facebookPropertyName) {
+		private Align(String twitterPropertyName, String googlePlusPropertyName, String facebookPropertyName) {
 			this.twitterPropertyName = twitterPropertyName;
-			this.googleBuzzPropertyName = googleBuzzPropertyName;
 			this.googlePlusPropertyName = googlePlusPropertyName;
 			this.facebookPropertyName = facebookPropertyName;
 		}
 
 		public String getTwitterPropertyName() {
 			return twitterPropertyName;
-		}
-
-		public String getGoogleBuzzPropertyName() {
-			return googleBuzzPropertyName;
 		}
 
 		public String getGooglePlusPropertyName() {
@@ -48,7 +42,6 @@ public class ShareThis extends Composite {
 	@UiField HTMLPanel shareThisPanel;
 
 	private HTML htmlTwitter;
-	private HTML htmlGoogleBuzz;
 	private HTML htmlGooglePlus;
 	private HTML htmlFacebook;
 	private String href = "";
@@ -73,14 +66,6 @@ public class ShareThis extends Composite {
 
 	public void setHtmlTwitter(HTML twitter) {
 		this.htmlTwitter = twitter;
-	}
-
-	public HTML getHtmlGoogleBuzz() {
-		return htmlGoogleBuzz;
-	}
-
-	public void setHtmlGoogleBuzz(HTML googleBuzz) {
-		this.htmlGoogleBuzz = googleBuzz;
 	}
 
 	public HTML getHtmlGooglePlus() {
@@ -157,7 +142,6 @@ public class ShareThis extends Composite {
 
 	public void setup() {
 		setupTwitterScript();
-		setupGoogleBuzzScript();
 		setupGooglePlusScript();
 		setupFacebookScript();
 
@@ -168,7 +152,6 @@ public class ShareThis extends Composite {
 		}
 
 		drawTwitterButton();
-		drawGoogleBuzzButton();
 		drawGooglePlusButton();
 		drawFacebookButton();
 
@@ -195,20 +178,6 @@ public class ShareThis extends Composite {
 		html += ">Tweet</a>";
 		setHtmlTwitter(new HTML(html));
 		shareThisContainer.add(htmlTwitter);
-	}
-
-	private void drawGoogleBuzzButton() {
-		String html = "<a ";
-		html += "href=\"https://www.google.com/buzz/post\" ";
-		html += "class=\"google-buzz-button\" ";
-		html += "title=\"" + title +  "\" ";
-		html += "data-message=\"" + message + "\" ";
-		html += "data-url=\"" + href +"\" ";
-		html += "data-locale=\"en\" ";
-		html += "data-button-style=\"" + align.getGoogleBuzzPropertyName() + "\"></a>";
-
-		setHtmlGoogleBuzz(new HTML(html));
-		shareThisContainer.add(htmlGoogleBuzz);
 	}
 
 	private void drawGooglePlusButton() {
@@ -238,15 +207,6 @@ public class ShareThis extends Composite {
 		Document doc = Document.get();
 		ScriptElement script = doc.createScriptElement();
 		script.setSrc("https://platform.twitter.com/widgets.js");
-		script.setType("text/javascript");
-		script.setLang("javascript");
-		doc.getBody().appendChild(script);
-	}
-
-	private void setupGoogleBuzzScript() {
-		Document doc = Document.get();
-		ScriptElement script = doc.createScriptElement();
-		script.setSrc("https://www.google.com/buzz/api/button.js");
 		script.setType("text/javascript");
 		script.setLang("javascript");
 		doc.getBody().appendChild(script);
