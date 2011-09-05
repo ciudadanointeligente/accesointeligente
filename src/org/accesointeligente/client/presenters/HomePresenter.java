@@ -30,11 +30,13 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 
 import javax.inject.Inject;
 
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy> implements HomeUiHandlers {
 	public interface MyView extends View, HasUiHandlers<HomeUiHandlers> {
+		void setShare(String href);
 	}
 
 	@ProxyCodeSplit
@@ -54,6 +56,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 	@Override
 	protected void revealInParent() {
 		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
+	}
+
+	@Override
+	protected void onReveal() {
+		getView().setShare(Window.Location.getHref());
 	}
 
 	@Override

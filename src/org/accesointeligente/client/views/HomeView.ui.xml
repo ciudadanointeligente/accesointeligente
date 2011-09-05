@@ -90,5 +90,6 @@
 				</table>
 			</div>
 		</div>
+		<g:HTMLPanel ui:field="sharePanel" addStyleNames="{style.sharePanel}" />
 	</g:HTMLPanel>
 </ui:UiBinder>

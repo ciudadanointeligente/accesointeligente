@@ -188,3 +188,10 @@ div {
 .NGOSlinks {
 	font-size: 10px;
 }
+
+.sharePanel {
+	position:fixed;
+	top: 70px;
+	margin-left: -80px;
+	z-index: 99;
+}

@@ -20,6 +20,7 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.HomePresenter;
 import org.accesointeligente.client.uihandlers.HomeUiHandlers;
+import org.accesointeligente.client.widgets.ShareThis;
 
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -28,9 +29,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 	private static HomeViewUiBinder uiBinder = GWT.create(HomeViewUiBinder.class);
@@ -40,6 +39,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 	@UiField FocusPanel requestFormLink;
 	@UiField FocusPanel requestListLink;
 	@UiField FlowPanel lastResponses;
+	@UiField HTMLPanel sharePanel;
+	private ShareThis share;
 
 	public HomeView() {
 		widget = uiBinder.createAndBindUi(this);
@@ -48,6 +49,18 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+
+	@Override
+	public void setShare(String href) {
+		share = new ShareThis();
+		share.setHref(href);
+		// TODO: define social network messages
+		share.setTitle("AccesoInteligente");
+		share.setMessage("La información es tuya #AccesoInteligente");
+		share.setLangLong("es_CL");
+		share.setup();
+		sharePanel.add(share);
 	}
 
 	@UiHandler("requestFormLink")
