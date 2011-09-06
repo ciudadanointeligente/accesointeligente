@@ -204,6 +204,7 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 		String newPassword = null;
+		String title = null;
 
 		try {
 			Criteria criteria = hibernate.createCriteria(User.class);
@@ -219,10 +220,16 @@ public class UserServiceImpl extends PersistentRemoteService implements UserServ
 			hibernate.update(user);
 			hibernate.getTransaction().commit();
 
+			if (user.getGender() == null || user.getGender().equals(Gender.MALE)) {
+				title = "Sr.";
+			} else {
+				title = "Sra.";
+			}
+
 			Emailer emailer = new Emailer();
 			emailer.setRecipient(user.getEmail());
 			emailer.setSubject(ApplicationProperties.getProperty("email.password.recovery.subject"));
-			emailer.setBody(String.format(ApplicationProperties.getProperty("email.password.recovery.body"), (user.getGender().equals(Gender.FEMALE)) ? "Sra. " : "Sr. ", user.getFirstName(), newPassword) + ApplicationProperties.getProperty("email.signature"));
+			emailer.setBody(String.format(ApplicationProperties.getProperty("email.password.recovery.body"), title, user.getFirstName(), newPassword) + ApplicationProperties.getProperty("email.signature"));
 			emailer.connectAndSend();
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
