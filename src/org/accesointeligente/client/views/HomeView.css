@@ -193,5 +193,5 @@ div {
 	position:fixed;
 	top: 70px;
 	margin-left: -80px;
-	z-index: 99;
+	z-index: 1;
 }
