@@ -34,7 +34,6 @@ import org.hibernate.criterion.Restrictions;
 import java.util.*;
 
 public class UserServiceImpl extends PersistentRemoteService implements UserService {
-	private static final long serialVersionUID = -389660005156048126L;
 	private PersistentBeanManager persistentBeanManager;
 
 	public UserServiceImpl() {

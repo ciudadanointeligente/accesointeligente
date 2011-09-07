@@ -33,7 +33,6 @@ import org.hibernate.criterion.Order;
 import java.util.List;
 
 public class InstitutionServiceImpl extends PersistentRemoteService implements InstitutionService {
-	private static final long serialVersionUID = 7649117458892114784L;
 	private PersistentBeanManager persistentBeanManager;
 
 	public InstitutionServiceImpl() {

@@ -19,13 +19,14 @@
 package org.accesointeligente.server.services;
 
 
-import net.sf.gilead.core.PersistentBeanManager;
-import net.sf.gilead.gwt.PersistentRemoteService;
-
 import org.accesointeligente.client.services.AgeService;
 import org.accesointeligente.model.Age;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.ServiceException;
+
+import net.sf.gilead.core.PersistentBeanManager;
+import net.sf.gilead.gwt.PersistentRemoteService;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -33,7 +34,6 @@ import org.hibernate.criterion.Order;
 import java.util.List;
 
 public class AgeServiceImpl extends PersistentRemoteService implements AgeService {
-	private static final long serialVersionUID = -6095320806491962761L;
 	private PersistentBeanManager persistentBeanManager;
 
 	public AgeServiceImpl() {
