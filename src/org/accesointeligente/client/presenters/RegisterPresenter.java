@@ -33,7 +33,9 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
-import com.gwtplatform.mvp.client.proxy.*;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -66,6 +68,7 @@ public class RegisterPresenter extends Presenter<RegisterPresenter.MyView, Regis
 		Country getCountry();
 		Region getRegion();
 		String getEmail();
+		void setEmailFocus();
 		String getPassword();
 		Boolean validateForm();
 	}
@@ -96,6 +99,8 @@ public class RegisterPresenter extends Presenter<RegisterPresenter.MyView, Regis
 
 	@Inject
 	private UserServiceAsync userService;
+
+	private Boolean emailAvailable = false;
 
 	@Inject
 	public RegisterPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
@@ -214,7 +219,34 @@ public class RegisterPresenter extends Presenter<RegisterPresenter.MyView, Regis
 	}
 
 	@Override
+	public void checkEmail() {
+		userService.checkEmailExistence(getView().getEmail(), new AsyncCallback<Boolean>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("Ha ocurrido un error, por favor intente nuevamente", NotificationEventType.ERROR);
+			}
+
+			@Override
+			public void onSuccess(Boolean result) {
+				if (result) {
+					showNotification("La dirección de correo ingresada ya se ha registrado", NotificationEventType.ERROR);
+					emailAvailable = false;
+					getView().setEmailFocus();
+				} else {
+					emailAvailable = true;
+				}
+			}
+		});
+	}
+
+	@Override
 	public void register() {
+		if (emailAvailable == false) {
+			showNotification("La dirección de correo ingresada ya se ha registrado", NotificationEventType.NOTICE);
+			return;
+		}
+
 		if (getView().validateForm()) {
 			final User user = new User();
 

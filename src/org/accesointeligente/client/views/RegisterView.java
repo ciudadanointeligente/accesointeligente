@@ -26,6 +26,7 @@ import org.accesointeligente.shared.*;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -230,6 +231,11 @@ public class RegisterView extends ViewWithUiHandlers<RegisterUiHandlers> impleme
 	}
 
 	@Override
+	public void setEmailFocus() {
+		email.setFocus(true);
+	}
+
+	@Override
 	public String getPassword() {
 		return password1.getText();
 	}
@@ -305,6 +311,11 @@ public class RegisterView extends ViewWithUiHandlers<RegisterUiHandlers> impleme
 	@UiHandler("countryOther")
 	public void onCountryOtherValueChange(ValueChangeEvent<Boolean> event) {
 		region.setEnabled(!event.getValue());
+	}
+
+	@UiHandler("email")
+	public void onEmailBlur(BlurEvent event) {
+		getUiHandlers().checkEmail();
 	}
 
 	@UiHandler("register")

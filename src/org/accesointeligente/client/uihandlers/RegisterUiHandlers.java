@@ -30,4 +30,5 @@ public interface RegisterUiHandlers extends UiHandlers {
 	void getRegions();
 	void register();
 	void showNotification(String message, NotificationEventType type);
+	void checkEmail();
 }
