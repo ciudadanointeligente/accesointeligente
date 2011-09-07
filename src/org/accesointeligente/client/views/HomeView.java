@@ -18,9 +18,13 @@
  */
 package org.accesointeligente.client.views;
 
+import org.accesointeligente.client.AnchorCell;
+import org.accesointeligente.client.AnchorCellParams;
 import org.accesointeligente.client.presenters.HomePresenter;
 import org.accesointeligente.client.uihandlers.HomeUiHandlers;
 import org.accesointeligente.client.widgets.ShareThis;
+import org.accesointeligente.model.Request;
+import org.accesointeligente.shared.AppPlace;
 
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -29,7 +33,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.ListDataProvider;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 	private static HomeViewUiBinder uiBinder = GWT.create(HomeViewUiBinder.class);
@@ -39,6 +46,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 	@UiField FocusPanel requestFormLink;
 	@UiField FocusPanel requestListLink;
 	@UiField FlowPanel lastResponses;
+	@UiField CellTable<Request> lastResponsesRequestTable;
 	@UiField HTMLPanel sharePanel;
 	private ShareThis share;
 
@@ -49,6 +57,35 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+
+	@Override
+	public void initTable() {
+		// Title
+		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
+			@Override
+			public AnchorCellParams getValue(Request request) {
+				AnchorCellParams params = new AnchorCellParams();
+				params.setValue(request.getTitle());
+				String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
+				params.setUrl(baseUrl + request.getId());
+				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
+				return params;
+			}
+		};
+		lastResponsesRequestTable.addColumn(titleColumn);
+	}
+
+	@Override
+	public void removeColumns() {
+		while (lastResponsesRequestTable.getColumnCount() > 0) {
+			lastResponsesRequestTable.removeColumn(0);
+		}
+	}
+
+	@Override
+	public void setRequests(ListDataProvider<Request> data) {
+		data.addDataDisplay(lastResponsesRequestTable);
 	}
 
 	@Override
