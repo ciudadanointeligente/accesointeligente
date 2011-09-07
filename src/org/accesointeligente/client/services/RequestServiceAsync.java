@@ -55,4 +55,5 @@ public interface RequestServiceAsync {
 	void saveUserResponse(UserResponse userResponse, AsyncCallback<UserResponse> callback);
 	void getUserResponse(Response response, AsyncCallback<UserResponse> callback);
 	void getBestVotedRequests(AsyncCallback<List<Request>> callback);
+	void getLastResponseRequests(AsyncCallback<List<Request>> callback);
 }

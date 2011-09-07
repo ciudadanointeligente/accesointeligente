@@ -800,4 +800,25 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			throw new ServiceException();
 		}
 	}
+
+	@Override
+	public List<Request> getLastResponseRequests() throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+			criteria.addOrder(Order.desc("responseDate"));
+			criteria.setFirstResult(0);
+			criteria.setMaxResults(3);
+			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
+			hibernate.getTransaction().commit();
+			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
 }
