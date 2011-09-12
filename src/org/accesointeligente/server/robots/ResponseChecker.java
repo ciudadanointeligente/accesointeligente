@@ -210,7 +210,7 @@ public class ResponseChecker {
 		org.hibernate.Session hibernate;
 		StringTokenizer tokenizer;
 
-		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equals(Part.INLINE)) {
 			logger.info("Part is attachment");
 			FileType filetype = null;
 
@@ -261,7 +261,14 @@ public class ResponseChecker {
 				filetype = FileType.PDF;
 			} else {
 				logger.info("Part mime type is not handled: " + MimeUtility.decodeText(part.getContentType()) + ".");
-				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
+				String partFileName = "";
+				try {
+					partFileName = MimeUtility.decodeText(part.getFileName());
+				} catch (Exception e) {
+					partFileName = "";
+				}
+
+				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(partFileName);
 
 				logger.info("Checking file extension");
 				if (fileMatcher.matches()) {
@@ -423,7 +430,14 @@ public class ResponseChecker {
 				}
 			} else {
 				logger.info("Part mime type is not handled: " + MimeUtility.decodeText(part.getContentType()) + ".");
-				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
+				String partFileName = "";
+				try {
+					partFileName = MimeUtility.decodeText(part.getFileName());
+				} catch (Exception e) {
+					partFileName = "";
+				}
+
+				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(partFileName);
 
 				FileType filetype = null;
 				logger.info("Checking file extension");
