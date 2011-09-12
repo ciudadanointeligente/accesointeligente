@@ -210,7 +210,7 @@ public class ResponseChecker {
 		org.hibernate.Session hibernate;
 		StringTokenizer tokenizer;
 
-		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equals(Part.INLINE)) {
+		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
 			logger.info("Part is attachment");
 			FileType filetype = null;
 
