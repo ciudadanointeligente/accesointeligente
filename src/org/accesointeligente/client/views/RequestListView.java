@@ -117,7 +117,7 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 			public AnchorCellParams getValue(Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				params.setUrl(getUiHandlers().getRequestBaseUrlPlace() + request.getId());
+				params.setUrl(getUiHandlers().getRequestBaseUrlPlace(request.getId()));
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}

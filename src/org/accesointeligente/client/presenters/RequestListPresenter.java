@@ -288,7 +288,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	@Override
 	public void showRequest(Integer requestId) {
-		if (listType.equals(RequestListType.DRAFTS.getType())) {
+		if (listType.equals(RequestListType.DRAFTS)) {
 			placeManager.revealPlace(new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", requestId.toString()));
 		} else {
 			placeManager.revealPlace(new PlaceRequest(AppPlace.RESPONSE).with("requestId", requestId.toString()));
@@ -306,13 +306,15 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	// FIXME: use PlaceRequest instead lf URL redirections
 	@Override
-	public String getRequestBaseUrlPlace() {
+	public String getRequestBaseUrlPlace(Integer requestId) {
 		String baseUrl;
 
-		if (listType.equals(RequestListType.DRAFTS.getType())) {
-			baseUrl = "#" + AppPlace.REQUESTSTATUS + ";requestId=";
+		if (listType.equals(RequestListType.DRAFTS)) {
+			PlaceRequest placeRequest = new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", requestId.toString());
+			baseUrl = "#" + placeManager.buildHistoryToken(placeRequest);
 		} else {
-			baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
+			PlaceRequest placeRequest = new PlaceRequest(AppPlace.RESPONSE).with("requestId", requestId.toString());
+			baseUrl = "#" + placeManager.buildHistoryToken(placeRequest);
 		}
 
 		return baseUrl;
