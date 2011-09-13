@@ -265,7 +265,7 @@ public class ResponseChecker {
 				try {
 					partFileName = MimeUtility.decodeText(part.getFileName());
 				} catch (Exception e) {
-					logger.info("Part is invalid, it will be skipped");
+					logger.info("Invalid filename, part will be skipped");
 					return;
 				}
 
@@ -521,7 +521,15 @@ public class ResponseChecker {
 				String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
 				String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
 
-				String filename = MimeUtility.decodeText(part.getFileName());
+				String filename = "";
+
+				try {
+					filename = MimeUtility.decodeText(part.getFileName());
+				} catch (Exception e) {
+					logger.info("Invalid filename, part will be skipped");
+					return;
+				}
+
 				logger.info("Filename: " + filename);
 
 				matcher = pattern.matcher(filename);
