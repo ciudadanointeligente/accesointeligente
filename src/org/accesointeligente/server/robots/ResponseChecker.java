@@ -265,7 +265,8 @@ public class ResponseChecker {
 				try {
 					partFileName = MimeUtility.decodeText(part.getFileName());
 				} catch (Exception e) {
-					partFileName = "";
+					logger.info("Part is invalid, it will be skipped");
+					return;
 				}
 
 				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(partFileName);
