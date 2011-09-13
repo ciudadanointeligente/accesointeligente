@@ -4,7 +4,7 @@
 	<ui:style src="RequestStatusView.css" />
 	<g:HTMLPanel>
 		<div class="notice">
-			<div class="fLeft">Tu solicitud ha sido guardada como BORRADOR. Para confirmar presiona "Enviar"</div>
+			<div class="fLeft">Tu solicitud ha sido guardada como BORRADOR. Para que procesemos tu solicitud presiona "Confirmar"</div>
 		</div>
 		<div class="headSolicitud clear">
 			<h1>Resumen de la solicitud</h1>
