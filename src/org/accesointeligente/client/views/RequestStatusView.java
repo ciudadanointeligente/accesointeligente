@@ -113,6 +113,7 @@ public class RequestStatusView extends ViewWithUiHandlers<RequestStatusUiHandler
 
 	@Override
 	public void setRequestCategories(Set<RequestCategory> categories) {
+		requestCategoryPanel.clear();
 		Iterator<RequestCategory> iterator = categories.iterator();
 
 		while (iterator.hasNext()) {
