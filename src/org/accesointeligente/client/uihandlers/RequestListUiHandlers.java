@@ -29,4 +29,5 @@ public interface RequestListUiHandlers extends UiHandlers {
 	void showRequest(Integer requestId);
 	String getRequestBaseUrlPlace();
 	void gotoRequest();
+	void gotoLogin();
 }

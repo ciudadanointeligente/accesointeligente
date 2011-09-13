@@ -219,9 +219,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 				setInSlot(SLOT_SEARCH_WIDGET, requestSearchPresenter);
 				getView().setSearchButtonVisible(true);
 				getView().setSearchHandleVisible(true);
-				if (ClientSessionUtil.checkSession()) {
-					getView().initTableFavColumn();
-				}
+				getView().initTableFavColumn();
 				break;
 		}
 	}
@@ -333,5 +331,10 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	@Override
 	public void loginRequired(LoginRequiredEvent event) {
 		oldListType = null;
+	}
+
+	@Override
+	public void gotoLogin() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.LOGIN));
 	}
 }

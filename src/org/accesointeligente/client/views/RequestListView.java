@@ -219,7 +219,11 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 				new CustomActionImageCell<CustomActionImageCellParams>(new Delegate<CustomActionImageCellParams>() {
 
 			public void execute(CustomActionImageCellParams params) {
-				getUiHandlers().requestToggleFavorite((Request) params.getValue());
+				if (ClientSessionUtil.getUser() != null) {
+					getUiHandlers().requestToggleFavorite((Request) params.getValue());
+				} else {
+					getUiHandlers().gotoLogin();
+				}
 			}
 		})) {
 			@Override
@@ -228,11 +232,13 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 				params.setUrl("images/reqList/no-favorite.png");
 				params.setTitle("Seguir");
 
-				for (UserFavoriteRequest favorite : request.getFavorites()) {
-					if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
-						params.setUrl("images/reqList/favorite.png");
-						params.setTitle("Dejar de seguir");
-						break;
+				if (ClientSessionUtil.getUser() != null) {
+					for (UserFavoriteRequest favorite : request.getFavorites()) {
+						if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
+							params.setUrl("images/reqList/favorite.png");
+							params.setTitle("Dejar de seguir");
+							break;
+						}
 					}
 				}
 
