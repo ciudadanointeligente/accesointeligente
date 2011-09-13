@@ -26,6 +26,9 @@ import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hwpf.extractor.WordExtractor;
@@ -35,9 +38,6 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
-
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import java.io.File;
 import java.io.IOException;
@@ -141,7 +141,7 @@ public class ResponseChecker {
 					Boolean requestFound = false;
 					Matcher matcher = htmlPattern.matcher(messageBody);
 
-					if (!matcher.matches()) {
+					if (matcher.matches()) {
 						messageBody = htmlToString(messageBody);
 					}
 
