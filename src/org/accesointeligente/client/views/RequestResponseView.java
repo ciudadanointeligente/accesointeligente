@@ -20,6 +20,7 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.AnchorCell;
 import org.accesointeligente.client.AnchorCellParams;
+import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.*;
@@ -161,11 +162,6 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	}
 
 	@Override
-	public void setRatingReadOnly(Boolean readOnly) {
-		requestRate.setReadOnly(readOnly);
-	}
-
-	@Override
 	public void clearResponseWidget(ResponseWidget widget) {
 		widget.clearUserResponsePanel();
 	}
@@ -252,7 +248,11 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 
 	@UiHandler("requestRate")
 	public void onRequestRateClick(ClickEvent event) {
-		getUiHandlers().saveQualification(requestRate.getValue());
+		if (ClientSessionUtil.getUser() != null) {
+			getUiHandlers().saveQualification(requestRate.getValue());
+		} else {
+			getUiHandlers().gotoLogin();
+		}
 	}
 
 	@UiFactory
