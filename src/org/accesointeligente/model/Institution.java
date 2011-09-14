@@ -30,6 +30,7 @@ public class Institution extends LightEntity {
 	private Boolean enabled;
 	private Boolean canLogin;
 	private Boolean canMakeRequest;
+	private Boolean masterEnabled;
 
 	public Integer getId() {
 		return id;
@@ -79,4 +80,11 @@ public class Institution extends LightEntity {
 		this.canMakeRequest = canMakeRequest;
 	}
 
+	public Boolean getMasterEnabled() {
+		return masterEnabled;
+	}
+
+	public void setMasterEnabled(Boolean disabled) {
+		this.masterEnabled = disabled;
+	}
 }

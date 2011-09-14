@@ -17,5 +17,6 @@
 		<property name="enabled"/>
 		<property name="canLogin"/>
 		<property name="canMakeRequest"/>
+		<property name="masterEnabled"/>
 	</class>
 </hibernate-mapping>
