@@ -33,6 +33,7 @@ public enum FileType {
 	TXT("Texto plano", ".txt"),
 	RTF("Texto con formato", ".rtf"),
 	HTML("Documento HTML", ".html"),
+	HTM("Documento HTML", ".htm"),
 	XML("Documento XML", ".xml"),
 	ZIP("Archivo Comprimido", ".zip"),
 	RAR("Archivo Comprimido", ".rar"),
