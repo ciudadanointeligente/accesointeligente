@@ -44,6 +44,7 @@ public class RequestUpdater {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("status", RequestStatus.PENDING));
+			criteria.add(Restrictions.eq("masterEnabled", "true"));
 			List<Request> newRequests = criteria.list();
 			hibernate.getTransaction().commit();
 
