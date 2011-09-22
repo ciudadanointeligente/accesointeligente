@@ -19,8 +19,11 @@
 package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Request;
+import org.accesointeligente.model.external.SGSListResult;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.shared.RequestStatus;
+
+import com.google.gson.Gson;
 
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
@@ -59,6 +62,10 @@ public class SGS extends Robot {
 	private String requestCreatedAction = "?accion=solicitud-de-informacion&act=5";
 	private String requestViewAction = "?accion=mis-solicitudes&act=1";
 	private String requestListAction = "?accion=Mis-Solicitudes";
+	private String requestAjaxOption = "&axj=1";
+	private String requestJsonListTotal = "&iDisplayStart=0&iDisplayLength=0";
+	private String requestJsonListStart = "&iDisplayStart=";
+	private String requestJsonListLength = "&iDisplayLength=";
 
 	public SGS() {
 		client = new DefaultHttpClient();
@@ -239,6 +246,27 @@ public class SGS extends Robot {
 					remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
 					request.setRemoteIdentifier(remoteIdentifier);
 				}
+
+				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the identifier via JSON requests
+				if (request.getRemoteIdentifier() == null) {
+					try {
+						Gson gsonEncoder = new Gson();
+						SGSListResult sgsListResult = new SGSListResult();
+						Integer totalResults = 0;
+						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListTotal));
+						sgsListResult = gsonEncoder.fromJson(new InputStreamReader(response.getEntity().getContent(), characterEncoding).toString(), SGSListResult.class);
+
+						totalResults = sgsListResult.getTotalRecords();
+						totalResults--;
+						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListStart + totalResults.toString() + requestJsonListLength + "1"));
+						sgsListResult = gsonEncoder.fromJson(new InputStreamReader(response.getEntity().getContent(), characterEncoding).toString(), SGSListResult.class);
+						remoteIdentifier = sgsListResult.getSgsRequests()[0].getIdentifier();
+						request.setRemoteIdentifier(remoteIdentifier);
+					} catch (Exception ex) {
+						logger.error(ex.getMessage(), ex);
+						throw ex;
+					}
+				}
 			}
 
 			return request;
@@ -271,7 +299,12 @@ public class SGS extends Robot {
 			statusCell = document.findElementByAttValue("width", "36%", true, true);
 
 			if (statusCell == null) {
-				throw new RobotException("Invalid status text cell");
+				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the new assigned cell
+				statusCell = document.findElementByAttValue("width", "28%", true, true);
+
+				if (statusCell == null) {
+					throw new RobotException("Invalid status text cell");
+				}
 			}
 
 			statusLabel = statusCell.getText().toString().trim();
@@ -443,4 +476,35 @@ public class SGS extends Robot {
 		this.requestListAction = requestListAction;
 	}
 
+	public String getRequestAjaxOption() {
+		return requestAjaxOption;
+	}
+
+	public void setRequestAjaxOption(String requestAjaxOption) {
+		this.requestAjaxOption = requestAjaxOption;
+	}
+
+	public String getRequestJsonListTotal() {
+		return requestJsonListTotal;
+	}
+
+	public void setRequestJsonListTotal(String requestJsonListTotal) {
+		this.requestJsonListTotal = requestJsonListTotal;
+	}
+
+	public String getRequestJsonListStart() {
+		return requestJsonListStart;
+	}
+
+	public void setRequestJsonListStart(String requestJsonListStart) {
+		this.requestJsonListStart = requestJsonListStart;
+	}
+
+	public String getRequestJsonListLength() {
+		return requestJsonListLength;
+	}
+
+	public void setRequestJsonListLength(String requestJsonListLength) {
+		this.requestJsonListLength = requestJsonListLength;
+	}
 }
