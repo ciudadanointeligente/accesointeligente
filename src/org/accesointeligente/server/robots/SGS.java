@@ -256,9 +256,11 @@ public class SGS extends Robot {
 					try {
 						Gson gsonEncoder = new Gson();
 						String jsonResponse = null;
+						String jsonQueryUrl = baseUrl + requestListAction + requestAjaxOption + requestJsonListTotal;
+						logger.info(jsonQueryUrl);
 						SGSListResult sgsListResult = new SGSListResult();
 						Integer totalResults = 0;
-						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListTotal));
+						response = client.execute(new HttpGet(jsonQueryUrl));
 						jsonResponse = response.getEntity().getContent().toString();
 						logger.info(jsonResponse);
 						sgsListResult = gsonEncoder.fromJson(jsonResponse, SGSListResult.class);
