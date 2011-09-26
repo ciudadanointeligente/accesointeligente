@@ -62,7 +62,7 @@ public class SGS extends Robot {
 	private String requestCreatedAction = "?accion=solicitud-de-informacion&act=5";
 	private String requestViewAction = "?accion=mis-solicitudes&act=1";
 	private String requestListAction = "?accion=Mis-Solicitudes";
-	private String requestAjaxOption = "&axj=1";
+	private String requestAjaxOption = "&act=6&axj=1";
 	private String requestJsonListTotal = "&iDisplayStart=0&iDisplayLength=0";
 	private String requestJsonListStart = "&iDisplayStart=";
 	private String requestJsonListLength = "&iDisplayLength=";
