@@ -247,8 +247,8 @@ public class SGS extends Robot {
 						remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
 						request.setRemoteIdentifier(remoteIdentifier);
 					}
-				} catch (Exception e) {
-					throw new RobotException("Couldn't found remote identifier in SGS request list");
+				} catch (Exception ex) {
+					logger.info("Couldn't found remote identifier in SGS request list");
 				}
 
 				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the identifier via JSON requests
