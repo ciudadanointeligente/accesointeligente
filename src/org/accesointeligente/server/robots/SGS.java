@@ -258,12 +258,12 @@ public class SGS extends Robot {
 						SGSListResult sgsListResult = new SGSListResult();
 						Integer totalResults = 0;
 						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListTotal));
-						sgsListResult = gsonEncoder.fromJson(new InputStreamReader(response.getEntity().getContent(), characterEncoding).toString(), SGSListResult.class);
+						sgsListResult = gsonEncoder.fromJson(response.getEntity().getContent().toString(), SGSListResult.class);
 
 						totalResults = sgsListResult.getTotalRecords();
 						totalResults--;
 						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListStart + totalResults.toString() + requestJsonListLength + "1"));
-						sgsListResult = gsonEncoder.fromJson(new InputStreamReader(response.getEntity().getContent(), characterEncoding).toString(), SGSListResult.class);
+						sgsListResult = gsonEncoder.fromJson(response.getEntity().getContent().toString(), SGSListResult.class);
 						remoteIdentifier = sgsListResult.getSgsRequests()[0].getIdentifier();
 						request.setRemoteIdentifier(remoteIdentifier);
 					} catch (Exception ex) {
