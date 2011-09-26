@@ -236,15 +236,19 @@ public class SGS extends Robot {
 					}
 				}
 
-				// The last row of the table has the request
-				TagNode tableContainer = document.findElementByAttValue("id", "table-block", true, true);
-				TagNode[] tableRows = tableContainer.getChildTags()[0].getChildTags()[0].getChildTags();
-				TagNode lastRow = tableRows[tableRows.length - 1];
+				try {
+					// The last row of the table has the request
+					TagNode tableContainer = document.findElementByAttValue("id", "table-block", true, true);
+					TagNode[] tableRows = tableContainer.getChildTags()[0].getChildTags()[0].getChildTags();
+					TagNode lastRow = tableRows[tableRows.length - 1];
 
-				// FIXME: verify that the identifier found isn't already used
-				if (lastRow.getChildTags().length == 6) {
-					remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
-					request.setRemoteIdentifier(remoteIdentifier);
+					// FIXME: verify that the identifier found isn't already used
+					if (lastRow.getChildTags().length == 6) {
+						remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
+						request.setRemoteIdentifier(remoteIdentifier);
+					}
+				} catch (Exception e) {
+					throw new RobotException("Couldn't found remote identifier in SGS request list");
 				}
 
 				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the identifier via JSON requests
