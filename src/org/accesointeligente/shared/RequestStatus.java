@@ -24,7 +24,8 @@ public enum RequestStatus {
 	PENDING("Pendiente", "images/pendiente.png"),
 	EXPIRED("Vencida", "images/vencida.png"),
 	CLOSED("Cerrada", "images/cerrada.png"),
-	DERIVED("Derivada", "images/derivada.png");
+	DERIVED("Derivada", "images/derivada.png"),
+	ERROR("Pendiente", "images/pendiente.png");
 
 	private String name;
 	private String url;
