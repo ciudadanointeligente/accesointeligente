@@ -141,7 +141,7 @@ public class ResponseChecker {
 					Boolean requestFound = false;
 					Matcher matcher = htmlPattern.matcher(messageBody);
 
-					if (matcher.matches()) {
+					if (matcher.find()) {
 						messageBody = htmlToString(messageBody);
 					}
 
@@ -646,6 +646,7 @@ public class ResponseChecker {
 	private String htmlToString(String string) throws IOException {
 		TagNode body;
 		TagNode htmlDocument;
+		string = string.replaceAll("<br/>", "\n");
 		HtmlCleaner cleaner = new HtmlCleaner();
 		htmlDocument = cleaner.clean(string);
 		body = (TagNode) htmlDocument.getElementsByName("body", true)[0];
