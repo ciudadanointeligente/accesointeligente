@@ -257,21 +257,26 @@ public class SGS extends Robot {
 						Gson gsonEncoder = new Gson();
 						String jsonResponse = null;
 						String jsonQueryUrl = baseUrl + requestListAction + requestAjaxOption + requestJsonListTotal;
-						logger.info(jsonQueryUrl);
+
 						SGSListResult sgsListResult = new SGSListResult();
 						Integer totalResults = 0;
+
+						// First we get the total of requests made to the system
 						response = client.execute(new HttpGet(jsonQueryUrl));
-						jsonResponse = response.getEntity().getContent().toString();
-						logger.info(jsonResponse);
+						document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+						jsonResponse = document.getText().toString();
 						sgsListResult = gsonEncoder.fromJson(jsonResponse, SGSListResult.class);
 
 						totalResults = sgsListResult.getTotalRecords();
 						totalResults--;
+
+						// Then we fetch the last identifier and use it for our request
 						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListStart + totalResults.toString() + requestJsonListLength + "1"));
-						jsonResponse = response.getEntity().getContent().toString();
-						logger.info(jsonResponse);
+						document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
+						jsonResponse = document.getText().toString();
 						sgsListResult = gsonEncoder.fromJson(jsonResponse, SGSListResult.class);
-						remoteIdentifier = sgsListResult.getSgsRequests()[0].getIdentifier();
+						remoteIdentifier = sgsListResult.getSgsRequests()[0][0];
+
 						request.setRemoteIdentifier(remoteIdentifier);
 					} catch (Exception ex) {
 						logger.error(ex.getMessage(), ex);
