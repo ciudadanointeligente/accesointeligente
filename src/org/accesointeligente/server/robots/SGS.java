@@ -192,20 +192,26 @@ public class SGS extends Robot {
 				location = response.getFirstHeader("Location");
 
 				if (location == null) {
-					throw new RobotException("Invalid redirection after confirmation");
+					logger.error("Invalid redirection after confirmation");
+					request.setStatus(RequestStatus.ERROR);
+					return request;
 				}
 
 				pattern = Pattern.compile("^index.php\\" + requestCreatedAction + "&folio=(.+)$");
 				matcher = pattern.matcher(location.getValue());
 
 				if (!matcher.matches()) {
-					throw new RobotException("External id not found");
+					logger.error("External id not found");
+					request.setStatus(RequestStatus.ERROR);
+					return request;
 				}
 
 				remoteIdentifier = matcher.group(1);
 
 				if (remoteIdentifier == null || remoteIdentifier.length() == 0) {
-					throw new Exception();
+					logger.error("External id is not defined");
+					request.setStatus(RequestStatus.ERROR);
+					return request;
 				}
 
 				EntityUtils.consume(response.getEntity());
@@ -220,6 +226,8 @@ public class SGS extends Robot {
 				TagNode form = document.findElementByAttValue("id", "form1", true, true);
 
 				if (form == null) {
+					logger.error("External id not found");
+					request.setStatus(RequestStatus.ERROR);
 					return request;
 				}
 
@@ -248,7 +256,7 @@ public class SGS extends Robot {
 						request.setRemoteIdentifier(remoteIdentifier);
 					}
 				} catch (Exception ex) {
-					logger.info("Couldn't found remote identifier in SGS request list");
+					logger.error("Couldn't found remote identifier in SGS request list");
 				}
 
 				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the identifier via JSON requests
@@ -280,7 +288,8 @@ public class SGS extends Robot {
 						request.setRemoteIdentifier(remoteIdentifier);
 					} catch (Exception ex) {
 						logger.error(ex.getMessage(), ex);
-						throw ex;
+						request.setStatus(RequestStatus.ERROR);
+						return request;
 					}
 				}
 			}
@@ -288,7 +297,8 @@ public class SGS extends Robot {
 			return request;
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
-			throw ex;
+			request.setStatus(RequestStatus.ERROR);
+			return request;
 		}
 	}
 
@@ -315,7 +325,7 @@ public class SGS extends Robot {
 			statusCell = document.findElementByAttValue("width", "36%", true, true);
 
 			if (statusCell == null) {
-				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the new assigned cell
+				// If we couldn't get the status, it must be SGS 1.1. We'll try to get the new assigned cell
 				statusCell = document.findElementByAttValue("width", "28%", true, true);
 
 				if (statusCell == null) {
