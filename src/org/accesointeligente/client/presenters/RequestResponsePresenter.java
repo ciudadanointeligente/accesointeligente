@@ -34,6 +34,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -58,13 +59,13 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 		void showNewCommentPanel(Boolean show);
 		void cleanNewCommentText();
 		void setRatingValue(Integer rate);
-		void setRatingReadOnly(Boolean readOnly);
 		void clearResponseWidget(ResponseWidget widget);
 		void setUserResponse(UserResponse userResponse, ResponseWidget widget);
 		void newUserResponse(Response response, ResponseWidget widget);
 		void initTable();
 		void removeColumns();
 		void setRequests(ListDataProvider<Request> data);
+		void setShare(String href);
 	}
 
 	@ProxyCodeSplit
@@ -92,7 +93,6 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 	@Override
 	public void onReset() {
-		getView().setRatingReadOnly(true);
 		getView().removeColumns();
 		getView().initTable();
 		loadBestVotedRequests();
@@ -155,7 +155,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 					Boolean loggedIn = ClientSessionUtil.checkSession();
 					getView().showNewCommentPanel(loggedIn);
-					getView().setRatingReadOnly(!loggedIn);
+					getView().setShare(Window.Location.getHref());
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
@@ -320,6 +320,11 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 		}
 
 		placeManager.revealPlace(new PlaceRequest(AppPlace.LIST).with("type", RequestListType.GENERAL.getType()));
+	}
+
+	@Override
+	public void gotoLogin() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.LOGIN));
 	}
 
 	@Override

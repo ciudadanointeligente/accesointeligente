@@ -123,7 +123,7 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 				Map<String, Institution> institutions = new HashMap<String, Institution>();
 
 				for (Institution institution: result) {
-					if (institution.getEnabled()) {
+					if (institution.getEnabled() && institution.getMasterEnabled()) {
 						institutions.put(institution.getName(), institution);
 					}
 				}

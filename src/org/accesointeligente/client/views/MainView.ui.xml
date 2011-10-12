@@ -28,12 +28,7 @@
 								<g:MenuItemSeparator />
 								<g:MenuItem ui:field="statistics">Estadísticas</g:MenuItem>
 								<g:MenuItemSeparator />
-								<g:MenuItem ui:field="about">
-									Acerca del proyecto
-									<g:MenuBar vertical="true">
-										<g:MenuItem ui:field="aboutProject">Sobre el proyecto</g:MenuItem>
-									</g:MenuBar>
-								</g:MenuItem>
+								<g:MenuItem ui:field="aboutProject">Acerca del proyecto</g:MenuItem>
 								<g:MenuItemSeparator />
 								<g:MenuItem ui:field="contact"><img title="Contáctanos" src="images/menuBar/contact.png" /></g:MenuItem>
 							</g:MenuBar>

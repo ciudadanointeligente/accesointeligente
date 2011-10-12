@@ -4,7 +4,7 @@
 	<ui:style src="LoginView.css" />
 
 	<g:PopupPanel modal="true" glassEnabled="true">
-		<g:FocusPanel addStyleNames="{style.greyBlock}" width="400PX" height="470PX" ui:field="loginPanel">
+		<g:FocusPanel addStyleNames="{style.greyBlock}" width="400PX" height="485PX" ui:field="loginPanel">
 			<g:FormPanel ui:field="loginForm" addStyleNames="loginForm">
 				<g:HTMLPanel>
 					<g:Label ui:field="close" addStyleNames="{style.closeButton}" />

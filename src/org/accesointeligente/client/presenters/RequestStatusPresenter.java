@@ -117,7 +117,7 @@ public class RequestStatusPresenter extends Presenter<RequestStatusPresenter.MyV
 					getView().setRequestContext(result.getContext());
 					getView().setRequestTitle(result.getTitle());
 					getView().setRequestCategories(result.getCategories());
-					getView().setDate(result.getConfirmationDate());
+					getView().setDate(result.getCreationDate());
 					getView().editOptions(requestIsEditable());
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);

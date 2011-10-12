@@ -18,9 +18,13 @@
  */
 package org.accesointeligente.client.uihandlers;
 
+import org.accesointeligente.shared.NotificationEventType;
+
 import com.gwtplatform.mvp.client.UiHandlers;
 
 public interface HomeUiHandlers extends UiHandlers {
 	void gotoRequest();
 	void gotoList();
+	void loadLastResponseRequests();
+	void showNotification(String message, NotificationEventType type);
 }

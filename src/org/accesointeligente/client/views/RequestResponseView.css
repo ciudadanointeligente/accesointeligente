@@ -117,3 +117,10 @@
 	padding: 3px 10px;
 	border: none;
 }
+
+.sharePanel {
+	position:fixed;
+	top: 175px;
+	margin-left: -80px;
+	z-index: 1;
+}

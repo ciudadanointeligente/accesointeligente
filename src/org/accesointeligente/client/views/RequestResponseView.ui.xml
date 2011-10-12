@@ -59,5 +59,6 @@
 				<c:CellTable ui:field="bestVotedRequestTable" pageSize="5" addStyleNames="{style.requestTable}" />
 			</div>
 		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="sharePanel" addStyleNames="{style.sharePanel}" />
 	</g:HTMLPanel>
 </ui:UiBinder>

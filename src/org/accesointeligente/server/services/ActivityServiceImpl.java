@@ -23,6 +23,10 @@ import org.accesointeligente.client.services.ActivityService;
 import org.accesointeligente.model.Activity;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.ServiceException;
+
+import net.sf.gilead.core.PersistentBeanManager;
+import net.sf.gilead.gwt.PersistentRemoteService;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -30,11 +34,7 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
-import net.sf.gilead.core.PersistentBeanManager;
-import net.sf.gilead.gwt.PersistentRemoteService;
-
 public class ActivityServiceImpl extends PersistentRemoteService implements ActivityService {
-	private static final long serialVersionUID = -7458001808166552806L;
 	private PersistentBeanManager persistentBeanManager;
 
 	public ActivityServiceImpl() {

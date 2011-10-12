@@ -20,18 +20,15 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.AnchorCell;
 import org.accesointeligente.client.AnchorCellParams;
+import org.accesointeligente.client.ClientSessionUtil;
 import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
-import org.accesointeligente.client.widgets.CommentWidget;
-import org.accesointeligente.client.widgets.ResponseWidget;
-import org.accesointeligente.client.widgets.UserResponseWidget;
+import org.accesointeligente.client.widgets.*;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
-import org.cobogw.gwt.user.client.ui.Rating;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,6 +39,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
+
+import org.cobogw.gwt.user.client.ui.Rating;
 
 import java.util.Date;
 import java.util.List;
@@ -68,6 +67,8 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	@UiField TextArea newCommentText;
 	@UiField Button newCommentSubmit;
 	@UiField CellTable<Request> bestVotedRequestTable;
+	@UiField HTMLPanel sharePanel;
+	private ShareThis share;
 
 	public RequestResponseView() {
 		widget = uiBinder.createAndBindUi(this);
@@ -161,11 +162,6 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	}
 
 	@Override
-	public void setRatingReadOnly(Boolean readOnly) {
-		requestRate.setReadOnly(readOnly);
-	}
-
-	@Override
 	public void clearResponseWidget(ResponseWidget widget) {
 		widget.clearUserResponsePanel();
 	}
@@ -227,6 +223,19 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 		data.addDataDisplay(bestVotedRequestTable);
 	}
 
+	@Override
+	public void setShare(String href) {
+		sharePanel.clear();
+		share = new ShareThis();
+		share.setHref(href);
+		// TODO: define social network messages
+		share.setTitle("AccesoInteligente");
+		share.setMessage("Mira lo que encontré en #AccesoInteligente");
+		share.setLangLong("es_CL");
+		share.setup();
+		sharePanel.add(share);
+	}
+
 	@UiHandler("requestListLink")
 	public void onRequestListLinkClick(ClickEvent event) {
 		getUiHandlers().goBack();
@@ -239,7 +248,11 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 
 	@UiHandler("requestRate")
 	public void onRequestRateClick(ClickEvent event) {
-		getUiHandlers().saveQualification(requestRate.getValue());
+		if (ClientSessionUtil.getUser() != null) {
+			getUiHandlers().saveQualification(requestRate.getValue());
+		} else {
+			getUiHandlers().gotoLogin();
+		}
 	}
 
 	@UiFactory

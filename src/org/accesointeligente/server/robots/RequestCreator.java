@@ -44,6 +44,7 @@ public class RequestCreator {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("status", RequestStatus.NEW));
+			criteria.createAlias("institution", "ins").add(Restrictions.eq("ins.masterEnabled", true));
 			List<Request> newRequests = criteria.list();
 			hibernate.getTransaction().commit();
 

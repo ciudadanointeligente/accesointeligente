@@ -56,6 +56,7 @@ public class ResponseChecker {
 	private Session session;
 	private Store store;
 	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,7}).*");
+	private Pattern htmlPattern = Pattern.compile("<.*?>");
 	private List<Attachment> attachments;
 	private Set<String> remoteIdentifiers;
 	private String messageBody;
@@ -138,7 +139,11 @@ public class ResponseChecker {
 					}
 
 					Boolean requestFound = false;
-					messageBody = htmlToString(messageBody);
+					Matcher matcher = htmlPattern.matcher(messageBody);
+
+					if (matcher.find()) {
+						messageBody = htmlToString(messageBody);
+					}
 
 					logger.info("Searching for Request Remote Identifier");
 					for (String remoteIdentifier : remoteIdentifiers) {
@@ -256,7 +261,15 @@ public class ResponseChecker {
 				filetype = FileType.PDF;
 			} else {
 				logger.info("Part mime type is not handled: " + MimeUtility.decodeText(part.getContentType()) + ".");
-				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
+				String partFileName = "";
+				try {
+					partFileName = MimeUtility.decodeText(part.getFileName());
+				} catch (Exception e) {
+					logger.info("Invalid filename, part will be skipped");
+					return;
+				}
+
+				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(partFileName);
 
 				logger.info("Checking file extension");
 				if (fileMatcher.matches()) {
@@ -418,7 +431,14 @@ public class ResponseChecker {
 				}
 			} else {
 				logger.info("Part mime type is not handled: " + MimeUtility.decodeText(part.getContentType()) + ".");
-				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(MimeUtility.decodeText(part.getFileName()));
+				String partFileName = "";
+				try {
+					partFileName = MimeUtility.decodeText(part.getFileName());
+				} catch (Exception e) {
+					partFileName = "";
+				}
+
+				Matcher fileMatcher = Pattern.compile(".*\\.([A-Za-z0-9]+)$").matcher(partFileName);
 
 				FileType filetype = null;
 				logger.info("Checking file extension");
@@ -501,7 +521,15 @@ public class ResponseChecker {
 				String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
 				String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
 
-				String filename = MimeUtility.decodeText(part.getFileName());
+				String filename = "";
+
+				try {
+					filename = MimeUtility.decodeText(part.getFileName());
+				} catch (Exception e) {
+					logger.info("Invalid filename, part will be skipped");
+					return;
+				}
+
 				logger.info("Filename: " + filename);
 
 				matcher = pattern.matcher(filename);
@@ -618,6 +646,7 @@ public class ResponseChecker {
 	private String htmlToString(String string) throws IOException {
 		TagNode body;
 		TagNode htmlDocument;
+		string = string.replaceAll("<br/>", "\n");
 		HtmlCleaner cleaner = new HtmlCleaner();
 		htmlDocument = cleaner.clean(string);
 		body = (TagNode) htmlDocument.getElementsByName("body", true)[0];

@@ -35,5 +35,6 @@ public interface RequestResponseUiHandlers extends UiHandlers {
 	void saveUserResponse(String information, Response response, ResponseWidget widget);
 	void loadBestVotedRequests();
 	void goBack();
+	void gotoLogin();
 	void showNotification(String message, NotificationEventType type);
 }

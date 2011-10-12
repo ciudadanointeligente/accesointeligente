@@ -27,6 +27,7 @@ public interface RequestListUiHandlers extends UiHandlers {
 	void requestToggleFavorite(Request request);
 	void showNotification(String message, NotificationEventType type);
 	void showRequest(Integer requestId);
-	String getRequestBaseUrlPlace();
+	String getRequestBaseUrlPlace(Integer requestId);
 	void gotoRequest();
+	void gotoLogin();
 }

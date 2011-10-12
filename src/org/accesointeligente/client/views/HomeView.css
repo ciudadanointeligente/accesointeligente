@@ -188,3 +188,41 @@ div {
 .NGOSlinks {
 	font-size: 10px;
 }
+
+.requestTable a {
+	text-decoration: none;
+}
+
+.modulesHomeBottom .requestTable {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.requestTable th {
+	background: url("images/reqList/separator.png") no-repeat scroll 0 1px
+		transparent;
+	border-bottom: 1px dashed #6F7277;
+	border-top: 1px dashed #6F7277;
+	color: #5900AD;
+	padding: 10px 15px;
+	text-align: center;
+	text-shadow: none;
+	min-width: 30px;
+	white-space: nowrap;
+}
+
+.requestTable th:first-child {
+	background-image: none;
+}
+
+.requestTable td {
+	padding: 3px;
+	border: none;
+}
+
+.sharePanel {
+	position:fixed;
+	top: 175px;
+	margin-left: -80px;
+	z-index: 1;
+}

@@ -219,9 +219,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 				setInSlot(SLOT_SEARCH_WIDGET, requestSearchPresenter);
 				getView().setSearchButtonVisible(true);
 				getView().setSearchHandleVisible(true);
-				if (ClientSessionUtil.checkSession()) {
-					getView().initTableFavColumn();
-				}
+				getView().initTableFavColumn();
 				break;
 		}
 	}
@@ -290,7 +288,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	@Override
 	public void showRequest(Integer requestId) {
-		if (listType.equals(RequestListType.DRAFTS.getType())) {
+		if (listType.equals(RequestListType.DRAFTS)) {
 			placeManager.revealPlace(new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", requestId.toString()));
 		} else {
 			placeManager.revealPlace(new PlaceRequest(AppPlace.RESPONSE).with("requestId", requestId.toString()));
@@ -308,13 +306,15 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	// FIXME: use PlaceRequest instead lf URL redirections
 	@Override
-	public String getRequestBaseUrlPlace() {
+	public String getRequestBaseUrlPlace(Integer requestId) {
 		String baseUrl;
 
-		if (listType.equals(RequestListType.DRAFTS.getType())) {
-			baseUrl = "#" + AppPlace.REQUESTSTATUS + ";requestId=";
+		if (listType.equals(RequestListType.DRAFTS)) {
+			PlaceRequest placeRequest = new PlaceRequest(AppPlace.REQUESTSTATUS).with("requestId", requestId.toString());
+			baseUrl = "#" + placeManager.buildHistoryToken(placeRequest);
 		} else {
-			baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
+			PlaceRequest placeRequest = new PlaceRequest(AppPlace.RESPONSE).with("requestId", requestId.toString());
+			baseUrl = "#" + placeManager.buildHistoryToken(placeRequest);
 		}
 
 		return baseUrl;
@@ -333,5 +333,10 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 	@Override
 	public void loginRequired(LoginRequiredEvent event) {
 		oldListType = null;
+	}
+
+	@Override
+	public void gotoLogin() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.LOGIN));
 	}
 }
