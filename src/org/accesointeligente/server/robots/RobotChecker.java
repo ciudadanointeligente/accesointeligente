@@ -19,6 +19,8 @@
 package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Institution;
+import org.accesointeligente.server.ApplicationProperties;
+import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.RobotContext;
 
@@ -41,8 +43,12 @@ public class RobotChecker {
 			List<Institution> institutions = criteria.list();
 			hibernate.getTransaction().commit();
 
+			Boolean enabled = false;
+
 			for (Institution institution : institutions) {
 				Robot robot = RobotContext.getRobot(institution.getInstitutionClass());
+
+				enabled = institution.getEnabled();
 
 				if (robot != null) {
 					try {
@@ -71,6 +77,14 @@ public class RobotChecker {
 				hibernate.beginTransaction();
 				hibernate.update(institution);
 				hibernate.getTransaction().commit();
+
+				if (institution.getEnabled() != enabled) {
+					if (institution.getEnabled() == true) {
+						emailNotification(institution.getName(), ApplicationProperties.getProperty("robot.status.enabled"));
+					} else {
+						emailNotification(institution.getName(), ApplicationProperties.getProperty("robot.status.disabled"));
+					}
+				}
 			}
 		} catch (Exception ex) {
 			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
@@ -78,5 +92,13 @@ public class RobotChecker {
 				logger.error("Failure", ex);
 			}
 		}
+	}
+
+	public void emailNotification(String institutionName, String status) {
+		Emailer emailer = new Emailer();
+		emailer.setRecipient(ApplicationProperties.getProperty("email.admin"));
+		emailer.setSubject(ApplicationProperties.getProperty("email.robot.subject"));
+		emailer.setBody(String.format(ApplicationProperties.getProperty("email.robot.body"), institutionName, status) + ApplicationProperties.getProperty("email.signature"));
+		emailer.connectAndSend();
 	}
 }
