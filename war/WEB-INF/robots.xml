@@ -96,7 +96,7 @@
 
 	<bean id="ConsejoNacionalDeLaCulturaYLasArtes" class="org.accesointeligente.server.robots.SGS" scope="prototype">
 		<constructor-arg name="idEntidad" value="261"/>
-		<constructor-arg name="baseUrl" value="http://www.transparenciaencultura.cl/sgs/index.php"/>
+		<constructor-arg name="baseUrl" value="http://transparencia.cultura.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
