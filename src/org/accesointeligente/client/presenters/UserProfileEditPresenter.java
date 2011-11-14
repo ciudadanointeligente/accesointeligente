@@ -35,6 +35,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;
@@ -123,6 +124,7 @@ public class UserProfileEditPresenter extends Presenter<UserProfileEditPresenter
 		getPersonAges();
 		getRegions();
 		showUser();
+		Window.setTitle("Mis datos - Acceso Inteligente");
 	}
 
 	@Override

@@ -34,6 +34,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
@@ -73,6 +74,7 @@ public class ContactPresenter extends Presenter<ContactPresenter.MyView, Contact
 	public void onReset() {
 		checkUserSession();
 		getView().subjectAddOptions();
+		Window.setTitle("Formulario de contacto - Acceso Inteligente");
 	}
 
 	@Override

@@ -37,6 +37,7 @@ import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;
@@ -86,6 +87,7 @@ public class RequestEditPresenter extends Presenter<RequestEditPresenter.MyView,
 	@Override
 	public void onReset() {
 		getInstitutions();
+		Window.setTitle("Editar solicitud - Acceso Inteligente");
 	}
 
 	@Override

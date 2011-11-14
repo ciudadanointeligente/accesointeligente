@@ -34,6 +34,7 @@ import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Date;
@@ -80,6 +81,7 @@ public class RequestStatusPresenter extends Presenter<RequestStatusPresenter.MyV
 		if (requestId != null) {
 			showRequest(requestId);
 		}
+		Window.setTitle("Resumen de la solicitud - Acceso Inteligente");
 	}
 
 	@Override

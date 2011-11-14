@@ -31,6 +31,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootPopupContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 
 import javax.inject.Inject;
 
@@ -50,6 +51,11 @@ public class TermsAndConditionsPresenter extends Presenter<TermsAndConditionsPre
 	public TermsAndConditionsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
 		getView().setUiHandlers(this);
+	}
+
+	@Override
+	protected void onReset() {
+		Window.setTitle("Términos y condiciones - Acceso Inteligente");
 	}
 
 	@Override

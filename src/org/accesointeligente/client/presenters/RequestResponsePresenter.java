@@ -45,6 +45,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class RequestResponsePresenter extends Presenter<RequestResponsePresenter.MyView, RequestResponsePresenter.MyProxy> implements RequestResponseUiHandlers {
+	public static final String REQUEST_TITLE_CONTINUE = "...";
+	public static final Integer REQUEST_TITLE_INIT = 0;
+	public static final Integer REQUEST_TITLE_SIZE = 40;
+
 	public interface MyView extends View, HasUiHandlers<RequestResponseUiHandlers> {
 		// Request
 		void setStatus(RequestStatus status);
@@ -156,6 +160,11 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 					Boolean loggedIn = ClientSessionUtil.checkSession();
 					getView().showNewCommentPanel(loggedIn);
 					getView().setShare(Window.Location.getHref());
+					if (request.getTitle().length() > REQUEST_TITLE_SIZE) {
+						Window.setTitle(request.getTitle().substring(REQUEST_TITLE_INIT, REQUEST_TITLE_SIZE) + REQUEST_TITLE_CONTINUE + " - Acceso Inteligente");
+					} else {
+						Window.setTitle(request.getTitle() + " - Acceso Inteligente");
+					}
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}

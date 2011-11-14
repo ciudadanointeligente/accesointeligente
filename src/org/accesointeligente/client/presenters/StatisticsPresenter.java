@@ -28,6 +28,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 
 import javax.inject.Inject;
 
@@ -43,6 +44,11 @@ public class StatisticsPresenter extends Presenter<StatisticsPresenter.MyView, S
 	@Inject
 	public StatisticsPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
+	}
+
+	@Override
+	protected void onReset() {
+		Window.setTitle("Estadísticas - Acceso Inteligente");
 	}
 
 	@Override

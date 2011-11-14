@@ -37,6 +37,7 @@ import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;
@@ -84,6 +85,7 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 		getView().resetForm();
 		getRequestCategories();
 		getInstitutions();
+		Window.setTitle("Solicitud de acceso a la información - Acceso Inteligente");
 	}
 
 	@Override

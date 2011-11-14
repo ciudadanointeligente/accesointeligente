@@ -29,6 +29,7 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;
@@ -63,6 +64,7 @@ public class RequestSearchPresenter extends PresenterWidget<RequestSearchPresent
 	public void onReset() {
 		getView().resetFilters();
 		getInstitutions();
+		Window.setTitle("Listado de solicitudes - Acceso Inteligente");
 	}
 
 	@Override
