@@ -26,9 +26,6 @@ import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
 
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hwpf.extractor.WordExtractor;
@@ -38,6 +35,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class ResponseChecker {
 	private Properties props;
 	private Session session;
 	private Store store;
-	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,7}).*");
+	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,8}).*");
 	private Pattern htmlPattern = Pattern.compile("<.*?>");
 	private List<Attachment> attachments;
 	private Set<String> remoteIdentifiers;
