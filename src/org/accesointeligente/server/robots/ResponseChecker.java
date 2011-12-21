@@ -568,7 +568,7 @@ public class ResponseChecker {
 	}
 
 	private String formatIdentifier(String prefix, Integer number) {
-		return String.format("%s-%08d", prefix, number);
+		return String.format("%s-%07d", prefix, number);
 	}
 
 	private Response createResponse(String sender, Date date, String subject, String information, List<Attachment> attachments) {
