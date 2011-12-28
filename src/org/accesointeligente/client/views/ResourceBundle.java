@@ -26,4 +26,7 @@ public interface ResourceBundle extends ClientBundle {
 
 	@Source("RequestListView.css")
 	RequestListViewCss RequestListView();
+
+	@Source("RequestResponseView.css")
+	RequestResponseViewCss RequestResponseView();
 }

@@ -51,6 +51,8 @@
 					<g:TextArea ui:field="newCommentText" addStyleNames="{style.newComment}" />
 					<g:Button ui:field="newCommentSubmit" addStyleNames="{style.commentButton}"><img src="images/comments-button.png" /> Comentar</g:Button>
 				</g:HTMLPanel>
+				<br />
+				<h3>Comentarios:</h3>
 				<g:FlowPanel ui:field="commentsPanel" />
 			</g:HTMLPanel>
 		</g:HTMLPanel>

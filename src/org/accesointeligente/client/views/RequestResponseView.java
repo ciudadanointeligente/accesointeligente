@@ -28,7 +28,7 @@ import org.accesointeligente.model.*;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import org.cobogw.gwt.user.client.ui.Rating;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,10 +37,11 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
-import org.cobogw.gwt.user.client.ui.Rating;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import java.util.Date;
 import java.util.List;
@@ -72,6 +73,8 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 
 	public RequestResponseView() {
 		widget = uiBinder.createAndBindUi(this);
+		ResourceBundle.INSTANCE.RequestResponseView().ensureInjected();
+		ResourceBundle.INSTANCE.RequestListView().ensureInjected();
 	}
 
 	@Override
@@ -135,12 +138,21 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	@Override
 	public void setComments(List<RequestComment> comments) {
 		commentsPanel.clear();
-		for (RequestComment comment : comments) {
+		if (comments.size() > 0) {
+			for (RequestComment comment : comments) {
+				CommentWidget commentWidget = new CommentWidget();
+				commentWidget.setImage("");
+				commentWidget.setAuthor(comment.getUser().getFirstName());
+				commentWidget.setDate(comment.getDate());
+				commentWidget.setContent(comment.getText());
+				commentsPanel.add(commentWidget);
+			}
+		} else {
 			CommentWidget commentWidget = new CommentWidget();
 			commentWidget.setImage("");
-			commentWidget.setAuthor(comment.getUser().getFirstName());
-			commentWidget.setDate(comment.getDate());
-			commentWidget.setContent(comment.getText());
+			commentWidget.setAuthor("Sin comentarios");
+			commentWidget.setDate(new Date());
+			commentWidget.setContent("No hay comentarios aún, ingresa para comentar");
 			commentsPanel.add(commentWidget);
 		}
 		commentCount.setText(new Integer(comments.size()).toString());
@@ -185,13 +197,14 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 			}
 		});
 
-		userResponsePanel.addStyleName("userResponsePanel");
-		userResponseTextBox.addStyleName("newUserResponse");
-		userResponseButton.addStyleName("userResponseButton");
+		userResponsePanel.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userResponsePanel());
+		userResponseTextBox.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().newUserResponse());
+		userResponseButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userResponseButton());
 
 		userResponsePanel.add(userResponseTextBox);
 		userResponsePanel.add(userResponseButton);
 		widget.add(userResponsePanel);
+		widget.add(new HTML("<br />"));
 	}
 
 	@Override
