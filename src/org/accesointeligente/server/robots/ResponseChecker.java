@@ -25,6 +25,7 @@ import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.UserSatisfaction;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -579,6 +580,7 @@ public class ResponseChecker {
 		response.setDate(date);
 		response.setSubject(subject);
 		response.setInformation(information);
+		response.setUserSatisfaction(UserSatisfaction.NOANSWER);
 		hibernate.save(response);
 		hibernate.getTransaction().commit();
 
