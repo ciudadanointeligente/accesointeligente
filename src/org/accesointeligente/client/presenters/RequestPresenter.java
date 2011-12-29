@@ -28,6 +28,10 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.RequestCategory;
 import org.accesointeligente.shared.*;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -35,10 +39,6 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
-
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;
 
@@ -173,6 +173,7 @@ public class RequestPresenter extends Presenter<RequestPresenter.MyView, Request
 		request.setCategories(categories);
 		request.setUser(ClientSessionUtil.getUser());
 		request.setStatus(RequestStatus.DRAFT);
+		request.setUserSatisfaction(UserSatisfaction.NOANSWER);
 
 		requestService.saveRequest(request, new AsyncCallback<Request>() {
 			@Override
