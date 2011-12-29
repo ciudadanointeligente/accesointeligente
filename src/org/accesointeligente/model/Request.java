@@ -18,9 +18,10 @@
  */
 package org.accesointeligente.model;
 
-import org.accesointeligente.shared.*;
-
 import net.sf.gilead.pojo.gwt.LightEntity;
+
+import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.UserSatisfaction;
 
 import java.util.Date;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class Request extends LightEntity {
 	private Set<UserFavoriteRequest> favorites;
 	private Set<RequestComment> comments;
 	private Double qualification;
+	private UserSatisfaction userSatisfaction;
 
 	public Integer getId() {
 		return id;
@@ -179,5 +181,13 @@ public class Request extends LightEntity {
 
 	public void setQualification(Double qualification) {
 		this.qualification = qualification;
+	}
+
+	public UserSatisfaction getUserSatisfaction() {
+		return userSatisfaction;
+	}
+
+	public void setUserSatisfaction(UserSatisfaction userSatisfaction) {
+		this.userSatisfaction = userSatisfaction;
 	}
 }

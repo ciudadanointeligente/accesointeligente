@@ -44,5 +44,10 @@
 			<one-to-many class="RequestComment"/>
 		</set>
 		<property name="qualification"/>
+		<property name="userSatisfaction">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.UserSatisfaction</param>
+			</type>
+		</property>
 	</class>
 </hibernate-mapping>
