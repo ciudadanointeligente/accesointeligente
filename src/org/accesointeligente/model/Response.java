@@ -20,6 +20,8 @@ package org.accesointeligente.model;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import org.accesointeligente.shared.UserSatisfaction;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -34,6 +36,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private Set<Attachment> attachments;
 	private UserResponse userResponse;
 	private Boolean notified = false;
+	private UserSatisfaction userSatisfaction;
 
 	public Integer getId() {
 		return id;
@@ -105,6 +108,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setNotified(Boolean notified) {
 		this.notified = notified;
+	}
+
+	public UserSatisfaction getUserSatisfaction() {
+		return userSatisfaction;
+	}
+
+	public void setUserSatisfaction(UserSatisfaction userSatisfaction) {
+		this.userSatisfaction = userSatisfaction;
 	}
 
 	@Override

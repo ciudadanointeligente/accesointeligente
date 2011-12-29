@@ -21,5 +21,10 @@
 		</set>
 		<one-to-one name="userResponse" class="UserResponse" property-ref="response"/>
 		<property name="notified"/>
+		<property name="userSatisfaction">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.UserSatisfaction</param>
+			</type>
+		</property>
 	</class>
 </hibernate-mapping>
