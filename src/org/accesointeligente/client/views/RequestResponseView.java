@@ -27,6 +27,7 @@ import org.accesointeligente.client.widgets.*;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.AppPlace;
 import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.UserSatisfaction;
 
 import org.cobogw.gwt.user.client.ui.Rating;
 
@@ -37,7 +38,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -128,6 +128,9 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 				if (response.getDate() != null) {
 					responseWidget.setDate(response.getDate());
 					getUiHandlers().loadAttachments(response, responseWidget);
+					if ((response.getUserSatisfaction() == UserSatisfaction.NOANSWER) || (response.getUserSatisfaction() == null)) {
+						userSatisfaction(response, responseWidget);
+					}
 					getUiHandlers().getUserResponse(response, responseWidget);
 				}
 				responsePanel.add(responseWidget);
@@ -166,6 +169,102 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	@Override
 	public void cleanNewCommentText() {
 		newCommentText.setText("");
+	}
+
+	@Override
+	public void userSatisfaction(final Response response, final ResponseWidget widget) {
+		final FlowPanel userSatisfactionPanel = new FlowPanel();
+		final FlowPanel requestStatusPanel = new FlowPanel();
+		requestStatusPanel.setVisible(false);
+		InlineLabel userSatisfactionQuestion = new InlineLabel("¿Te satisface esta respuesta?");
+		Label userInsatisfactionQuestion = new Label("¿Por qué no es satisfactoria?");
+		Button userSatisfiedButton = new Button("Sí", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (ClientSessionUtil.getUser() != null) {
+					getUiHandlers().setResponseUserSatisfaction(response, UserSatisfaction.SATISFIED, userSatisfactionPanel, requestStatusPanel);
+				} else {
+					getUiHandlers().gotoLogin();
+				}
+			}
+		});
+		Button userUnsatisfiedButton = new Button("No", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (ClientSessionUtil.getUser() != null) {
+					userSatisfactionPanel.setVisible(false);
+					requestStatusPanel.setVisible(true);
+				} else {
+					getUiHandlers().gotoLogin();
+				}
+			}
+		});
+
+		final RadioButton requestDerivedRadioButton = new RadioButton("requestStatus", "Derivada");
+		final RadioButton requestExtendedRadioButton = new RadioButton("requestStatus", "Prorroga");
+		final RadioButton requestDeniedRadioButton = new RadioButton("requestStatus", "Denegada");
+		final RadioButton responseRadioButtonIncomplete = new RadioButton("requestStatus", "Incompleta");
+		Button submitUserInsatisfactionButton = new Button("Enviar", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				RequestStatus requestStatus = null;
+				if (requestDerivedRadioButton.getValue()) {
+					requestStatus = RequestStatus.DERIVED;
+				} else if (requestExtendedRadioButton.getValue()) {
+					requestStatus = RequestStatus.EXTENDED;
+				} else if (requestDeniedRadioButton.getValue()) {
+					requestStatus = RequestStatus.DENIED;
+				} else if (responseRadioButtonIncomplete.getValue()) {
+					requestStatus = response.getRequest().getStatus();
+				}
+				if (requestStatus != null) {
+					getUiHandlers().setRequestStatus(response.getRequest(), requestStatus);
+					getUiHandlers().setResponseUserSatisfaction(response, UserSatisfaction.UNSATISFIED, userSatisfactionPanel, requestStatusPanel);
+				}
+			}
+		});
+		Button cancelUserInstafiscationButton = new Button("Cancelar", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				userSatisfactionPanel.setVisible(true);
+				requestStatusPanel.setVisible(false);
+			}
+		});
+
+		userSatisfactionPanel.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userSatisfacionPanel());
+		userSatisfactionQuestion.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userSatisfactionQuestion());
+		userSatisfiedButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userSatisfiedButton());
+		userUnsatisfiedButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userUnsatisfiedButton());
+
+		userSatisfactionPanel.add(userSatisfactionQuestion);
+		userSatisfactionPanel.add(userSatisfiedButton);
+		userSatisfactionPanel.add(userUnsatisfiedButton);
+		userSatisfactionPanel.add(new HTML("<br />"));
+		widget.add(userSatisfactionPanel);
+
+		requestStatusPanel.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestStatusPanel());
+		userInsatisfactionQuestion.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userInsatisfactionQuestion());
+		requestDerivedRadioButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestDerivedRadioButton());
+		requestExtendedRadioButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestExtendedRadioButton());
+		requestDeniedRadioButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestDeniedRadioButton());
+		responseRadioButtonIncomplete.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().responseRadioButtonIncomplete());
+		submitUserInsatisfactionButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().submitUserInsatisfactionButton());
+		cancelUserInstafiscationButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().cancelUserInstafiscationButton());
+
+		requestStatusPanel.add(userInsatisfactionQuestion);
+		requestStatusPanel.add(requestDerivedRadioButton);
+		requestStatusPanel.add(requestExtendedRadioButton);
+		requestStatusPanel.add(requestDeniedRadioButton);
+		requestStatusPanel.add(responseRadioButtonIncomplete);
+		requestStatusPanel.add(new HTML("<br />"));
+		requestStatusPanel.add(submitUserInsatisfactionButton);
+		requestStatusPanel.add(cancelUserInstafiscationButton);
+		requestStatusPanel.add(new HTML("<br />"));
+		widget.add(requestStatusPanel);
 	}
 
 	@Override

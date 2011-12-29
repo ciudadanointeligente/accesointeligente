@@ -152,3 +152,27 @@
 .userSatisfiedButton {}
 
 .userUnsatisfiedButton {}
+
+.requestStatusPanel {}
+
+.userInsatisfactionQuestion {}
+
+.requestDerivedRadioButton {
+	display: block;
+}
+
+.requestExtendedRadioButton {
+	display: block;
+}
+
+.requestDeniedRadioButton {
+	display: block;
+}
+
+.responseRadioButtonIncomplete {
+	display: block;
+}
+
+.submitUserInsatisfactionButton {}
+
+.cancelUserInstafiscationButton {}

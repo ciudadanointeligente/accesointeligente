@@ -26,17 +26,18 @@ import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.view.client.ListDataProvider;
+
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.*;
-
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +61,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 		// Response
 		void setResponses(List<Response> responses);
 		void setComments(List<RequestComment> comments);
+		void userSatisfaction(Response response, ResponseWidget widget);
 		void showNewCommentPanel(Boolean show);
 		void cleanNewCommentText();
 		void setRatingValue(Integer rate);
@@ -88,6 +90,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 	private Integer requestId;
 	private Request request;
+	private List<Response> responses;
 
 	@Inject
 	public RequestResponsePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
@@ -141,7 +144,6 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 					getView().setInstitutionName(request.getInstitution().getName());
 					getView().setRequestInfo(request.getInformation());
 					getView().setRequestContext(request.getContext());
-					List<Response> responses;
 					if (request.getResponses() != null && request.getResponses().size() > 0) {
 						responses = new ArrayList<Response>(request.getResponses());
 					} else {
@@ -315,6 +317,50 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 			public void onSuccess(List<Request> results) {
 				ListDataProvider<Request> data = new ListDataProvider<Request>(results);
 				getView().setRequests(data);
+			}
+		});
+	}
+
+	@Override
+	public void setResponseUserSatisfaction(final Response response, UserSatisfaction userSatisfaction, final FlowPanel userSatisfactionPanel, final FlowPanel requestStatusPanel) {
+		if (!ClientSessionUtil.getUser().equals(response.getRequest().getUser())) {
+			showNotification("Usted no es el propietario de esta solucitud.", NotificationEventType.ERROR);
+			return;
+		}
+		requestService.setResponseUserSatisfaction(response.getId(), userSatisfaction, new AsyncCallback<Response>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No fue posible realizar esta acción, por favor intente nuevamente", NotificationEventType.ERROR);
+				userSatisfactionPanel.setVisible(true);
+			}
+
+			@Override
+			public void onSuccess(Response result) {
+				showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
+				userSatisfactionPanel.setVisible(false);
+				requestStatusPanel.setVisible(false);
+			}
+		});
+	}
+
+	@Override
+	public void setRequestStatus(final Request request, RequestStatus requestStatus) {
+		if (!ClientSessionUtil.getUser().equals(request.getUser())) {
+			showNotification("Usted no es el propietario de esta solucitud.", NotificationEventType.ERROR);
+			return;
+		}
+
+		requestService.setRequestStatus(request.getId(), requestStatus, new AsyncCallback<Request>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No se ha podido actualizar el estado de la solicitud.", NotificationEventType.ERROR);
+			}
+
+			@Override
+			public void onSuccess(Request result) {
+				showNotification("Se ha actualizado el estado de la solicitud.", NotificationEventType.SUCCESS);
 			}
 		});
 	}
