@@ -129,7 +129,9 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 					responseWidget.setDate(response.getDate());
 					getUiHandlers().loadAttachments(response, responseWidget);
 					if ((response.getUserSatisfaction() == UserSatisfaction.NOANSWER) || (response.getUserSatisfaction() == null)) {
-						userSatisfaction(response, responseWidget);
+						if (ClientSessionUtil.getUser() == null || ClientSessionUtil.getUser().equals(response.getRequest().getUser())) {
+							userSatisfaction(response, responseWidget);
+						}
 					}
 					getUiHandlers().getUserResponse(response, responseWidget);
 				}
