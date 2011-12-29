@@ -19,8 +19,7 @@
 package org.accesointeligente.client.services;
 
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.Page;
-import org.accesointeligente.shared.RequestSearchParams;
+import org.accesointeligente.shared.*;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -56,4 +55,6 @@ public interface RequestServiceAsync {
 	void getUserResponse(Response response, AsyncCallback<UserResponse> callback);
 	void getBestVotedRequests(AsyncCallback<List<Request>> callback);
 	void getLastResponseRequests(AsyncCallback<List<Request>> callback);
+	void setResponseUserSatisfaction(Integer responseId, UserSatisfaction userSatisfaction, AsyncCallback<Response> callback);
+	void setRequestStatus(Integer requestId, RequestStatus requestStatus, AsyncCallback<Request> callback);
 }

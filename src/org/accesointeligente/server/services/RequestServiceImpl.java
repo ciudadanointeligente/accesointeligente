@@ -18,13 +18,13 @@
  */
 package org.accesointeligente.server.services;
 
+import net.sf.gilead.core.PersistentBeanManager;
+import net.sf.gilead.gwt.PersistentRemoteService;
+
 import org.accesointeligente.client.services.RequestService;
 import org.accesointeligente.model.*;
 import org.accesointeligente.server.*;
 import org.accesointeligente.shared.*;
-
-import net.sf.gilead.core.PersistentBeanManager;
-import net.sf.gilead.gwt.PersistentRemoteService;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -816,6 +816,67 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			List<Request> requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			hibernate.getTransaction().commit();
 			return requests;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Response setResponseUserSatisfaction(Integer responseId, UserSatisfaction userSatisfaction) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Response response = (Response) hibernate.get(Response.class, responseId);
+			response.setUserSatisfaction(userSatisfaction);
+			hibernate.save(response);
+
+			Criteria criteria = hibernate.createCriteria(Response.class);
+			criteria.add(Restrictions.eq("request", response.getRequest()));
+			List<Response> relatedResponses = (List<Response>)criteria.list();
+
+			Boolean satisfiedRequest = false;
+			Integer unsatisfiedResponses = 0;
+
+			for (Response relatedResponse : relatedResponses) {
+				if (relatedResponse.getUserSatisfaction().equals(UserSatisfaction.SATISFIED)) {
+					satisfiedRequest = true;
+					break;
+				}
+				unsatisfiedResponses++;
+			}
+
+			Request request = response.getRequest();
+			if (satisfiedRequest) {
+				request.setUserSatisfaction(UserSatisfaction.SATISFIED);
+				hibernate.save(request);
+			} else if (unsatisfiedResponses.equals(relatedResponses.size())) {
+				request.setUserSatisfaction(UserSatisfaction.UNSATISFIED);
+				hibernate.save(request);
+			}
+
+			hibernate.getTransaction().commit();
+			return response;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Request setRequestStatus(Integer requestId, RequestStatus requestStatus) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Request request = (Request) hibernate.get(Request.class, requestId);
+			if (!request.getStatus().equals(requestStatus)) {
+				request.setStatus(requestStatus);
+				hibernate.save(request);
+			}
+			hibernate.getTransaction().commit();
+			return request;
 		} catch (Throwable ex) {
 			hibernate.getTransaction().rollback();
 			throw new ServiceException();
