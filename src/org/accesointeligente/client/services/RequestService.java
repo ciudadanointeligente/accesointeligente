@@ -59,4 +59,6 @@ public interface RequestService extends RemoteService {
 	List<Request> getLastResponseRequests() throws ServiceException;
 	Response setResponseUserSatisfaction(Integer responseId, UserSatisfaction userSatisfaction) throws ServiceException;
 	Request setRequestStatus(Integer requestId, RequestStatus requestStatus) throws ServiceException;
+	Response getResponse(Integer responseId, String responseKey) throws ServiceException;
+	Request getRequestByResponseId(Integer responseId) throws ServiceException;
 }
