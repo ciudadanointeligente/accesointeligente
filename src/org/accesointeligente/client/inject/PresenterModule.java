@@ -22,15 +22,15 @@ import org.accesointeligente.client.*;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.views.*;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.inject.Singleton;
+
 import com.gwtplatform.mvp.client.RootPresenter;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
-
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.inject.Singleton;
 
 public class PresenterModule extends AbstractPresenterModule {
 	@Override
@@ -59,6 +59,7 @@ public class PresenterModule extends AbstractPresenterModule {
 		bindPresenter(UserGuideVideoPresenter.class, UserGuideVideoPresenter.MyView.class, UserGuideVideoView.class, UserGuideVideoPresenter.MyProxy.class);
 		bindPresenter(UserGuidePresenter.class, UserGuidePresenter.MyView.class, UserGuideView.class, UserGuidePresenter.MyProxy.class);
 		bindPresenter(TermsAndConditionsPresenter.class, TermsAndConditionsPresenter.MyView.class, TermsAndConditionsView.class, TermsAndConditionsPresenter.MyProxy.class);
+		bindPresenter(ResponseUserSatisfactionPresenter.class, ResponseUserSatisfactionPresenter.MyView.class, ResponseUserSatisfactionView.class, ResponseUserSatisfactionPresenter.MyProxy.class);
 		bindPresenterWidget(RequestSearchPresenter.class, RequestSearchPresenter.MyView.class, RequestSearchView.class);
 	}
 }

@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="ResponseUserSatisfactionView.css" />
+	<g:HTMLPanel>
+		<g:HTMLPanel ui:field="userSatisfactionPanel" addStyleNames="{style.userSatisfactionPanel}">
+			<g:Label addStyleNames="{style.userSatisfactionQuestion}">¿Te satisface esta respuesta?</g:Label>
+			<g:Button ui:field="userSatisfiedButton" addStyleNames="{style.userSatisfiedButton}">Sí</g:Button>
+			<g:Button ui:field="userUnsatisfiedButton" addStyleNames="{style.userUnsatisfiedButton}">No</g:Button>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="requestStatusPanel" addStyleNames="{style.requestStatusPanel}" visible="false">
+			<g:Label addStyleNames="{style.userInsatisfactionQuestion}">¿Por qué no es satisfactoria?</g:Label>
+			<g:RadioButton ui:field="requestDerivedRadioButton" addStyleNames="{style.requestDerivedRadioButton}" ui:name="requestStatus">Derivada</g:RadioButton>
+			<g:RadioButton ui:field="requestExtendedRadioButton" addStyleNames="{style.requestExtendedRadioButton}" ui:name="requestStatus">Prorroga</g:RadioButton>
+			<g:RadioButton ui:field="requestDeniedRadioButton" addStyleNames="{style.requestDeniedRadioButton}" ui:name="requestStatus">Denegada</g:RadioButton>
+			<g:RadioButton ui:field="responseRadioButtonIncomplete" addStyleNames="{style.responseRadioButtonIncomplete}" ui:name="requestStatus">Incompleta</g:RadioButton>
+			<g:Button ui:field="submitUserInsatisfactionButton" addStyleNames="{style.submitUserInsatisfactionButton}">Enviar</g:Button>
+			<g:Button ui:field="cancelUserInstafiscationButton" addStyleNames="{style.cancelUserInstafiscationButton}">Cancelar</g:Button>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>

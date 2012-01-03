@@ -35,4 +35,5 @@ public class AppPlace {
 	public static final String USERGUIDEVIDEO = "userguidevideo";
 	public static final String GUIDE = "guide";
 	public static final String TERMSANDCONDITIONS = "termsandconditions";
+	public static final String RESPONSEUSERSATISFACTION = "responseusersatisfaction";
 }
