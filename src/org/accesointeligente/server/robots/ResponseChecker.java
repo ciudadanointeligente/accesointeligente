@@ -23,6 +23,7 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.server.RandomPassword;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
 import org.accesointeligente.shared.UserSatisfaction;
@@ -581,6 +582,7 @@ public class ResponseChecker {
 		response.setSubject(subject);
 		response.setInformation(information);
 		response.setUserSatisfaction(UserSatisfaction.NOANSWER);
+		response.setResponseKey(RandomPassword.getRandomString(10));
 		hibernate.save(response);
 		hibernate.getTransaction().commit();
 
