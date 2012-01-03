@@ -26,5 +26,6 @@
 				<param name="enumClassName">org.accesointeligente.shared.UserSatisfaction</param>
 			</type>
 		</property>
+		<property name="responseKey"/>
 	</class>
 </hibernate-mapping>

@@ -37,6 +37,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private UserResponse userResponse;
 	private Boolean notified = false;
 	private UserSatisfaction userSatisfaction;
+	private String responseKey;
 
 	public Integer getId() {
 		return id;
@@ -116,6 +117,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setUserSatisfaction(UserSatisfaction userSatisfaction) {
 		this.userSatisfaction = userSatisfaction;
+	}
+
+	public String getResponseKey() {
+		return responseKey;
+	}
+
+	public void setResponseKey(String responseKey) {
+		this.responseKey = responseKey;
 	}
 
 	@Override
