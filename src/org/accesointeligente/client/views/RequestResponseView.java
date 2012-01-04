@@ -25,9 +25,7 @@ import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.*;
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestStatus;
-import org.accesointeligente.shared.UserSatisfaction;
+import org.accesointeligente.shared.*;
 
 import org.cobogw.gwt.user.client.ui.Rating;
 
@@ -289,6 +287,10 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 
 	@Override
 	public void newUserResponse(final Response response, final ResponseWidget widget) {
+		Long MILLISECONDS_PER_DAY = (long) (24 * 60 * 60 * 1000);
+		if ((((new Date()).getTime() - response.getDate().getTime())/ MILLISECONDS_PER_DAY) > 5) {
+			return;
+		}
 		FlowPanel userResponsePanel = new FlowPanel();
 		final TextArea userResponseTextBox = new TextArea();
 		Button userResponseButton = new Button("Responder", new ClickHandler() {
