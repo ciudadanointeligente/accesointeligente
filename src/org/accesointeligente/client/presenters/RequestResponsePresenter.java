@@ -322,12 +322,13 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 	}
 
 	@Override
-	public void setResponseUserSatisfaction(final Response response, UserSatisfaction userSatisfaction, final FlowPanel userSatisfactionPanel, final FlowPanel requestStatusPanel) {
+	public void updateResponse(final Response response, final FlowPanel userSatisfactionPanel, final FlowPanel requestStatusPanel) {
 		if (!ClientSessionUtil.getUser().equals(response.getRequest().getUser())) {
 			showNotification("Usted no es el propietario de esta solucitud.", NotificationEventType.ERROR);
 			return;
 		}
-		requestService.setResponseUserSatisfaction(response.getId(), userSatisfaction, new AsyncCallback<Response>() {
+
+		requestService.saveResponse(response, new AsyncCallback<Response>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -337,30 +338,22 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 			@Override
 			public void onSuccess(Response result) {
-				showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
-				userSatisfactionPanel.setVisible(false);
-				requestStatusPanel.setVisible(false);
-			}
-		});
-	}
+				Request request = result.getRequest();
+				requestService.setRequestUserSatisfaction(request, new AsyncCallback<Request>() {
 
-	@Override
-	public void setRequestStatus(final Request request, RequestStatus requestStatus) {
-		if (!ClientSessionUtil.getUser().equals(request.getUser())) {
-			showNotification("Usted no es el propietario de esta solucitud.", NotificationEventType.ERROR);
-			return;
-		}
+					@Override
+					public void onFailure(Throwable caught) {
+						showNotification("No fue posible realizar esta acción, por favor intente nuevamente", NotificationEventType.ERROR);
+						userSatisfactionPanel.setVisible(true);
+					}
 
-		requestService.setRequestStatus(request.getId(), requestStatus, new AsyncCallback<Request>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				showNotification("No se ha podido actualizar el estado de la solicitud.", NotificationEventType.ERROR);
-			}
-
-			@Override
-			public void onSuccess(Request result) {
-				showNotification("Se ha actualizado el estado de la solicitud.", NotificationEventType.SUCCESS);
+					@Override
+					public void onSuccess(Request result) {
+						showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
+						userSatisfactionPanel.setVisible(false);
+						requestStatusPanel.setVisible(false);
+					}
+				});
 			}
 		});
 	}

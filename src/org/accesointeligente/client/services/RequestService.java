@@ -19,7 +19,9 @@
 package org.accesointeligente.client.services;
 
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.*;
+import org.accesointeligente.shared.Page;
+import org.accesointeligente.shared.RequestSearchParams;
+import org.accesointeligente.shared.ServiceException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -57,8 +59,7 @@ public interface RequestService extends RemoteService {
 	UserResponse getUserResponse(Response response) throws ServiceException;
 	List<Request> getBestVotedRequests() throws ServiceException;
 	List<Request> getLastResponseRequests() throws ServiceException;
-	Response setResponseUserSatisfaction(Integer responseId, UserSatisfaction userSatisfaction) throws ServiceException;
-	Request setRequestStatus(Integer requestId, RequestStatus requestStatus) throws ServiceException;
+	Request setRequestUserSatisfaction(Request request) throws ServiceException;
 	Response getResponse(Integer responseId, String responseKey) throws ServiceException;
 	Request getRequestByResponseId(Integer responseId) throws ServiceException;
 }

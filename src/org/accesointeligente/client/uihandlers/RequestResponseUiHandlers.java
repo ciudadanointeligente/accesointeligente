@@ -22,8 +22,6 @@ import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.NotificationEventType;
-import org.accesointeligente.shared.RequestStatus;
-import org.accesointeligente.shared.UserSatisfaction;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -38,8 +36,7 @@ public interface RequestResponseUiHandlers extends UiHandlers {
 	void getUserResponse(Response response, ResponseWidget widget);
 	void saveUserResponse(String information, Response response, ResponseWidget widget);
 	void loadBestVotedRequests();
-	void setResponseUserSatisfaction(Response response, UserSatisfaction userSatisfaction, FlowPanel userSatisfactionPanel, FlowPanel requestStatusPanel);
-	void setRequestStatus(Request request, RequestStatus requestStatus);
+	void updateResponse(Response response, FlowPanel userSatisfactionPanel, FlowPanel requestStatusPanel);
 	void goBack();
 	void gotoLogin();
 	void showNotification(String message, NotificationEventType type);

@@ -10,10 +10,10 @@
 		</g:HTMLPanel>
 		<g:HTMLPanel ui:field="requestStatusPanel" addStyleNames="{style.requestStatusPanel}" visible="false">
 			<g:Label addStyleNames="{style.userInsatisfactionQuestion}">¿Por qué no es satisfactoria?</g:Label>
-			<g:RadioButton ui:field="requestDerivedRadioButton" addStyleNames="{style.requestDerivedRadioButton}" ui:name="requestStatus">Derivada</g:RadioButton>
-			<g:RadioButton ui:field="requestExtendedRadioButton" addStyleNames="{style.requestExtendedRadioButton}" ui:name="requestStatus">Prorroga</g:RadioButton>
-			<g:RadioButton ui:field="requestDeniedRadioButton" addStyleNames="{style.requestDeniedRadioButton}" ui:name="requestStatus">Denegada</g:RadioButton>
-			<g:RadioButton ui:field="responseRadioButtonIncomplete" addStyleNames="{style.responseRadioButtonIncomplete}" ui:name="requestStatus">Incompleta</g:RadioButton>
+			<g:RadioButton ui:field="requestDerivedRadioButton" addStyleNames="{style.requestDerivedRadioButton}" ui:name="requestStatus"/>
+			<g:RadioButton ui:field="requestExtendedRadioButton" addStyleNames="{style.requestExtendedRadioButton}" ui:name="requestStatus"/>
+			<g:RadioButton ui:field="requestDeniedRadioButton" addStyleNames="{style.requestDeniedRadioButton}" ui:name="requestStatus"/>
+			<g:RadioButton ui:field="responseRadioButtonIncomplete" addStyleNames="{style.responseRadioButtonIncomplete}" ui:name="requestStatus"/>
 			<g:Button ui:field="submitUserInsatisfactionButton" addStyleNames="{style.submitUserInsatisfactionButton}">Enviar</g:Button>
 			<g:Button ui:field="cancelUserInstafiscationButton" addStyleNames="{style.cancelUserInstafiscationButton}">Cancelar</g:Button>
 		</g:HTMLPanel>

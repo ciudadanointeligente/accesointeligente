@@ -25,9 +25,7 @@ import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.*;
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestStatus;
-import org.accesointeligente.shared.UserSatisfaction;
+import org.accesointeligente.shared.*;
 
 import org.cobogw.gwt.user.client.ui.Rating;
 
@@ -186,7 +184,9 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 			@Override
 			public void onClick(ClickEvent event) {
 				if (ClientSessionUtil.getUser() != null) {
-					getUiHandlers().setResponseUserSatisfaction(response, UserSatisfaction.SATISFIED, userSatisfactionPanel, requestStatusPanel);
+					response.setType(ResponseType.INFORMATION);
+					response.setUserSatisfaction(UserSatisfaction.SATISFIED);
+					getUiHandlers().updateResponse(response, userSatisfactionPanel, requestStatusPanel);
 				} else {
 					getUiHandlers().gotoLogin();
 				}
@@ -205,27 +205,28 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 			}
 		});
 
-		final RadioButton requestDerivedRadioButton = new RadioButton("requestStatus", "Derivada");
-		final RadioButton requestExtendedRadioButton = new RadioButton("requestStatus", "Prorroga");
-		final RadioButton requestDeniedRadioButton = new RadioButton("requestStatus", "Denegada");
-		final RadioButton responseRadioButtonIncomplete = new RadioButton("requestStatus", "Incompleta");
+		final RadioButton requestDerivedRadioButton = new RadioButton("requestStatus", ResponseType.DERIVATION.getName());
+		final RadioButton requestExtendedRadioButton = new RadioButton("requestStatus", ResponseType.EXTENSION.getName());
+		final RadioButton requestDeniedRadioButton = new RadioButton("requestStatus", ResponseType.DENIAL.getName());
+		final RadioButton responseRadioButtonIncomplete = new RadioButton("requestStatus", ResponseType.INCOMPLETE.getName());
 		Button submitUserInsatisfactionButton = new Button("Enviar", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				RequestStatus requestStatus = null;
+				ResponseType responseType = null;
 				if (requestDerivedRadioButton.getValue()) {
-					requestStatus = RequestStatus.DERIVED;
+					responseType = ResponseType.DERIVATION;
 				} else if (requestExtendedRadioButton.getValue()) {
-					requestStatus = RequestStatus.EXTENDED;
+					responseType = ResponseType.EXTENSION;
 				} else if (requestDeniedRadioButton.getValue()) {
-					requestStatus = RequestStatus.DENIED;
+					responseType = ResponseType.DENIAL;
 				} else if (responseRadioButtonIncomplete.getValue()) {
-					requestStatus = response.getRequest().getStatus();
+					responseType = ResponseType.INCOMPLETE;
 				}
-				if (requestStatus != null) {
-					getUiHandlers().setRequestStatus(response.getRequest(), requestStatus);
-					getUiHandlers().setResponseUserSatisfaction(response, UserSatisfaction.UNSATISFIED, userSatisfactionPanel, requestStatusPanel);
+				if (responseType != null) {
+					response.setUserSatisfaction(UserSatisfaction.UNSATISFIED);
+					response.setType(responseType);
+					getUiHandlers().updateResponse(response, userSatisfactionPanel, requestStatusPanel);
 				}
 			}
 		});

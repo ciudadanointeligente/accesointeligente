@@ -640,7 +640,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			response = (Response) persistentBeanManager.merge(response);
-			hibernate.save(response);
+			hibernate.saveOrUpdate(response);
 			hibernate.getTransaction().commit();
 			return response;
 		} catch (Throwable ex) {
@@ -823,58 +823,37 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 	}
 
 	@Override
-	public Response setResponseUserSatisfaction(Integer responseId, UserSatisfaction userSatisfaction) throws ServiceException {
+	public Request setRequestUserSatisfaction(Request request) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
 		try {
-			Response response = (Response) hibernate.get(Response.class, responseId);
-			response.setUserSatisfaction(userSatisfaction);
-			hibernate.save(response);
+			request = (Request) persistentBeanManager.merge(request);
 
 			Criteria criteria = hibernate.createCriteria(Response.class);
-			criteria.add(Restrictions.eq("request", response.getRequest()));
+			criteria.add(Restrictions.eq("request", request));
 			List<Response> relatedResponses = (List<Response>)criteria.list();
 
 			Boolean satisfiedRequest = false;
 			Integer unsatisfiedResponses = 0;
 
 			for (Response relatedResponse : relatedResponses) {
-				if (relatedResponse.getUserSatisfaction().equals(UserSatisfaction.SATISFIED)) {
+				if (relatedResponse.getUserSatisfaction() != null && relatedResponse.getUserSatisfaction().equals(UserSatisfaction.SATISFIED)) {
 					satisfiedRequest = true;
 					break;
 				}
 				unsatisfiedResponses++;
 			}
 
-			Request request = response.getRequest();
 			if (satisfiedRequest) {
 				request.setUserSatisfaction(UserSatisfaction.SATISFIED);
-				hibernate.save(request);
+				hibernate.saveOrUpdate(request);
 			} else if (unsatisfiedResponses.equals(relatedResponses.size())) {
 				request.setUserSatisfaction(UserSatisfaction.UNSATISFIED);
-				hibernate.save(request);
+				hibernate.saveOrUpdate(request);
 			}
 
-			hibernate.getTransaction().commit();
-			return response;
-		} catch (Throwable ex) {
-			hibernate.getTransaction().rollback();
-			throw new ServiceException();
-		}
-	}
-
-	@Override
-	public Request setRequestStatus(Integer requestId, RequestStatus requestStatus) throws ServiceException {
-		Session hibernate = HibernateUtil.getSession();
-		hibernate.beginTransaction();
-
-		try {
-			Request request = (Request) hibernate.get(Request.class, requestId);
-			if (!request.getStatus().equals(requestStatus)) {
-				request.setStatus(requestStatus);
-				hibernate.save(request);
-			}
+			request = (Request) persistentBeanManager.clone(request);
 			hibernate.getTransaction().commit();
 			return request;
 		} catch (Throwable ex) {

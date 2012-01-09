@@ -2,7 +2,7 @@ package org.accesointeligente.client.views;
 
 import org.accesointeligente.client.presenters.ResponseUserSatisfactionPresenter;
 import org.accesointeligente.client.uihandlers.ResponseUserSatisfactionUiHandlers;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.ResponseType;
 import org.accesointeligente.shared.UserSatisfaction;
 
 import com.google.gwt.core.client.GWT;
@@ -35,6 +35,10 @@ public class ResponseUserSatisfactionView extends ViewWithUiHandlers<ResponseUse
 
 	public ResponseUserSatisfactionView() {
 		widget = uiBinder.createAndBindUi(this);
+		requestDerivedRadioButton.setText(ResponseType.DERIVATION.getName());
+		requestExtendedRadioButton.setText(ResponseType.EXTENSION.getName());
+		requestDeniedRadioButton.setText(ResponseType.DENIAL.getName());
+		responseRadioButtonIncomplete.setText(ResponseType.INCOMPLETE.getName());
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class ResponseUserSatisfactionView extends ViewWithUiHandlers<ResponseUse
 
 	@UiHandler("userSatisfiedButton")
 	public void onUserSatisfiedClick(ClickEvent event) {
-		getUiHandlers().setResponseUserSatisfaction(UserSatisfaction.SATISFIED);
+		getUiHandlers().updateResponse(ResponseType.INFORMATION, UserSatisfaction.SATISFIED);
 	}
 
 	@UiHandler("userUnsatisfiedButton")
@@ -65,19 +69,18 @@ public class ResponseUserSatisfactionView extends ViewWithUiHandlers<ResponseUse
 
 	@UiHandler("submitUserInsatisfactionButton")
 	public void onSubmitUserInsatisfactionButtonClick(ClickEvent event) {
-		RequestStatus requestStatus = null;
+		ResponseType responseType = null;
 		if (requestDerivedRadioButton.getValue()) {
-			requestStatus = RequestStatus.DERIVED;
+			responseType = ResponseType.DERIVATION;
 		} else if (requestExtendedRadioButton.getValue()) {
-			requestStatus = RequestStatus.EXTENDED;
+			responseType = ResponseType.EXTENSION;
 		} else if (requestDeniedRadioButton.getValue()) {
-			requestStatus = RequestStatus.DENIED;
+			responseType = ResponseType.DENIAL;
 		} else if (responseRadioButtonIncomplete.getValue()) {
-			requestStatus = getUiHandlers().getRequestStatus();
+			responseType = ResponseType.INCOMPLETE;
 		}
-		if (requestStatus != null) {
-			getUiHandlers().setRequestStatus(requestStatus);
-			getUiHandlers().setResponseUserSatisfaction(UserSatisfaction.UNSATISFIED);
+		if (responseType != null) {
+			getUiHandlers().updateResponse(responseType, UserSatisfaction.UNSATISFIED);
 		}
 	}
 

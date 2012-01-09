@@ -100,6 +100,10 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 						public void onSuccess(Request result) {
 							if (result != null) {
 								request = result;
+								if (response.getUserSatisfaction() != null) {
+									getView().showUserSatisfactionPanel(false);
+									getView().showRequestStatusPanel(false);
+								}
 							} else {
 								showNotification("No fue posible cargar la información de la respuesta, por favor intente nuevamente", NotificationEventType.ERROR);
 								placeManager.revealDefaultPlace();
@@ -115,36 +119,36 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 	}
 
 	@Override
-	public void setResponseUserSatisfaction(UserSatisfaction userSatisfaction) {
-		requestService.setResponseUserSatisfaction(responseId, userSatisfaction, new AsyncCallback<Response>() {
+	public void updateResponse(ResponseType responseType, UserSatisfaction userSatisfaction) {
+		response.setUserSatisfaction(userSatisfaction);
+		response.setType(responseType);
+		requestService.saveResponse(response, new AsyncCallback<Response>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				showNotification("No fue posible realizar esta acción, por favor intente nuevamente", NotificationEventType.ERROR);
 				getView().showUserSatisfactionPanel(true);
+				getView().showRequestStatusPanel(false);
 			}
 
 			@Override
 			public void onSuccess(Response result) {
-				showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
-				getView().showUserSatisfactionPanel(false);
-				getView().showRequestStatusPanel(false);
-			}
-		});
-	}
+				requestService.setRequestUserSatisfaction(request, new AsyncCallback<Request>() {
 
-	@Override
-	public void setRequestStatus(RequestStatus requestStatus) {
-		requestService.setRequestStatus(request.getId(), requestStatus, new AsyncCallback<Request>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						showNotification("No fue posible realizar esta acción, por favor intente nuevamente", NotificationEventType.ERROR);
+						getView().showUserSatisfactionPanel(true);
+						getView().showRequestStatusPanel(false);
+					}
 
-			@Override
-			public void onFailure(Throwable caught) {
-				showNotification("No se ha podido actualizar el estado de la solicitud.", NotificationEventType.ERROR);
-			}
-
-			@Override
-			public void onSuccess(Request result) {
-				showNotification("Se ha actualizado el estado de la solicitud.", NotificationEventType.SUCCESS);
+					@Override
+					public void onSuccess(Request result) {
+						showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
+						getView().showUserSatisfactionPanel(false);
+						getView().showRequestStatusPanel(false);
+					}
+				});
 			}
 		});
 	}
