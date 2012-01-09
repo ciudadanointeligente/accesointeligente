@@ -20,6 +20,7 @@ package org.accesointeligente.model;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import org.accesointeligente.shared.ResponseType;
 import org.accesointeligente.shared.UserSatisfaction;
 
 import java.util.Date;
@@ -38,6 +39,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private Boolean notified = false;
 	private UserSatisfaction userSatisfaction;
 	private String responseKey;
+	private ResponseType type;
 
 	public Integer getId() {
 		return id;
@@ -125,6 +127,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setResponseKey(String responseKey) {
 		this.responseKey = responseKey;
+	}
+
+	public ResponseType getType() {
+		return type;
+	}
+
+	public void setType(ResponseType responseType) {
+		this.type = responseType;
 	}
 
 	@Override

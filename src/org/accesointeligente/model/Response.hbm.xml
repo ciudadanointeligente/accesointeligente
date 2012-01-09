@@ -27,5 +27,10 @@
 			</type>
 		</property>
 		<property name="responseKey"/>
+		<property name="type">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.ResponseType</param>
+			</type>
+		</property>
 	</class>
 </hibernate-mapping>
