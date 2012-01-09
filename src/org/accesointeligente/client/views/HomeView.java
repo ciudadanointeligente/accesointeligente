@@ -26,10 +26,9 @@ import org.accesointeligente.client.widgets.ShareThis;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.shared.AppPlace;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -37,6 +36,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 	private static HomeViewUiBinder uiBinder = GWT.create(HomeViewUiBinder.class);
@@ -64,11 +65,17 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 		// Title
 		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
 			@Override
-			public AnchorCellParams getValue(Request request) {
+			public AnchorCellParams getValue(final Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
-				params.setUrl(baseUrl + request.getId());
+				final String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return baseUrl + request.getId();
+					}
+				});
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}

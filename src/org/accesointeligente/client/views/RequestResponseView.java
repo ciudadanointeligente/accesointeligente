@@ -25,7 +25,9 @@ import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.*;
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.*;
+import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.UserSatisfaction;
 
 import org.cobogw.gwt.user.client.ui.Rating;
 
@@ -33,6 +35,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -315,11 +318,17 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 		// Title
 		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
 			@Override
-			public AnchorCellParams getValue(Request request) {
+			public AnchorCellParams getValue(final Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
-				params.setUrl(baseUrl + request.getId());
+				final String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return baseUrl + request.getId();
+					}
+				});
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}
