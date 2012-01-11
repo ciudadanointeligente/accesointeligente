@@ -23,8 +23,6 @@ import org.accesointeligente.model.external.SGSListResult;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.shared.RequestStatus;
 
-import com.google.gson.Gson;
-
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -37,6 +35,8 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+
+import com.google.gson.Gson;
 
 import java.beans.ConstructorProperties;
 import java.io.InputStreamReader;
@@ -256,7 +256,7 @@ public class SGS extends Robot {
 						request.setRemoteIdentifier(remoteIdentifier);
 					}
 				} catch (Exception ex) {
-					logger.error("Couldn't found remote identifier in SGS request list");
+					logger.error("Couldn't found remote identifier in SGS request list", ex);
 				}
 
 				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the identifier via JSON requests
