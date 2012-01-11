@@ -458,7 +458,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="OficinaNacionalDeEmergencia" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="OficinaNacionalDeEmergencia" class="org.accesointeligente.server.robots.SGSOnemi" scope="prototype">
 		<constructor-arg name="idEntidad" value="5"/>
 		<constructor-arg name="baseUrl" value="http://201.238.248.162/~oficina/siac/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -787,7 +787,7 @@
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
-	
+
 	<bean id="GabineteMinisterioDelInterior" class="org.accesointeligente.server.robots.SIAC" scope="prototype">
 		<constructor-arg name="idEntidad" value="1"/>
 		<constructor-arg name="baseUrl" value="http://siac.interior.gov.cl"/>
