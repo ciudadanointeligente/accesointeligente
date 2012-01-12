@@ -47,6 +47,7 @@ public class ResponseNotifier {
 			List<Response> responses = criteria.list();
 			for (Response response : responses) {
 				Hibernate.initialize(response.getRequest());
+				Hibernate.initialize(response.getRequest().getUser());
 			}
 			hibernate.getTransaction().commit();
 
