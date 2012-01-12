@@ -288,7 +288,7 @@ public class SGSOnemi extends Robot {
 			get.addHeader("Referer", baseUrl + requestListAction);
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
-			statusCell = document.findElementByAttValue("width", "36%", true, true);
+			statusCell = document.getElementsByAttValue("width", "33%", true, true)[0];
 
 			if (statusCell == null) {
 				throw new RobotException("Invalid status text cell");
@@ -299,7 +299,7 @@ public class SGSOnemi extends Robot {
 			// TODO: check if request expired
 			if (statusLabel.equals("En Proceso")) {
 				return RequestStatus.PENDING;
-			} else if (statusLabel.equals("Respondida")) {
+			} else if (statusLabel.equals("Respondida") || statusLabel.equals("Finalizada")) {
 				return RequestStatus.CLOSED;
 			} else if (statusLabel.equals("Derivada")) {
 				return RequestStatus.DERIVED;
