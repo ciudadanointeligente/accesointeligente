@@ -25,9 +25,7 @@ import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
@@ -47,6 +45,9 @@ public class ResponseNotifier {
 			criteria.setFetchMode("request.user", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("notified", false));
 			List<Response> responses = criteria.list();
+			for (Response response : responses) {
+				Hibernate.initialize(response.getRequest());
+			}
 			hibernate.getTransaction().commit();
 
 			for (Response response : responses) {
