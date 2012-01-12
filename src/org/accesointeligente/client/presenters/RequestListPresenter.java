@@ -38,6 +38,7 @@ import com.gwtplatform.mvp.client.proxy.*;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.*;
 
@@ -76,6 +77,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 
 	private RequestListType listType;
 	private RequestListType oldListType;
+	private String oldWindowTitle;
 	private AsyncDataProvider<Request> requestData;
 	private RequestSearchParams searchParams;
 
@@ -101,10 +103,13 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 				prepareViewStyle();
 				resetData(0);
 				oldListType = listType;
+				oldWindowTitle = Window.getTitle();
 			} else {
 				showNotification("Necesita acceder para poder ver esta lista", NotificationEventType.NOTICE);
 				placeManager.revealDefaultPlace();
 			}
+		} else if (listType.equals(oldListType)) {
+			Window.setTitle(oldWindowTitle);
 		}
 	}
 
@@ -154,6 +159,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 						} else {
 							requestService.getUserRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
 						}
+						Window.setTitle("Mis solicitudes - Acceso Inteligente");
 						break;
 					case FAVORITES:
 						if (searchParams != null) {
@@ -161,9 +167,11 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 						} else {
 							requestService.getUserFavoriteRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
 						}
+						Window.setTitle("Mis favoritos - Acceso Inteligente");
 						break;
 					case DRAFTS:
 						requestService.getUserDraftList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
+						Window.setTitle("Mis borradores - Acceso Inteligente");
 						break;
 					case GENERAL:
 						if (searchParams != null) {
@@ -171,6 +179,7 @@ public class RequestListPresenter extends Presenter<RequestListPresenter.MyView,
 						} else {
 							requestService.getRequestList(display.getVisibleRange().getStart(), display.getVisibleRange().getLength(), callback);
 						}
+						Window.setTitle("Listado de solicitudes - Acceso Inteligente");
 						break;
 				}
 			}

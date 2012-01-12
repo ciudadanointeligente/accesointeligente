@@ -23,11 +23,10 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.server.RandomPassword;
 import org.accesointeligente.shared.FileType;
 import org.accesointeligente.shared.RequestStatus;
-
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import org.accesointeligente.shared.UserSatisfaction;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -38,6 +37,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +57,7 @@ public class ResponseChecker {
 	private Properties props;
 	private Session session;
 	private Store store;
-	private Pattern pattern = Pattern.compile(".*([A-Z]{2}[0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,7}).*");
+	private Pattern pattern = Pattern.compile(".*([A-Z]{2})[- ]{0,1}([0-9]{3}[A-Z])[- ]{0,1}([0-9]{1,8}).*");
 	private Pattern htmlPattern = Pattern.compile("<.*?>");
 	private List<Attachment> attachments;
 	private Set<String> remoteIdentifiers;
@@ -98,8 +100,8 @@ public class ResponseChecker {
 						Matcher matcher = pattern.matcher(message.getSubject());
 
 						if (matcher.matches()) {
-							remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-							logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+							remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+							logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 						}
 					}
 
@@ -125,8 +127,8 @@ public class ResponseChecker {
 							matcher = pattern.matcher(token);
 
 							if (matcher.matches()) {
-								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-								logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+								logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 							}
 						}
 					} else {
@@ -224,8 +226,8 @@ public class ResponseChecker {
 					matcher = pattern.matcher(tokenizer.nextToken());
 
 					if (matcher.matches()) {
-						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-						logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 					}
 				}
 
@@ -240,8 +242,8 @@ public class ResponseChecker {
 					matcher = pattern.matcher(tokenizer.nextToken());
 
 					if (matcher.matches()) {
-						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-						logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 					}
 				}
 
@@ -294,8 +296,8 @@ public class ResponseChecker {
 							matcher = pattern.matcher(tokenizer.nextToken());
 
 							if (matcher.matches()) {
-								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-								logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+								logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 							}
 						}
 						break;
@@ -307,8 +309,8 @@ public class ResponseChecker {
 							matcher = pattern.matcher(tokenizer.nextToken());
 
 							if (matcher.matches()) {
-								remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-								logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+								remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+								logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 							}
 						}
 						break;
@@ -326,7 +328,7 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+									remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 								}
 							}
 
@@ -357,8 +359,8 @@ public class ResponseChecker {
 			matcher = pattern.matcher(filename);
 
 			if (matcher.matches()) {
-				remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-				logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+				remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+				logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 			}
 
 			attachment.setName(filename);
@@ -396,8 +398,8 @@ public class ResponseChecker {
 					matcher = pattern.matcher(token);
 
 					if (matcher.matches()) {
-						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-						logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 					}
 				}
 
@@ -412,8 +414,8 @@ public class ResponseChecker {
 					matcher = pattern.matcher(tokenizer.nextToken());
 
 					if (matcher.matches()) {
-						logger.info("Remote Identifier found: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-						remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+						logger.info("Remote Identifier found: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 					}
 				}
 
@@ -463,8 +465,8 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-									logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+									remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+									logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 								}
 							}
 							break;
@@ -476,8 +478,8 @@ public class ResponseChecker {
 								matcher = pattern.matcher(tokenizer.nextToken());
 
 								if (matcher.matches()) {
-									remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-									logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+									remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+									logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 								}
 							}
 							break;
@@ -495,8 +497,8 @@ public class ResponseChecker {
 									matcher = pattern.matcher(tokenizer.nextToken());
 
 									if (matcher.matches()) {
-										remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-										logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+										remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+										logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 									}
 								}
 
@@ -535,8 +537,8 @@ public class ResponseChecker {
 				matcher = pattern.matcher(filename);
 
 				if (matcher.matches()) {
-					remoteIdentifiers.add(formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
-					logger.info("remote identifier: " + formatIdentifier(matcher.group(1), Integer.parseInt(matcher.group(2))));
+					remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+					logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
 				}
 
 				attachment.setName(filename);
@@ -567,8 +569,8 @@ public class ResponseChecker {
 		}
 	}
 
-	private String formatIdentifier(String prefix, Integer number) {
-		return String.format("%s-%07d", prefix, number);
+	private String formatIdentifier(String prefix, String suffix, Integer number) {
+		return String.format("%s%s-%07d", prefix, suffix, number);
 	}
 
 	private Response createResponse(String sender, Date date, String subject, String information, List<Attachment> attachments) {
@@ -579,6 +581,8 @@ public class ResponseChecker {
 		response.setDate(date);
 		response.setSubject(subject);
 		response.setInformation(information);
+		response.setUserSatisfaction(UserSatisfaction.NOANSWER);
+		response.setResponseKey(RandomPassword.getRandomString(10));
 		hibernate.save(response);
 		hibernate.getTransaction().commit();
 

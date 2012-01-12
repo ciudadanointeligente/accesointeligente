@@ -32,6 +32,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import javax.inject.Inject;
@@ -56,6 +57,11 @@ public class PasswordRecoveryPresenter extends Presenter<PasswordRecoveryPresent
 	public PasswordRecoveryPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
 		getView().setUiHandlers(this);
+	}
+
+	@Override
+	protected void onReset() {
+		Window.setTitle("Recuperación de contraseña - Acceso Inteligente");
 	}
 
 	@Override

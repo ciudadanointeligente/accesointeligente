@@ -88,7 +88,7 @@
 
 .newComment {
 	border: 1px dashed #AFAFAF;
-	height: 120px;
+	height: 80px;
 	padding: 5px;
 	width: 98%;
 }
@@ -124,3 +124,55 @@
 	margin-left: -80px;
 	z-index: 1;
 }
+
+.userResponsePanel {
+	overflow: hidden;
+	padding: 0;
+	width: 100%;
+	margin-bottom: -12px;
+}
+
+.newUserResponse {
+	border: 1px dashed #AFAFAF;
+	height: 60px;
+	padding: 5px;
+	width: 98%;
+}
+
+.userResponseButton {
+	float: right;
+}
+
+.userSatisfacionPanel {}
+
+.userSatisfactionQuestion {
+	padding: 5px;
+}
+
+.userSatisfiedButton {}
+
+.userUnsatisfiedButton {}
+
+.requestStatusPanel {}
+
+.userInsatisfactionQuestion {}
+
+.requestDerivedRadioButton {
+	display: block;
+}
+
+.requestExtendedRadioButton {
+	display: block;
+}
+
+.requestDeniedRadioButton {
+	display: block;
+}
+
+.responseRadioButtonIncomplete {
+	display: block;
+}
+
+.submitUserInsatisfactionButton {}
+
+.cancelUserInstafiscationButton {}

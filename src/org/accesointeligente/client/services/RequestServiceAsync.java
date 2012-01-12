@@ -56,4 +56,7 @@ public interface RequestServiceAsync {
 	void getUserResponse(Response response, AsyncCallback<UserResponse> callback);
 	void getBestVotedRequests(AsyncCallback<List<Request>> callback);
 	void getLastResponseRequests(AsyncCallback<List<Request>> callback);
+	void setRequestUserSatisfaction(Request request, AsyncCallback<Request> callback);
+	void getResponse(Integer responseId, String responseKey, AsyncCallback<Response> callback);
+	void getRequestByResponseId(Integer responseId, AsyncCallback<Request> callback);
 }

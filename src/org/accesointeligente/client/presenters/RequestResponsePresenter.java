@@ -26,17 +26,18 @@ import org.accesointeligente.client.widgets.ResponseWidget;
 import org.accesointeligente.model.*;
 import org.accesointeligente.shared.*;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.view.client.ListDataProvider;
+
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.*;
-
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.view.client.ListDataProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +46,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class RequestResponsePresenter extends Presenter<RequestResponsePresenter.MyView, RequestResponsePresenter.MyProxy> implements RequestResponseUiHandlers {
+	public static final String REQUEST_TITLE_CONTINUE = "...";
+	public static final Integer REQUEST_TITLE_INIT = 0;
+	public static final Integer REQUEST_TITLE_SIZE = 40;
+
 	public interface MyView extends View, HasUiHandlers<RequestResponseUiHandlers> {
 		// Request
 		void setStatus(RequestStatus status);
@@ -56,6 +61,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 		// Response
 		void setResponses(List<Response> responses);
 		void setComments(List<RequestComment> comments);
+		void userSatisfaction(Response response, ResponseWidget widget);
 		void showNewCommentPanel(Boolean show);
 		void cleanNewCommentText();
 		void setRatingValue(Integer rate);
@@ -84,6 +90,7 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 
 	private Integer requestId;
 	private Request request;
+	private List<Response> responses;
 
 	@Inject
 	public RequestResponsePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
@@ -137,7 +144,6 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 					getView().setInstitutionName(request.getInstitution().getName());
 					getView().setRequestInfo(request.getInformation());
 					getView().setRequestContext(request.getContext());
-					List<Response> responses;
 					if (request.getResponses() != null && request.getResponses().size() > 0) {
 						responses = new ArrayList<Response>(request.getResponses());
 					} else {
@@ -156,6 +162,11 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 					Boolean loggedIn = ClientSessionUtil.checkSession();
 					getView().showNewCommentPanel(loggedIn);
 					getView().setShare(Window.Location.getHref());
+					if (request.getTitle().length() > REQUEST_TITLE_SIZE) {
+						Window.setTitle(request.getTitle().substring(REQUEST_TITLE_INIT, REQUEST_TITLE_SIZE) + REQUEST_TITLE_CONTINUE + " - Acceso Inteligente");
+					} else {
+						Window.setTitle(request.getTitle() + " - Acceso Inteligente");
+					}
 				} else {
 					showNotification("No se puede cargar la solicitud", NotificationEventType.ERROR);
 				}
@@ -306,6 +317,43 @@ public class RequestResponsePresenter extends Presenter<RequestResponsePresenter
 			public void onSuccess(List<Request> results) {
 				ListDataProvider<Request> data = new ListDataProvider<Request>(results);
 				getView().setRequests(data);
+			}
+		});
+	}
+
+	@Override
+	public void updateResponse(final Response response, final FlowPanel userSatisfactionPanel, final FlowPanel requestStatusPanel) {
+		if (!ClientSessionUtil.getUser().equals(response.getRequest().getUser())) {
+			showNotification("Usted no es el propietario de esta solucitud.", NotificationEventType.ERROR);
+			return;
+		}
+
+		requestService.saveResponse(response, new AsyncCallback<Response>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showNotification("No fue posible realizar esta acción, por favor intente nuevamente", NotificationEventType.ERROR);
+				userSatisfactionPanel.setVisible(true);
+			}
+
+			@Override
+			public void onSuccess(Response result) {
+				Request request = result.getRequest();
+				requestService.setRequestUserSatisfaction(request, new AsyncCallback<Request>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						showNotification("No fue posible realizar esta acción, por favor intente nuevamente", NotificationEventType.ERROR);
+						userSatisfactionPanel.setVisible(true);
+					}
+
+					@Override
+					public void onSuccess(Request result) {
+						showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
+						userSatisfactionPanel.setVisible(false);
+						requestStatusPanel.setVisible(false);
+					}
+				});
 			}
 		});
 	}

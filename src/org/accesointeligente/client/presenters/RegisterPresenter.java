@@ -38,6 +38,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.*;
@@ -106,6 +107,11 @@ public class RegisterPresenter extends Presenter<RegisterPresenter.MyView, Regis
 	public RegisterPresenter(EventBus eventBus, MyView view, MyProxy proxy) {
 		super(eventBus, view, proxy);
 		getView().setUiHandlers(this);
+	}
+
+	@Override
+	public void onReset() {
+		Window.setTitle("Registro - Acceso Inteligente");
 	}
 
 	@Override

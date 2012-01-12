@@ -31,6 +31,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootPopupContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Navigator;
 
 import javax.inject.Inject;
@@ -76,6 +77,8 @@ public class UserGuideVideoPresenter extends Presenter<UserGuideVideoPresenter.M
 		} else {
 			getView().setVideo(USERGUIDEVIDEO_WEBM);
 		}
+
+		Window.setTitle("Guía de uso - Video - Acceso Inteligente");
 	}
 
 	@Override

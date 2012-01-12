@@ -24,8 +24,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeUri;
 
 public class CustomActionImageCell<C> extends AbstractCell<CustomActionImageCellParams> {
 	public static interface Delegate<C> {
@@ -34,7 +36,7 @@ public class CustomActionImageCell<C> extends AbstractCell<CustomActionImageCell
 
 	interface Template extends SafeHtmlTemplates {
 		@Template("<div style=\"text-align: center;\" tabindex=\"-1\"><img src=\"{0}\" title=\"{1}\" style=\"cursor: pointer;\" tabindex=\"-1\"/></div>")
-		SafeHtml img(String url, String title);
+		SafeHtml img(SafeUri url, String title);
 	}
 
 	private static Template template;

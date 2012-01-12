@@ -25,22 +25,22 @@ import org.accesointeligente.client.presenters.RequestResponsePresenter;
 import org.accesointeligente.client.uihandlers.RequestResponseUiHandlers;
 import org.accesointeligente.client.widgets.*;
 import org.accesointeligente.model.*;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.shared.*;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import org.cobogw.gwt.user.client.ui.Rating;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.ListDataProvider;
 
-import org.cobogw.gwt.user.client.ui.Rating;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import java.util.Date;
 import java.util.List;
@@ -72,6 +72,8 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 
 	public RequestResponseView() {
 		widget = uiBinder.createAndBindUi(this);
+		ResourceBundle.INSTANCE.RequestResponseView().ensureInjected();
+		ResourceBundle.INSTANCE.RequestListView().ensureInjected();
 	}
 
 	@Override
@@ -125,6 +127,11 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 				if (response.getDate() != null) {
 					responseWidget.setDate(response.getDate());
 					getUiHandlers().loadAttachments(response, responseWidget);
+					if ((response.getUserSatisfaction() == UserSatisfaction.NOANSWER) || (response.getUserSatisfaction() == null)) {
+						if (ClientSessionUtil.getUser() == null || ClientSessionUtil.getUser().equals(response.getRequest().getUser())) {
+							userSatisfaction(response, responseWidget);
+						}
+					}
 					getUiHandlers().getUserResponse(response, responseWidget);
 				}
 				responsePanel.add(responseWidget);
@@ -135,12 +142,21 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	@Override
 	public void setComments(List<RequestComment> comments) {
 		commentsPanel.clear();
-		for (RequestComment comment : comments) {
+		if (comments.size() > 0) {
+			for (RequestComment comment : comments) {
+				CommentWidget commentWidget = new CommentWidget();
+				commentWidget.setImage("");
+				commentWidget.setAuthor(comment.getUser().getFirstName());
+				commentWidget.setDate(comment.getDate());
+				commentWidget.setContent(comment.getText());
+				commentsPanel.add(commentWidget);
+			}
+		} else {
 			CommentWidget commentWidget = new CommentWidget();
 			commentWidget.setImage("");
-			commentWidget.setAuthor(comment.getUser().getFirstName());
-			commentWidget.setDate(comment.getDate());
-			commentWidget.setContent(comment.getText());
+			commentWidget.setAuthor("Sin comentarios");
+			commentWidget.setDate(new Date());
+			commentWidget.setContent("No hay comentarios aún, ingresa para comentar");
 			commentsPanel.add(commentWidget);
 		}
 		commentCount.setText(new Integer(comments.size()).toString());
@@ -154,6 +170,105 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 	@Override
 	public void cleanNewCommentText() {
 		newCommentText.setText("");
+	}
+
+	@Override
+	public void userSatisfaction(final Response response, final ResponseWidget widget) {
+		final FlowPanel userSatisfactionPanel = new FlowPanel();
+		final FlowPanel requestStatusPanel = new FlowPanel();
+		requestStatusPanel.setVisible(false);
+		InlineLabel userSatisfactionQuestion = new InlineLabel("¿Te satisface esta respuesta?");
+		Label userInsatisfactionQuestion = new Label("¿Por qué no es satisfactoria?");
+		Button userSatisfiedButton = new Button("Sí", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (ClientSessionUtil.getUser() != null) {
+					response.setType(ResponseType.INFORMATION);
+					response.setUserSatisfaction(UserSatisfaction.SATISFIED);
+					getUiHandlers().updateResponse(response, userSatisfactionPanel, requestStatusPanel);
+				} else {
+					getUiHandlers().gotoLogin();
+				}
+			}
+		});
+		Button userUnsatisfiedButton = new Button("No", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (ClientSessionUtil.getUser() != null) {
+					userSatisfactionPanel.setVisible(false);
+					requestStatusPanel.setVisible(true);
+				} else {
+					getUiHandlers().gotoLogin();
+				}
+			}
+		});
+
+		final RadioButton requestDerivedRadioButton = new RadioButton("requestStatus", ResponseType.DERIVATION.getName());
+		final RadioButton requestExtendedRadioButton = new RadioButton("requestStatus", ResponseType.EXTENSION.getName());
+		final RadioButton requestDeniedRadioButton = new RadioButton("requestStatus", ResponseType.DENIAL.getName());
+		final RadioButton responseRadioButtonIncomplete = new RadioButton("requestStatus", ResponseType.INCOMPLETE.getName());
+		Button submitUserInsatisfactionButton = new Button("Enviar", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				ResponseType responseType = null;
+				if (requestDerivedRadioButton.getValue()) {
+					responseType = ResponseType.DERIVATION;
+				} else if (requestExtendedRadioButton.getValue()) {
+					responseType = ResponseType.EXTENSION;
+				} else if (requestDeniedRadioButton.getValue()) {
+					responseType = ResponseType.DENIAL;
+				} else if (responseRadioButtonIncomplete.getValue()) {
+					responseType = ResponseType.INCOMPLETE;
+				}
+				if (responseType != null) {
+					response.setUserSatisfaction(UserSatisfaction.UNSATISFIED);
+					response.setType(responseType);
+					getUiHandlers().updateResponse(response, userSatisfactionPanel, requestStatusPanel);
+				}
+			}
+		});
+		Button cancelUserInstafiscationButton = new Button("Cancelar", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				userSatisfactionPanel.setVisible(true);
+				requestStatusPanel.setVisible(false);
+			}
+		});
+
+		userSatisfactionPanel.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userSatisfacionPanel());
+		userSatisfactionQuestion.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userSatisfactionQuestion());
+		userSatisfiedButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userSatisfiedButton());
+		userUnsatisfiedButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userUnsatisfiedButton());
+
+		userSatisfactionPanel.add(userSatisfactionQuestion);
+		userSatisfactionPanel.add(userSatisfiedButton);
+		userSatisfactionPanel.add(userUnsatisfiedButton);
+		userSatisfactionPanel.add(new HTML("<br />"));
+		widget.add(userSatisfactionPanel);
+
+		requestStatusPanel.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestStatusPanel());
+		userInsatisfactionQuestion.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userInsatisfactionQuestion());
+		requestDerivedRadioButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestDerivedRadioButton());
+		requestExtendedRadioButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestExtendedRadioButton());
+		requestDeniedRadioButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().requestDeniedRadioButton());
+		responseRadioButtonIncomplete.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().responseRadioButtonIncomplete());
+		submitUserInsatisfactionButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().submitUserInsatisfactionButton());
+		cancelUserInstafiscationButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().cancelUserInstafiscationButton());
+
+		requestStatusPanel.add(userInsatisfactionQuestion);
+		requestStatusPanel.add(requestDerivedRadioButton);
+		requestStatusPanel.add(requestExtendedRadioButton);
+		requestStatusPanel.add(requestDeniedRadioButton);
+		requestStatusPanel.add(responseRadioButtonIncomplete);
+		requestStatusPanel.add(new HTML("<br />"));
+		requestStatusPanel.add(submitUserInsatisfactionButton);
+		requestStatusPanel.add(cancelUserInstafiscationButton);
+		requestStatusPanel.add(new HTML("<br />"));
+		widget.add(requestStatusPanel);
 	}
 
 	@Override
@@ -176,6 +291,10 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 
 	@Override
 	public void newUserResponse(final Response response, final ResponseWidget widget) {
+		Long MILLISECONDS_PER_DAY = (long) (24 * 60 * 60 * 1000);
+		if ((((new Date()).getTime() - response.getDate().getTime())/ MILLISECONDS_PER_DAY) > 5) {
+			return;
+		}
 		FlowPanel userResponsePanel = new FlowPanel();
 		final TextArea userResponseTextBox = new TextArea();
 		Button userResponseButton = new Button("Responder", new ClickHandler() {
@@ -185,13 +304,14 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 			}
 		});
 
-		userResponsePanel.addStyleName("userResponsePanel");
-		userResponseTextBox.addStyleName("newUserResponse");
-		userResponseButton.addStyleName("userResponseButton");
+		userResponsePanel.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userResponsePanel());
+		userResponseTextBox.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().newUserResponse());
+		userResponseButton.addStyleName(ResourceBundle.INSTANCE.RequestResponseView().userResponseButton());
 
 		userResponsePanel.add(userResponseTextBox);
 		userResponsePanel.add(userResponseButton);
 		widget.add(userResponsePanel);
+		widget.add(new HTML("<br />"));
 	}
 
 	@Override
@@ -199,11 +319,17 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 		// Title
 		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
 			@Override
-			public AnchorCellParams getValue(Request request) {
+			public AnchorCellParams getValue(final Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
-				params.setUrl(baseUrl + request.getId());
+				final String baseUrl = "#" + AppPlace.RESPONSE + ";requestId=";
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return baseUrl + request.getId();
+					}
+				});
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}

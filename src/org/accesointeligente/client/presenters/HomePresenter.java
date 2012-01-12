@@ -74,6 +74,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 		getView().removeColumns();
 		getView().initTable();
 		loadLastResponseRequests();
+		Window.setTitle("Es tu derecho, es fácil - Acceso Inteligente");
 	}
 
 	@Override

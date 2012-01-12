@@ -7,7 +7,7 @@
 	<bean id="PresidenciaDeLaRepublica" class="org.accesointeligente.server.robots.SGS" scope="prototype">
 		<constructor-arg name="idEntidad" value="1"/>
 		<constructor-arg name="baseUrl" value="http://www.votainteligente.cl/sgs/index.php"/>
-		<property name="username" value="test.uchile@gmail.com"/>
+		<property name="username" value="test@test.com"/>
 		<property name="password" value="aSDF1234"/>
 	</bean>
 </beans>

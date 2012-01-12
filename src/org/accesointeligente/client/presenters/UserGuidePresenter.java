@@ -28,6 +28,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 
 import javax.inject.Inject;
 
@@ -48,5 +49,10 @@ public class UserGuidePresenter extends Presenter<UserGuidePresenter.MyView, Use
 	@Override
 	protected void revealInParent() {
 		fireEvent(new RevealContentEvent(MainPresenter.SLOT_MAIN_CONTENT, this));
+	}
+
+	@Override
+	protected void onReset() {
+		Window.setTitle("Guía de uso - Acceso Inteligente");
 	}
 }

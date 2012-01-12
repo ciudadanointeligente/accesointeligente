@@ -25,6 +25,7 @@ import org.accesointeligente.model.Attachment;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -60,9 +61,15 @@ public class ResponseWidget extends Composite {
 		// Name
 		Column<Attachment, AnchorCellParams> downloadColumn = new Column<Attachment, AnchorCellParams>(new AnchorCell()) {
 			@Override
-			public AnchorCellParams getValue(Attachment attachment) {
+			public AnchorCellParams getValue(final Attachment attachment) {
 				AnchorCellParams params = new AnchorCellParams();
-				params.setUrl(attachment.getUrl());
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return attachment.getUrl();
+					}
+				});
 				params.setStyleNames("");
 				params.setValue(attachment.getName());
 				return params;

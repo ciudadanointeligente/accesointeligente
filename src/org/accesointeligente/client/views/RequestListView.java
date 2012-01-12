@@ -27,17 +27,18 @@ import org.accesointeligente.model.Response;
 import org.accesointeligente.model.UserFavoriteRequest;
 import org.accesointeligente.shared.RequestStatus;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,14 +95,24 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 		// Status
 		Column<Request, CustomImageCellParams> statusColumn = new Column<Request, CustomImageCellParams>(new CustomImageCell()) {
 			@Override
-			public CustomImageCellParams getValue(Request request) {
+			public CustomImageCellParams getValue(final Request request) {
 				CustomImageCellParams params = new CustomImageCellParams();
 
 				if (RequestStatus.CLOSED.equals(request.getStatus()) && (request.getResponses() == null || request.getResponses().size() == 0)) {
-					params.setUrl(RequestStatus.PENDING.getUrl());
+					params.setUrl(new SafeUri() {
+							@Override
+							public String asString() {
+								return RequestStatus.PENDING.getUrl();
+							}
+					});
 					params.setTitle(RequestStatus.PENDING.getName());
 				} else {
-					params.setUrl(request.getStatus().getUrl());
+					params.setUrl(new SafeUri() {
+						@Override
+						public String asString() {
+							return request.getStatus().getUrl();
+						}
+					});
 					params.setTitle(request.getStatus().getName());
 				}
 
@@ -114,10 +125,16 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 		// Title
 		Column<Request, AnchorCellParams> titleColumn = new Column<Request, AnchorCellParams>(new AnchorCell()) {
 			@Override
-			public AnchorCellParams getValue(Request request) {
+			public AnchorCellParams getValue(final Request request) {
 				AnchorCellParams params = new AnchorCellParams();
 				params.setValue(request.getTitle());
-				params.setUrl(getUiHandlers().getRequestBaseUrlPlace(request.getId()));
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return getUiHandlers().getRequestBaseUrlPlace(request.getId());
+					}
+				});
 				params.setStyleNames(ResourceBundle.INSTANCE.RequestListView().reqTableTitle());
 				return params;
 			}
@@ -203,7 +220,13 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 			@Override
 			public CustomActionImageCellParams getValue(Request request) {
 				CustomActionImageCellParams params = new CustomActionImageCellParams();
-				params.setUrl("images/reqList/viewMore.png");
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return "images/reqList/viewMore.png";
+					}
+				});
 				params.setTitle("Ver +");
 				params.setValue(request);
 				return params;
@@ -229,13 +252,25 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 			@Override
 			public CustomActionImageCellParams getValue(Request request) {
 				CustomActionImageCellParams params = new CustomActionImageCellParams();
-				params.setUrl("images/reqList/no-favorite.png");
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return "images/reqList/no-favorite.png";
+					}
+				});
 				params.setTitle("Seguir");
 
 				if (ClientSessionUtil.getUser() != null) {
 					for (UserFavoriteRequest favorite : request.getFavorites()) {
 						if (ClientSessionUtil.getUser().equals(favorite.getUser())) {
-							params.setUrl("images/reqList/favorite.png");
+							params.setUrl(new SafeUri() {
+
+								@Override
+								public String asString() {
+									return "images/reqList/favorite.png";
+								}
+							});
 							params.setTitle("Dejar de seguir");
 							break;
 						}
@@ -263,7 +298,13 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 			@Override
 			public CustomActionImageCellParams getValue(Request request) {
 				CustomActionImageCellParams params = new CustomActionImageCellParams();
-				params.setUrl("images/mandato.png");
+				params.setUrl(new SafeUri() {
+
+					@Override
+					public String asString() {
+						return "images/mandato.png";
+					}
+				});
 				params.setTitle("Descarga el mandato");
 				params.setValue(request);
 				return params;

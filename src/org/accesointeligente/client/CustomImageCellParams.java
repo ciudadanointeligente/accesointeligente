@@ -18,16 +18,18 @@
  */
 package org.accesointeligente.client;
 
+import com.google.gwt.safehtml.shared.SafeUri;
+
 public class CustomImageCellParams {
-	private String url;
+	private SafeUri url;
 	private String title;
 	private String styleNames;
 
-	public String getUrl() {
+	public SafeUri getUrl() {
 		return url;
 	}
 
-	public void setUrl(String url) {
+	public void setUrl(SafeUri url) {
 		this.url = url;
 	}
 

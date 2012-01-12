@@ -21,14 +21,16 @@ package org.accesointeligente.client;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeUri;
 
 public class CustomImageCell extends AbstractCell<CustomImageCellParams> {
 
 	interface Template extends SafeHtmlTemplates {
 		@Template("<img src=\"{0}\" title=\"{1}\" class=\"{2}\"/>")
-		SafeHtml img(String url, String title, String styleNames);
+		SafeHtml img(SafeUri url, String title, String styleNames);
 	}
 
 	private static Template template;

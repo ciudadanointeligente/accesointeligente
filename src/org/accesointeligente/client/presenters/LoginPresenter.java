@@ -38,6 +38,7 @@ import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
 import com.gwtplatform.mvp.client.proxy.*;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import javax.inject.Inject;
@@ -76,6 +77,7 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 	public void onReveal() {
 		getView().clearForm();
 		getView().setEmailFocus();
+		Window.setTitle("Auntentificación - Acceso Inteligente");
 	}
 
 	@Override

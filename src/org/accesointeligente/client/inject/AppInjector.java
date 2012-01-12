@@ -24,13 +24,13 @@ import org.accesointeligente.client.UserGatekeeper;
 import org.accesointeligente.client.presenters.*;
 import org.accesointeligente.client.services.*;
 
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.Provider;
+
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
 @GinModules({PresenterModule.class, ServiceModule.class})
 public interface AppInjector extends Ginjector {
@@ -56,6 +56,7 @@ public interface AppInjector extends Ginjector {
 	AsyncProvider<UserGuideVideoPresenter> getUserGuideVideoPresenter();
 	AsyncProvider<UserGuidePresenter> getUserGuidePresenter();
 	AsyncProvider<TermsAndConditionsPresenter> getTermsAndConditionsPresenter();
+	AsyncProvider<ResponseUserSatisfactionPresenter> getResponseUserSatisfactionPresenter();
 	ActivityServiceAsync getActivityService();
 	AgeServiceAsync getAgeService();
 	InstitutionServiceAsync getInstitutionService();

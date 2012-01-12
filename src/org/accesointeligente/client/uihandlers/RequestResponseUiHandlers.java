@@ -23,6 +23,8 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.Response;
 import org.accesointeligente.shared.NotificationEventType;
 
+import com.google.gwt.user.client.ui.FlowPanel;
+
 import com.gwtplatform.mvp.client.UiHandlers;
 
 public interface RequestResponseUiHandlers extends UiHandlers {
@@ -34,6 +36,7 @@ public interface RequestResponseUiHandlers extends UiHandlers {
 	void getUserResponse(Response response, ResponseWidget widget);
 	void saveUserResponse(String information, Response response, ResponseWidget widget);
 	void loadBestVotedRequests();
+	void updateResponse(Response response, FlowPanel userSatisfactionPanel, FlowPanel requestStatusPanel);
 	void goBack();
 	void gotoLogin();
 	void showNotification(String message, NotificationEventType type);
