@@ -37,6 +37,7 @@ public class Response extends LightEntity implements Comparable<Response> {
 	private Set<Attachment> attachments;
 	private UserResponse userResponse;
 	private Boolean notified = false;
+	private Boolean notifiedSatisfaction = false;
 	private UserSatisfaction userSatisfaction;
 	private String responseKey;
 	private ResponseType type;
@@ -111,6 +112,14 @@ public class Response extends LightEntity implements Comparable<Response> {
 
 	public void setNotified(Boolean notified) {
 		this.notified = notified;
+	}
+
+	public Boolean getNotifiedSatisfaction() {
+		return notifiedSatisfaction;
+	}
+
+	public void setNotifiedSatisfaction(Boolean notifiedSatisfaction) {
+		this.notifiedSatisfaction = notifiedSatisfaction;
 	}
 
 	public UserSatisfaction getUserSatisfaction() {
