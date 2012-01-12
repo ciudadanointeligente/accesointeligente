@@ -182,7 +182,7 @@ public class SGSOnemi extends Robot {
 			request.setStatus(RequestStatus.PENDING);
 			request.setProcessDate(new Date());
 
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
 				location = response.getFirstHeader("Location");
 
 				if (location == null) {
