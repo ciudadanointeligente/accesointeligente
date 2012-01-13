@@ -45,6 +45,7 @@
 		<mapping resource="org/accesointeligente/model/Contact.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Institution.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/InstitutionType.hbm.xml"/>
+		<mapping resource="org/accesointeligente/model/Notification.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Region.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/Request.hbm.xml"/>
 		<mapping resource="org/accesointeligente/model/RequestCategory.hbm.xml"/>
