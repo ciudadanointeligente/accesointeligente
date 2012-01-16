@@ -41,6 +41,7 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 	public interface MyView extends View, HasUiHandlers<ResponseUserSatisfactionUiHandlers> {
 		void showUserSatisfactionPanel(Boolean visible);
 		void showRequestStatusPanel(Boolean visible);
+		void showBackHomePanel(Boolean visible);
 	}
 
 	@ProxyCodeSplit
@@ -121,6 +122,7 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 								if (response.getUserSatisfaction() != null && response.getUserSatisfaction() != UserSatisfaction.NOANSWER) {
 									getView().showUserSatisfactionPanel(false);
 									getView().showRequestStatusPanel(false);
+									getView().showBackHomePanel(true);
 								}
 							} else {
 								showNotification("No fue posible cargar la información de la respuesta, por favor intente nuevamente", NotificationEventType.ERROR);
@@ -165,6 +167,7 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 						showNotification("Hemos guardado su respuesta", NotificationEventType.SUCCESS);
 						getView().showUserSatisfactionPanel(false);
 						getView().showRequestStatusPanel(false);
+						getView().showBackHomePanel(true);
 					}
 				});
 			}
@@ -178,6 +181,11 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void goHome() {
+		placeManager.revealPlace(new PlaceRequest(AppPlace.HOME));
 	}
 
 	@Override

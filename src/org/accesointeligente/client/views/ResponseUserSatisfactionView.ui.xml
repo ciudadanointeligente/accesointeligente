@@ -17,5 +17,8 @@
 			<g:Button ui:field="submitUserInsatisfactionButton" addStyleNames="{style.submitUserInsatisfactionButton}">Enviar</g:Button>
 			<g:Button ui:field="cancelUserInstafiscationButton" addStyleNames="{style.cancelUserInstafiscationButton}">Cancelar</g:Button>
 		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="backHomePanel" visible="false">
+			<g:Button ui:field="backHomeButton">Volver al Home</g:Button>
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>
