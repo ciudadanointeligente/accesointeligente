@@ -51,7 +51,7 @@
 		</property>
 		<property name="expired">
 			<type name="org.accesointeligente.server.EnumUserType">
-				<param name="enumClassName">org.accesointeligente.shared.RequestExpiredType</param>
+				<param name="enumClassName">org.accesointeligente.shared.RequestExpireType</param>
 			</type>
 		</property>
 	</class>
