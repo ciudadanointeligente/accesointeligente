@@ -38,7 +38,7 @@ public class NotificationManager {
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Notification.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.add(Restrictions.eq("dispatched", false));
+			criteria.add(Restrictions.eq("dispatched", Boolean.FALSE));
 			List<Notification> notifications = criteria.list();
 			hibernate.getTransaction().commit();
 
