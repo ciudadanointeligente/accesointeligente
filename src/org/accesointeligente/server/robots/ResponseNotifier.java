@@ -23,6 +23,7 @@ import org.accesointeligente.model.Response;
 import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.shared.AppPlace;
 
 import org.apache.log4j.Logger;
 import org.hibernate.*;
@@ -45,7 +46,7 @@ public class ResponseNotifier {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFetchMode("request", FetchMode.JOIN);
 			criteria.setFetchMode("request.user", FetchMode.JOIN);
-			criteria.add(Restrictions.eq("notified", false));
+			criteria.add(Restrictions.eq("notified", Boolean.FALSE));
 			List<Response> responses = criteria.list();
 			for (Response response : responses) {
 				Hibernate.initialize(response.getRequest());
@@ -70,7 +71,7 @@ public class ResponseNotifier {
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Response.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.add(Restrictions.eq("notifiedSatisfaction", false));
+			criteria.add(Restrictions.eq("notifiedSatisfaction", Boolean.FALSE));
 			criteria.add(Restrictions.or(Restrictions.eq("userSatisfaction", "NOANSWER"), Restrictions.isNull("userSatisfaction")));
 			List<Response> responses = criteria.list();
 			hibernate.getTransaction().commit();
@@ -118,11 +119,14 @@ public class ResponseNotifier {
 		Session hibernate = null;
 
 		try {
+			String responseSatisfactionLink = ApplicationProperties.getProperty("request.baseurl") + "#" + AppPlace.RESPONSEUSERSATISFACTION;
+			responseSatisfactionLink += ";responseId=" + response.getId().toString();
+			responseSatisfactionLink += ";responseKey=" + response.getResponseKey();
 			User user = response.getRequest().getUser();
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
-			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), responseSatisfactionLink, response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
 			response.setNotifiedSatisfaction(true);
 
 			hibernate = HibernateUtil.getSession();
