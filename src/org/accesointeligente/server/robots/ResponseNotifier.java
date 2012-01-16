@@ -55,24 +55,14 @@ public class ResponseNotifier {
 
 			for (Response response : responses) {
 				logger.info("responseId = " + response.getId());
-
-				try {
-					createResponseNotification(response);
-
-				} catch (Exception ex) {
-					if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
-						hibernate.getTransaction().rollback();
-					}
-
-					logger.error("responseId = " + response.getId(), ex);
-				}
+				createResponseNotification(response);
 			}
 		} catch (Exception ex) {
 			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 				hibernate.getTransaction().rollback();
 			}
 
-			logger.error("Failure", ex);
+			logger.error(ex.getMessage(), ex);
 		}
 
 		try {
@@ -88,17 +78,7 @@ public class ResponseNotifier {
 			for (Response response : responses) {
 				if ((((new Date()).getTime() - response.getDate().getTime())/ MILLISECONDS_PER_DAY) > 1) {
 					logger.info("responseId = " + response.getId());
-
-					try {
-						createUserSatisfactionNotification(response);
-
-					} catch (Exception ex) {
-						if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
-							hibernate.getTransaction().rollback();
-						}
-
-						logger.error("responseId = " + response.getId(), ex);
-					}
+					createUserSatisfactionNotification(response);
 				}
 			}
 		} catch (Exception ex) {
@@ -106,41 +86,56 @@ public class ResponseNotifier {
 				hibernate.getTransaction().rollback();
 			}
 
-			logger.error("Failure", ex);
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
 	public void createResponseNotification(Response response) {
 		Session hibernate = null;
+		try {
+			User user = response.getRequest().getUser();
+			Notification notification = new Notification();
+			notification.setEmail(user.getEmail());
+			notification.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			response.setNotified(true);
 
-		User user = response.getRequest().getUser();
-		Notification notification = new Notification();
-		notification.setEmail(user.getEmail());
-		notification.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
-		notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
-		response.setNotified(true);
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			hibernate.saveOrUpdate(response);
+			hibernate.saveOrUpdate(notification);
+			hibernate.getTransaction().commit();
+		} catch (Exception ex) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+				hibernate.getTransaction().rollback();
+			}
 
-		hibernate = HibernateUtil.getSession();
-		hibernate.beginTransaction();
-		hibernate.saveOrUpdate(response);
-		hibernate.saveOrUpdate(notification);
-		hibernate.getTransaction().commit();
+			logger.error("Couldn't create ResponseNotification", ex);
+		}
 	}
 
 	public void createUserSatisfactionNotification(Response response) {
 		Session hibernate = null;
 
-		User user = response.getRequest().getUser();
-		Notification notification = new Notification();
-		notification.setEmail(user.getEmail());
-		notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
-		notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
-		response.setNotifiedSatisfaction(true);
+		try {
+			User user = response.getRequest().getUser();
+			Notification notification = new Notification();
+			notification.setEmail(user.getEmail());
+			notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			response.setNotifiedSatisfaction(true);
 
-		hibernate = HibernateUtil.getSession();
-		hibernate.beginTransaction();
-		hibernate.saveOrUpdate(response);
-		hibernate.saveOrUpdate(notification);
-		hibernate.getTransaction().commit();
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			hibernate.saveOrUpdate(response);
+			hibernate.saveOrUpdate(notification);
+			hibernate.getTransaction().commit();
+		} catch (Exception ex) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+				hibernate.getTransaction().rollback();
+			}
+
+			logger.error("Couldn't create Response UserSatisfactionNotification", ex);
+		}
 	}
 }
