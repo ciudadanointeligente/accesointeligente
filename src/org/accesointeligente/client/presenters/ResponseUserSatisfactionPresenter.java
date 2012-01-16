@@ -118,7 +118,7 @@ public class ResponseUserSatisfactionPresenter extends Presenter<ResponseUserSat
 						public void onSuccess(Request result) {
 							if (result != null) {
 								request = result;
-								if (response.getUserSatisfaction() != null) {
+								if (response.getUserSatisfaction() != null && response.getUserSatisfaction() != UserSatisfaction.NOANSWER) {
 									getView().showUserSatisfactionPanel(false);
 									getView().showRequestStatusPanel(false);
 								}
