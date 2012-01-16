@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+				"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+								"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.accesointeligente.model">
 	<class name="Request">
@@ -47,6 +47,11 @@
 		<property name="userSatisfaction">
 			<type name="org.accesointeligente.server.EnumUserType">
 				<param name="enumClassName">org.accesointeligente.shared.UserSatisfaction</param>
+			</type>
+		</property>
+		<property name="expired">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.RequestExpiredType</param>
 			</type>
 		</property>
 	</class>
