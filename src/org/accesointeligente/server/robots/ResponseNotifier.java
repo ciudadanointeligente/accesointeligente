@@ -97,6 +97,15 @@ public class ResponseNotifier {
 	public void createResponseNotification(Response response) {
 		Session hibernate = null;
 		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			response = (Response) hibernate.get(Response.class, response.getId());
+			Hibernate.initialize(response.getRequest());
+			if (response.getRequest() != null) {
+				Hibernate.initialize(response.getRequest().getUser());
+			} else {
+				throw new Exception("The response doesn't have an assigned Request");
+			}
 			User user = response.getRequest().getUser();
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
@@ -104,8 +113,6 @@ public class ResponseNotifier {
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
 			response.setNotified(true);
 
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
 			hibernate.saveOrUpdate(response);
 			hibernate.saveOrUpdate(notification);
 			hibernate.getTransaction().commit();
@@ -125,6 +132,15 @@ public class ResponseNotifier {
 			String responseSatisfactionLink = ApplicationProperties.getProperty("request.baseurl") + "#" + AppPlace.RESPONSEUSERSATISFACTION;
 			responseSatisfactionLink += ";responseId=" + response.getId().toString();
 			responseSatisfactionLink += ";responseKey=" + response.getResponseKey();
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			response = (Response) hibernate.get(Response.class, response.getId());
+			Hibernate.initialize(response.getRequest());
+			if (response.getRequest() != null) {
+				Hibernate.initialize(response.getRequest().getUser());
+			} else {
+				throw new Exception("The response doesn't have an assigned Request");
+			}
 			User user = response.getRequest().getUser();
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
@@ -132,8 +148,6 @@ public class ResponseNotifier {
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), responseSatisfactionLink, response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
 			response.setNotifiedSatisfaction(true);
 
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
 			hibernate.saveOrUpdate(response);
 			hibernate.saveOrUpdate(notification);
 			hibernate.getTransaction().commit();
