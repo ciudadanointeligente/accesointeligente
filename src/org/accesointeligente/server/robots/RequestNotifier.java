@@ -68,7 +68,7 @@ public class RequestNotifier {
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.add(Restrictions.eq("expired",  RequestExpireType.ONTIME));
+			criteria.add(Restrictions.or(Restrictions.eq("expired",  RequestExpireType.ONTIME), Restrictions.isNull("expired")));
 			List<Request> requests = criteria.list();
 			hibernate.getTransaction().commit();
 
