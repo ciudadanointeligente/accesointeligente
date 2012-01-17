@@ -19,6 +19,7 @@
 package org.accesointeligente.shared;
 
 public enum RequestExpireType {
+	WITHRESPONSE("Con respuesta"),
 	ONTIME("A tiempo"),
 	EXPIRESSOON("Pronta a vencer"),
 	EXPIRED("Vencida");

@@ -24,6 +24,7 @@ import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.UserSatisfaction;
 
 import org.apache.log4j.Logger;
@@ -112,6 +113,7 @@ public class ResponseNotifier {
 			notification.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
 			notification.setDate(new Date());
+			response.getRequest().setExpired(RequestExpireType.WITHRESPONSE);
 			response.setNotified(true);
 
 			hibernate.saveOrUpdate(response);
