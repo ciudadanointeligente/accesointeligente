@@ -25,13 +25,14 @@ import org.apache.log4j.Logger;
 import java.util.TimerTask;
 
 public class ResponseNotificationTask extends TimerTask {
-	private static final Logger logger = Logger.getLogger(ResponseNotificationTask.class);
+	private static Logger logger;
 
 	@Override
 	public void run() {
 		new Thread() {
 			@Override
 			public void run() {
+				logger = Logger.getLogger(ResponseNotificationTask.class);
 				logger.info("Begin");
 
 				try {
