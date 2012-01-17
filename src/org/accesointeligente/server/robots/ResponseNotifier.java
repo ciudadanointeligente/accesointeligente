@@ -129,9 +129,6 @@ public class ResponseNotifier {
 		Session hibernate = null;
 
 		try {
-			String responseSatisfactionLink = ApplicationProperties.getProperty("request.baseurl") + "#" + AppPlace.RESPONSEUSERSATISFACTION;
-			responseSatisfactionLink += ";responseId=" + response.getId().toString();
-			responseSatisfactionLink += ";responseKey=" + response.getResponseKey();
 			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 			response = (Response) hibernate.get(Response.class, response.getId());
@@ -141,7 +138,12 @@ public class ResponseNotifier {
 			} else {
 				throw new Exception("The response doesn't have an assigned Request");
 			}
+
 			User user = response.getRequest().getUser();
+
+			String responseSatisfactionLink = ApplicationProperties.getProperty("request.baseurl") + "#" + AppPlace.RESPONSEUSERSATISFACTION;
+			responseSatisfactionLink += ";responseId=" + response.getId().toString();
+			responseSatisfactionLink += ";responseKey=" + response.getResponseKey();
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
