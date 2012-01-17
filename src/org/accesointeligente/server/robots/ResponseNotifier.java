@@ -24,6 +24,7 @@ import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.AppPlace;
+import org.accesointeligente.shared.UserSatisfaction;
 
 import org.apache.log4j.Logger;
 import org.hibernate.*;
@@ -74,7 +75,7 @@ public class ResponseNotifier {
 			Criteria criteria = hibernate.createCriteria(Response.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.add(Restrictions.eq("notifiedSatisfaction", Boolean.FALSE));
-			criteria.add(Restrictions.or(Restrictions.eq("userSatisfaction", "NOANSWER"), Restrictions.isNull("userSatisfaction")));
+			criteria.add(Restrictions.or(Restrictions.eq("userSatisfaction", UserSatisfaction.NOANSWER), Restrictions.isNull("userSatisfaction")));
 			List<Response> responses = criteria.list();
 			hibernate.getTransaction().commit();
 
