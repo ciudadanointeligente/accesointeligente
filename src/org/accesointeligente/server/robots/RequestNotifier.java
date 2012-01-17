@@ -96,6 +96,7 @@ public class RequestNotifier {
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.request.expired.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.request.expired.body"), user.getFirstName(), request.getInstitution().getName(), ApplicationProperties.getProperty("request.baseurl"), request.getId(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setDate(new Date());
 			request.setExpired(RequestExpireType.EXPIRED);
 
 			hibernate = HibernateUtil.getSession();
@@ -121,6 +122,7 @@ public class RequestNotifier {
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.request.expiressoon.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.request.expiressoon.body"), user.getFirstName(), request.getInstitution().getName(), ApplicationProperties.getProperty("request.baseurl"), request.getId(), request.getTitle(), request.getConfirmationDate()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setDate(new Date());
 			request.setExpired(RequestExpireType.EXPIRESSOON);
 
 			hibernate = HibernateUtil.getSession();

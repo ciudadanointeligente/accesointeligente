@@ -111,6 +111,7 @@ public class ResponseNotifier {
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setDate(new Date());
 			response.setNotified(true);
 
 			hibernate.saveOrUpdate(response);
@@ -148,6 +149,7 @@ public class ResponseNotifier {
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), responseSatisfactionLink, response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setDate(new Date());
 			response.setNotifiedSatisfaction(true);
 
 			hibernate.saveOrUpdate(response);
