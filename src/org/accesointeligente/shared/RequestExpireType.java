@@ -1,7 +1,7 @@
 /**
  * Acceso Inteligente
  *
- * Copyright (C) 2010-2011 Fundación Ciudadano Inteligente
+ * Copyright (C) 2010-2012 Fundación Ciudadano Inteligente
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,15 +16,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.client.uihandlers;
+package org.accesointeligente.shared;
 
-import org.accesointeligente.shared.*;
+public enum RequestExpireType {
+	ONTIME("A tiempo"),
+	EXPIRESSOON("Pronta a vencer"),
+	EXPIRED("Vencida");
 
-import com.gwtplatform.mvp.client.UiHandlers;
+	private String name;
 
-public interface ResponseUserSatisfactionUiHandlers extends UiHandlers {
-	void updateResponse(ResponseType responseType, UserSatisfaction userSatisfaction);
-	RequestStatus getRequestStatus();
-	void goHome();
-	void showNotification(String message, NotificationEventType type);
+	private RequestExpireType(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

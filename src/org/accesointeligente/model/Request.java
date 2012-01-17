@@ -20,6 +20,7 @@ package org.accesointeligente.model;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.RequestStatus;
 import org.accesointeligente.shared.UserSatisfaction;
 
@@ -46,6 +47,7 @@ public class Request extends LightEntity {
 	private Set<RequestComment> comments;
 	private Double qualification;
 	private UserSatisfaction userSatisfaction;
+	private RequestExpireType expired;
 
 	public Integer getId() {
 		return id;
@@ -189,5 +191,13 @@ public class Request extends LightEntity {
 
 	public void setUserSatisfaction(UserSatisfaction userSatisfaction) {
 		this.userSatisfaction = userSatisfaction;
+	}
+
+	public RequestExpireType getExpired() {
+		return expired;
+	}
+
+	public void setExpired(RequestExpireType expired) {
+		this.expired = expired;
 	}
 }

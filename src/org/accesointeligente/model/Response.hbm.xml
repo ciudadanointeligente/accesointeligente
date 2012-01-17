@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+				"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+								"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.accesointeligente.model">
 	<class name="Response">
@@ -21,6 +21,7 @@
 		</set>
 		<one-to-one name="userResponse" class="UserResponse" property-ref="response"/>
 		<property name="notified"/>
+		<property name="notifiedSatisfaction"/>
 		<property name="userSatisfaction">
 			<type name="org.accesointeligente.server.EnumUserType">
 				<param name="enumClassName">org.accesointeligente.shared.UserSatisfaction</param>

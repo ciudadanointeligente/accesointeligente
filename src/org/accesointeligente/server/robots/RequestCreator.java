@@ -21,6 +21,7 @@ package org.accesointeligente.server.robots;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.RobotContext;
+import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.apache.log4j.Logger;
@@ -62,6 +63,7 @@ public class RequestCreator {
 						request = robot.makeRequest(request);
 						hibernate = HibernateUtil.getSession();
 						hibernate.beginTransaction();
+						request.setExpired(RequestExpireType.ONTIME);
 						hibernate.update(request);
 						hibernate.getTransaction().commit();
 					}

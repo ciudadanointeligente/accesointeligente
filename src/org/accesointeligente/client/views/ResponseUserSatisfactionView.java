@@ -50,6 +50,8 @@ public class ResponseUserSatisfactionView extends ViewWithUiHandlers<ResponseUse
 	@UiField RadioButton responseRadioButtonIncomplete;
 	@UiField Button submitUserInsatisfactionButton;
 	@UiField Button cancelUserInstafiscationButton;
+	@UiField HTMLPanel backHomePanel;
+	@UiField Button backHomeButton;
 
 	public ResponseUserSatisfactionView() {
 		widget = uiBinder.createAndBindUi(this);
@@ -72,6 +74,11 @@ public class ResponseUserSatisfactionView extends ViewWithUiHandlers<ResponseUse
 	@Override
 	public void showRequestStatusPanel(Boolean visible) {
 		requestStatusPanel.setVisible(visible);
+	}
+
+	@Override
+	public void showBackHomePanel(Boolean visible) {
+		backHomePanel.setVisible(visible);
 	}
 
 	@UiHandler("userSatisfiedButton")
@@ -106,5 +113,10 @@ public class ResponseUserSatisfactionView extends ViewWithUiHandlers<ResponseUse
 	public void onCancelUserInstafiscationButtonClick(ClickEvent event) {
 		showUserSatisfactionPanel(true);
 		showRequestStatusPanel(false);
+	}
+
+	@UiHandler("backHomeButton")
+	public void onBackHomeButtonClick(ClickEvent event) {
+		getUiHandlers().goHome();
 	}
 }

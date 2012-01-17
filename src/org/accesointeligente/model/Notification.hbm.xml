@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+		"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+				"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.accesointeligente.model">
+	<class name="Notification">
+		<id name="id">
+			<generator class="identity"/>
+		</id>
+		<property name="email"/>
+		<property name="subject"/>
+		<property name="message">
+			<column name="message" sql-type="text"/>
+		</property>
+		<property name="date"/>
+		<property name="dispatched"/>
+	</class>
+</hibernate-mapping>
