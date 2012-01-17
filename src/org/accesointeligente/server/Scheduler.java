@@ -42,7 +42,6 @@ public class Scheduler implements Runnable {
 		timer.schedule(new RequestCreationTask(), 0, 3600000);
 		timer.schedule(new ResponseCheckerTask(), 120000, 3600000);
 		timer.schedule(new ResponseNotificationTask(), 900000, 3600000);
-		timer.schedule(new RequestUpdateTask(), 1800000, 3600000);
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, 1);
