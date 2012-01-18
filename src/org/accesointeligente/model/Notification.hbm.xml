@@ -14,6 +14,11 @@
 			<column name="message" sql-type="text"/>
 		</property>
 		<property name="date"/>
+		<property name="type">
+			<type name="org.accesointeligente.server.EnumUserType">
+				<param name="enumClassName">org.accesointeligente.shared.NotificationType</param>
+			</type>
+		</property>
 		<property name="dispatched"/>
 	</class>
 </hibernate-mapping>
