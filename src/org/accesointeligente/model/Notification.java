@@ -18,6 +18,8 @@
  */
 package org.accesointeligente.model;
 
+import org.accesointeligente.shared.NotificationType;
+
 import java.util.Date;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
@@ -29,6 +31,7 @@ public class Notification extends LightEntity {
 	private String subject;
 	private String message;
 	private Date date;
+	private NotificationType type;
 	private Boolean dispatched = false;
 
 	public Integer getId() {
@@ -69,6 +72,14 @@ public class Notification extends LightEntity {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public NotificationType getType() {
+		return type;
+	}
+
+	public void setType(NotificationType type) {
+		this.type = type;
 	}
 
 	public Boolean getDispatched() {
