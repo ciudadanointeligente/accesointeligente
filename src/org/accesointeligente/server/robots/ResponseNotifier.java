@@ -23,9 +23,7 @@ import org.accesointeligente.model.Response;
 import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.shared.AppPlace;
-import org.accesointeligente.shared.RequestExpireType;
-import org.accesointeligente.shared.UserSatisfaction;
+import org.accesointeligente.shared.*;
 
 import org.apache.log4j.Logger;
 import org.hibernate.*;
@@ -112,6 +110,7 @@ public class ResponseNotifier {
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.arrived.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.arrived.body"), user.getFirstName(), ApplicationProperties.getProperty("request.baseurl"), response.getRequest().getId(), response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setType(NotificationType.RESPONSEARRIVED);
 			notification.setDate(new Date());
 			response.getRequest().setExpired(RequestExpireType.WITHRESPONSE);
 			response.setNotified(true);
@@ -151,6 +150,7 @@ public class ResponseNotifier {
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), responseSatisfactionLink, response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setType(NotificationType.RESPONSESATISFACTION);
 			notification.setDate(new Date());
 			response.setNotifiedSatisfaction(true);
 
