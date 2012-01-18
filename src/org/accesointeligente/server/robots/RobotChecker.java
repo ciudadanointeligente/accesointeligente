@@ -47,6 +47,7 @@ public class RobotChecker {
 
 			for (Institution institution : institutions) {
 				Robot robot = RobotContext.getRobot(institution.getInstitutionClass());
+				logger.info("institutionId: " + institution.getId());
 
 				enabled = institution.getEnabled();
 

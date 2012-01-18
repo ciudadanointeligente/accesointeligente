@@ -19,7 +19,7 @@
 
 	<bean id="CajaDePrevisionDeLaDefensaNacional" class="org.accesointeligente.server.robots.SGS" scope="prototype">
 		<constructor-arg name="idEntidad" value="110"/>
-		<constructor-arg name="baseUrl" value="http://200.11.68.116/index.php"/>
+		<constructor-arg name="baseUrl" value="http://transparencia.capredena.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
@@ -383,7 +383,7 @@
 
 	<bean id="GobiernoRegionalDeValparaiso" class="org.accesointeligente.server.robots.SGS" scope="prototype">
 		<constructor-arg name="idEntidad" value="81"/>
-		<constructor-arg name="baseUrl" value="http://200.68.28.220/sgs/index.php"/>
+		<constructor-arg name="baseUrl" value="http://www.gorevalparaiso.gob.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
