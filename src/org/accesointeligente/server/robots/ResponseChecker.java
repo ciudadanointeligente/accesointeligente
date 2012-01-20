@@ -172,7 +172,7 @@ public class ResponseChecker {
 							hibernate.beginTransaction();
 
 							response.setRequest(request);
-							request.setStatus(RequestStatus.CLOSED);
+							request.setStatus(RequestStatus.RESPONDED);
 							request.setResponseDate(new Date());
 							hibernate.update(request);
 							hibernate.update(response);

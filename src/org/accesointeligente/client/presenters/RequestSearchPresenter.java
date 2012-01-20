@@ -24,13 +24,13 @@ import org.accesointeligente.model.Institution;
 import org.accesointeligente.shared.RequestSearchEvent;
 import org.accesointeligente.shared.RequestSearchParams;
 
-import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
 
 import java.util.*;
 
@@ -47,7 +47,6 @@ public class RequestSearchPresenter extends PresenterWidget<RequestSearchPresent
 		Boolean getStatusPending();
 		Boolean getStatusClosed();
 		Boolean getStatusExpired();
-		Boolean getStatusDerived();
 		void resetFilters();
 	}
 
@@ -98,7 +97,6 @@ public class RequestSearchPresenter extends PresenterWidget<RequestSearchPresent
 		params.setStatusPending(getView().getStatusPending());
 		params.setStatusClosed(getView().getStatusClosed());
 		params.setStatusExpired(getView().getStatusExpired());
-		params.setStatusDerived(getView().getStatusDerived());
 		fireEvent(new RequestSearchEvent(params));
 	}
 

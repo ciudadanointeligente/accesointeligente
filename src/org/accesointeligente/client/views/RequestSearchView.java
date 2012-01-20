@@ -22,8 +22,6 @@ import org.accesointeligente.client.presenters.RequestSearchPresenter;
 import org.accesointeligente.client.uihandlers.RequestSearchUiHandlers;
 import org.accesointeligente.model.Institution;
 
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -33,6 +31,8 @@ import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.datepicker.client.DateBox;
+
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import java.util.Date;
 import java.util.Map;
@@ -50,7 +50,6 @@ public class RequestSearchView extends ViewWithUiHandlers<RequestSearchUiHandler
 	@UiField CheckBox statusPending;
 	@UiField CheckBox statusClosed;
 	@UiField CheckBox statusExpired;
-	@UiField CheckBox statusDerived;
 	@UiField Button search;
 	@UiField Button clear;
 
@@ -105,11 +104,6 @@ public class RequestSearchView extends ViewWithUiHandlers<RequestSearchUiHandler
 	}
 
 	@Override
-	public Boolean getStatusDerived() {
-		return statusDerived.getValue();
-	}
-
-	@Override
 	public void displayMessage(String message) {
 		Window.alert(message);
 	}
@@ -129,7 +123,6 @@ public class RequestSearchView extends ViewWithUiHandlers<RequestSearchUiHandler
 		statusPending.setValue(true);
 		statusClosed.setValue(true);
 		statusExpired.setValue(true);
-		statusDerived.setValue(true);
 	}
 
 	@UiFactory

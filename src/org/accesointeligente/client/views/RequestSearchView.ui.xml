@@ -55,9 +55,6 @@
 							<td>
 								<g:CheckBox ui:field="statusExpired" checked="true">Vencido</g:CheckBox>
 							</td>
-							<td>
-								<g:CheckBox ui:field="statusDerived" checked="true">Derivado</g:CheckBox>
-							</td>
 						</tr>
 					</table>
 				</g:HTMLPanel>
