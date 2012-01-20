@@ -299,10 +299,8 @@ public class SGSOnemi extends Robot {
 			// TODO: check if request expired
 			if (statusLabel.equals("En Proceso")) {
 				return RequestStatus.PENDING;
-			} else if (statusLabel.equals("Respondida") || statusLabel.equals("Finalizada")) {
-				return RequestStatus.CLOSED;
-			} else if (statusLabel.equals("Derivada")) {
-				return RequestStatus.DERIVED;
+			} else if (statusLabel.equals("Respondida")) {
+				return RequestStatus.RESPONDED;
 			} else {
 				return null;
 			}

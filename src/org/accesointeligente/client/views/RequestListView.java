@@ -98,7 +98,7 @@ public class RequestListView extends ViewWithUiHandlers<RequestListUiHandlers> i
 			public CustomImageCellParams getValue(final Request request) {
 				CustomImageCellParams params = new CustomImageCellParams();
 
-				if (RequestStatus.CLOSED.equals(request.getStatus()) && (request.getResponses() == null || request.getResponses().size() == 0)) {
+				if (RequestStatus.NOANSWER.equals(request.getStatus()) || (request.getResponses() == null || request.getResponses().size() == 0)) {
 					params.setUrl(new SafeUri() {
 							@Override
 							public String asString() {

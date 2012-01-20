@@ -32,7 +32,6 @@ public class RequestSearchParams implements Serializable {
 	private Boolean statusPending;
 	private Boolean statusClosed;
 	private Boolean statusExpired;
-	private Boolean statusDerived;
 
 	public String getKeyWord() {
 		return keyWord;
@@ -88,13 +87,5 @@ public class RequestSearchParams implements Serializable {
 
 	public void setStatusExpired(Boolean statusExpired) {
 		this.statusExpired = statusExpired;
-	}
-
-	public Boolean getStatusDerived() {
-		return statusDerived;
-	}
-
-	public void setStatusDerived(Boolean statusDerived) {
-		this.statusDerived = statusDerived;
 	}
 }
