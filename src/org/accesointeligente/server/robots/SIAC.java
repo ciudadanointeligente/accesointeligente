@@ -216,9 +216,7 @@ public class SIAC extends Robot {
 			if (statusLabel.equals("Ingreso de Solicitud")) {
 				return RequestStatus.PENDING;
 			} else if (statusLabel.equals("Respuesta Solucionada")) {
-				return RequestStatus.CLOSED;
-			} else if (statusLabel.equals("DerivaciÃ³n a Externos")) {
-				return RequestStatus.DERIVED;
+				return RequestStatus.RESPONDED;
 			} else {
 				return null;
 			}

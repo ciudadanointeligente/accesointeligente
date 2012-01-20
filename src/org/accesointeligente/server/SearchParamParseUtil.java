@@ -18,6 +18,7 @@
  */
 package org.accesointeligente.server;
 
+import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
 
@@ -61,22 +62,17 @@ public class SearchParamParseUtil {
 			criteria.add(Restrictions.le("confirmationDate", params.getMaxDate()));
 		}
 
-		if (params.getStatusClosed() || params.getStatusDerived() || params.getStatusExpired() || params.getStatusPending()) {
+		if (params.getStatusClosed() || params.getStatusExpired() || params.getStatusPending()) {
 			Disjunction statusDisjunction = Restrictions.disjunction();
 
 			// Closed Marked
 			if (params.getStatusClosed()) {
-				statusDisjunction.add(Restrictions.eq("status", RequestStatus.CLOSED));
-			}
-
-			// Derived Marked
-			if (params.getStatusDerived()) {
-				statusDisjunction.add(Restrictions.eq("status", RequestStatus.DERIVED));
+				statusDisjunction.add(Restrictions.eq("status", RequestStatus.RESPONDED));
 			}
 
 			// Expired Marked
 			if (params.getStatusExpired()) {
-				statusDisjunction.add(Restrictions.eq("status", RequestStatus.EXPIRED));
+				statusDisjunction.add(Restrictions.eq("expired", RequestExpireType.EXPIRED));
 			}
 
 			// Pending Marked
@@ -119,22 +115,12 @@ public class SearchParamParseUtil {
 			filters += " AND confirmationDate <= :maxDate ";
 		}
 
-		if (params.getStatusClosed() || params.getStatusDerived() || params.getStatusExpired() || params.getStatusPending()) {
+		if (params.getStatusClosed() || params.getStatusPending()) {
 			filters += " AND status IN (";
 
 			// Closed Marked
 			if (params.getStatusClosed()) {
-				filters += "'" + RequestStatus.CLOSED.toString() + "',";
-			}
-
-			// Derived Marked
-			if (params.getStatusDerived()) {
-				filters += "'" + RequestStatus.DERIVED.toString() + "',";
-			}
-
-			// Expired Marked
-			if (params.getStatusExpired()) {
-				filters += "'" + RequestStatus.EXPIRED.toString() + "',";
+				filters += "'" + RequestStatus.RESPONDED.toString() + "',";
 			}
 
 			// Pending Marked
@@ -149,6 +135,14 @@ public class SearchParamParseUtil {
 
 			filters += " )";
 		}
+
+		if (params.getStatusExpired()) {
+			// Expired Marked
+			if (params.getStatusExpired()) {
+				filters += " AND expired = '" + RequestExpireType.EXPIRED.toString() + "' ";
+			}
+		}
+
 		return filters;
 	}
 }

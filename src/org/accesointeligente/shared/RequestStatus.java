@@ -22,12 +22,9 @@ public enum RequestStatus {
 	DRAFT("Borrador", "images/borrador.png"),
 	NEW("Pendiente", "images/pendiente.png"),
 	PENDING("Pendiente", "images/pendiente.png"),
-	EXPIRED("Vencida", "images/vencida.png"),
-	CLOSED("Cerrada", "images/cerrada.png"),
-	DERIVED("Derivada", "images/derivada.png"),
 	ERROR("Pendiente", "images/pendiente.png"),
-	EXTENDED("Prorroga", "images/prorroga.png"),
-	DENIED("Denegada", "images/denegada.png");
+	RESPONDED("Respondida", "images/cerrada.png"),
+	NOANSWER("Sin respuesta", "images/pendiente.png");
 
 	private String name;
 	private String url;

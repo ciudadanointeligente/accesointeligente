@@ -339,9 +339,7 @@ public class SGS extends Robot {
 			if (statusLabel.equals("En Proceso")) {
 				return RequestStatus.PENDING;
 			} else if (statusLabel.equals("Respondida")) {
-				return RequestStatus.CLOSED;
-			} else if (statusLabel.equals("Derivada")) {
-				return RequestStatus.DERIVED;
+				return RequestStatus.RESPONDED;
 			} else {
 				return null;
 			}
