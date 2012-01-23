@@ -19,8 +19,8 @@
 package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Request;
-import org.accesointeligente.model.external.SGSListResult;
 import org.accesointeligente.server.ApplicationProperties;
+import org.accesointeligente.server.services.RequestServiceImpl;
 import org.accesointeligente.shared.RequestStatus;
 
 import org.apache.http.*;
@@ -36,8 +36,6 @@ import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 
-import com.google.gson.Gson;
-
 import java.beans.ConstructorProperties;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -46,6 +44,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This robot works only with SGS 1.0.22 and 1.0.3
+ *
+ */
 public class SGS extends Robot {
 	private static final Logger logger = Logger.getLogger(SGS.class);
 	private HttpClient client;
@@ -62,10 +64,6 @@ public class SGS extends Robot {
 	private String requestCreatedAction = "?accion=solicitud-de-informacion&act=5";
 	private String requestViewAction = "?accion=mis-solicitudes&act=1";
 	private String requestListAction = "?accion=Mis-Solicitudes";
-	private String requestAjaxOption = "&act=6&axj=1";
-	private String requestJsonListTotal = "&iDisplayStart=0&iDisplayLength=0";
-	private String requestJsonListStart = "&iDisplayStart=";
-	private String requestJsonListLength = "&iDisplayLength=";
 
 	public SGS() {
 		client = new DefaultHttpClient();
@@ -188,7 +186,7 @@ public class SGS extends Robot {
 			request.setStatus(RequestStatus.PENDING);
 			request.setProcessDate(new Date());
 
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY || response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
 				location = response.getFirstHeader("Location");
 
 				if (location == null) {
@@ -245,52 +243,26 @@ public class SGS extends Robot {
 				}
 
 				try {
+
 					// The last row of the table has the request
 					TagNode tableContainer = document.findElementByAttValue("id", "table-block", true, true);
 					TagNode[] tableRows = tableContainer.getChildTags()[0].getChildTags()[0].getChildTags();
 					TagNode lastRow = tableRows[tableRows.length - 1];
 
-					// FIXME: verify that the identifier found isn't already used
+					// Verify that the identifier found isn't already used
 					if (lastRow.getChildTags().length == 6) {
 						remoteIdentifier = lastRow.getChildTags()[0].getText().toString().trim();
-						request.setRemoteIdentifier(remoteIdentifier);
+						RequestServiceImpl requestService = new RequestServiceImpl();
+						Request previousRequest = requestService.getRequest(remoteIdentifier);
+						if (previousRequest == null) {
+							request.setRemoteIdentifier(remoteIdentifier);
+						} else {
+							request.setStatus(RequestStatus.ERROR);
+							logger.error("The remote identifier: " + remoteIdentifier + " is already in use");
+						}
 					}
 				} catch (Exception ex) {
 					logger.error("Couldn't found remote identifier in SGS request list", ex);
-				}
-
-				// If we couldn't get the remote identifier, it must be SGS 1.1. We'll try to get the identifier via JSON requests
-				if (request.getRemoteIdentifier() == null) {
-					try {
-						Gson gsonEncoder = new Gson();
-						String jsonResponse = null;
-						String jsonQueryUrl = baseUrl + requestListAction + requestAjaxOption + requestJsonListTotal;
-
-						SGSListResult sgsListResult = new SGSListResult();
-						Integer totalResults = 0;
-
-						// First we get the total of requests made to the system
-						response = client.execute(new HttpGet(jsonQueryUrl));
-						document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
-						jsonResponse = document.getText().toString();
-						sgsListResult = gsonEncoder.fromJson(jsonResponse, SGSListResult.class);
-
-						totalResults = sgsListResult.getTotalRecords();
-						totalResults--;
-
-						// Then we fetch the last identifier and use it for our request
-						response = client.execute(new HttpGet(baseUrl + requestListAction + requestAjaxOption + requestJsonListStart + totalResults.toString() + requestJsonListLength + "1"));
-						document = cleaner.clean(new InputStreamReader(response.getEntity().getContent(), characterEncoding));
-						jsonResponse = document.getText().toString();
-						sgsListResult = gsonEncoder.fromJson(jsonResponse, SGSListResult.class);
-						remoteIdentifier = sgsListResult.getSgsRequests()[0][0];
-
-						request.setRemoteIdentifier(remoteIdentifier);
-					} catch (Exception ex) {
-						logger.error(ex.getMessage(), ex);
-						request.setStatus(RequestStatus.ERROR);
-						return request;
-					}
 				}
 			}
 
@@ -325,12 +297,7 @@ public class SGS extends Robot {
 			statusCell = document.findElementByAttValue("width", "36%", true, true);
 
 			if (statusCell == null) {
-				// If we couldn't get the status, it must be SGS 1.1. We'll try to get the new assigned cell
-				statusCell = document.findElementByAttValue("width", "28%", true, true);
-
-				if (statusCell == null) {
-					throw new RobotException("Invalid status text cell");
-				}
+				throw new RobotException("Invalid status text cell");
 			}
 
 			statusLabel = statusCell.getText().toString().trim();
@@ -500,35 +467,4 @@ public class SGS extends Robot {
 		this.requestListAction = requestListAction;
 	}
 
-	public String getRequestAjaxOption() {
-		return requestAjaxOption;
-	}
-
-	public void setRequestAjaxOption(String requestAjaxOption) {
-		this.requestAjaxOption = requestAjaxOption;
-	}
-
-	public String getRequestJsonListTotal() {
-		return requestJsonListTotal;
-	}
-
-	public void setRequestJsonListTotal(String requestJsonListTotal) {
-		this.requestJsonListTotal = requestJsonListTotal;
-	}
-
-	public String getRequestJsonListStart() {
-		return requestJsonListStart;
-	}
-
-	public void setRequestJsonListStart(String requestJsonListStart) {
-		this.requestJsonListStart = requestJsonListStart;
-	}
-
-	public String getRequestJsonListLength() {
-		return requestJsonListLength;
-	}
-
-	public void setRequestJsonListLength(String requestJsonListLength) {
-		this.requestJsonListLength = requestJsonListLength;
-	}
 }
