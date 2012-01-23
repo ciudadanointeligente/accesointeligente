@@ -256,7 +256,7 @@ public class SGSOnemi extends Robot {
 						}
 					}
 				} catch (Exception ex) {
-					logger.error("Couldn't found remote identifier in SGS request list");
+					logger.error("Couldn't found remote identifier in SGS request list", ex);
 				}
 			}
 
