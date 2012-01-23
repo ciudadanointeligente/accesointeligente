@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="AgenciaDeCooperacionInternacional" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="AgenciaDeCooperacionInternacional" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="94"/>
 		<constructor-arg name="baseUrl" value="http://201.238.224.3:1055/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -17,28 +17,28 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="CajaDePrevisionDeLaDefensaNacional" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="CajaDePrevisionDeLaDefensaNacional" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="110"/>
 		<constructor-arg name="baseUrl" value="http://transparencia.capredena.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ComisionAdministradoraDelSistemaDeCreditosParaEstudiosSuperiores" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ComisionAdministradoraDelSistemaDeCreditosParaEstudiosSuperiores" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="151"/>
 		<constructor-arg name="baseUrl" value="http://sgs.ingresa.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ComisionChilenaDeEnergiaNuclear" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ComisionChilenaDeEnergiaNuclear" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="257"/>
 		<constructor-arg name="baseUrl" value="http://oirs.cchen.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ComisionChilenaDelCobre" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ComisionChilenaDelCobre" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="256"/>
 		<constructor-arg name="baseUrl" value="http://ares.cochilco.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -59,21 +59,21 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ComisionNacionalDeRiego" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ComisionNacionalDeRiego" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="250"/>
 		<constructor-arg name="baseUrl" value="http://sgs.cnr.gob.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ComiteDeInversionesExtranjeras" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ComiteDeInversionesExtranjeras" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="135"/>
 		<constructor-arg name="baseUrl" value="http://servapliext.cinver.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ConsejoDeDefensaDelEstado" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ConsejoDeDefensaDelEstado" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="263"/>
 		<constructor-arg name="baseUrl" value="http://www.cde.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -87,21 +87,21 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ConsejoNacionalDeAcreditacion" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ConsejoNacionalDeAcreditacion" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="281"/>
-		<constructor-arg name="baseUrl" value="http://www.cnachile.cl/SGS/index.php"/>
+		<constructor-arg name="baseUrl" value="http://www.cnachile.cl/SGS110/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ConsejoNacionalDeLaCulturaYLasArtes" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ConsejoNacionalDeLaCulturaYLasArtes" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="261"/>
 		<constructor-arg name="baseUrl" value="http://transparencia.cultura.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ConsejoNacionalDeTelevision" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ConsejoNacionalDeTelevision" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="132"/>
 		<constructor-arg name="baseUrl" value="http://sgscntv.cntv.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -115,7 +115,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="CorporacionDeAsistenciaJudicialRegionesTarapacaYAntofagasta" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="CorporacionDeAsistenciaJudicialRegionesTarapacaYAntofagasta" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="167"/>
 		<constructor-arg name="baseUrl" value="http://www.cajta.cl/SGS1.1/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -143,28 +143,28 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="CorporacionNacionalForestal" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="CorporacionNacionalForestal" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="251"/>
 		<constructor-arg name="baseUrl" value="http://sgs.odepa.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DefensaCivilDeChile" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DefensaCivilDeChile" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="107"/>
 		<constructor-arg name="baseUrl" value="http://www.defensacivil.cl/sgs_defensacivil/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DefensoriaPenalPublica" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DefensoriaPenalPublica" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="162"/>
 		<constructor-arg name="baseUrl" value="http://www.transparencia.dpp.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionAdministrativa" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionAdministrativa" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="106"/>
 		<constructor-arg name="baseUrl" value="http://www.ssffaa.gob.cl/sgs_ffaa11/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -178,35 +178,35 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionDelTrabajo" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionDelTrabajo" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="171"/>
 		<constructor-arg name="baseUrl" value="http://sgs.dt.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionDePresupuestos" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionDePresupuestos" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="117"/>
 		<constructor-arg name="baseUrl" value="http://scutum.dipres.cl:8080/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionDePrevisionDeCarabinerosDeChile" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionDePrevisionDeCarabinerosDeChile" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="111"/>
 		<constructor-arg name="baseUrl" value="http://200.68.3.138:81/sgs1.1/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionGeneralDeAeronauticaCivil" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionGeneralDeAeronauticaCivil" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="115"/>
 		<constructor-arg name="baseUrl" value="http://abeto.dgac.cl/ley/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionGeneralDeCreditoPrendario" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionGeneralDeCreditoPrendario" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="172"/>
 		<constructor-arg name="baseUrl" value="http://sgs.dicrep.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -220,7 +220,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionGeneralDeMovilizacionNacional" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionGeneralDeMovilizacionNacional" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="108"/>
 		<constructor-arg name="baseUrl" value="http://www.dgmn.cl/oirs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -241,28 +241,28 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="DireccionNacionalDelServicioCivil" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="DireccionNacionalDelServicioCivil" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="119"/>
 		<constructor-arg name="baseUrl" value="http://www.serviciocivil.gob.cl/gestionsolicitudes/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="EjercitoDeChile" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="EjercitoDeChile" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="101"/>
 		<constructor-arg name="baseUrl" value="http://solicitudtransparencia.ejercito.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="FiscaliaNacionalEconomica" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="FiscaliaNacionalEconomica" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="137"/>
 		<constructor-arg name="baseUrl" value="http://transparencia.fne.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="FondoDeSolidaridadEInversionSocial" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="FondoDeSolidaridadEInversionSocial" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="146"/>
 		<constructor-arg name="baseUrl" value="http://sai.fosis.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -283,14 +283,14 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GendarmeriaDeChile" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GendarmeriaDeChile" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="163"/>
 		<constructor-arg name="baseUrl" value="http://sgs.gendarmeria.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeAntofagasta" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeAntofagasta" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="78"/>
 		<constructor-arg name="baseUrl" value="http://www.goreantofagasta.gob.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -311,42 +311,42 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeAysen" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeAysen" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="89"/>
 		<constructor-arg name="baseUrl" value="http://sgs.goreaysen.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeCoquimbo" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeCoquimbo" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="80"/>
 		<constructor-arg name="baseUrl" value="http://www.gorecoquimbo.gob.cl/gestionsolicitudes/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeLaAraucania" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeLaAraucania" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="86"/>
 		<constructor-arg name="baseUrl" value="http://www.gorearaucania.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDelBiobio" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDelBiobio" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="85"/>
 		<constructor-arg name="baseUrl" value="http://sgs.gorebiobio.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDelMaule" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDelMaule" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="84"/>
 		<constructor-arg name="baseUrl" value="http://www.gobiernoregionaldelmaule.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeLosLagos" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeLosLagos" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="88"/>
 		<constructor-arg name="baseUrl" value="http://sgs.goreloslagos.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -360,14 +360,14 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeMagallanesYAntarticaChilena" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeMagallanesYAntarticaChilena" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="90"/>
 		<constructor-arg name="baseUrl" value="http://164.77.209.179/sgs1.1/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="GobiernoRegionalDeOHiggins" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="GobiernoRegionalDeOHiggins" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="83"/>
 		<constructor-arg name="baseUrl" value="http://sgs.dellibertador.cl/sgs1.1/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -388,7 +388,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="InstitutoAntarticoChileno" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="InstitutoAntarticoChileno" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="95"/>
 		<constructor-arg name="baseUrl" value="http://transparencia.inach.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -402,21 +402,21 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="InstitutoDeSeguridadLaboral" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="InstitutoDeSeguridadLaboral" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="174"/>
 		<constructor-arg name="baseUrl" value="http://sgs.isl.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="InstitutoGeograficoMilitar" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="InstitutoGeograficoMilitar" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="112"/>
 		<constructor-arg name="baseUrl" value="http://200.24.230.178/igm.cl/www/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="InstitutoNacionalDeLaJuventud" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="InstitutoNacionalDeLaJuventud" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="147"/>
 		<constructor-arg name="baseUrl" value="http://extranet.injuv.gob.cl/institucional/solicitudes/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -430,7 +430,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="InstitutoNacionalDePropiedadIntelectual" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="InstitutoNacionalDePropiedadIntelectual" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="280"/>
 		<constructor-arg name="baseUrl" value="http://www.inapi.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -466,7 +466,7 @@
 		<property name="requestFormAction" value="?accion=solicitud-de-informacion&amp;t=1"/>
 	</bean>
 
-	<bean id="OficinasDeEstudiosYPoliticasAgrarias" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="OficinasDeEstudiosYPoliticasAgrarias" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="253"/>
 		<constructor-arg name="baseUrl" value="http://sgs.odepa.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -480,7 +480,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="PresidenciaDeLaRepublica" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="PresidenciaDeLaRepublica" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="1"/>
 		<constructor-arg name="baseUrl" value="http://transparencia.presidencia.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -585,7 +585,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ServicioNacionalDelAdultoMayor" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ServicioNacionalDelAdultoMayor" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="129"/>
 		<constructor-arg name="baseUrl" value="http://sgs.senama.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -620,7 +620,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="ServicioNacionalDeTurismo" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="ServicioNacionalDeTurismo" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="140"/>
 		<constructor-arg name="baseUrl" value="http://www.sernatur.cl/images/X/sgs1.1/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -683,14 +683,14 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDeJusticia" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDeJusticia" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="158"/>
 		<constructor-arg name="baseUrl" value="http://web.minjusticia.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDelTrabajo" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDelTrabajo" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="169"/>
 		<constructor-arg name="baseUrl" value="http://www.mintrab.gob.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -704,7 +704,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDeMineria" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDeMineria" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="255"/>
 		<constructor-arg name="baseUrl" value="http://sgs.minmineria.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -718,42 +718,42 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDePlanificacionYCooperacion" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDePlanificacionYCooperacion" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="143"/>
 		<constructor-arg name="baseUrl" value="http://sgs.ministeriodesarrollosocial.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDePrevisionSocial" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDePrevisionSocial" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="170"/>
 		<constructor-arg name="baseUrl" value="http://sgssps.previsionsocial.gob.cl/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDeRelacionesExteriores" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDeRelacionesExteriores" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="91"/>
 		<constructor-arg name="baseUrl" value="http://163.247.50.113/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDeTelecomunicaciones" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDeTelecomunicaciones" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="191"/>
 		<constructor-arg name="baseUrl" value="http://sgs.subtel.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDeTransporte" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SubsecretariaDeTransporte" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="190"/>
 		<constructor-arg name="baseUrl" value="http://www.subtrans.cl/transparencia/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SuperintendenciaDeBancosEInstitucionesFinancieras" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SuperintendenciaDeBancosEInstitucionesFinancieras" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="123"/>
 		<constructor-arg name="baseUrl" value="http://transparencia.sbif.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
@@ -774,7 +774,7 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SuperintendenciaDePensiones" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="SuperintendenciaDePensiones" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="176"/>
 		<constructor-arg name="baseUrl" value="https://www.spensiones.cl/sgs20285/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
