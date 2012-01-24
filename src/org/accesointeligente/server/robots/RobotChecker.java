@@ -19,8 +19,8 @@
 package org.accesointeligente.server.robots;
 
 import org.accesointeligente.model.Institution;
+import org.accesointeligente.model.Notification;
 import org.accesointeligente.server.ApplicationProperties;
-import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.RobotContext;
 
@@ -81,9 +81,9 @@ public class RobotChecker {
 
 				if (institution.getEnabled() != enabled) {
 					if (institution.getEnabled() == true) {
-						emailNotification(institution.getName(), ApplicationProperties.getProperty("robot.status.enabled"));
+						saveNotification(institution.getName(), ApplicationProperties.getProperty("robot.status.enabled"));
 					} else {
-						emailNotification(institution.getName(), ApplicationProperties.getProperty("robot.status.disabled"));
+						saveNotification(institution.getName(), ApplicationProperties.getProperty("robot.status.disabled"));
 					}
 				}
 			}
@@ -95,11 +95,22 @@ public class RobotChecker {
 		}
 	}
 
-	public void emailNotification(String institutionName, String status) {
-		Emailer emailer = new Emailer();
-		emailer.setRecipient(ApplicationProperties.getProperty("email.admin"));
-		emailer.setSubject(ApplicationProperties.getProperty("email.robot.subject"));
-		emailer.setBody(String.format(ApplicationProperties.getProperty("email.robot.body"), institutionName, status) + ApplicationProperties.getProperty("email.signature"));
-		emailer.connectAndSend();
+	public void saveNotification(String institutionName, String status) {
+		Session hibernate = null;
+		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			Notification notification = new Notification();
+			notification.setEmail(ApplicationProperties.getProperty("email.admin"));
+			notification.setSubject(ApplicationProperties.getProperty("email.admin.robot.subject"));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.admin.robot.body"), institutionName, status) + ApplicationProperties.getProperty("email.signature"));
+			hibernate.save(notification);
+			hibernate.getTransaction().commit();
+		} catch (Exception ex) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+				hibernate.getTransaction().rollback();
+				logger.error("Failure", ex);
+			}
+		}
 	}
 }
