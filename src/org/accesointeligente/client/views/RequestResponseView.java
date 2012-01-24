@@ -177,7 +177,7 @@ public class RequestResponseView extends ViewWithUiHandlers<RequestResponseUiHan
 		final FlowPanel userSatisfactionPanel = new FlowPanel();
 		final FlowPanel requestStatusPanel = new FlowPanel();
 		requestStatusPanel.setVisible(false);
-		InlineLabel userSatisfactionQuestion = new InlineLabel("¿Te satisface esta respuesta?");
+		InlineLabel userSatisfactionQuestion = new InlineLabel("¿Te satisface esta respuesta, es decir, responde a tu pregunta?");
 		Label userInsatisfactionQuestion = new Label("¿Por qué no es satisfactoria?");
 		Button userSatisfiedButton = new Button("Sí", new ClickHandler() {
 
