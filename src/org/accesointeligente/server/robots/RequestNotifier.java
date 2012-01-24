@@ -23,7 +23,9 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.shared.*;
+import org.accesointeligente.shared.NotificationType;
+import org.accesointeligente.shared.RequestExpireType;
+import org.accesointeligente.shared.RequestStatus;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -73,6 +75,7 @@ public class RequestNotifier {
 			criteria.add(Restrictions.or(Restrictions.eq("expired",  RequestExpireType.ONTIME), Restrictions.isNull("expired")));
 			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+			criteria.add(Restrictions.ne("status", RequestStatus.ERROR));
 			List<Request> requests = criteria.list();
 			hibernate.getTransaction().commit();
 
