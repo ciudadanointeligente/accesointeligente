@@ -18,8 +18,10 @@
  */
 package org.accesointeligente.server.robots;
 
+import org.accesointeligente.model.Notification;
 import org.accesointeligente.model.Request;
 import org.accesointeligente.server.ApplicationProperties;
+import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.services.RequestServiceImpl;
 import org.accesointeligente.shared.RequestStatus;
 
@@ -33,6 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 
@@ -192,6 +195,7 @@ public class SGS extends Robot {
 				if (location == null) {
 					logger.error("Invalid redirection after confirmation");
 					request.setStatus(RequestStatus.ERROR);
+					saveNotification(request.getId());
 					return request;
 				}
 
@@ -201,6 +205,7 @@ public class SGS extends Robot {
 				if (!matcher.matches()) {
 					logger.error("External id not found");
 					request.setStatus(RequestStatus.ERROR);
+					saveNotification(request.getId());
 					return request;
 				}
 
@@ -209,6 +214,7 @@ public class SGS extends Robot {
 				if (remoteIdentifier == null || remoteIdentifier.length() == 0) {
 					logger.error("External id is not defined");
 					request.setStatus(RequestStatus.ERROR);
+					saveNotification(request.getId());
 					return request;
 				}
 
@@ -226,6 +232,7 @@ public class SGS extends Robot {
 				if (form == null) {
 					logger.error("External id not found");
 					request.setStatus(RequestStatus.ERROR);
+					saveNotification(request.getId());
 					return request;
 				}
 
@@ -258,6 +265,7 @@ public class SGS extends Robot {
 							request.setRemoteIdentifier(remoteIdentifier);
 						} else {
 							request.setStatus(RequestStatus.ERROR);
+							saveNotification(request.getId());
 							logger.error("The remote identifier: " + remoteIdentifier + " is already in use");
 						}
 					}
@@ -270,6 +278,7 @@ public class SGS extends Robot {
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			request.setStatus(RequestStatus.ERROR);
+			saveNotification(request.getId());
 			return request;
 		}
 	}
@@ -376,6 +385,25 @@ public class SGS extends Robot {
 			characterEncoding = matcher.group(1);
 		} catch (Exception e) {
 			characterEncoding = "ISO-8859-1";
+		}
+	}
+
+	public void saveNotification(Integer requestId) {
+		Session hibernate = null;
+		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			Notification notification = new Notification();
+			notification.setEmail(ApplicationProperties.getProperty("email.admin"));
+			notification.setSubject(ApplicationProperties.getProperty("email.request.error.subject"));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.request.error.body"), requestId.toString()) + ApplicationProperties.getProperty("email.signature"));
+			hibernate.save(notification);
+			hibernate.getTransaction().commit();
+		} catch (Exception ex) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+				hibernate.getTransaction().rollback();
+				logger.error("Notification failure", ex);
+			}
 		}
 	}
 
