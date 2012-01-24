@@ -138,9 +138,9 @@
 
 	<bean id="CorporacionNacionalDeDesarrolloIndigena" class="org.accesointeligente.server.robots.SGS" scope="prototype">
 		<constructor-arg name="idEntidad" value="144"/>
-		<constructor-arg name="baseUrl" value="http://200.54.70.250/sgs/index.php"/>
+		<constructor-arg name="baseUrl" value="http://www.conadi.gob.cl/sgs/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
-		<property name="password" value="holanda895:AI"/>
+		<property name="password" value="KlQ2XSs"/>
 	</bean>
 
 	<bean id="CorporacionNacionalForestal" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
