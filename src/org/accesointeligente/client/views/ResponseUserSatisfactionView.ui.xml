@@ -4,7 +4,7 @@
 	<ui:style src="ResponseUserSatisfactionView.css" />
 	<g:HTMLPanel>
 		<g:HTMLPanel ui:field="userSatisfactionPanel" addStyleNames="{style.userSatisfactionPanel}">
-			<g:Label addStyleNames="{style.userSatisfactionQuestion}">¿Te satisface esta respuesta?</g:Label>
+			<g:Label addStyleNames="{style.userSatisfactionQuestion}">¿Te satisface esta respuesta, es decir, responde a tu pregunta?</g:Label>
 			<g:Button ui:field="userSatisfiedButton" addStyleNames="{style.userSatisfiedButton}">Sí</g:Button>
 			<g:Button ui:field="userUnsatisfiedButton" addStyleNames="{style.userUnsatisfiedButton}">No</g:Button>
 		</g:HTMLPanel>
