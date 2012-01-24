@@ -149,7 +149,7 @@ public class ResponseNotifier {
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
 			notification.setSubject(ApplicationProperties.getProperty("email.response.satisfaction.subject"));
-			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), responseSatisfactionLink, response.getRequest().getTitle()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.satisfaction.body"), user.getFirstName(), responseSatisfactionLink, response.getRequest().getTitle(), responseSatisfactionLink) + ApplicationProperties.getProperty("email.signature"));
 			notification.setType(NotificationType.RESPONSESATISFACTION);
 			notification.setDate(new Date());
 			response.setNotifiedSatisfaction(true);
