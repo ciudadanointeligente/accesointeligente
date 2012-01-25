@@ -27,7 +27,7 @@ import org.hibernate.Session;
 public class NotificationUtil {
 	private static final Logger logger = Logger.getLogger(Emailer.class);
 
-	public Notification saveNotification(Notification notification) throws ServiceException {
+	public static Notification saveNotification(Notification notification) throws ServiceException {
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
