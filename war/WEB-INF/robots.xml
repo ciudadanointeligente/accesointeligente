@@ -269,9 +269,9 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="FondoNacionalDeSalud" class="org.accesointeligente.server.robots.SGS" scope="prototype">
+	<bean id="FondoNacionalDeSalud" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="196"/>
-		<constructor-arg name="baseUrl" value="http://163.247.51.38/desarrollo/trans/index.php"/>
+		<constructor-arg name="baseUrl" value="http://sgs.fonasa.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
