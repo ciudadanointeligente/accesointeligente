@@ -42,7 +42,7 @@ public class Scheduler implements Runnable {
 		timer.schedule(new ResponseCheckerTask(), 120000, 3600000);
 		timer.schedule(new ResponseNotificationTask(), 900000, 3600000);
 		timer.schedule(new RequestNotificationTask(), 1500000, 3600000);
-		timer.schedule(new NotificationManagerTask(), 2700000, 7200000);
-		timer.schedule(new RobotCheckTask(), 3600000, 43200000);
+		timer.schedule(new NotificationManagerTask(), 2100000, 7200000);
+		timer.schedule(new RobotCheckTask(), 2700000, 43200000);
 	}
 }
