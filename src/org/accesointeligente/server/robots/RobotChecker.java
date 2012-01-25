@@ -27,6 +27,7 @@ import org.accesointeligente.server.RobotContext;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class RobotChecker {
 			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Institution.class);
+			criteria.addOrder(Order.asc("id"));
 			List<Institution> institutions = criteria.list();
 			hibernate.getTransaction().commit();
 

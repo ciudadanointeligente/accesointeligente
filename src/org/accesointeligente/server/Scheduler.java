@@ -20,7 +20,6 @@ package org.accesointeligente.server;
 
 import org.apache.log4j.Logger;
 
-import java.util.Calendar;
 import java.util.Timer;
 
 public class Scheduler implements Runnable {
@@ -43,14 +42,7 @@ public class Scheduler implements Runnable {
 		timer.schedule(new ResponseCheckerTask(), 120000, 3600000);
 		timer.schedule(new ResponseNotificationTask(), 900000, 3600000);
 		timer.schedule(new RequestNotificationTask(), 1500000, 3600000);
-		timer.schedule(new NotificationManagerTask(), 2700000, 3600000);
-
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		timer.schedule(new RobotCheckTask(), cal.getTime(), 43200000);
+		timer.schedule(new NotificationManagerTask(), 2700000, 7200000);
+		timer.schedule(new RobotCheckTask(), 3600000, 43200000);
 	}
 }
