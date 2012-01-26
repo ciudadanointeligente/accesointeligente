@@ -1,5 +1,5 @@
 /**
- * Acceso Inteligente
+// * Acceso Inteligente
  *
  * Copyright (C) 2010-2011 Fundación Ciudadano Inteligente
  *
@@ -18,9 +18,7 @@
  */
 package org.accesointeligente.server.robots;
 
-import org.accesointeligente.model.Notification;
-import org.accesointeligente.model.Response;
-import org.accesointeligente.model.User;
+import org.accesointeligente.model.*;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.*;
@@ -46,6 +44,7 @@ public class ResponseNotifier {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.setFetchMode("request", FetchMode.JOIN);
 			criteria.setFetchMode("request.user", FetchMode.JOIN);
+			criteria.add(Restrictions.isNotNull("request"));
 			criteria.add(Restrictions.eq("notified", Boolean.FALSE));
 			List<Response> responses = criteria.list();
 			for (Response response : responses) {
@@ -74,6 +73,7 @@ public class ResponseNotifier {
 			Criteria criteria = hibernate.createCriteria(Response.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.add(Restrictions.eq("notifiedSatisfaction", Boolean.FALSE));
+			criteria.add(Restrictions.isNotNull("request"));
 			criteria.add(Restrictions.or(Restrictions.eq("userSatisfaction", UserSatisfaction.NOANSWER), Restrictions.isNull("userSatisfaction")));
 			List<Response> responses = criteria.list();
 			hibernate.getTransaction().commit();
@@ -102,6 +102,7 @@ public class ResponseNotifier {
 			Hibernate.initialize(response.getRequest());
 			if (response.getRequest() != null) {
 				Hibernate.initialize(response.getRequest().getUser());
+				createFavoriteNotification(response.getRequest());
 			} else {
 				throw new Exception("The response doesn't have an assigned Request");
 			}
@@ -124,6 +125,42 @@ public class ResponseNotifier {
 			}
 
 			logger.error("Couldn't create ResponseNotification", ex);
+		}
+	}
+
+	public void createFavoriteNotification(Request request) {
+		Session hibernate = null;
+		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			request = (Request) hibernate.get(Request.class, request.getId());
+
+			Criteria criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.add(Restrictions.eq("request", request.getId()));
+			List<UserFavoriteRequest> usersfavoriterequest = criteria.list();
+			if (usersfavoriterequest != null) {
+				for (UserFavoriteRequest userfavoriterequest : usersfavoriterequest) {
+					Notification notification = new Notification();
+					notification.setEmail(userfavoriterequest.getUser().getEmail());
+					notification.setSubject(ApplicationProperties.getProperty("email.response.favorite.subject"));
+					notification.setMessage(String.format(ApplicationProperties.getProperty("email.response.favorite.body"), userfavoriterequest.getUser().getFirstName(), ApplicationProperties.getProperty("request.baseurl"), request.getId(), request.getTitle()) + ApplicationProperties.getProperty("email.signature"));
+					notification.setType(NotificationType.RESPONSEFAVORITE);
+					notification.setDate(new Date());
+
+					hibernate.saveOrUpdate(notification);
+					hibernate.getTransaction().commit();
+				}
+
+			} else {
+				throw new Exception("The request doesn't have followers");
+			}
+		} catch (Exception ex) {
+			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
+				hibernate.getTransaction().rollback();
+			}
+
+			logger.error("Couldn't create FavoriteNotification", ex);
 		}
 	}
 
