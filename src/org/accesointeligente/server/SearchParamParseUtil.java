@@ -18,12 +18,24 @@
  */
 package org.accesointeligente.server;
 
+import org.accesointeligente.model.external.SolrResponse;
 import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.*;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
+
+import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchParamParseUtil {
 
@@ -144,5 +156,90 @@ public class SearchParamParseUtil {
 		}
 
 		return filters;
+	}
+
+	public static Long solrCriteriaAddSearchParams(Criteria criteria, RequestSearchParams params, Integer offset, Integer limit) throws Exception {
+		Long totalResults = 0L;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		String jsonSolrQuery = "q=(";
+
+		if (params.getKeyWord() != null && !params.getKeyWord().equals("")) {
+			jsonSolrQuery += "(";
+			jsonSolrQuery += "title:" + params.getKeyWord();
+			jsonSolrQuery += " OR information:" + params.getKeyWord();
+			jsonSolrQuery += " OR context:" + params.getKeyWord();
+			jsonSolrQuery += ")";
+		} else {
+			jsonSolrQuery += "(";
+			jsonSolrQuery += "title:*";
+			jsonSolrQuery += " OR information:*";
+			jsonSolrQuery += " OR context:*";
+			jsonSolrQuery += ")";
+		}
+
+		if (params.getInstitution() != null) {
+			jsonSolrQuery += " OR institutionId:" + params.getInstitution().getId().toString();
+		}
+
+
+		if (params.getMinDate() != null && params.getMaxDate() != null) {
+			jsonSolrQuery += " AND confirmationDate:[ " + formatter.format(params.getMinDate()) + " TO " + formatter.format(params.getMaxDate()) + "]";
+		} else if (params.getMinDate() != null) {
+			jsonSolrQuery += " AND confirmationDate:[ " + formatter.format(params.getMinDate()) + " TO * ]";
+		} else if (params.getMaxDate() != null) {
+			jsonSolrQuery += " AND confirmationDate:[ * TO " + formatter.format(params.getMaxDate()) + "]";
+		}
+
+		if (params.getStatusClosed() || params.getStatusPending()) {
+			jsonSolrQuery += " AND (status:(";
+
+			// Closed Marked
+			if (params.getStatusClosed()) {
+				jsonSolrQuery += " " + RequestStatus.RESPONDED.toString() + " ";
+			}
+
+			// Pending Marked
+			if (params.getStatusPending()) {
+				jsonSolrQuery += " " + RequestStatus.PENDING.toString() + " ";
+				jsonSolrQuery += " " + RequestStatus.NEW.toString() + " ";
+			}
+			jsonSolrQuery += "))";
+		}
+
+		jsonSolrQuery += ")";
+		jsonSolrQuery += "&start=" + offset.toString();
+		jsonSolrQuery += "&rows=" + limit.toString();
+		jsonSolrQuery += "&fl=id";
+		jsonSolrQuery += "&wt=json";
+
+		if (params.getKeyWord() == null || params.getKeyWord().equals("")) {
+			jsonSolrQuery += "&sort=numericId asc";
+		}
+
+		HttpClient client = new DefaultHttpClient();
+		HtmlCleaner cleaner = new HtmlCleaner();
+		HttpResponse response;
+		TagNode document;
+		Gson gsonEncoder = new Gson();
+		String jsonResponse = null;
+
+		try {
+			// First we get the total of requests
+			jsonResponse = SolrClient.execQuery(jsonSolrQuery);
+			SolrResponse solrResponse = gsonEncoder.fromJson(jsonResponse, SolrResponse.class);
+			totalResults = new Long(solrResponse.getResponse().getNumFound());
+			List<Integer> requestIds = new ArrayList<Integer>();
+
+			for (org.accesointeligente.model.external.SolrResponse.Response.Document responseDocument : solrResponse.getResponse().getDocs()) {
+				requestIds.add(responseDocument.getId());
+			}
+
+			criteria.add(Restrictions.in("id", requestIds));
+
+		} catch (Exception ex) {
+			throw ex;
+		}
+
+		return totalResults;
 	}
 }
