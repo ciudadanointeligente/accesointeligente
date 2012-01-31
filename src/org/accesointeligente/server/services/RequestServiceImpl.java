@@ -448,6 +448,11 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 	@Override
 	public Page<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+
+		if (ApplicationProperties.getProperty("solr.server.status") != null && ApplicationProperties.getProperty("solr.server.status").equals(SolrStatus.AVAILABLE.toString())) {
+			return getSolrRequestList(offset, limit, params);
+		}
+
 		Session hibernate = HibernateUtil.getSession();
 		hibernate.beginTransaction();
 
@@ -489,6 +494,47 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 					criteria.setFetchMode("responses", FetchMode.JOIN);
 					requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 				}
+			}
+
+			hibernate.getTransaction().commit();
+			Page<Request> page = new Page<Request>();
+			page.setStart(offset.longValue());
+			page.setDataCount(totalResults);
+			page.setData(requests);
+			return page;
+		} catch (Throwable ex) {
+			hibernate.getTransaction().rollback();
+			throw new ServiceException();
+		}
+	}
+
+	@Override
+	public Page<Request> getSolrRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException {
+		Session hibernate = HibernateUtil.getSession();
+		hibernate.beginTransaction();
+
+		try {
+			Criteria criteria = hibernate.createCriteria(Request.class);
+			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+
+			Long totalResults = 0L;
+			try {
+				totalResults = SearchParamParseUtil.solrCriteriaAddSearchParams(criteria, params, offset, limit);
+			} catch (Exception ex) {
+				hibernate.getTransaction().rollback();
+				throw new ServiceException();
+			}
+
+			List<Request> requests = new ArrayList<Request>(0);
+
+			if (totalResults > 0) {
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+				criteria.addOrder(Order.asc("confirmationDate"));
+				criteria.addOrder(Order.asc("institution"));
+				criteria.setFetchMode("institution", FetchMode.JOIN);
+				criteria.setFetchMode("favorites", FetchMode.JOIN);
+				criteria.setFetchMode("responses", FetchMode.JOIN);
+				requests = (List<Request>) persistentBeanManager.clone(criteria.list());
 			}
 
 			hibernate.getTransaction().commit();

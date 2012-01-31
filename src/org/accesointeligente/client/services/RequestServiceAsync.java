@@ -39,6 +39,7 @@ public interface RequestServiceAsync {
 	void getUserDraftList(Integer offset, Integer limit, AsyncCallback<Page<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, AsyncCallback<Page<Request>> callback);
 	void getRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<Page<Request>> callback);
+	void getSolrRequestList(Integer offset, Integer limit, RequestSearchParams params, AsyncCallback<Page<Request>> callback);
 	void getResponseAttachmentList(Response response, AsyncCallback<List<Attachment>> callback);
 	void getFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);
 	void createFavoriteRequest(Request request, User user, AsyncCallback<UserFavoriteRequest> callback);

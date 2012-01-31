@@ -42,6 +42,7 @@ public interface RequestService extends RemoteService {
 	Page<Request> getUserDraftList(Integer offset, Integer limit) throws ServiceException;
 	Page<Request> getRequestList(Integer offset, Integer limit) throws ServiceException;
 	Page<Request> getRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
+	Page<Request> getSolrRequestList(Integer offset, Integer limit, RequestSearchParams params) throws ServiceException;
 	List<Attachment> getResponseAttachmentList(Response response) throws ServiceException;
 	UserFavoriteRequest getFavoriteRequest(Request request, User user) throws ServiceException;
 	UserFavoriteRequest createFavoriteRequest(Request request, User user) throws ServiceException;
