@@ -37,13 +37,15 @@ public class SolrClient {
 		HtmlCleaner cleaner = new HtmlCleaner();
 		HttpGet get;
 		HttpResponse response;
+		String httpQuery = "";
 
 		try {
-			String httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.command.reindex");
+			httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.command.reindex");
 			get = new HttpGet(httpQuery);
 			response = client.execute(get);
 			cleaner.clean(new InputStreamReader(response.getEntity().getContent()));
 		} catch (Exception ex) {
+			logger.error(httpQuery);
 			logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -53,13 +55,15 @@ public class SolrClient {
 		HtmlCleaner cleaner = new HtmlCleaner();
 		HttpGet get;
 		HttpResponse response;
+		String httpQuery = "";
 
 		try {
-			String httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.command.reloadConfig");
+			httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.command.reloadConfig");
 			get = new HttpGet(httpQuery);
 			response = client.execute(get);
 			cleaner.clean(new InputStreamReader(response.getEntity().getContent()));
 		} catch (Exception ex) {
+			logger.error(httpQuery);
 			logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -71,15 +75,17 @@ public class SolrClient {
 		HttpResponse response;
 		TagNode document;
 		String jsonResponse = null;
+		String httpQuery = "";
 
 		try {
-			String httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.path");
+			httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.path");
 			httpQuery += URIUtil.encodePath(query);
 			get = new HttpGet(httpQuery);
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent()));
 			jsonResponse = document.getText().toString();
 		} catch (Exception ex) {
+			logger.error(httpQuery);
 			logger.error(ex.getMessage(), ex);
 		}
 
