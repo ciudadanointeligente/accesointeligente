@@ -89,7 +89,7 @@
 
 	<bean id="ConsejoNacionalDeAcreditacion" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
 		<constructor-arg name="idEntidad" value="281"/>
-		<constructor-arg name="baseUrl" value="http://www.cnachile.cl/SGS110/index.php"/>
+		<constructor-arg name="baseUrl" value="http://www.cnachile.cl/sgs11/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
 	</bean>
