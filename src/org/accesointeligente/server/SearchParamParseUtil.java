@@ -24,13 +24,8 @@ import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.*;
-import org.htmlcleaner.HtmlCleaner;
-import org.htmlcleaner.TagNode;
 
 import com.google.gson.Gson;
 
@@ -217,10 +212,6 @@ public class SearchParamParseUtil {
 			jsonSolrQuery += "&sort=numericId asc";
 		}
 
-		HttpClient client = new DefaultHttpClient();
-		HtmlCleaner cleaner = new HtmlCleaner();
-		HttpResponse response;
-		TagNode document;
 		Gson gsonEncoder = new Gson();
 		String jsonResponse = null;
 
