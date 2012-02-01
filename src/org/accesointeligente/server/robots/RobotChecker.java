@@ -23,12 +23,14 @@ import org.accesointeligente.model.Notification;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.RobotContext;
+import org.accesointeligente.shared.NotificationType;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 
+import java.util.Date;
 import java.util.List;
 
 public class RobotChecker {
@@ -106,6 +108,8 @@ public class RobotChecker {
 			notification.setEmail(ApplicationProperties.getProperty("email.admin"));
 			notification.setSubject(ApplicationProperties.getProperty("email.admin.robot.subject"));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.admin.robot.body"), institutionName, status) + ApplicationProperties.getProperty("email.signature"));
+			notification.setType(NotificationType.ROBOTCHECK);
+			notification.setDate(new Date());
 			hibernate.save(notification);
 			hibernate.getTransaction().commit();
 		} catch (Exception ex) {
