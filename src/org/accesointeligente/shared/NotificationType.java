@@ -19,6 +19,7 @@
 package org.accesointeligente.shared;
 
 public enum NotificationType {
+	CONTACTFORM,
 	RESPONSEARRIVED,
 	RESPONSEFAVORITE,
 	RESPONSESATISFACTION,
