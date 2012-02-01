@@ -106,7 +106,7 @@ public class RobotChecker {
 			hibernate.beginTransaction();
 			Notification notification = new Notification();
 			notification.setEmail(ApplicationProperties.getProperty("email.admin"));
-			notification.setSubject(ApplicationProperties.getProperty("email.admin.robot.subject"));
+			notification.setSubject(String.format(ApplicationProperties.getProperty("email.admin.robot.subject"), institutionName));
 			notification.setMessage(String.format(ApplicationProperties.getProperty("email.admin.robot.body"), institutionName, status) + ApplicationProperties.getProperty("email.signature"));
 			notification.setType(NotificationType.ROBOTCHECK);
 			notification.setDate(new Date());
