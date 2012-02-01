@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.server;
+package org.accesointeligente.server.solr;
+
+import org.accesointeligente.server.ApplicationProperties;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

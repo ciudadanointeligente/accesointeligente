@@ -24,6 +24,7 @@ import net.sf.gilead.gwt.PersistentRemoteService;
 import org.accesointeligente.client.services.RequestService;
 import org.accesointeligente.model.*;
 import org.accesointeligente.server.*;
+import org.accesointeligente.server.solr.SolrStatus;
 import org.accesointeligente.shared.*;
 
 import org.hibernate.Criteria;

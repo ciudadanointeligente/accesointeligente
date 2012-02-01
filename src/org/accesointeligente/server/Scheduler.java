@@ -18,6 +18,9 @@
  */
 package org.accesointeligente.server;
 
+import org.accesointeligente.server.solr.SolrIndexTask;
+import org.accesointeligente.server.solr.SolrReloadConfigTask;
+
 import org.apache.log4j.Logger;
 
 import java.util.Timer;

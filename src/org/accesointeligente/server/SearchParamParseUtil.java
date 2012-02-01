@@ -19,6 +19,7 @@
 package org.accesointeligente.server;
 
 import org.accesointeligente.model.external.SolrResponse;
+import org.accesointeligente.server.solr.SolrClient;
 import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.RequestSearchParams;
 import org.accesointeligente.shared.RequestStatus;
