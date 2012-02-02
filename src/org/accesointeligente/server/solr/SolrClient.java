@@ -27,9 +27,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
-import org.mortbay.util.URIUtil;
 
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URL;
 
 public class SolrClient {
 	private static final Logger logger = Logger.getLogger(SolrClient.class);
@@ -78,10 +79,16 @@ public class SolrClient {
 		TagNode document;
 		String jsonResponse = null;
 		String httpQuery = "";
+		URL url = null;
+		URI uri = null;
 
 		try {
 			httpQuery = ApplicationProperties.getProperty("solr.server.address") + ApplicationProperties.getProperty("solr.core.path") + ApplicationProperties.getProperty("solr.query.path");
-			httpQuery += URIUtil.encodePath(query);
+			httpQuery += query;
+			url = new URL(httpQuery);
+			uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+			url = uri.toURL();
+			httpQuery = url.toString();
 			get = new HttpGet(httpQuery);
 			response = client.execute(get);
 			document = cleaner.clean(new InputStreamReader(response.getEntity().getContent()));
