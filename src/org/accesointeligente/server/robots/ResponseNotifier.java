@@ -102,7 +102,7 @@ public class ResponseNotifier {
 			Hibernate.initialize(response.getRequest());
 			if (response.getRequest() != null) {
 				Hibernate.initialize(response.getRequest().getUser());
-				createFavoriteNotification(response.getRequest());
+//				createFavoriteNotification(response.getRequest());
 			} else {
 				throw new Exception("The response doesn't have an assigned Request");
 			}
