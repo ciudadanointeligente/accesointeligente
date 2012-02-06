@@ -50,6 +50,7 @@ public class RequestNotifier {
 			criteria.add(Restrictions.eq("expired", RequestExpireType.EXPIRESSOON));
 			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+			criteria.add(Restrictions.isNotNull("processDate"));
 			List<Request> requests = criteria.list();
 			hibernate.getTransaction().commit();
 
@@ -76,6 +77,7 @@ public class RequestNotifier {
 			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 			criteria.add(Restrictions.ne("status", RequestStatus.ERROR));
+			criteria.add(Restrictions.isNotNull("processDate"));
 			List<Request> requests = criteria.list();
 			hibernate.getTransaction().commit();
 
