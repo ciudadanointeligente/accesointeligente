@@ -916,6 +916,7 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 
 		try {
 			Criteria criteria = hibernate.createCriteria(Response.class);
+			criteria.setFetchMode("request", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("id", responseId));
 			criteria.add(Restrictions.eq("responseKey", responseKey));
 			Response response = (Response) persistentBeanManager.clone(criteria.uniqueResult());
@@ -938,6 +939,8 @@ public class RequestServiceImpl extends PersistentRemoteService implements Reque
 			Response response = (Response) criteria.uniqueResult();
 
 			criteria = hibernate.createCriteria(Request.class);
+			criteria.setFetchMode("user", FetchMode.JOIN);
+			criteria.setFetchMode("institution", FetchMode.JOIN);
 			criteria.add(Restrictions.eq("id", response.getRequest().getId()));
 			Request request = (Request) persistentBeanManager.clone(criteria.uniqueResult());
 			hibernate.getTransaction().commit();
