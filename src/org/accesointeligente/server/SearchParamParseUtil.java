@@ -30,8 +30,7 @@ import org.hibernate.criterion.*;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SearchParamParseUtil {
 
@@ -160,10 +159,32 @@ public class SearchParamParseUtil {
 		String jsonSolrQuery = "q=(";
 
 		if (params.getKeyWord() != null && !params.getKeyWord().equals("")) {
+			String[] keyWords = params.getKeyWord().split("[ ]");
+			Set<String> keyWordList = new HashSet<String>();
+			String formattedKeywords = null;
+
+			for (int i = 0; i < keyWords.length; i++) {
+				keyWords[i]  = keyWords[i].replaceAll("\\W", "");
+				keyWordList.add(keyWords[i]);
+			}
+
+			Iterator<String> iterator = keyWordList.iterator();
+
+			formattedKeywords = "(";
+
+			while(iterator.hasNext()) {
+				formattedKeywords += iterator.next();
+				if (iterator.hasNext()) {
+					formattedKeywords += " AND ";
+				}
+			}
+
+			formattedKeywords += ")";
+
 			jsonSolrQuery += "(";
-			jsonSolrQuery += "title:" + params.getKeyWord();
-			jsonSolrQuery += " OR information:" + params.getKeyWord();
-			jsonSolrQuery += " OR context:" + params.getKeyWord();
+			jsonSolrQuery += "title:" + formattedKeywords;
+			jsonSolrQuery += " OR information:" + formattedKeywords;
+			jsonSolrQuery += " OR context:" + formattedKeywords;
 			jsonSolrQuery += ")";
 		} else {
 			jsonSolrQuery += "(";
