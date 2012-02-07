@@ -1,0 +1,22 @@
+<dataConfig>
+	<dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/accesointeligente" user="accesoint" password="accesointeligente"/>
+	<document>
+		<entity name="informationRequest" query="select * from `Request` where status!='DRAFT'">
+			<field column="id" name="id" />
+			<field column="id" name="numericId" />
+			<field column="userId" name="userId" />
+			<field column="institutionId" name="institutionId" />
+			<field column="information" name="information" />
+			<field column="context" name="context" />
+			<field column="title" name="title" />
+			<field column="status" name="status" />
+			<field column="remoteIdentifier" name="remoteIdentifier" />
+			<field column="qualification" name="qualification" />
+			<field column="creationDate" name="creationDate" />
+			<field column="confirmationDate" name="confirmationDate" />
+			<field column="processDate" name="processDate" />
+			<field column="responseDate" name="responseDate" />
+			<field column="userSatisfaction" name="userSatisfaction" />
+		</entity>
+	</document>
+</dataConfig>
