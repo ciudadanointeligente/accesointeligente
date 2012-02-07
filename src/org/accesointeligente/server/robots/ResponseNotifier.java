@@ -102,7 +102,7 @@ public class ResponseNotifier {
 			Hibernate.initialize(response.getRequest());
 			if (response.getRequest() != null) {
 				Hibernate.initialize(response.getRequest().getUser());
-//				createFavoriteNotification(response.getRequest());
+				createFavoriteNotification(response.getRequest());
 			} else {
 				throw new Exception("The response doesn't have an assigned Request");
 			}
@@ -136,6 +136,8 @@ public class ResponseNotifier {
 			request = (Request) hibernate.get(Request.class, request.getId());
 
 			Criteria criteria = hibernate.createCriteria(UserFavoriteRequest.class);
+			criteria.setFetchMode("user", FetchMode.JOIN);
+			criteria.setFetchMode("request", FetchMode.JOIN);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			criteria.add(Restrictions.eq("request", request.getId()));
 			List<UserFavoriteRequest> usersfavoriterequest = criteria.list();
