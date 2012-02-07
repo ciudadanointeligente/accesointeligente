@@ -18,22 +18,18 @@
  */
 package org.accesointeligente.server.services;
 
+import net.sf.gilead.core.PersistentBeanManager;
+import net.sf.gilead.gwt.PersistentRemoteService;
+
 import org.accesointeligente.client.services.ContactService;
 import org.accesointeligente.model.Contact;
 import org.accesointeligente.model.Notification;
 import org.accesointeligente.server.ApplicationProperties;
-import org.accesointeligente.server.Emailer;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.shared.NotificationType;
-import org.accesointeligente.shared.RequestExpireType;
 import org.accesointeligente.shared.ServiceException;
 
-import net.sf.gilead.core.PersistentBeanManager;
-import net.sf.gilead.gwt.PersistentRemoteService;
-
 import org.hibernate.Session;
-
-import java.util.Date;
 
 public class ContactServiceImpl extends PersistentRemoteService implements ContactService {
 	private PersistentBeanManager persistentBeanManager;
@@ -48,6 +44,11 @@ public class ContactServiceImpl extends PersistentRemoteService implements Conta
 		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			hibernate.saveOrUpdate(contact);
+			hibernate.getTransaction().commit();
+
 			Notification notification = new Notification();
 			notification.setEmail(contact.getEmail());
 			notification.setSubject(String.format(ApplicationProperties.getProperty("email.contact.subject"), contact.getSubject()));
