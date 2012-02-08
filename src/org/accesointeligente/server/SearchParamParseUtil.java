@@ -185,6 +185,8 @@ public class SearchParamParseUtil {
 			jsonSolrQuery += "title:" + formattedKeywords;
 			jsonSolrQuery += " OR information:" + formattedKeywords;
 			jsonSolrQuery += " OR context:" + formattedKeywords;
+			jsonSolrQuery += " OR responseSubject:" + formattedKeywords;
+			jsonSolrQuery += " OR responseInformation:" + formattedKeywords;
 			jsonSolrQuery += ")";
 		} else {
 			jsonSolrQuery += "(";
