@@ -291,6 +291,8 @@
 		<field name="processDate" type="date" indexed="true" stored="true" />
 		<field name="responseDate" type="date" indexed="true" stored="true" />
 		<field name="userSatisfaction" type="string" indexed="true" stored="true" />
+		<field name="responseSubject" type="text_es" indexed="true" stored="true" multiValued="true"/>
+		<field name="responseInformation" type="text_es" indexed="true" stored="true" multiValued="true"/>
 	</fields>
 
 	<!-- Field to use to determine and enforce document uniqueness. Unless this field is marked with required="false", it will be a required field -->

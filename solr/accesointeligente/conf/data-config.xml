@@ -17,6 +17,10 @@
 			<field column="processDate" name="processDate" />
 			<field column="responseDate" name="responseDate" />
 			<field column="userSatisfaction" name="userSatisfaction" />
+			<entity name="informationResponse" datasource="mysql" query="select subject,information from `Response` where requestId='${informationRequest.id}'">
+				<field name="responseSubject" column="subject" />
+				<field name="responseInformation" column="information" />
+			</entity>
 		</entity>
 	</document>
 </dataConfig>
