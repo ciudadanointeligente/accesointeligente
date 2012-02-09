@@ -101,6 +101,7 @@ public class ResponseNotifier {
 			response = (Response) hibernate.get(Response.class, response.getId());
 			Hibernate.initialize(response.getRequest());
 			if (response.getRequest() != null) {
+				Hibernate.initialize(response.getRequest());
 				Hibernate.initialize(response.getRequest().getUser());
 				createFavoriteNotification(response.getRequest());
 			} else {
@@ -133,13 +134,12 @@ public class ResponseNotifier {
 		try {
 			hibernate = HibernateUtil.getSession();
 			hibernate.beginTransaction();
-			request = (Request) hibernate.get(Request.class, request.getId());
 
 			Criteria criteria = hibernate.createCriteria(UserFavoriteRequest.class);
 			criteria.setFetchMode("user", FetchMode.JOIN);
 			criteria.setFetchMode("request", FetchMode.JOIN);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.add(Restrictions.eq("request", request.getId()));
+			criteria.add(Restrictions.eq("request", request));
 			List<UserFavoriteRequest> usersfavoriterequest = criteria.list();
 			if (usersfavoriterequest != null) {
 				for (UserFavoriteRequest userfavoriterequest : usersfavoriterequest) {
