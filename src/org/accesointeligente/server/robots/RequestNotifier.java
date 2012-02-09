@@ -23,9 +23,8 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.shared.NotificationType;
-import org.accesointeligente.shared.RequestExpireType;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.server.HolidayCalendar;
+import org.accesointeligente.shared.*;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -40,7 +39,6 @@ public class RequestNotifier {
 
 	public void notifyExpiredRequests() {
 		Session hibernate = null;
-		Long MILLISECONDS_PER_DAY = (long) (24 * 60 * 60 * 1000);
 
 		try {
 			hibernate = HibernateUtil.getSession();
@@ -55,7 +53,7 @@ public class RequestNotifier {
 			hibernate.getTransaction().commit();
 
 			for (Request request : requests) {
-				if ((((new Date()).getTime() - request.getProcessDate().getTime())/ MILLISECONDS_PER_DAY) > 31) {
+				if (!HolidayCalendar.isOnTime(request.getProcessDate(), 20)) {
 					logger.info("requestId = " + request.getId());
 					createExpiredNotification(request);
 				}
@@ -82,7 +80,7 @@ public class RequestNotifier {
 			hibernate.getTransaction().commit();
 
 			for (Request request : requests) {
-				if ((((new Date()).getTime() - request.getProcessDate().getTime())/ MILLISECONDS_PER_DAY) > 22) {
+				if (!HolidayCalendar.isOnTime(request.getProcessDate(), 15)) {
 					logger.info("requestId = " + request.getId());
 					createExpiresSoonNotification(request);
 				}
