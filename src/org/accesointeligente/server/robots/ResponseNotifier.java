@@ -27,8 +27,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ResponseNotifier {
 	private static final Logger logger = Logger.getLogger(ResponseNotifier.class);
@@ -100,10 +99,12 @@ public class ResponseNotifier {
 			hibernate.beginTransaction();
 			response = (Response) hibernate.get(Response.class, response.getId());
 			Hibernate.initialize(response.getRequest());
+			Set<Request> favoriteRequests = new HashSet<Request>();
+
 			if (response.getRequest() != null) {
 				Hibernate.initialize(response.getRequest());
 				Hibernate.initialize(response.getRequest().getUser());
-				createFavoriteNotification(response.getRequest());
+				favoriteRequests.add(response.getRequest());
 			} else {
 				throw new Exception("The response doesn't have an assigned Request");
 			}
@@ -120,6 +121,10 @@ public class ResponseNotifier {
 			hibernate.saveOrUpdate(response);
 			hibernate.saveOrUpdate(notification);
 			hibernate.getTransaction().commit();
+
+			for (Request request : favoriteRequests) {
+				createFavoriteNotification(request);
+			}
 		} catch (Exception ex) {
 			if (hibernate != null && hibernate.isOpen() && hibernate.getTransaction().isActive()) {
 				hibernate.getTransaction().rollback();
