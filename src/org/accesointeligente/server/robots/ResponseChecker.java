@@ -24,9 +24,7 @@ import org.accesointeligente.model.Response;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.RandomPassword;
-import org.accesointeligente.shared.FileType;
-import org.accesointeligente.shared.RequestStatus;
-import org.accesointeligente.shared.UserSatisfaction;
+import org.accesointeligente.shared.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -173,6 +171,7 @@ public class ResponseChecker {
 
 							response.setRequest(request);
 							request.setStatus(RequestStatus.RESPONDED);
+							request.setExpired(RequestExpireType.WITHRESPONSE);
 							request.setResponseDate(new Date());
 							hibernate.update(request);
 							hibernate.update(response);
