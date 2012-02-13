@@ -18,6 +18,9 @@
  */
 package org.accesointeligente.server;
 
+import org.accesointeligente.server.solr.SolrIndexTask;
+import org.accesointeligente.server.solr.SolrReloadConfigTask;
+
 import org.apache.log4j.Logger;
 
 import java.util.Timer;
@@ -38,11 +41,13 @@ public class Scheduler implements Runnable {
 	@Override
 	public void run() {
 		logger.info("Running");
-		timer.schedule(new RequestCreationTask(), 0, 3600000);
-		timer.schedule(new ResponseCheckerTask(), 120000, 3600000);
-		timer.schedule(new ResponseNotificationTask(), 900000, 3600000);
-		timer.schedule(new RequestNotificationTask(), 1500000, 3600000);
-		timer.schedule(new NotificationManagerTask(), 2100000, 7200000);
-		timer.schedule(new RobotCheckTask(), 2700000, 43200000);
+		timer.schedule(new RequestCreationTask(), 0, 3600000); // 0 minutes - repeat 1 hour
+		timer.schedule(new ResponseCheckerTask(), 120000, 3600000); // 2 minutes - repeat 1 hour
+		timer.schedule(new SolrReloadConfigTask(), 900000, 43200000); // 15 minutes - repeat 12 hours
+		timer.schedule(new SolrIndexTask(), 1200000, 43200000); // 20 minutes - repeat 12 hours
+		timer.schedule(new ResponseNotificationTask(), 1500000, 3600000); // 25 minutes - repeat 1 hour
+		timer.schedule(new RequestNotificationTask(), 2100000, 3600000); // 35 minutes - repeat 1 hour
+		timer.schedule(new NotificationManagerTask(), 2700000, 7200000); // 45 minutes - repeat 2 hours
+		timer.schedule(new RobotCheckTask(), 3300000, 43200000); // 55 minutes - repeat 12 hours
 	}
 }

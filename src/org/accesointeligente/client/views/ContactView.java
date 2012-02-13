@@ -113,7 +113,7 @@ public class ContactView extends ViewWithUiHandlers<ContactUiHandlers> implement
 
 	@Override
 	public Boolean checkContactForm() {
-		if (getName() == null || getEmail() == null || checkEmail() || !checkSubject() || getMessage() == null) {
+		if (getName() == null || getEmail() == null || !checkEmail() || !checkSubject() || getMessage() == null) {
 			return false;
 		}
 		return true;

@@ -18,15 +18,16 @@
  */
 package org.accesointeligente.server.services;
 
-import org.accesointeligente.client.services.ContactService;
-import org.accesointeligente.model.Contact;
-import org.accesointeligente.server.ApplicationProperties;
-import org.accesointeligente.server.Emailer;
-import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.shared.ServiceException;
-
 import net.sf.gilead.core.PersistentBeanManager;
 import net.sf.gilead.gwt.PersistentRemoteService;
+
+import org.accesointeligente.client.services.ContactService;
+import org.accesointeligente.model.Contact;
+import org.accesointeligente.model.Notification;
+import org.accesointeligente.server.ApplicationProperties;
+import org.accesointeligente.server.HibernateUtil;
+import org.accesointeligente.shared.NotificationType;
+import org.accesointeligente.shared.ServiceException;
 
 import org.hibernate.Session;
 
@@ -40,18 +41,25 @@ public class ContactServiceImpl extends PersistentRemoteService implements Conta
 
 	@Override
 	public Contact saveContact(Contact contact) throws ServiceException {
-		Session hibernate = HibernateUtil.getSession();
-		hibernate.beginTransaction();
+		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
 			hibernate.saveOrUpdate(contact);
 			hibernate.getTransaction().commit();
 
-			Emailer emailer = new Emailer();
-			emailer.setRecipient(contact.getEmail());
-			emailer.setSubject(String.format(ApplicationProperties.getProperty("email.contact.subject"), contact.getSubject()));
-			emailer.setBody(String.format(ApplicationProperties.getProperty("email.contact.body"), contact.getName(), contact.getMessage()) + ApplicationProperties.getProperty("email.signature"));
-			emailer.connectAndSend();
+			Notification notification = new Notification();
+			notification.setEmail(contact.getEmail());
+			notification.setSubject(String.format(ApplicationProperties.getProperty("email.contact.subject"), contact.getSubject()));
+			notification.setMessage(String.format(ApplicationProperties.getProperty("email.contact.body"), contact.getName(), contact.getMessage()) + ApplicationProperties.getProperty("email.signature"));
+			notification.setType(NotificationType.CONTACTFORM);
+			notification.setDate(contact.getDate());
+
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			hibernate.saveOrUpdate(notification);
+			hibernate.getTransaction().commit();
 
 			return contact;
 		} catch (Throwable ex) {

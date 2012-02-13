@@ -23,12 +23,12 @@ import org.accesointeligente.model.Request;
 import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
-import org.accesointeligente.shared.NotificationType;
-import org.accesointeligente.shared.RequestExpireType;
-import org.accesointeligente.shared.RequestStatus;
+import org.accesointeligente.server.HolidayCalendar;
+import org.accesointeligente.shared.*;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -40,7 +40,6 @@ public class RequestNotifier {
 
 	public void notifyExpiredRequests() {
 		Session hibernate = null;
-		Long MILLISECONDS_PER_DAY = (long) (24 * 60 * 60 * 1000);
 
 		try {
 			hibernate = HibernateUtil.getSession();
@@ -50,11 +49,12 @@ public class RequestNotifier {
 			criteria.add(Restrictions.eq("expired", RequestExpireType.EXPIRESSOON));
 			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
+			criteria.add(Restrictions.isNotNull("processDate"));
 			List<Request> requests = criteria.list();
 			hibernate.getTransaction().commit();
 
 			for (Request request : requests) {
-				if ((((new Date()).getTime() - request.getProcessDate().getTime())/ MILLISECONDS_PER_DAY) > 31) {
+				if (!HolidayCalendar.isOnTime(request.getProcessDate(), 20)) {
 					logger.info("requestId = " + request.getId());
 					createExpiredNotification(request);
 				}
@@ -72,15 +72,16 @@ public class RequestNotifier {
 			hibernate.beginTransaction();
 			Criteria criteria = hibernate.createCriteria(Request.class);
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.add(Restrictions.or(Restrictions.eq("expired",  RequestExpireType.ONTIME), Restrictions.isNull("expired")));
+			criteria.add(Restrictions.eq("expired", RequestExpireType.ONTIME));
 			criteria.add(Restrictions.ne("status", RequestStatus.NEW));
 			criteria.add(Restrictions.ne("status", RequestStatus.DRAFT));
 			criteria.add(Restrictions.ne("status", RequestStatus.ERROR));
+			criteria.add(Restrictions.isNotNull("processDate"));
 			List<Request> requests = criteria.list();
 			hibernate.getTransaction().commit();
 
 			for (Request request : requests) {
-				if ((((new Date()).getTime() - request.getProcessDate().getTime())/ MILLISECONDS_PER_DAY) > 22) {
+				if (!HolidayCalendar.isOnTime(request.getProcessDate(), 15)) {
 					logger.info("requestId = " + request.getId());
 					createExpiresSoonNotification(request);
 				}
@@ -98,6 +99,9 @@ public class RequestNotifier {
 		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			Hibernate.initialize(request.getUser());
 			User user = request.getUser();
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
@@ -107,8 +111,6 @@ public class RequestNotifier {
 			notification.setDate(new Date());
 			request.setExpired(RequestExpireType.EXPIRED);
 
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
 			hibernate.saveOrUpdate(request);
 			hibernate.saveOrUpdate(notification);
 			hibernate.getTransaction().commit();
@@ -125,6 +127,9 @@ public class RequestNotifier {
 		Session hibernate = null;
 
 		try {
+			hibernate = HibernateUtil.getSession();
+			hibernate.beginTransaction();
+			Hibernate.initialize(request.getUser());
 			User user = request.getUser();
 			Notification notification = new Notification();
 			notification.setEmail(user.getEmail());
@@ -134,8 +139,6 @@ public class RequestNotifier {
 			notification.setDate(new Date());
 			request.setExpired(RequestExpireType.EXPIRESSOON);
 
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
 			hibernate.saveOrUpdate(request);
 			hibernate.saveOrUpdate(notification);
 			hibernate.getTransaction().commit();

@@ -1,7 +1,7 @@
 /**
  * Acceso Inteligente
  *
- * Copyright (C) 2010-2012 Fundación Ciudadano Inteligente
+ * Copyright (C) 2010-2011 Fundación Ciudadano Inteligente
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,14 +16,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.accesointeligente.shared;
+package org.accesointeligente.server.solr;
 
-public enum NotificationType {
-	CONTACTFORM,
-	RESPONSEARRIVED,
-	RESPONSEFAVORITE,
-	RESPONSESATISFACTION,
-	REQUESTEXPIRESSOON,
-	REQUESTEXPIRED,
-	ROBOTCHECK
+public enum SolrStatus {
+	AVAILABLE,
+	UNAVAILABLE
 }
