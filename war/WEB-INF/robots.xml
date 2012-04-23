@@ -140,7 +140,7 @@
 		<constructor-arg name="idEntidad" value="144"/>
 		<constructor-arg name="baseUrl" value="http://www.conadi.gob.cl/sgs/sgs/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
-		<property name="password" value="KlQ2XSs"/>
+		<property name="password" value="y2dvvTJ"/>
 	</bean>
 
 	<bean id="CorporacionNacionalForestal" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
