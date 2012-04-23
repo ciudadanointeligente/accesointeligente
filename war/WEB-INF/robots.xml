@@ -760,8 +760,15 @@
 		<property name="password" value="holanda895:AI"/>
 	</bean>
 
-	<bean id="SubsecretariaDePlanificacionYCooperacion" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
-		<constructor-arg name="idEntidad" value="143"/>
+	<bean id="SubsecretariaDeEvaluacionSocial" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
+		<constructor-arg name="idEntidad" value="350"/>
+		<constructor-arg name="baseUrl" value="http://sgs.ministeriodesarrollosocial.gob.cl/index.php"/>
+		<property name="username" value="info@accesointeligente.org"/>
+		<property name="password" value="holanda895:AI"/>
+	</bean>
+
+	<bean id="SubsecretariaDeServiciosSociales" class="org.accesointeligente.server.robots.SGS110" scope="prototype">
+		<constructor-arg name="idEntidad" value="351"/>
 		<constructor-arg name="baseUrl" value="http://sgs.ministeriodesarrollosocial.gob.cl/index.php"/>
 		<property name="username" value="info@accesointeligente.org"/>
 		<property name="password" value="holanda895:AI"/>
