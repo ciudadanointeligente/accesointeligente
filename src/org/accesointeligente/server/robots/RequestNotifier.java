@@ -24,7 +24,9 @@ import org.accesointeligente.model.User;
 import org.accesointeligente.server.ApplicationProperties;
 import org.accesointeligente.server.HibernateUtil;
 import org.accesointeligente.server.HolidayCalendar;
-import org.accesointeligente.shared.*;
+import org.accesointeligente.shared.NotificationType;
+import org.accesointeligente.shared.RequestExpireType;
+import org.accesointeligente.shared.RequestStatus;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -81,6 +83,7 @@ public class RequestNotifier {
 			hibernate.getTransaction().commit();
 
 			for (Request request : requests) {
+				Hibernate.initialize(request);
 				if (!HolidayCalendar.isOnTime(request.getProcessDate(), 15)) {
 					logger.info("requestId = " + request.getId());
 					createExpiresSoonNotification(request);

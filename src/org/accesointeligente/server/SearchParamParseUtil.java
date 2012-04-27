@@ -197,7 +197,7 @@ public class SearchParamParseUtil {
 		}
 
 		if (params.getInstitution() != null) {
-			jsonSolrQuery += " OR institutionId:" + params.getInstitution().getId().toString();
+			jsonSolrQuery += " AND institutionId:" + params.getInstitution().getId().toString();
 		}
 
 
