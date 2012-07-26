@@ -210,6 +210,7 @@ public class ResponseChecker {
 		Matcher matcher;
 		org.hibernate.Session hibernate;
 		StringTokenizer tokenizer;
+		Boolean skipInvalidAttachment;
 
 		if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
 			logger.info("Part is attachment");
@@ -284,6 +285,7 @@ public class ResponseChecker {
 				}
 			}
 			logger.info("File extension is: " + filetype.getExtension());
+			skipInvalidAttachment = false;
 
 			try {
 				switch (filetype) {
@@ -314,24 +316,29 @@ public class ResponseChecker {
 						}
 						break;
 					case PDF:
-						PdfReader reader = new PdfReader(part.getInputStream());
+						try {
+							PdfReader reader = new PdfReader(part.getInputStream());
 
-						for (int page = 1; page <= reader.getNumberOfPages(); page++) {
-							if (remoteIdentifiers != null) {
-								break;
-							}
-
-							tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
-
-							while (tokenizer.hasMoreTokens()) {
-								matcher = pattern.matcher(tokenizer.nextToken());
-
-								if (matcher.matches()) {
-									remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+							for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+								if (remoteIdentifiers != null) {
+									break;
 								}
-							}
 
-							reader.close();
+								tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
+
+								while (tokenizer.hasMoreTokens()) {
+									matcher = pattern.matcher(tokenizer.nextToken());
+
+									if (matcher.matches()) {
+										remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+									}
+								}
+
+								reader.close();
+							}
+						} catch (Exception ex) {
+							logger.error("Invalid PDF attachment, part will be skipped", ex);
+							skipInvalidAttachment = true;
 						}
 						break;
 					default:
@@ -341,51 +348,53 @@ public class ResponseChecker {
 				throw e;
 			}
 
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
-
-			Attachment attachment = new Attachment();
-			hibernate.save(attachment);
-
-			hibernate.getTransaction().commit();
-
-			String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
-			String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
-
-			String filename = MimeUtility.decodeText(part.getFileName());
-			logger.info("Filename: " + filename);
-
-			matcher = pattern.matcher(filename);
-
-			if (matcher.matches()) {
-				remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
-				logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
-			}
-
-			attachment.setName(filename);
-			attachment.setType(filetype);
-			attachment.setUrl(baseUrl + "/" + filename);
-
-			try {
-				logger.info("Creating directory: " + directory);
-				File dir = new File(directory);
-				dir.mkdir();
-				logger.info("Saving " + directory + "/" + filename);
-				FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
-			} catch (Exception e) {
+			if (!skipInvalidAttachment) {
 				hibernate = HibernateUtil.getSession();
 				hibernate.beginTransaction();
-				hibernate.delete(attachment);
-				hibernate.getTransaction().commit();
-				logger.error("Error saving " + directory + "/" + filename, e);
-				throw e;
-			}
 
-			hibernate = HibernateUtil.getSession();
-			hibernate.beginTransaction();
-			hibernate.update(attachment);
-			hibernate.getTransaction().commit();
-			attachments.add(attachment);
+				Attachment attachment = new Attachment();
+				hibernate.save(attachment);
+
+				hibernate.getTransaction().commit();
+
+				String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
+				String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
+
+				String filename = MimeUtility.decodeText(part.getFileName());
+				logger.info("Filename: " + filename);
+
+				matcher = pattern.matcher(filename);
+
+				if (matcher.matches()) {
+					remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+					logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+				}
+
+				attachment.setName(filename);
+				attachment.setType(filetype);
+				attachment.setUrl(baseUrl + "/" + filename);
+
+				try {
+					logger.info("Creating directory: " + directory);
+					File dir = new File(directory);
+					dir.mkdir();
+					logger.info("Saving " + directory + "/" + filename);
+					FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
+				} catch (Exception e) {
+					hibernate = HibernateUtil.getSession();
+					hibernate.beginTransaction();
+					hibernate.delete(attachment);
+					hibernate.getTransaction().commit();
+					logger.error("Error saving " + directory + "/" + filename, e);
+					throw e;
+				}
+
+				hibernate = HibernateUtil.getSession();
+				hibernate.beginTransaction();
+				hibernate.update(attachment);
+				hibernate.getTransaction().commit();
+				attachments.add(attachment);
+			} //end change2
 		} else {
 			if (part.isMimeType("text/plain")) {
 				logger.info("Part is text/plain");
@@ -453,6 +462,7 @@ public class ResponseChecker {
 					filetype = FileType.BIN;
 				}
 				logger.info("File extension is: " + filetype.getExtension());
+				skipInvalidAttachment = false;
 
 				try {
 					switch (filetype) {
@@ -483,25 +493,30 @@ public class ResponseChecker {
 							}
 							break;
 						case PDF:
-							PdfReader reader = new PdfReader(part.getInputStream());
+							try {
+								PdfReader reader = new PdfReader(part.getInputStream());
 
-							for (int page = 1; page <= reader.getNumberOfPages(); page++) {
-								if (remoteIdentifiers != null) {
-									break;
-								}
-
-								tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
-
-								while (tokenizer.hasMoreTokens()) {
-									matcher = pattern.matcher(tokenizer.nextToken());
-
-									if (matcher.matches()) {
-										remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
-										logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+								for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+									if (remoteIdentifiers != null) {
+										break;
 									}
-								}
 
-								reader.close();
+									tokenizer = new StringTokenizer(PdfTextExtractor.getTextFromPage(reader, page));
+
+									while (tokenizer.hasMoreTokens()) {
+										matcher = pattern.matcher(tokenizer.nextToken());
+
+										if (matcher.matches()) {
+											remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+											logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+										}
+									}
+
+									reader.close();
+								}
+							} catch (Exception ex) {
+								logger.error("Invalid PDF attachment, part will be skipped", ex);
+								skipInvalidAttachment = true;
 							}
 							break;
 						default:
@@ -511,59 +526,61 @@ public class ResponseChecker {
 					throw e;
 				}
 
-				hibernate = HibernateUtil.getSession();
-				hibernate.beginTransaction();
-
-				Attachment attachment = new Attachment();
-				hibernate.save(attachment);
-
-				hibernate.getTransaction().commit();
-
-				String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
-				String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
-
-				String filename = "";
-
-				try {
-					filename = MimeUtility.decodeText(part.getFileName());
-				} catch (Exception e) {
-					logger.info("Invalid filename, part will be skipped");
-					return;
-				}
-
-				logger.info("Filename: " + filename);
-
-				matcher = pattern.matcher(filename);
-
-				if (matcher.matches()) {
-					remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
-					logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
-				}
-
-				attachment.setName(filename);
-				attachment.setType(filetype);
-				attachment.setUrl(baseUrl + "/" + filename);
-
-				try {
-					logger.info("Creating directory: " + directory);
-					File dir = new File(directory);
-					dir.mkdir();
-					logger.info("Saving " + directory + "/" + filename);
-					FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
-				} catch (Exception e) {
+				if (!skipInvalidAttachment) {
 					hibernate = HibernateUtil.getSession();
 					hibernate.beginTransaction();
-					hibernate.delete(attachment);
-					hibernate.getTransaction().commit();
-					logger.error("Error saving " + directory + "/" + filename, e);
-					throw e;
-				}
 
-				hibernate = HibernateUtil.getSession();
-				hibernate.beginTransaction();
-				hibernate.update(attachment);
-				hibernate.getTransaction().commit();
-				attachments.add(attachment);
+					Attachment attachment = new Attachment();
+					hibernate.save(attachment);
+
+					hibernate.getTransaction().commit();
+
+					String directory = ApplicationProperties.getProperty("attachment.directory") + attachment.getId().toString();
+					String baseUrl = ApplicationProperties.getProperty("attachment.baseurl") + attachment.getId().toString();
+
+					String filename = "";
+
+					try {
+						filename = MimeUtility.decodeText(part.getFileName());
+					} catch (Exception e) {
+						logger.info("Invalid filename, part will be skipped");
+						return;
+					}
+
+					logger.info("Filename: " + filename);
+
+					matcher = pattern.matcher(filename);
+
+					if (matcher.matches()) {
+						remoteIdentifiers.add(formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+						logger.info("remote identifier: " + formatIdentifier(matcher.group(1),matcher.group(2), Integer.parseInt(matcher.group(3))));
+					}
+
+					attachment.setName(filename);
+					attachment.setType(filetype);
+					attachment.setUrl(baseUrl + "/" + filename);
+
+					try {
+						logger.info("Creating directory: " + directory);
+						File dir = new File(directory);
+						dir.mkdir();
+						logger.info("Saving " + directory + "/" + filename);
+						FileUtils.copyInputStreamToFile(part.getInputStream(), new File(dir, filename));
+					} catch (Exception e) {
+						hibernate = HibernateUtil.getSession();
+						hibernate.beginTransaction();
+						hibernate.delete(attachment);
+						hibernate.getTransaction().commit();
+						logger.error("Error saving " + directory + "/" + filename, e);
+						throw e;
+					}
+
+					hibernate = HibernateUtil.getSession();
+					hibernate.beginTransaction();
+					hibernate.update(attachment);
+					hibernate.getTransaction().commit();
+					attachments.add(attachment);
+				}
 			}
 		}
 	}
